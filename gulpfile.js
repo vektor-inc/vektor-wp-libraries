@@ -13,14 +13,16 @@ var plumber = require('gulp-plumber');
 
 gulp.task( 'copy', function() {
     gulp.src( './vk-admin/**'  )
-    .pipe( gulp.dest( '../plugins/vk-all-in-one-expansion-unit/plugins_admin/vk-admin/' ) ); // _scss ディレクトリに保存
+    .pipe( gulp.dest( '../plugins/vk-all-in-one-expansion-unit/plugins_admin/vk-admin/' ) )
+    .pipe( gulp.dest( '../plugins/vk-post-author-display/vk-admin/' ) );
 } );
 
 // Watch
 gulp.task('watch', function() {
-    // gulp.watch('css/*.css', ['cssmin'])
+    gulp.watch('./vk-admin/css/**', ['copy']);
+    gulp.watch('./vk-admin/class.vk-admin.php', ['copy']);
     // gulp.watch('js/*.js', ['scripts']);
-    gulp.watch('vk-admin', ['scripts','scripts_header_fixed']);
+    // gulp.watch('vk-admin', ['scripts','scripts_header_fixed']);
 });
 
 gulp.task('default', ['copy','watch']);
