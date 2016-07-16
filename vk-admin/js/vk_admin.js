@@ -56,22 +56,68 @@ jQuery(document).ready(function($){
 /* スクロール時の位置固定
 /*-------------------------------------------*/
 jQuery(document).ready(function(){
-    var contentHeight = jQuery('.adminMain').height();
-    setNav();
+
+    // サイドバー要素のデフォルトの絶対位置
+    var default_offset = jQuery('.scrTracking').offset();
+
+    navMove( default_offset );
+
     // スクロールしたら
     jQuery(window).scroll(function () {
-        var scroll = jQuery(this).scrollTop();
-        if ( scroll < contentHeight ){ // これがないと延々とスクロールする
-            setNav();
+        navMove( default_offset );
+    });
+    jQuery(window).resize(function(){
+        navMove( default_offset );
+    });
+});
+
+function navMove( default_offset ){
+
+    // コンテンツエリアの高さを取得
+    var contentHeight = jQuery('.adminMain').height();
+
+    // ウィンドウの高さを取得
+    var windowHeight = jQuery(window).height();
+
+    // スクロール量
+    var scrollHeight = jQuery(this).scrollTop();
+
+    // .scrTracking の下の余白
+    var itemBottomMargin = 10;
+
+    jQuery('.scrTracking').each(function(i){
+
+        // サイドバー要素の高さ
+        var itemHeight = jQuery(this).height();
+
+        // ウィンドウサイズからはみ出すサイズ
+        if ( itemHeight < windowHeight ){
+            var overHeight = 0;
+        } else {
+            var overHeight = itemHeight - windowHeight;
+        }
+
+        if ( windowHeight < itemHeight ) {
+            // アイテムがウィンドウサイズより高い場合
+
+            if ( scrollHeight > overHeight ) {
+                // はみ出してる高さよりスクロールが大きい場合
+                // スクロール量からはみ出してる高さを引いた余白を追加
+                var marginTop = scrollHeight - overHeight - default_offset['top'] - itemBottomMargin;
+                jQuery(this).css({"margin-top":marginTop});
+            } else { 
+                // はみ出してる高さよりスクロールが小さい場合
+                jQuery(this).css({"margin-top":0});
+            }
+            
+        } else {
+            // アイテムがウィンドウサイズより低い場合
+            jQuery(this).css({ "margin-top" : scrollHeight });
         }
     });
-    function setNav(){
-        // スクロールの量を取得
-        var scroll = jQuery(this).scrollTop();
-        jQuery('#adminContent_sub').css({"padding-top":scroll});
-        jQuery('.adminSub').css({"padding-top":scroll});
-    }
-});
+}
+
+
 /*-------------------------------------------*/
 /* ページ内リンクで頭出しの余白を適切にする
 /*-------------------------------------------*/

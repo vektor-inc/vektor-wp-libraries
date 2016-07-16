@@ -129,7 +129,7 @@ class Vk_Admin {
 		<div class="wrap vk_admin_page">
 			<div class="adminMain">
 
-				<div id="adminContent_sub">
+				<div id="adminContent_sub" class="scrTracking">
 					<?php echo $get_logo_html; ?>
 					<h2 class="page_title"><?php echo $get_page_title;?></h2>
 					<div class="vk_option_nav">
@@ -146,7 +146,7 @@ class Vk_Admin {
 
 			</div><!-- [ /.adminMain ] -->
 
-			<div class="adminSub">
+			<div class="adminSub scrTracking">
 			<div class="infoBox"><?php echo Vk_Admin::get_news_body();?></div>
 			<div class="adminBnr"><?php echo Vk_Admin::admin_banner();?></div>
 			</div><!-- [ /.adminSub ] -->
