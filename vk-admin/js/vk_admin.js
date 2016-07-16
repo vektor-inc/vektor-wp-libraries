@@ -60,21 +60,21 @@ jQuery(document).ready(function(){
     // サイドバー要素のデフォルトの絶対位置
     var default_offset = jQuery('.scrTracking').offset();
 
-    navMove( default_offset );
+    // コンテンツエリアの高さを取得
+    var contentHeight = jQuery('.adminMain').height();
+
+    navMove( default_offset, contentHeight );
 
     // スクロールしたら
     jQuery(window).scroll(function () {
-        navMove( default_offset );
+        navMove( default_offset, contentHeight );
     });
     jQuery(window).resize(function(){
-        navMove( default_offset );
+        navMove( default_offset, contentHeight );
     });
 });
 
-function navMove( default_offset ){
-
-    // コンテンツエリアの高さを取得
-    var contentHeight = jQuery('.adminMain').height();
+function navMove( default_offset, contentHeight ){
 
     // ウィンドウの高さを取得
     var windowHeight = jQuery(window).height();
@@ -82,8 +82,7 @@ function navMove( default_offset ){
     // スクロール量
     var scrollHeight = jQuery(this).scrollTop();
 
-    // .scrTracking の下の余白
-    var itemBottomMargin = 10;
+    var marginBottom = 15;
 
     jQuery('.scrTracking').each(function(i){
 
@@ -97,23 +96,27 @@ function navMove( default_offset ){
             var overHeight = itemHeight - windowHeight;
         }
 
-        if ( windowHeight < itemHeight ) {
-            // アイテムがウィンドウサイズより高い場合
+        if ( scrollHeight < contentHeight ){ // これがないと延々とスクロールする
 
-            if ( scrollHeight > overHeight ) {
-                // はみ出してる高さよりスクロールが大きい場合
-                // スクロール量からはみ出してる高さを引いた余白を追加
-                var marginTop = scrollHeight - overHeight - default_offset['top'] - itemBottomMargin;
-                jQuery(this).css({"margin-top":marginTop});
-            } else { 
-                // はみ出してる高さよりスクロールが小さい場合
-                jQuery(this).css({"margin-top":0});
+            if ( windowHeight < itemHeight ) {
+                // アイテムがウィンドウサイズより高い場合
+
+                if ( scrollHeight > overHeight ) {
+                    // はみ出してる高さよりスクロールが大きい場合
+                    // スクロール量からはみ出してる高さを引いた余白を追加
+                    var marginTop = scrollHeight - overHeight - default_offset['top'] - marginBottom;
+                    jQuery(this).css({"margin-top":marginTop});
+                } else { 
+                    // はみ出してる高さよりスクロールが小さい場合
+                    jQuery(this).css({"margin-top":0});
+                }
+                
+            } else {
+                // アイテムがウィンドウサイズより低い場合
+                jQuery(this).css({ "margin-top" : scrollHeight });
             }
-            
-        } else {
-            // アイテムがウィンドウサイズより低い場合
-            jQuery(this).css({ "margin-top" : scrollHeight });
         }
+
     });
 }
 

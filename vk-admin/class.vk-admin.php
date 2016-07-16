@@ -40,13 +40,13 @@ class Vk_Admin {
 	/*  admin_banner
 	/*--------------------------------------------------*/
 	public static function admin_banner() {
-		// print '<pre style="text-align:left">';print_r($a);print '</pre>';
-		$dir_url = plugin_dir_url( __FILE__ );
+		$dir_url = self::admin_directory_url();
 		if ( get_locale() == 'ja' ) {
 			$banner = '<a href="http://lightning.vektor-inc.co.jp/ja/" target="_blank"><img src="'.$dir_url.'/images/lightning_bnr_ja.jpg" alt="lightning_bnr_ja" /></a>';
 		} else {
 			$banner = '<a href="http://lightning.vektor-inc.co.jp/" target="_blank"><img src="'.$dir_url.'/images/lightning_bnr_en.jpg" alt="lightning_bnr_en" /></a>';
 		}
+		$banner .= '<a href="http://www.vektor-inc.co.jp" class="vektor_logo" target="_blank"><img src="'.$dir_url.'/images/vektor_logo.png" alt="lightning_bnr_en" /></a>';
 		return apply_filters( 'vkExUnit_news_admin_banner_html' , $banner );
 	}
 
