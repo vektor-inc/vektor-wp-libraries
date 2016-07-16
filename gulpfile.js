@@ -21,6 +21,7 @@ gulp.task( 'copy', function() {
 gulp.task('watch', function() {
     gulp.watch('./vk-admin/css/**', ['copy']);
     gulp.watch('./vk-admin/class.vk-admin.php', ['copy']);
+    gulp.watch('./vk-admin/js/**', ['copy']);
     // gulp.watch('js/*.js', ['scripts']);
     // gulp.watch('vk-admin', ['scripts','scripts_header_fixed']);
 });
