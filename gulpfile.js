@@ -10,7 +10,6 @@ var jsmin = require('gulp-jsmin');
 // エラーでも監視を続行させる
 var plumber = require('gulp-plumber');
 
-
 gulp.task( 'copy', function() {
     gulp.src( './vk-admin/**'  )
     .pipe( gulp.dest( '../plugins/vk-all-in-one-expansion-unit/plugins_admin/vk-admin/' ) )
