@@ -11,16 +11,17 @@ var jsmin = require('gulp-jsmin');
 var plumber = require('gulp-plumber');
 
 gulp.task( 'copy', function() {
-    gulp.src( './vk-admin/**'  )
+    gulp.src( './vk-admin/package/**' )
     .pipe( gulp.dest( '../plugins/vk-all-in-one-expansion-unit/plugins_admin/vk-admin/' ) )
     .pipe( gulp.dest( '../plugins/vk-post-author-display/vk-admin/' ) );
 } );
 
 // Watch
 gulp.task('watch', function() {
-    gulp.watch('./vk-admin/css/**', ['copy']);
-    gulp.watch('./vk-admin/class.vk-admin.php', ['copy']);
-    gulp.watch('./vk-admin/js/**', ['copy']);
+	gulp.watch('./vk-admin/package/images/**', ['copy']);
+    gulp.watch('./vk-admin/package/css/**', ['copy']);
+    gulp.watch('./vk-admin/package/js/**', ['copy']);
+    gulp.watch('./vk-admin/package/class.vk-admin.php', ['copy']);
     // gulp.watch('js/*.js', ['scripts']);
     // gulp.watch('vk-admin', ['scripts','scripts_header_fixed']);
 });
