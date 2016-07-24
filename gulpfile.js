@@ -13,7 +13,8 @@ var plumber = require('gulp-plumber');
 gulp.task( 'copy', function() {
     gulp.src( './vk-admin/package/**' )
     .pipe( gulp.dest( '../plugins/vk-all-in-one-expansion-unit/plugins_admin/vk-admin/' ) )
-    .pipe( gulp.dest( '../plugins/vk-post-author-display/vk-admin/' ) );
+    .pipe( gulp.dest( '../plugins/vk-post-author-display/vk-admin/' ) )
+    .pipe( gulp.dest( '../plugins/wp-easy-responsive-tabs-to-accordion/vk-admin/' ) );
 } );
 
 // Watch
