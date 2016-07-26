@@ -10,21 +10,27 @@ var jsmin = require('gulp-jsmin');
 // エラーでも監視を続行させる
 var plumber = require('gulp-plumber');
 
-gulp.task( 'copy', function() {
+gulp.task( 'copy_vk-admin', function() {
     gulp.src( './vk-admin/package/**' )
     .pipe( gulp.dest( '../plugins/vk-all-in-one-expansion-unit/plugins_admin/vk-admin/' ) )
     .pipe( gulp.dest( '../plugins/vk-post-author-display/inc/vk-admin/' ) )
     .pipe( gulp.dest( '../plugins/wp-easy-responsive-tabs-to-accordion/vk-admin/' ) );
 } );
+gulp.task( 'copy_term-color', function() {
+    gulp.src( './term-color/package/**' )
+    .pipe( gulp.dest( '../plugins/vk-post-author-display/inc/term-color/' ) )
+    .pipe( gulp.dest( '../plugins/lightning-media-unit/inc/term-color/' ) );
+} );
 
 // Watch
 gulp.task('watch', function() {
-	gulp.watch('./vk-admin/package/images/**', ['copy']);
-    gulp.watch('./vk-admin/package/css/**', ['copy']);
-    gulp.watch('./vk-admin/package/js/**', ['copy']);
-    gulp.watch('./vk-admin/package/class.vk-admin.php', ['copy']);
+	gulp.watch('./vk-admin/package/images/**', ['copy_vk-admin']);
+    gulp.watch('./vk-admin/package/css/**', ['copy_vk-admin']);
+    gulp.watch('./vk-admin/package/js/**', ['copy_vk-admin']);
+    gulp.watch('./vk-admin/package/class.vk-admin.php', ['copy_vk-admin']);
+    gulp.watch('./term-color/package/**', ['copy_term-color']);
     // gulp.watch('js/*.js', ['scripts']);
     // gulp.watch('vk-admin', ['scripts','scripts_header_fixed']);
 });
 
-gulp.task('default', ['copy','watch']);
+gulp.task('default', ['watch']);
