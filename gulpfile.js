@@ -21,7 +21,10 @@ gulp.task( 'copy_term-color', function() {
     .pipe( gulp.dest( '../plugins/vk-post-author-display/inc/term-color/' ) )
     .pipe( gulp.dest( '../plugins/lightning-media-unit/inc/term-color/' ) );
 } );
-
+gulp.task( 'copy_header-top', function() {
+    gulp.src( './header-top/package/**' )
+    .pipe( gulp.dest( '../plugins/lightning-skin-variety/inc/header-top/' ) );
+} );
 // Watch
 gulp.task('watch', function() {
 	gulp.watch('./vk-admin/package/images/**', ['copy_vk-admin']);
@@ -29,6 +32,7 @@ gulp.task('watch', function() {
     gulp.watch('./vk-admin/package/js/**', ['copy_vk-admin']);
     gulp.watch('./vk-admin/package/class.vk-admin.php', ['copy_vk-admin']);
     gulp.watch('./term-color/package/**', ['copy_term-color']);
+    gulp.watch('./header-top/package/**', ['copy_header-top']);
     // gulp.watch('js/*.js', ['scripts']);
     // gulp.watch('vk-admin', ['scripts','scripts_header_fixed']);
 });
