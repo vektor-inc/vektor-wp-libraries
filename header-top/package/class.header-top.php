@@ -66,12 +66,12 @@ class Lightning_header_top
     /*-------------------------------------------*/
     /*  実行
     /*-------------------------------------------*/
-	// 	static function init(){
-	// 		add_action( 'admin_init', array( __CLASS__, 'lightning_header_top_add_menu' ) );
+	// static function init(){
+	// 	add_action( 'after_setup_theme', array( __CLASS__, 'lightning_header_top_add_menu' ) );
 	// }
 
     public function __construct(){
-    	// add_action( 'after_setup_theme', array( $this, 'lightning_header_top_add_menu' ) );
+    	add_action( 'after_setup_theme', array( $this, 'lightning_header_top_add_menu' ) );
     	add_action( 'lightning_header_prepend', array( $this, 'lightning_header_top_prepend_item' ) );
     	add_action( 'customize_preview_init', array( $this, 'ltg_header_top_add_script' ) );
     	add_action( 'plugins_loaded', array( $this, 'ltg_header_top_add_script' ) );
