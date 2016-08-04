@@ -5,7 +5,6 @@
 if ( ! class_exists( 'Lightning_header_top' ) )
 {
 	require( 'header-top/class.header-top.php' );
-	require( 'header-top/header-top-customizer.php' );
 
 	/*  transrate
 	/*-------------------------------------------*/

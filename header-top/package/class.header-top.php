@@ -75,6 +75,7 @@ class Lightning_header_top
     	add_action( 'lightning_header_prepend', array( $this, 'lightning_header_top_prepend_item' ) );
     	add_action( 'customize_preview_init', array( $this, 'ltg_header_top_add_script' ) );
     	add_action( 'plugins_loaded', array( $this, 'ltg_header_top_add_script' ) );
+    	require_once( 'header-top-customizer.php' );
     }
 
 } // class Lightning_header_top 
