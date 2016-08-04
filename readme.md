@@ -1,6 +1,6 @@
 ## 使い方
 
-WordPress開発環境の wp-content ディレクトリにこの vektor-wp-libraries を置いて gulpを走らせます。
+* WordPress開発環境の wp-content ディレクトリにこの vektor-wp-libraries を置いて gulpを走らせます。
 
 ### 注意事項
 
