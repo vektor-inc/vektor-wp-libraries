@@ -12,6 +12,7 @@ function lightning_header_top_customize_register( $wp_customize ) {
 	$veu_options = get_option( 'vkExUnit_contact' );
 	$default_btn_txt = ( isset( $veu_options['short_text'] ) && $veu_options['short_text'] ) ? $veu_options['short_text'] : __( 'CONTACT', 'ligthning' );
 	$default_btn_url = ( isset( $veu_options['contact_link'] ) && $veu_options['contact_link'] ) ? esc_url( $veu_options['contact_link'] ) : '';
+	$default_tel_number = ( isset( $veu_options['tel_number'] ) && $veu_options['tel_number'] ) ? esc_url( $veu_options['tel_number'] ) : '';
 
 	$wp_customize->add_setting( 'lightning_theme_options[header_top_contact_txt]',	array(
 		'default' 			=> $default_btn_txt,
@@ -25,6 +26,13 @@ function lightning_header_top_customize_register( $wp_customize ) {
 		'type'				=> 'option',
 		'capability' 		=> 'edit_theme_options',
 		'sanitize_callback' => 'esc_url_raw',
+		) );
+	$wp_customize->add_setting( 'lightning_theme_options[header_top_tel_number]',	array(
+		'default' 			=> $default_tel_number,
+		'type'				=> 'option',
+		'capability' 		=> 'edit_theme_options',
+		'transport'   		=> 'postMessage',
+		'sanitize_callback' => 'sanitize_text_field',
 		) );
 
    class Custom_Text_Control_a extends WP_Customize_Control {
@@ -55,4 +63,11 @@ function lightning_header_top_customize_register( $wp_customize ) {
 		'priority' => 11,
 		'description' => __('Ex : http:www.aaa.com/contact/', $vk_header_top_textdomain ),
 		) ) );
+	$wp_customize->add_control( 'header_top_tel_number', array(
+		'label'     => __('Contact Tel Number', $vk_header_top_textdomain ),
+		'section'  => 'lightning_header_top',
+		'settings' => 'lightning_theme_options[header_top_tel_number]',
+		'type' => 'text',
+		'priority' => 12,
+		) );
 }
