@@ -14,13 +14,16 @@
        wp.customize( 'lightning_theme_options[header_top_tel_number]', function( value ) {
            value.bind( function( newval ) {
               if ( newval ){
-                  if ( jQuery('ul#menu-header-top li:last-child').hasClass('headerTop_tel') ){
-                    $( 'ul#menu-header-top li.headerTop_tel' ).html( '<a class="headerTop_tel_wrap" href="tel:' + newval+ '">' + newval + '</a>' );
+                  // ulのid名はメニューエリアではなくカスタムメニューのidが入る（＝変動する）のでulのidでは指定しないこと
+                  // 電話番号が存在しない場合
+                  if ( jQuery('#headerTop ul.nav li:last-child').hasClass('headerTop_tel') ){
+                    $( '#headerTop ul.nav li.headerTop_tel' ).html( '<a class="headerTop_tel_wrap" href="tel:' + newval+ '">' + newval + '</a>' );
                   } else {
-                    $( 'ul#menu-header-top').append( '<li class="headerTop_tel"><a class="headerTop_tel_wrap" href="tel:' + newval+ '">' + newval + '</a></li>' );
+                    $( '#headerTop ul.nav').append( '<li class="headerTop_tel"><a class="headerTop_tel_wrap" href="tel:' + newval+ '">' + newval + '</a></li>' );
                   }
                 } else {
-                  $( 'ul#menu-header-top li.headerTop_tel' ).remove();
+                  // 入力欄を空にされたら削除する
+                  $( '#headerTop ul.nav li.headerTop_tel' ).remove();
                 }
            } );
        } );

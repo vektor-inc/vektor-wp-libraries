@@ -35,7 +35,7 @@ if ( ! class_exists( 'Lightning_header_top' ) )
 			}
 
 			$args = array(
-				'theme_location' => 'HeaderTop',
+				'theme_location' => 'header-top',
 				'container'      => 'nav',
 				'items_wrap'     => '<ul id="%1$s" class="%2$s nav">%3$s'.$contact_tel.'</ul>',
 				'fallback_cb'    => '',
@@ -77,7 +77,7 @@ if ( ! class_exists( 'Lightning_header_top' ) )
 		}
 
 		static function lightning_header_top_add_menu() {
-			register_nav_menus( array( 'HeaderTop' => 'Header Top Navigation', ) );
+			register_nav_menus( array( 'header-top' => 'Header Top Navigation', ) );
 		}
 
 		
