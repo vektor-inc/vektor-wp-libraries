@@ -45,18 +45,22 @@ class Vk_Admin {
 	public static function admin_banner() {
 		$banner = '';
 		$dir_url = self::admin_directory_url();
+		$lang = ( get_locale() == 'ja' ) ? 'ja' : 'en' ;
+
 		if ( !is_plugin_active('vk-post-author-display/post-author-display.php') ){
-			$banner .= '<a href="https://wordpress.org/plugins/vk-post-author-display/" target="_blank" class="admin_banner"><img src="'.$dir_url.'/images/post_author_display_bnr_ja.jpg" alt="VK Post Author 
+			$banner .= '<a href="https://wordpress.org/plugins/vk-post-author-display/" target="_blank" class="admin_banner"><img src="'.$dir_url.'/images/post_author_display_bnr_'.$lang .'.jpg" alt="VK Post Author 
 			Display" /></a>';
 		}
-		if ( get_locale() == 'ja' ) {
 
+		if ( $lang == 'ja' ) {
 			$banner .= '<a href="http://lightning.vektor-inc.co.jp/ja/" target="_blank" class="admin_banner"><img src="'.$dir_url.'/images/lightning_bnr_ja.jpg" alt="lightning_bnr_ja" /></a>';
 		} else {
 			$banner .= '<a href="http://lightning.vektor-inc.co.jp/" target="_blank" class="admin_banner"><img src="'.$dir_url.'/images/lightning_bnr_en.jpg" alt="lightning_bnr_en" /></a>';
 		}
+
 		$banner .= '<a href="http://www.vektor-inc.co.jp" class="vektor_logo" target="_blank" class="admin_banner"><img src="'.$dir_url.'/images/vektor_logo.png" alt="lightning_bnr_en" /></a>';
-		return apply_filters( 'vkExUnit_news_admin_banner_html' , $banner );
+
+		return apply_filters( 'vk_admin_banner_html' , $banner );
 	}
 
 	/*--------------------------------------------------*/
@@ -123,8 +127,9 @@ class Vk_Admin {
 	/*--------------------------------------------------*/
 	/*  admin_sub
 	/*--------------------------------------------------*/
+	// 2016.08.07 ExUnitの有効化ページでは直接 admin_subを呼び出しているので注意
 	public static function admin_sub() {
-		$adminSub = '<div class="adminSub">'."\n";
+		$adminSub = '<div class="adminSub scrTracking">'."\n";
 		$adminSub .= '<div class="infoBox">'.Vk_Admin::get_news_body().'</div>'."\n";
 		$adminSub .= '<div class="adminBnr_section">'.Vk_Admin::admin_banner().'</div>'."\n";
 		$adminSub .= '</div><!-- [ /.adminSub ] -->'."\n";
@@ -157,10 +162,7 @@ class Vk_Admin {
 
 			</div><!-- [ /.adminMain ] -->
 
-			<div class="adminSub scrTracking">
-			<div class="infoBox"><?php echo Vk_Admin::get_news_body();?></div>
-			<div class="adminBnr_section"><?php echo Vk_Admin::admin_banner();?></div>
-			</div><!-- [ /.adminSub ] -->
+			<?php echo Vk_Admin::admin_sub();?>
 
 		</div><!-- [ /.vkExUnit_admin_page ] -->
 	<?php 
