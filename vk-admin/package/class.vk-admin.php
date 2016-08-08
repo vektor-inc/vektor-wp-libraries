@@ -3,12 +3,15 @@
 /*
 このファイルの元ファイルは
 https://github.com/vektor-inc/vektor-wp-libraries
-にあります。修正の際は上記リポジトリのデータを修正してください。
+にあります。
+修正の際は上記リポジトリのデータを修正してください。
+編集権限を持っていない方で何か修正要望などありましたら
+上記リポジトリにプルリクエストをよろしくお願いいたします。
 */
 
 class Vk_Admin {
 
-	public static $version = '1.0.0';
+	public static $version = '1.1.1';
 	
 	static function init(){
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_common_css' ) );
