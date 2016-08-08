@@ -23,13 +23,13 @@ class Vk_Admin {
 	}
 
 	static function admin_common_css (){
-		wp_enqueue_style( 'vk-admin-style', self::admin_directory_url().'/css/vk_admin.css', array(), self::$version, 'all' );
+		wp_enqueue_style( 'vk-admin-style', self::admin_directory_url().'css/vk_admin.css', array(), self::$version, 'all' );
 	}
 
 	static function admin_enqueue_scripts() {
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_media();
-		wp_enqueue_script( 'vk-admin-js', self::admin_directory_url().'/js/vk_admin.js', array( 'jquery' ), self::$version );
+		wp_enqueue_script( 'vk-admin-js', self::admin_directory_url().'js/vk_admin.js', array( 'jquery' ), self::$version );
 	}
 
 	static function admin_scripts( $admin_pages ){
