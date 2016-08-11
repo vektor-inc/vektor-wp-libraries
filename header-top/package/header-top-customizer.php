@@ -7,7 +7,7 @@ function lightning_header_top_customize_register( $wp_customize ) {
 	/*-------------------------------------------*/
 	$wp_customize->add_section( 'lightning_header_top', array(
 		'title'				=> __('Lightning Header top settings', $vk_header_top_textdomain  ),
-		'priority'			=> 500,
+		'priority'			=> 450,
 	) );
 	$veu_options = get_option( 'vkExUnit_contact' );
 	$default_btn_txt = ( isset( $veu_options['short_text'] ) && $veu_options['short_text'] ) ? $veu_options['short_text'] : __( 'CONTACT', 'ligthning' );

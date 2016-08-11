@@ -82,7 +82,7 @@ if ( ! class_exists( 'Lightning_header_top' ) )
 
 		
 		static function ltg_header_top_add_script() {
-		    wp_register_script( 'ltg_header_top_customizer_js' , plugin_dir_url( __FILE__ ).'/header-top-customizer.js', array( 'jquery','customize-preview' ), '20160801', true );
+		    wp_register_script( 'ltg_header_top_customizer_js' , plugin_dir_url( __FILE__ ).'/header-top-customizer.js', array( 'jquery','customize-preview' ), '20160809b', true );
 		    wp_enqueue_script( 'ltg_header_top_customizer_js' );
 		}
 
