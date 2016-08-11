@@ -8,7 +8,15 @@
    	       // リアルタイムにサイトタイトルを変更
        wp.customize( 'lightning_theme_options[header_top_contact_txt]', function( value ) {
            value.bind( function( newval ) {
-               $( '.headerTop_contactBtn a' ).html( newval );
+              if ( newval ){
+                if ( jQuery('#headerTop .container div:last-child' ).hasClass('headerTop_contactBtn') ){
+                  $( '.headerTop_contactBtn a' ).html( newval );
+                } else {
+                  $( '#headerTop .container').append( '<div class="headerTop_contactBtn"><a href="" class="btn btn-primary">' + newval + '</a></div>' );
+                }
+              } else {
+                $( '.headerTop_contactBtn' ).remove();
+              }
            } );
        } );
        wp.customize( 'lightning_theme_options[header_top_tel_number]', function( value ) {
@@ -17,7 +25,7 @@
                   // ulのid名はメニューエリアではなくカスタムメニューのidが入る（＝変動する）のでulのidでは指定しないこと
                   // 電話番号が存在しない場合
                   if ( jQuery('#headerTop ul.nav li:last-child').hasClass('headerTop_tel') ){
-                    $( '#headerTop ul.nav li.headerTop_tel' ).html( '<a class="headerTop_tel_wrap" href="tel:' + newval+ '">' + newval + '</a>' );
+                    $( '#headerTop ul.nav li.headerTop_tel' ).html( '<a class="headerTop_tel_wrap" href="tel:' + newval + '">' + newval + '</a>' );
                   } else {
                     $( '#headerTop ul.nav').append( '<li class="headerTop_tel"><a class="headerTop_tel_wrap" href="tel:' + newval+ '">' + newval + '</a></li>' );
                   }
