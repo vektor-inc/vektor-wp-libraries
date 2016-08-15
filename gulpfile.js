@@ -14,6 +14,7 @@ gulp.task( 'copy_vk-admin', function() {
     gulp.src( './vk-admin/package/**' )
     .pipe( gulp.dest( '../plugins/vk-all-in-one-expansion-unit/plugins_admin/vk-admin/' ) )
     .pipe( gulp.dest( '../plugins/vk-post-author-display/inc/vk-admin/' ) )
+    .pipe( gulp.dest( '../plugins/lightning-skin-variety/inc/vk-admin/' ) )
     .pipe( gulp.dest( '../plugins/wp-easy-responsive-tabs-to-accordion/vk-admin/' ) );
 } );
 gulp.task( 'copy_term-color', function() {
