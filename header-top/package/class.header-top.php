@@ -68,7 +68,7 @@ if ( ! class_exists( 'Lightning_header_top' ) )
 				$link_url = esc_url( $options['header_top_contact_url'] );
 			} else {
 				if ( isset( $vkExUnit_contact['contact_link'] ) && $vkExUnit_contact['contact_link'] )
-					$link_url = esc_url( $options['header_top_contact_url'] );
+					$link_url = esc_url( $vkExUnit_contact['contact_link'] );
 			}
 			if ( isset( $link_url ) && $link_url && isset( $link_url ) && $link_url ){
 				$contact_btn_html = '<div class="headerTop_contactBtn"><a href="'.$link_url.'" class="btn btn-primary">'.$btn_txt.'</a></div>';
