@@ -58,19 +58,22 @@ if ( ! class_exists( 'Lightning_header_top' ) )
 			global $vkExUnit_contact;
 
 			if ( isset( $options['header_top_contact_txt'] ) && $options['header_top_contact_txt'] ) {
-				$btn_txt = $options['header_top_contact_txt'];
-			} else {
-				if ( isset( $vkExUnit_contact['short_text'] ) && $vkExUnit_contact['short_text'] )
-					$btn_txt = $vkExUnit_contact['short_text'];
+				$btn_txt = esc_html( $options['header_top_contact_txt'] );
+			} elseif ( isset( $options['header_top_contact_txt'] ) && !$options['header_top_contact_txt'] ) {
+				$btn_txt = '';
+			} elseif ( !isset( $options['header_top_contact_txt'] ) && isset( $vkExUnit_contact['short_text'] ) ) {
+				$btn_txt = esc_html( $vkExUnit_contact['short_text'] );
 			}
 
 			if ( isset( $options['header_top_contact_url'] ) && $options['header_top_contact_url'] ) {
 				$link_url = esc_url( $options['header_top_contact_url'] );
-			} else {
-				if ( isset( $vkExUnit_contact['contact_link'] ) && $vkExUnit_contact['contact_link'] )
-					$link_url = esc_url( $vkExUnit_contact['contact_link'] );
+			} elseif ( isset( $options['header_top_contact_url'] ) && !$options['header_top_contact_url'] ) {
+				$link_url = '';
+			} elseif ( !isset( $options['header_top_contact_url'] ) && isset( $vkExUnit_contact['contact_link'] ) ) {
+				$link_url = esc_url( $vkExUnit_contact['contact_link'] );
 			}
-			if ( isset( $link_url ) && $link_url && isset( $link_url ) && $link_url ){
+
+			if ( isset( $btn_txt ) && $btn_txt && isset( $link_url ) && $link_url ){
 				$contact_btn_html = '<div class="headerTop_contactBtn"><a href="'.$link_url.'" class="btn btn-primary">'.$btn_txt.'</a></div>';
 				return $contact_btn_html;
 			}
