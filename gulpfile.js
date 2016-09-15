@@ -26,6 +26,12 @@ gulp.task( 'copy_header-top', function() {
     gulp.src( './header-top/package/**' )
     .pipe( gulp.dest( '../plugins/lightning-skin-variety/inc/header-top/' ) );
 } );
+
+gulp.task( 'copy_post-type-manager', function() {
+    gulp.src( './post-type-manager/package/**' )
+    // .pipe( gulp.dest( '../themes/biz-vektor/plugins/post-type-manager/' ) )
+    .pipe( gulp.dest( '../plugins/vk-all-in-one-expansion-unit/plugins/post-type-manager/' ) );
+} );
 // Watch
 gulp.task('watch', function() {
 	gulp.watch('./vk-admin/package/images/**', ['copy_vk-admin']);
@@ -34,6 +40,7 @@ gulp.task('watch', function() {
     gulp.watch('./vk-admin/package/class.vk-admin.php', ['copy_vk-admin']);
     gulp.watch('./term-color/package/**', ['copy_term-color']);
     gulp.watch('./header-top/package/**', ['copy_header-top']);
+    gulp.watch('./post-type-manager/package/**', ['copy_post-type-manager']);
     // gulp.watch('js/*.js', ['scripts']);
     // gulp.watch('vk-admin', ['scripts','scripts_header_fixed']);
 });
