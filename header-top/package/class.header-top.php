@@ -42,9 +42,10 @@ if ( ! class_exists( 'Lightning_header_top' ) )
 				'echo'           => false,
 			);
 			$header_top_menu = wp_nav_menu( $args ) ;
-			if ( $header_top_menu ) 
-			{
+			if ( $header_top_menu ) {
 				$header_prepend .= apply_filters( 'Lightning_headerTop_menu', $header_top_menu );
+			} else if ( $contact_tel ) {
+				$header_prepend .= '<nav><ul id="%1$s" class="%2$s nav">'.$contact_tel.'</ul></nav>';
 			}
 
 		    $header_prepend .= self::lightning_header_top_contact_btn();
