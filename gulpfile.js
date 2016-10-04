@@ -26,10 +26,13 @@ gulp.task( 'copy_header-top', function() {
     gulp.src( './header-top/package/**' )
     .pipe( gulp.dest( '../plugins/lightning-skin-variety/inc/header-top/' ) );
 } );
-
+// gulp.task( 'copy_font-awesome-selector', function() {
+//     gulp.src( './font-awesome-selector/package/**' )
+//     .pipe( gulp.dest( '../themes/lightning/library/font-awesome-selector/' ) );
+// } );
 gulp.task( 'copy_post-type-manager', function() {
     gulp.src( './post-type-manager/package/**' )
-    // .pipe( gulp.dest( '../themes/biz-vektor/plugins/post-type-manager/' ) )
+    .pipe( gulp.dest( '../themes/biz-vektor/plugins/post-type-manager/' ) )
     .pipe( gulp.dest( '../plugins/vk-all-in-one-expansion-unit/plugins/post-type-manager/' ) );
 } );
 // Watch
@@ -41,6 +44,7 @@ gulp.task('watch', function() {
     gulp.watch('./term-color/package/**', ['copy_term-color']);
     gulp.watch('./header-top/package/**', ['copy_header-top']);
     gulp.watch('./post-type-manager/package/**', ['copy_post-type-manager']);
+    // gulp.watch('./font-awesome-selector/package/**', ['copy_font-awesome-selector']);
     // gulp.watch('js/*.js', ['scripts']);
     // gulp.watch('vk-admin', ['scripts','scripts_header_fixed']);
 });
