@@ -21,13 +21,15 @@
        } );
        wp.customize( 'lightning_theme_options[header_top_tel_number]', function( value ) {
            value.bind( function( newval ) {
+              var tel = '<a class="headerTop_tel_wrap" href="tel:' + newval+ '">' + newval + '</a></li>';
+              // var tel
               if ( newval ){
                   // ulのid名はメニューエリアではなくカスタムメニューのidが入る（＝変動する）のでulのidでは指定しないこと
                   // 電話番号が存在しない場合
                   if ( jQuery('#headerTop ul.nav li:last-child').hasClass('headerTop_tel') ){
-                    $( '#headerTop ul.nav li.headerTop_tel' ).html( '<a class="headerTop_tel_wrap" href="tel:' + newval + '">' + newval + '</a>' );
+                    $( '#headerTop ul.nav li.headerTop_tel' ).html( tel );
                   } else {
-                    $( '#headerTop ul.nav').append( '<li class="headerTop_tel"><a class="headerTop_tel_wrap" href="tel:' + newval+ '">' + newval + '</a></li>' );
+                    $( '#headerTop ul.nav').append( '<li class="headerTop_tel">' + tel + '</li>' );
                   }
                 } else {
                   // 入力欄を空にされたら削除する

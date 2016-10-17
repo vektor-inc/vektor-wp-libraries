@@ -15,7 +15,7 @@ if ( ! class_exists( 'Lightning_header_top' ) )
 		/*	Header top nav
 		/*-------------------------------------------*/
 		
-		public static function lightning_header_top_prepend_item(){
+		public static function header_top_prepend_item(){
 			$header_prepend = '<div class="headerTop" id="headerTop">';
 			$header_prepend .= '<div class="container">';
 			$header_prepend .= '<p class="headerTop_description">'.get_bloginfo( 'description' ).'</p>';
@@ -44,17 +44,17 @@ if ( ! class_exists( 'Lightning_header_top' ) )
 			$header_top_menu = wp_nav_menu( $args ) ;
 			if ( $header_top_menu ) {
 				$header_prepend .= apply_filters( 'Lightning_headerTop_menu', $header_top_menu );
-			} else if ( $contact_tel ) {
+			} else if ( $contact_tel || is_customize_preview() ) {
 				$header_prepend .= '<nav><ul id="%1$s" class="%2$s nav">'.$contact_tel.'</ul></nav>';
 			}
 
-		    $header_prepend .= self::lightning_header_top_contact_btn();
+		    $header_prepend .= self::header_top_contact_btn();
 			$header_prepend .= '</div><!-- [ / .container ] -->';
 			$header_prepend .= '</div><!-- [ / #headerTop  ] -->';
 			echo $header_prepend;
 		}
 
-		static function lightning_header_top_contact_btn(){
+		static function header_top_contact_btn(){
 			global $options;
 			global $vkExUnit_contact;
 
@@ -80,13 +80,19 @@ if ( ! class_exists( 'Lightning_header_top' ) )
 			}
 		}
 
-		static function lightning_header_top_add_menu() {
+		static function header_top_add_menu() {
 			register_nav_menus( array( 'header-top' => 'Header Top Navigation', ) );
 		}
 
+		/*-------------------------------------------*/
+		/*  Add header top css
+		/*-------------------------------------------*/
+		static function header_top_add_css() {
+			wp_enqueue_style( 'lightning-header-top', LTG_HEADER_TOP_URL.'css/header_top.css', array( 'lightning-design-style' ), LTG_HEADER_TOP_VERSION, 'all' );
+		}
 		
-		static function ltg_header_top_add_script() {
-		    wp_register_script( 'ltg_header_top_customizer_js' , plugin_dir_url( __FILE__ ).'/header-top-customizer.js', array( 'jquery','customize-preview' ), '20160809b', true );
+		static function header_top_add_script() {
+		    wp_register_script( 'ltg_header_top_customizer_js' , plugin_dir_url( __FILE__ ).'/header-top-customizer.js', array( 'jquery','customize-preview' ), LTG_HEADER_TOP_VERSION, true );
 		    wp_enqueue_script( 'ltg_header_top_customizer_js' );
 		}
 
@@ -94,18 +100,22 @@ if ( ! class_exists( 'Lightning_header_top' ) )
 	    /*  実行
 	    /*-------------------------------------------*/
 		// static function init(){
-		// 	add_action( 'after_setup_theme', array( __CLASS__, 'lightning_header_top_add_menu' ) );
+		// 	add_action( 'after_setup_theme', array( __CLASS__, 'header_top_add_menu' ) );
 		// }
 
 	    public function __construct(){
+			define( 'LTG_HEADER_TOP_URL', plugin_dir_url( __FILE__ ) );
+			define( 'LTG_HEADER_TOP_DIR', plugin_dir_path( __FILE__ ) );
+			define( 'LTG_HEADER_TOP_VERSION', '1.0d' );
 	    	global $options;
 	    	global $vkExUnit_contact;
 			$options = get_option('Lightning_theme_options');
 			$vkExUnit_contact = get_option( 'vkExUnit_contact' );
-	    	add_action( 'after_setup_theme', array( $this, 'lightning_header_top_add_menu' ) );
-	    	add_action( 'lightning_header_prepend', array( $this, 'lightning_header_top_prepend_item' ) );
-	    	add_action( 'customize_preview_init', array( $this, 'ltg_header_top_add_script' ) );
-	    	add_action( 'plugins_loaded', array( $this, 'ltg_header_top_add_script' ) );
+	    	add_action( 'after_setup_theme', array( $this, 'header_top_add_menu' ) );
+	    	add_action( 'lightning_header_prepend', array( $this, 'header_top_prepend_item' ) );
+	    	add_action( 'customize_preview_init', array( $this, 'header_top_add_script' ) );
+	    	add_action( 'plugins_loaded', array( $this, 'header_top_add_script' ) );
+	    	add_action( 'wp_enqueue_scripts',  array( $this, 'header_top_add_css' ) );
 	    	require_once( 'header-top-customizer.php' );
 	    }
 

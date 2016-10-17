@@ -1,0 +1,74 @@
+@charset "utf-8";
+$color_blk : #191919;
+$color_key : #337ab7;
+$border_horizontal : 1px solid rgba( 255,255,255,0.15 );
+$border_gray : 1px solid rgba( 0,0,0,0.1 );
+$border_text_link_blk : 1px dotted #999;
+$margin_section_bottom : 30px;
+/*-------------------------------------------*/
+/*	.headerTop
+/*-------------------------------------------*/
+.headerTop { 
+	font-size:12px;
+	.headerTop_contactBtn {
+		z-index: 100;
+		a:before {
+		margin-right: 7px;
+	    content: "\f003";
+	    font-family: FontAwesome;
+		}
+		.btn { white-space: nowrap; }
+	}
+	li.headerTop_tel .headerTop_tel_wrap:before {
+		margin-right: 7px;
+		content: "\f095";
+		font-family: FontAwesome;
+	}
+}
+
+@media (max-width: 767px){
+	.headerTop_description { display:none; }
+	.headerTop { display: none; }
+	body.headerMenuOpen .headerTop { display: block; }
+	.headerTop {
+		margin-bottom:20px;
+		background-color:$color_blk;
+		.container { padding: 0; }
+		ul { border-top:$border_horizontal;margin-bottom:10px;
+			a { color:#999;border-bottom:$border_horizontal; }
+			a:hover,
+			a:active,
+			a:focus  { background-color:rgba(255,255,255,0.2);transition: background-color 0.4s;}
+		}
+		.headerTop_tel { padding:0 15px; }
+		a.headerTop_tel_wrap { border:1px solid #999; }
+		.headerTop_tel_wrap { display:block; overflow:hidden;text-align: center; color:#999;
+			padding: 6px 0;margin:5px 0 0; border-radius: 4px; }
+	}
+	.headerTop_contactBtn { text-align: center;padding:0 15px;
+		.btn { display: block; }
+	}
+} // @media (max-width: 767px){
+
+@media (max-width: 991px){
+	.headerTop .container { width: 100%; }
+}
+$header_top_offset : 10px;
+@media (min-width: 768px){
+.headerTop { color:#666;background-color: #f9f9f9;margin-top:-$header_top_offset;border-bottom:1px solid #efefef;
+	.container { padding: 0px 15px;display: flex;overflow: visible; }
+	.headerTop_description { position:relative;top:$header_top_offset;display:block;
+		margin:0;padding: 7px 20px 18px 0;width:1000px; line-height: 1.4em;
+	}
+	nav { position:relative;top:$header_top_offset; }
+	ul { display: flex;line-height: 1.4em; }
+	li { 
+		a,
+		span { padding:7px 15px;font-size:12px; white-space: nowrap;display: block; }
+		a:hover { background:none; }
+	}
+	.headerTop_contactBtn { position: relative;top:$header_top_offset;
+		a.btn { border-top-left-radius: 0; border-top-right-radius: 0;font-size:14px; }
+	}
+}
+} // @media (min-width: 768px){

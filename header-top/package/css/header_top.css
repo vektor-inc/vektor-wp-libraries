@@ -1,0 +1,32 @@
+/*-------------------------------------------*/
+/*	.headerTop
+/*-------------------------------------------*/
+.headerTop { font-size: 12px; }
+.headerTop .headerTop_contactBtn { z-index: 100; }
+.headerTop .headerTop_contactBtn a:before { margin-right: 7px; content: "\f003"; font-family: FontAwesome; }
+.headerTop .headerTop_contactBtn .btn { white-space: nowrap; }
+.headerTop li.headerTop_tel .headerTop_tel_wrap:before { margin-right: 7px; content: "\f095"; font-family: FontAwesome; }
+
+@media (max-width: 767px) { .headerTop_description { display: none; }
+  .headerTop { display: none; }
+  body.headerMenuOpen .headerTop { display: block; }
+  .headerTop { margin-bottom: 20px; background-color: #191919; }
+  .headerTop .container { padding: 0; }
+  .headerTop ul { border-top: 1px solid rgba(255, 255, 255, 0.15); margin-bottom: 10px; }
+  .headerTop ul a { color: #999; border-bottom: 1px solid rgba(255, 255, 255, 0.15); }
+  .headerTop ul a:hover, .headerTop ul a:active, .headerTop ul a:focus { background-color: rgba(255, 255, 255, 0.2); transition: background-color 0.4s; }
+  .headerTop .headerTop_tel { padding: 0 15px; }
+  .headerTop a.headerTop_tel_wrap { border: 1px solid #999; }
+  .headerTop .headerTop_tel_wrap { display: block; overflow: hidden; text-align: center; color: #999; padding: 6px 0; margin: 5px 0 0; border-radius: 4px; }
+  .headerTop_contactBtn { text-align: center; padding: 0 15px; }
+  .headerTop_contactBtn .btn { display: block; } }
+@media (max-width: 991px) { .headerTop .container { width: 100%; } }
+@media (min-width: 768px) { .headerTop { color: #666; background-color: #f9f9f9; margin-top: -10px; border-bottom: 1px solid #efefef; }
+  .headerTop .container { padding: 0px 15px; display: flex; overflow: visible; }
+  .headerTop .headerTop_description { position: relative; top: 10px; display: block; margin: 0; padding: 7px 20px 18px 0; width: 1000px; line-height: 1.4em; }
+  .headerTop nav { position: relative; top: 10px; }
+  .headerTop ul { display: flex; line-height: 1.4em; }
+  .headerTop li a, .headerTop li span { padding: 7px 15px; font-size: 12px; white-space: nowrap; display: block; }
+  .headerTop li a:hover { background: none; }
+  .headerTop .headerTop_contactBtn { position: relative; top: 10px; }
+  .headerTop .headerTop_contactBtn a.btn { border-top-left-radius: 0; border-top-right-radius: 0; font-size: 14px; } }

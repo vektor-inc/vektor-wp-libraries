@@ -24,7 +24,8 @@ gulp.task( 'copy_term-color', function() {
 } );
 gulp.task( 'copy_header-top', function() {
     gulp.src( './header-top/package/**' )
-    .pipe( gulp.dest( '../plugins/lightning-skin-variety/inc/header-top/' ) );
+    .pipe( gulp.dest( '../plugins/lightning-skin-variety/inc/header-top/' ) )
+    .pipe( gulp.dest( '../plugins/lightning-origin-pro/inc/header-top/' ) );
 } );
 // gulp.task( 'copy_font-awesome-selector', function() {
 //     gulp.src( './font-awesome-selector/package/**' )
