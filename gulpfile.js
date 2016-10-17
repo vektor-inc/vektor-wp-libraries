@@ -15,6 +15,7 @@ gulp.task( 'copy_vk-admin', function() {
     .pipe( gulp.dest( '../plugins/vk-all-in-one-expansion-unit/plugins_admin/vk-admin/' ) )
     .pipe( gulp.dest( '../plugins/vk-post-author-display/inc/vk-admin/' ) )
     .pipe( gulp.dest( '../plugins/lightning-skin-variety/inc/vk-admin/' ) )
+    .pipe( gulp.dest( '../plugins/lightning-origin-pro/inc/vk-admin/' ) )
     .pipe( gulp.dest( '../plugins/wp-easy-responsive-tabs-to-accordion/vk-admin/' ) );
 } );
 gulp.task( 'copy_term-color', function() {
@@ -26,6 +27,11 @@ gulp.task( 'copy_header-top', function() {
     gulp.src( './header-top/package/**' )
     .pipe( gulp.dest( '../plugins/lightning-skin-variety/inc/header-top/' ) )
     .pipe( gulp.dest( '../plugins/lightning-origin-pro/inc/header-top/' ) );
+} );
+gulp.task( 'copy_media-posts', function() {
+    gulp.src( './media-posts/package/**' )
+    .pipe( gulp.dest( '../plugins/lightning-skin-variety/inc/media-posts/' ) )
+    .pipe( gulp.dest( '../plugins/lightning-origin-pro/inc/media-posts/' ) );
 } );
 // gulp.task( 'copy_font-awesome-selector', function() {
 //     gulp.src( './font-awesome-selector/package/**' )
@@ -44,6 +50,7 @@ gulp.task('watch', function() {
     gulp.watch('./vk-admin/package/class.vk-admin.php', ['copy_vk-admin']);
     gulp.watch('./term-color/package/**', ['copy_term-color']);
     gulp.watch('./header-top/package/**', ['copy_header-top']);
+    gulp.watch('./media-posts/package/**', ['copy_media-posts']);
     gulp.watch('./post-type-manager/package/**', ['copy_post-type-manager']);
     // gulp.watch('./font-awesome-selector/package/**', ['copy_font-awesome-selector']);
     // gulp.watch('js/*.js', ['scripts']);
