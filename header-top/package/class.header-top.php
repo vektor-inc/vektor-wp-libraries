@@ -106,7 +106,7 @@ if ( ! class_exists( 'Lightning_header_top' ) )
 	    public function __construct(){
 			define( 'LTG_HEADER_TOP_URL', plugin_dir_url( __FILE__ ) );
 			define( 'LTG_HEADER_TOP_DIR', plugin_dir_path( __FILE__ ) );
-			define( 'LTG_HEADER_TOP_VERSION', '1.0d' );
+			define( 'LTG_HEADER_TOP_VERSION', '1.1' );
 	    	global $options;
 	    	global $vkExUnit_contact;
 			$options = get_option('Lightning_theme_options');
@@ -114,8 +114,9 @@ if ( ! class_exists( 'Lightning_header_top' ) )
 	    	add_action( 'after_setup_theme', array( $this, 'header_top_add_menu' ) );
 	    	add_action( 'lightning_header_prepend', array( $this, 'header_top_prepend_item' ) );
 	    	add_action( 'customize_preview_init', array( $this, 'header_top_add_script' ) );
-	    	add_action( 'plugins_loaded', array( $this, 'header_top_add_script' ) );
-	    	add_action( 'wp_enqueue_scripts',  array( $this, 'header_top_add_css' ) );
+	    	if( ! apply_filters('lightning_print_header_top_css_custom', false ) ){
+	    		add_action( 'wp_enqueue_scripts',  array( $this, 'header_top_add_css' ) );
+	    	}
 	    	require_once( 'header-top-customizer.php' );
 	    }
 
