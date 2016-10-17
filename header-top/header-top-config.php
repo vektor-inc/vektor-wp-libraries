@@ -22,4 +22,11 @@ if ( ! class_exists( 'Lightning_header_top' ) )
 	global $vk_header_top_textdomain;
 	$vk_header_top_textdomain = 'XXXX_plugin_text_domain_XXXX';
 
+	// header_topのCSSを個別で出力する場合は下記フックを使用
+	// add_filter( 'lightning_print_header_top_css_custom','ltg_variety_print_header_top_css' );
+	// function ltg_variety_print_header_top_css($print_css_default){
+	// 	$print_css_default = true;
+	// 	return $print_css_default;
+	// }
+
 }

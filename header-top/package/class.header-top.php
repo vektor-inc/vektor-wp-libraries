@@ -90,8 +90,13 @@ if ( ! class_exists( 'Lightning_header_top' ) )
 		/*-------------------------------------------*/
 		/*  Add header top css
 		/*-------------------------------------------*/
-		static function header_top_add_css() {
-			wp_enqueue_style( 'lightning-header-top', LTG_HEADER_TOP_URL.'css/header_top.css', array( 'lightning-design-style' ), LTG_HEADER_TOP_VERSION, 'all' );
+		static function header_top_add_css() 
+		{
+			// デフォルトでは出力しない
+			$print_css_default = false;
+			if( apply_filters('lightning_print_header_top_css_custom', false ) ){
+				wp_enqueue_style( 'lightning-header-top', LTG_HEADER_TOP_URL.'css/header_top.css', array( 'lightning-design-style' ), LTG_HEADER_TOP_VERSION, 'all' );
+			}
 		}
 		
 		static function header_top_add_script() {
@@ -117,9 +122,7 @@ if ( ! class_exists( 'Lightning_header_top' ) )
 	    	add_action( 'after_setup_theme', array( $this, 'header_top_add_menu' ) );
 	    	add_action( 'lightning_header_prepend', array( $this, 'header_top_prepend_item' ) );
 	    	add_action( 'customize_preview_init', array( $this, 'header_top_add_script' ) );
-	    	if( ! apply_filters('lightning_print_header_top_css_custom', false ) ){
-	    		add_action( 'wp_enqueue_scripts',  array( $this, 'header_top_add_css' ) );
-	    	}
+			add_action( 'wp_enqueue_scripts',  array( $this, 'header_top_add_css' ) );
 	    	require_once( 'header-top-customizer.php' );
 	    }
 
