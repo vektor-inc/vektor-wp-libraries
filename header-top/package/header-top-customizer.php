@@ -1,4 +1,14 @@
 <?php
+
+/*
+このファイルの元ファイルは
+https://github.com/vektor-inc/vektor-wp-libraries
+にあります。
+修正の際は上記リポジトリのデータを修正してください。
+編集権限を持っていない方で何か修正要望などありましたら
+各プラグインのリポジトリにプルリクエストで結構です。
+*/
+
 add_action( 'customize_register', 'lightning_header_top_customize_register' );
 function lightning_header_top_customize_register( $wp_customize ) {
 	global $vk_header_top_textdomain;
@@ -12,7 +22,7 @@ function lightning_header_top_customize_register( $wp_customize ) {
 	$veu_options = get_option( 'vkExUnit_contact' );
 	$default_btn_txt = ( isset( $veu_options['short_text'] ) && $veu_options['short_text'] ) ? $veu_options['short_text'] : __( 'CONTACT', 'ligthning' );
 	$default_btn_url = ( isset( $veu_options['contact_link'] ) && $veu_options['contact_link'] ) ? esc_url( $veu_options['contact_link'] ) : '';
-	$default_tel_number = ( isset( $veu_options['tel_number'] ) && $veu_options['tel_number'] ) ? esc_url( $veu_options['tel_number'] ) : '';
+	$default_tel_number = ( isset( $veu_options['tel_number'] ) && $veu_options['tel_number'] ) ? esc_html( $veu_options['tel_number'] ) : '';
 
 	$wp_customize->add_setting( 'lightning_theme_options[header_top_contact_txt]',	array(
 		'default' 			=> $default_btn_txt,
