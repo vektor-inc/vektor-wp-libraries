@@ -214,7 +214,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) )
 	    	// 0.618 = 1:1.618 = 0.38 : 0.62
 			add_image_size('media_thumbnail', 600, 371 , true );
 			require_once( 'class.widget.media-posts.php' );
-			require_once( 'views/class.loop_post_item.php' );
+			require_once( 'views/class.loop-post-view.php' );
 			require_once( 'class.font-awesome-selector.php' );
 			require_once( 'class.media-unit-admin.php' );
 	    }
@@ -257,16 +257,11 @@ if ( ! class_exists( 'Lightning_media_posts' ) )
 		if ( isset( $ltg_media_unit_archive_loop_layout[$post_type_slug] ) ){
 
 			$layout = $ltg_media_unit_archive_loop_layout[$post_type_slug];
-			$patterns = Lightning_media_posts::patterns();
 			$instance['new_icon_display'] = 7;
 			echo '<div class="loop_outer">';
-			echo '<div class="'.$patterns[$layout]['class_outer'].'">';
-			while ( have_posts() ) : the_post();
-				echo '<div class="'.$patterns[$layout]['class_post_outer'].'">';
-				Ltg_Media_Post_Item::media_post( $patterns[$layout]['class_post_item'], $instance );
-				echo '</div>';
-			endwhile;
-			echo '</div>';
+
+			Ltg_Media_Post_View::post_loop($layout, $instance);
+
 			echo '</div>';
 		}
 	}

@@ -63,8 +63,9 @@ class Lightning_Media_Admin {
 	public static function archive_layout_customize_register( $wp_customize )
 	{
 
+		global $vk_ltg_media_posts_textdomain;
 		$wp_customize->add_section( 'lightning_archive_layout', array(
-			'title'				=> __('Lightning Archive Layouts', 'lightning-variety'),
+			'title'				=> __('Lightning Archive Layouts', $vk_ltg_media_posts_textdomain ),
 			'priority'			=> 800,
 		) );
 
@@ -89,7 +90,7 @@ class Lightning_Media_Admin {
 				'sanitize_callback' => 'sanitize_text_field',
 			) );
 			$wp_customize->add_control( 'ltg_media_unit_archive_loop_layout['.$type.']', array(
-				'label'		=>  __('Archive Page Layout [ ').$post_types_labels[$type].' ]',
+				'label'		=>  sprintf( __( 'Archive Page Layout [ %s ]', $vk_ltg_media_posts_textdomain ),$post_types_labels[$type] ),
 				'section'	=> 'lightning_archive_layout',
 				'settings'  => 'ltg_media_unit_archive_loop_layout['.$type.']',
 				'type'		=> 'select',

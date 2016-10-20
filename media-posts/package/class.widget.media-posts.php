@@ -71,47 +71,9 @@ class WP_Widget_media_post extends WP_Widget {
 		$p_args['offset']         = ( isset( $instance['offset'] ) && $instance['offset'] ) ? mb_convert_kana( $instance['offset'], "n" ) : '';
 
 		$wp_query = new WP_Query( $p_args );
-		if ( $wp_query->have_posts() ) :
-			$patterns = Lightning_media_posts::patterns();
-			echo '<div class="'.$patterns[$instance['format']]['class_outer'].'">';
-				if ( $instance['format'] == 'image_1st' ) {
-					global $wp_query;
-					$count = 1;
-					/*
-					1 左
-					2 右
-					3 右
-					4 左 +
-					5 左
-					6 右
-					7 左 +
-					8 左
-					9 右
-					4 と 4に3の倍数を足した数の場合は改行
-					*/
-					while ( $wp_query->have_posts() ) : $wp_query->the_post();
-						$media_post_class = ( $count == 1 ) ? ' image_card first' : ' image_card normal';
-
-						if ( ( $count % 3 ) != 0 && $count != 2 ){
-							$media_post_class .= ' left' ;
-						}
-						if ( 
-							$count == 4 || 
-							( ( $count - 4 ) % 3 == 0  )
-							){
-							$media_post_class .= ' clear' ;
-						}
-						Ltg_Media_Post_Item::media_post( $media_post_class, $instance );
-						$count++;
-					endwhile;
-				} else {
-					while ( $wp_query->have_posts() ) : $wp_query->the_post();
-						echo '<div class="'.$patterns[$instance['format']]['class_post_outer'].'">';
-						Ltg_Media_Post_Item::media_post( $patterns[$instance['format']]['class_post_item'], $instance );
-						echo '</div>';
-					endwhile;
-				}
-			echo '</div>';
+		if ( have_posts() ) :
+			$layout = $instance['format'];
+			Ltg_Media_Post_View::post_loop($layout, $instance);
 		endif;
 		// echo '</div>';
 		echo $args['after_widget'];
