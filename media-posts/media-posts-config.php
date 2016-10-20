@@ -8,13 +8,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) )
 	$vk_ltg_media_posts_textdomain = 'lightning-variety';
 
 	require_once( 'media-posts/class.media-posts.php' );
-	require_once( 'media-posts/class.widget.media-posts.php' );
-	require_once( 'media-posts/views/class.loop_post_item.php' );
-	require_once( 'media-posts/class.font-awesome-selector.php' );
-	if ( is_admin() ) {
-		require_once( 'media-posts/class.media-unit-admin.php' );
-		add_action( 'admin_menu', array( 'Lightning_Media_Admin', 'init' ) );
-	}
+
 	/*  transrate
 	/*-------------------------------------------*/
 	function ltg_variety_translate(){

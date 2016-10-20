@@ -104,7 +104,7 @@ $item_bottom_margin : 25px;
 	 }
 	&:hover {		
 		.media_post_text {
-			background-color: rgba(255,0,0,0.8);
+			background-color: rgba(255,0,0,0.6);
 			transition: background-color 0.6s, transform 0.6s;
 		}
 	}
@@ -127,7 +127,6 @@ $item_bottom_margin : 25px;
 			&.left { float:left;margin-right:2%; }
 			&.clear { clear:both; }
 		}
-
 	}
 } // @media (min-width: 768px){
 

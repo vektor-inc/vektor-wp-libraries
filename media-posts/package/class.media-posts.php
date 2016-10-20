@@ -7,7 +7,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) )
 		static function init(){
 				define( 'LTG_MEDIA_POSTS_URL', plugin_dir_url( __FILE__ ) );
 				define( 'LTG_MEDIA_POSTS_DIR', plugin_dir_path( __FILE__ ) );
-				define( 'LTG_MEDIA_POSTS_VERSION', '1.0d' );
+				define( 'LTG_MEDIA_POSTS_VERSION', '1.1' );
 		}
 
 		public static function patterns(){
@@ -15,52 +15,54 @@ if ( ! class_exists( 'Lightning_media_posts' ) )
 			$patterns = array(
 				'image_1st' => array( 
 					'label' => __( 'Image card 1st feature', 'lightning-media-unit' ),
+					'class_outer' => 'image_1st',
+					// 1stは２件目以降とpostのクラスが異なるためここに値が無い
 				 ),
 				'image_3' => array( 
 					'label' => __( 'Image card 3 colmun', 'lightning-media-unit' ),
-					'class_outer' => 'row',
+					'class_outer' => 'row image_3',
 					'class_post_outer' => 'col-sm-6 col-lg-4 col-md-4',
 					'class_post_item' => ' image_card',
 				 ),
 				'image_1' => array( 
 					'label' => __( 'Image card 1 colmun', 'lightning-media-unit' ),
-					'class_outer' => 'row',
+					'class_outer' => 'row image_1',
 					'class_post_outer' => 'col-sm-12',
 					'class_post_item' => ' image_card'
 				 ),
 				'vert_3' => array( 
 					'label' => __( 'Vertical card 3 column', 'lightning-media-unit' ),
-					'class_outer' => 'row flex_height',
+					'class_outer' => 'row vert_3 flex_height',
 					'class_post_outer' => 'col-sm-6 col-lg-4 col-md-4 flex_height_col',
 					'class_post_item' => ' vertical_card normal_image'
 				 ),
 				'vert_1' => array( 
 					'label' => __( 'Vertical card 1 column', 'lightning-media-unit' ),
-					'class_outer' => 'row',
+					'class_outer' => 'row vert_1',
 					'class_post_outer' => 'col-sm-12',
 					'class_post_item' => ' vertical_card normal_image'
 				 ),
 				'vert_large_image_3' => array( 
 					'label' => __( 'Vertical card large image 3 column', 'lightning-media-unit' ),
-					'class_outer' => 'row flex_height',
+					'class_outer' => 'row vert_large_image_3 flex_height',
 					'class_post_outer' => 'col-sm-6 col-lg-4 col-md-4 flex_height_col',
 					'class_post_item' => ' vertical_card large_image'
 				 ),
 				'vert_large_image_1' => array( 
 					'label' => __( 'Vertical card large image 1 column', 'lightning-media-unit' ),
-					'class_outer' => 'row',
+					'class_outer' => 'row vert_large_image_1',
 					'class_post_outer' => 'col-sm-12',
 					'class_post_item' => ' vertical_card large_image'
 				 ),
 				'oblong_1' => array( 
 					'label' => __( 'Oblong card 1 column', 'lightning-media-unit' ),
-					'class_outer' => 'row',
+					'class_outer' => 'row oblong_1',
 					'class_post_outer' => 'col-sm-12',
 					'class_post_item' => ' oblong_card normal_image'
 				 ),
 				'oblong_large_image_1' => array( 
 					'label' => __( 'Oblong card large image 1 column', 'lightning-media-unit' ),
-					'class_outer' => 'row',
+					'class_outer' => 'row oblong_large_image_1',
 					'class_post_outer' => 'col-sm-12',
 					'class_post_item' => ' oblong_card large_image'
 				 ),
@@ -69,10 +71,11 @@ if ( ! class_exists( 'Lightning_media_posts' ) )
 		}
 
 		public static function patterns_select_options( $selected ){
+			global $vk_ltg_media_posts_textdomain;
 			$patterns = Lightning_media_posts::patterns();
 
 			$selected_html =  ( isset( $selected ) && ( $selected == 'default' ) ) ? ' selected' : '';
-			$select_html = '<option value="default">'.__('Lightning default').'</option>';
+			$select_html = '<option value="default">'.__('Lightning default', $vk_ltg_media_posts_textdomain).'</option>';
 
 			foreach ( $patterns as $key => $value ) {
 				$selected_html =  ( isset( $selected ) && ( $selected == $key ) ) ? ' selected' : '';
@@ -126,7 +129,6 @@ if ( ! class_exists( 'Lightning_media_posts' ) )
 
 			return $custom_types_labels;
 		}
-
 
 		/*-------------------------------------------*/
 		/*  Widgets init
@@ -196,7 +198,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) )
 			// デフォルトでは出力しない
 			$print_css_default = false;
 			if( apply_filters('lightning_print_media_posts_css_custom', $print_css_default ) ){
-				wp_enqueue_style( 'lmu_common_style', LTG_MEDIA_POSTS_URL.'css/media_posts.css', array(), LTG_MEDIA_POSTS_VERSION, 'all' );
+				wp_enqueue_style( 'lightning_media_posts_style', LTG_MEDIA_POSTS_URL.'css/media_posts.css', array(), LTG_MEDIA_POSTS_VERSION, 'all' );
 			}
 		}
 
@@ -211,6 +213,10 @@ if ( ! class_exists( 'Lightning_media_posts' ) )
 	    	add_action( 'widgets_init', array( $this, 'widgets_init' ), 100 );
 	    	// 0.618 = 1:1.618 = 0.38 : 0.62
 			add_image_size('media_thumbnail', 600, 371 , true );
+			require_once( 'class.widget.media-posts.php' );
+			require_once( 'views/class.loop_post_item.php' );
+			require_once( 'class.font-awesome-selector.php' );
+			require_once( 'class.media-unit-admin.php' );
 	    }
 
 	} // class Lightning_media_posts

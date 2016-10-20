@@ -29,13 +29,12 @@
 .media_post.image_card .media_post_text { position: absolute; bottom: 0; z-index: 10; color: #fff; width: 100%; background-color: rgba(0, 0, 0, 0.8); transition: background-color 0.6s, transform 0.6s; padding: 10px 10px 10px 13px; }
 .media_post.image_card .media_post_text .media_post_term { float: right; }
 .media_post.image_card .media_post_title { line-height: 1.3em; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.media_post.image_card:hover .media_post_text { background-color: rgba(255, 0, 0, 0.8); transition: background-color 0.6s, transform 0.6s; }
+.media_post.image_card:hover .media_post_text { background-color: rgba(255, 0, 0, 0.6); transition: background-color 0.6s, transform 0.6s; }
 
 /*-------------------------------------------*/
 /*	.image_1st
 /*-------------------------------------------*/
-@media (min-width: 768px) { .image_1st .media_post { margin-bottom: 10px; }
-  .image_1st .media_post.first { float: left; width: 66%; }
+@media (min-width: 768px) { .image_1st .media_post.first { float: left; width: 66%; }
   .image_1st .media_post.normal { float: right; width: 32%; }
   .image_1st .media_post.left { float: left; margin-right: 2%; }
   .image_1st .media_post.clear { clear: both; } }

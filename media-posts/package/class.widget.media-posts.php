@@ -19,10 +19,10 @@ class WP_Widget_media_post extends WP_Widget {
 
 	function widget( $args, $instance ) {
 		global $vk_ltg_media_posts_textdomain;
-		if ( ! isset( $instance['format'] ) ) { $instance['format'] = 0; }
+		if ( ! isset( $instance['format'] ) || ! $instance['format'] ) { $instance['format'] = 'image_1st'; }
 
 		echo $args['before_widget'];
-		echo '<div class="'.$instance['format'].'">';
+		// echo '<div class="'.$instance['format'].'">';
 		$title_icon = ( isset( $instance['title_icon'] ) && $instance['title_icon'] ) ? $instance['title_icon'] : '';
 		
 		if ( isset( $instance['label'] ) && $instance['label'] ) {
@@ -72,8 +72,9 @@ class WP_Widget_media_post extends WP_Widget {
 
 		$wp_query = new WP_Query( $p_args );
 		if ( $wp_query->have_posts() ) :
-
-				if ( ! $instance['format'] || $instance['format'] == 'image_1st' ) {
+			$patterns = Lightning_media_posts::patterns();
+			echo '<div class="'.$patterns[$instance['format']]['class_outer'].'">';
+				if ( $instance['format'] == 'image_1st' ) {
 					global $wp_query;
 					$count = 1;
 					/*
@@ -104,19 +105,15 @@ class WP_Widget_media_post extends WP_Widget {
 						$count++;
 					endwhile;
 				} else {
-					$patterns = Lightning_media_posts::patterns();
-					echo '<div class="'.$patterns[$instance['format']]['class_outer'].'">';
 					while ( $wp_query->have_posts() ) : $wp_query->the_post();
 						echo '<div class="'.$patterns[$instance['format']]['class_post_outer'].'">';
 						Ltg_Media_Post_Item::media_post( $patterns[$instance['format']]['class_post_item'], $instance );
 						echo '</div>';
 					endwhile;
-					echo '</div>';
 				}
-
+			echo '</div>';
 		endif;
-
-		echo '</div>';
+		// echo '</div>';
 		echo $args['after_widget'];
 
 		wp_reset_postdata();

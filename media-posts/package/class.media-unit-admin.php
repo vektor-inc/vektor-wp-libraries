@@ -16,6 +16,9 @@ class Lightning_Media_Admin {
 
 		//all labels
 		self::$post_types_labels = Lightning_media_posts::labelNames() + Lightning_media_posts::get_custom_types_labels();
+
+		add_action( 'customize_register', array( __CLASS__, 'archive_layout_customize_register' ) );
+
 	}
 
 	//displays Media Unit plugin page content
@@ -57,4 +60,46 @@ class Lightning_Media_Admin {
 		return $mess;
 	}
 
+	public static function archive_layout_customize_register( $wp_customize )
+	{
+
+		$wp_customize->add_section( 'lightning_archive_layout', array(
+			'title'				=> __('Lightning Archive Layouts', 'lightning-variety'),
+			'priority'			=> 800,
+		) );
+
+		$post_types = array( 'post' => 0 );
+		$post_types = Lightning_media_posts::get_custom_types() + $post_types;
+		$post_types['author'] = 'author';
+
+		$post_types_labels = Lightning_media_posts::labelNames() + Lightning_media_posts::get_custom_types_labels();
+		$post_types_labels['author'] = __( 'Author', $vk_ltg_media_posts_textdomain );
+
+		$patterns['default']['label'] = __( 'Lightning default', $vk_ltg_media_posts_textdomain );
+		$patterns = $patterns + Lightning_media_posts::patterns();
+		foreach ($patterns as $key => $value) {
+			$layouts[$key] = $value['label'];
+		}
+
+		foreach ( $post_types as $type => $value ) {
+			$wp_customize->add_setting( 'ltg_media_unit_archive_loop_layout['.$type.']', array(
+				'default'			=> 'default',
+				'type'				=> 'option',
+				'capability'		=> 'edit_theme_options',
+				'sanitize_callback' => 'sanitize_text_field',
+			) );
+			$wp_customize->add_control( 'ltg_media_unit_archive_loop_layout['.$type.']', array(
+				'label'		=>  __('Archive Page Layout [ ').$post_types_labels[$type].' ]',
+				'section'	=> 'lightning_archive_layout',
+				'settings'  => 'ltg_media_unit_archive_loop_layout['.$type.']',
+				'type'		=> 'select',
+				'choices'   => $layouts,
+				'priority'	=> 500,
+			));
+		}
+
+		return $wp_customize;
+	}
+
 }
+Lightning_Media_Admin::init();
