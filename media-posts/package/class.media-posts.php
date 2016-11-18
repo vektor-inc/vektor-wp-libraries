@@ -229,13 +229,15 @@ if ( ! class_exists( 'Lightning_media_posts' ) )
 	/*-------------------------------------------*/
 	add_filter( 'is_lightning_extend_loop', 'lmu_is_loop_layout_change' );
 	function lmu_is_loop_layout_change( $flag ){
-		$post_type = lightning_get_post_type();
 		$ltg_media_unit_archive_loop_layout = get_option( 'ltg_media_unit_archive_loop_layout' );
-		if ( $ltg_media_unit_archive_loop_layout ) {
-			if ( is_author() ){
-				$post_type['slug'] = 'author';
-			}
-			$postType = $post_type['slug'];
+		$post_type = lightning_get_post_type();
+		$postType = $post_type['slug'];
+
+		if ( is_author() ){
+				$postType = 'author';
+		}
+
+		if ( isset ( $ltg_media_unit_archive_loop_layout[$postType] ) ) {
 
 			if ( 
 				( $ltg_media_unit_archive_loop_layout[$postType] != 'default' ) || 
@@ -245,7 +247,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) )
 					add_action( 'lightning_extend_loop', 'lmu_do_loop_layout_change' );
 					$flag = true;
 			}
-		} // if ( $ltg_media_unit_archive_loop_layout ) {
+		} // if ( isset ( $ltg_media_unit_archive_loop_layout[$postType] ) ) {
 		return $flag;
 	}
 

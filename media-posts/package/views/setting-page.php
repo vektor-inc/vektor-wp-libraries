@@ -11,6 +11,9 @@ global $vk_ltg_media_posts_textdomain; ?>
 	<div class="sectionBox">
 		<table>
 			<?php
+			$post_types = array( 'post' => 0 );
+			$post_types = Lightning_media_posts::get_custom_types() + $post_types;
+			$post_types_labels = Lightning_media_posts::labelNames() + Lightning_media_posts::get_custom_types_labels();
 			$ltg_media_unit_archive_loop_layout = get_option('ltg_media_unit_archive_loop_layout');
 			foreach ( $post_types as $type => $value ) {
 				$selected = isset( $ltg_media_unit_archive_loop_layout[$type] ) ? $ltg_media_unit_archive_loop_layout[$type] : 'default';

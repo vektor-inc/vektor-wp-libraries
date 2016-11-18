@@ -747,12 +747,6 @@ class Vk_Font_Awesome_Selector {
 		}
 		$select_html .= '</ul>';
 
-		// $select_html .= '<select name="'.$name.'">';
-		// $select_html .= '<option><strong>いえい</strong></option>';
-		// foreach ($icons as $key => $value) {
-		// 	$select_html .= '<option value="'.$value.'"><span class="fa fa-fa fa-'.$value.'"><i class="fa fa-'.$value.'" aria-hidden="true"></i>'.$value.'</span></option>';
-		// }
-		// $select_html .= '</select>';
 		echo $select_html;
 	}
 
@@ -760,12 +754,13 @@ class Vk_Font_Awesome_Selector {
 		// font-awesome
 		$awesome_ver = '4.6.1';
 		$awesome_path = get_template_directory_uri().'/library/font-awesome/' . $awesome_ver . '/css/font-awesome.min.css';
-		$array = get_headers( $awesome_path );
 
-		if( strpos( $array[0],'OK' ) ) {
-			$awesome_ver = '4.6.3';
-			$awesome_path = 'https://maxcdn.bootstrapcdn.com/font-awesome/' . $awesome_ver . '/css/font-awesome.min.css';
-		}
+		// サーバーによってエラーになるためテーマディレクトリのfontawesomeのみ使用
+		// $array = get_headers( $awesome_path );
+		// if( strpos( $array[0],'OK' ) ) {
+		// 	$awesome_ver = '4.6.3';
+		// 	$awesome_path = 'https://maxcdn.bootstrapcdn.com/font-awesome/' . $awesome_ver . '/css/font-awesome.min.css';
+		// }
 		wp_enqueue_style( 'font-awesome', $awesome_path, array(), $awesome_ver );
 		?>
 		<style type="text/css">
