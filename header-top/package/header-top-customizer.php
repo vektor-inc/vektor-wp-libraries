@@ -19,29 +19,32 @@ function lightning_header_top_customize_register( $wp_customize ) {
 		'title'				=> __('Lightning Header top settings', $vk_header_top_textdomain  ),
 		'priority'			=> 450,
 	) );
-	$veu_options = get_option( 'vkExUnit_contact' );
-	$default_btn_txt = ( isset( $veu_options['short_text'] ) && $veu_options['short_text'] ) ? $veu_options['short_text'] : __( '', 'ligthning' );
-	$default_btn_url = ( isset( $veu_options['contact_link'] ) && $veu_options['contact_link'] ) ? esc_url( $veu_options['contact_link'] ) : '';
-	$default_tel_number = ( isset( $veu_options['tel_number'] ) && $veu_options['tel_number'] ) ? esc_html( $veu_options['tel_number'] ) : '';
+
+	/* 誤動作回避の為初期値の削除 */
+	// $veu_options = get_option( 'vkExUnit_contact' );
+	// $default_btn_txt = ( isset( $veu_options['short_text'] ) && $veu_options['short_text'] ) ? $veu_options['short_text'] : __( '', 'ligthning' );
+	// $default_btn_url = ( isset( $veu_options['contact_link'] ) && $veu_options['contact_link'] ) ? esc_url( $veu_options['contact_link'] ) : '';
+	// $default_tel_number = ( isset( $veu_options['tel_number'] ) && $veu_options['tel_number'] ) ? esc_html( $veu_options['tel_number'] ) : '';
 
 	$wp_customize->add_setting( 'lightning_theme_options[header_top_contact_txt]',	array(
-		'default' 			=> $default_btn_txt,
+		'default' 			=> '',
 		'type'				=> 'option',
 		'capability' 		=> 'edit_theme_options',
-		'transport'   		=> 'postMessage',
+		// 'transport'   		=> 'postMessage',
 		'sanitize_callback' => 'sanitize_text_field',
 		) );
 	$wp_customize->add_setting( 'lightning_theme_options[header_top_contact_url]',	array(
-		'default' 			=> $default_btn_url,
+		'default' 			=> '',
 		'type'				=> 'option',
 		'capability' 		=> 'edit_theme_options',
+		// 'transport'   		=> 'postMessage',
 		'sanitize_callback' => 'esc_url_raw',
 		) );
 	$wp_customize->add_setting( 'lightning_theme_options[header_top_tel_number]',	array(
-		'default' 			=> $default_tel_number,
+		'default' 			=> '',
 		'type'				=> 'option',
 		'capability' 		=> 'edit_theme_options',
-		'transport'   		=> 'postMessage',
+		// 'transport'   		=> 'postMessage',
 		'sanitize_callback' => 'sanitize_text_field',
 		) );
 

@@ -18,70 +18,9 @@ if ( ! class_exists( 'Lightning_header_top' ) )
 		/*	Header top nav
 		/*-------------------------------------------*/
 		
-		public static function header_top_prepend_item(){
-			$header_prepend = '<div class="headerTop" id="headerTop">';
-			$header_prepend .= '<div class="container">';
-			$header_prepend .= '<p class="headerTop_description">'.get_bloginfo( 'description' ).'</p>';
 
-			global $options;
-			global $vkExUnit_contact;
-			if ( isset( $options['header_top_tel_number'] ) && $options['header_top_tel_number'] ) {
-				$tel_number = mb_convert_kana ( esc_attr( $options['header_top_tel_number'] ), 'n' );
-				/* ここで追加するHTMLは header-top-customizer.js でも修正する必要があるので注意 */
-				if ( wp_is_mobile() ){
-					$contact_tel = '<li class="headerTop_tel"><a class="headerTop_tel_wrap" href="tel:'.$tel_number.'">'.$tel_number.'</a></li>';
-				} else {
-					$contact_tel = '<li class="headerTop_tel"><span class="headerTop_tel_wrap">'.$tel_number.'</span></li>';
-				}
-			} else {
-				$contact_tel = '';
-			}
 
-			$args = array(
-				'theme_location' => 'header-top',
-				'container'      => 'nav',
-				'items_wrap'     => '<ul id="%1$s" class="%2$s nav">%3$s'.$contact_tel.'</ul>',
-				'fallback_cb'    => '',
-				'echo'           => false,
-			);
-			$header_top_menu = wp_nav_menu( $args ) ;
-			if ( $header_top_menu ) {
-				$header_prepend .= apply_filters( 'Lightning_headerTop_menu', $header_top_menu );
-			} else if ( $contact_tel || is_customize_preview() ) {
-				$header_prepend .= '<nav><ul id="%1$s" class="%2$s nav">'.$contact_tel.'</ul></nav>';
-			}
 
-		    $header_prepend .= self::header_top_contact_btn();
-			$header_prepend .= '</div><!-- [ / .container ] -->';
-			$header_prepend .= '</div><!-- [ / #headerTop  ] -->';
-			echo $header_prepend;
-		}
-
-		static function header_top_contact_btn(){
-			global $options;
-			global $vkExUnit_contact;
-
-			if ( isset( $options['header_top_contact_txt'] ) && $options['header_top_contact_txt'] ) {
-				$btn_txt = esc_html( $options['header_top_contact_txt'] );
-			} elseif ( isset( $options['header_top_contact_txt'] ) && !$options['header_top_contact_txt'] ) {
-				$btn_txt = '';
-			} elseif ( !isset( $options['header_top_contact_txt'] ) && isset( $vkExUnit_contact['short_text'] ) ) {
-				$btn_txt = esc_html( $vkExUnit_contact['short_text'] );
-			}
-
-			if ( isset( $options['header_top_contact_url'] ) && $options['header_top_contact_url'] ) {
-				$link_url = esc_url( $options['header_top_contact_url'] );
-			} elseif ( isset( $options['header_top_contact_url'] ) && !$options['header_top_contact_url'] ) {
-				$link_url = '';
-			} elseif ( !isset( $options['header_top_contact_url'] ) && isset( $vkExUnit_contact['contact_link'] ) ) {
-				$link_url = esc_url( $vkExUnit_contact['contact_link'] );
-			}
-
-			if ( isset( $btn_txt ) && $btn_txt && isset( $link_url ) && $link_url ){
-				$contact_btn_html = '<div class="headerTop_contactBtn"><a href="'.$link_url.'" class="btn btn-primary">'.$btn_txt.'</a></div>';
-				return $contact_btn_html;
-			}
-		}
 
 		static function header_top_add_menu() {
 			register_nav_menus( array( 'header-top' => 'Header Top Navigation', ) );
@@ -120,15 +59,90 @@ if ( ! class_exists( 'Lightning_header_top' ) )
 			$options = get_option('Lightning_theme_options');
 			$vkExUnit_contact = get_option( 'vkExUnit_contact' );
 	    	add_action( 'after_setup_theme', array( $this, 'header_top_add_menu' ) );
-	    	add_action( 'lightning_header_prepend', array( $this, 'header_top_prepend_item' ) );
+	    	
 	    	add_action( 'customize_preview_init', array( $this, 'header_top_add_script' ) );
 			add_action( 'wp_enqueue_scripts',  array( $this, 'header_top_add_css' ) );
-	    	require_once( 'header-top-customizer.php' );
+	    	require( 'header-top-customizer.php' );
 	    }
 
 	} // class Lightning_header_top 
 
 	new Lightning_header_top();
+
+
+		function header_top_prepend_item(){
+			echo '<br />_|＼○_ﾋｬｯ ε=＼＿○ﾉ ﾎｰｳ!!'.'<br />'."\n";
+			$header_prepend = '<div class="headerTop" id="headerTop">';
+			$header_prepend .= '<div class="container">';
+			$header_prepend .= '<p class="headerTop_description">'.get_bloginfo( 'description' ).'</p>';
+
+			// global $options;
+			// global $vkExUnit_contact;
+			$options = get_option('Lightning_theme_options');
+			print '<pre style="text-align:left">';print_r($options);print '</pre>';
+			if ( isset( $options['header_top_tel_number'] ) && $options['header_top_tel_number'] ) {
+				$tel_number = mb_convert_kana ( esc_attr( $options['header_top_tel_number'] ), 'n' );
+				/* ここで追加するHTMLは header-top-customizer.js でも修正する必要があるので注意 */
+				if ( wp_is_mobile() ){
+					$contact_tel = '<li class="headerTop_tel"><a class="headerTop_tel_wrap" href="tel:'.$tel_number.'">'.$tel_number.'</a></li>';
+				} else {
+					$contact_tel = '<li class="headerTop_tel"><span class="headerTop_tel_wrap">'.$tel_number.'</span></li>';
+				}
+			} else {
+				$contact_tel = '';
+			}
+
+			$args = array(
+				'theme_location' => 'header-top',
+				'container'      => 'nav',
+				'items_wrap'     => '<ul id="%1$s" class="%2$s nav">%3$s'.$contact_tel.'</ul>',
+				'fallback_cb'    => '',
+				'echo'           => false,
+			);
+			$header_top_menu = wp_nav_menu( $args ) ;
+			if ( $header_top_menu ) {
+				$header_prepend .= apply_filters( 'Lightning_headerTop_menu', $header_top_menu );
+			} else if ( $contact_tel || is_customize_preview() ) {
+				$header_prepend .= '<nav><ul id="%1$s" class="%2$s nav">'.$contact_tel.'</ul></nav>';
+			}
+
+		    $header_prepend .= header_top_contact_btn();
+			$header_prepend .= '</div><!-- [ / .container ] -->';
+			$header_prepend .= '</div><!-- [ / #headerTop  ] -->';
+			echo $header_prepend;
+		}
+
+
+		function header_top_contact_btn(){
+			global $options;
+			$options = get_option('Lightning_theme_options');
+			// global $vkExUnit_contact;
+
+			if ( isset( $options['header_top_contact_txt'] ) && $options['header_top_contact_txt'] ) {
+				$btn_txt = esc_html( $options['header_top_contact_txt'] );
+			// } elseif ( isset( $options['header_top_contact_txt'] ) && !$options['header_top_contact_txt'] ) {
+			// 	$btn_txt = '';
+			// } elseif ( !isset( $options['header_top_contact_txt'] ) && isset( $vkExUnit_contact['short_text'] ) ) {
+			// 	$btn_txt = esc_html( $vkExUnit_contact['short_text'] );
+			} else {
+				$btn_txt = '';
+			}
+
+			if ( isset( $options['header_top_contact_url'] ) && $options['header_top_contact_url'] ) {
+				$link_url = esc_url( $options['header_top_contact_url'] );
+			// } elseif ( isset( $options['header_top_contact_url'] ) && !$options['header_top_contact_url'] ) {
+			// 	$link_url = '';
+			// } elseif ( !isset( $options['header_top_contact_url'] ) && isset( $vkExUnit_contact['contact_link'] ) ) {
+			// 	$link_url = esc_url( $vkExUnit_contact['contact_link'] );
+			} else {
+				$link_url = '';
+			}
+
+			if ( isset( $btn_txt ) && $btn_txt && isset( $link_url ) && $link_url ){
+				$contact_btn_html = '<div class="headerTop_contactBtn"><a href="'.$link_url.'" class="btn btn-primary">'.$btn_txt.'</a></div>';
+				return $contact_btn_html;
+			}
+		}
 }
 
 // Lightning_header_top::init();
