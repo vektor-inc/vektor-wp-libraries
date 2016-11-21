@@ -63,18 +63,22 @@ if ( ! class_exists( 'Lightning_header_top' ) )
 
 			if ( isset( $options['header_top_contact_txt'] ) && $options['header_top_contact_txt'] ) {
 				$btn_txt = esc_html( $options['header_top_contact_txt'] );
-			} elseif ( isset( $options['header_top_contact_txt'] ) && !$options['header_top_contact_txt'] ) {
+			// } elseif ( isset( $options['header_top_contact_txt'] ) && !$options['header_top_contact_txt'] ) {
+			// 	$btn_txt = '';
+			// } elseif ( !isset( $options['header_top_contact_txt'] ) && isset( $vkExUnit_contact['short_text'] ) ) {
+			// 	$btn_txt = esc_html( $vkExUnit_contact['short_text'] );
+			} else {
 				$btn_txt = '';
-			} elseif ( !isset( $options['header_top_contact_txt'] ) && isset( $vkExUnit_contact['short_text'] ) ) {
-				$btn_txt = esc_html( $vkExUnit_contact['short_text'] );
 			}
 
 			if ( isset( $options['header_top_contact_url'] ) && $options['header_top_contact_url'] ) {
 				$link_url = esc_url( $options['header_top_contact_url'] );
-			} elseif ( isset( $options['header_top_contact_url'] ) && !$options['header_top_contact_url'] ) {
+			// } elseif ( isset( $options['header_top_contact_url'] ) && !$options['header_top_contact_url'] ) {
+			// 	$link_url = '';
+			// } elseif ( !isset( $options['header_top_contact_url'] ) && isset( $vkExUnit_contact['contact_link'] ) ) {
+			// 	$link_url = esc_url( $vkExUnit_contact['contact_link'] );
+			} else {
 				$link_url = '';
-			} elseif ( !isset( $options['header_top_contact_url'] ) && isset( $vkExUnit_contact['contact_link'] ) ) {
-				$link_url = esc_url( $vkExUnit_contact['contact_link'] );
 			}
 
 			if ( isset( $btn_txt ) && $btn_txt && isset( $link_url ) && $link_url ){
