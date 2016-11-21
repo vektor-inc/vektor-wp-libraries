@@ -20,7 +20,7 @@ function lightning_header_top_customize_register( $wp_customize ) {
 		'priority'			=> 450,
 	) );
 	$veu_options = get_option( 'vkExUnit_contact' );
-	$default_btn_txt = ( isset( $veu_options['short_text'] ) && $veu_options['short_text'] ) ? $veu_options['short_text'] : __( 'CONTACT', 'ligthning' );
+	$default_btn_txt = ( isset( $veu_options['short_text'] ) && $veu_options['short_text'] ) ? $veu_options['short_text'] : __( '', 'ligthning' );
 	$default_btn_url = ( isset( $veu_options['contact_link'] ) && $veu_options['contact_link'] ) ? esc_url( $veu_options['contact_link'] ) : '';
 	$default_tel_number = ( isset( $veu_options['tel_number'] ) && $veu_options['tel_number'] ) ? esc_html( $veu_options['tel_number'] ) : '';
 
