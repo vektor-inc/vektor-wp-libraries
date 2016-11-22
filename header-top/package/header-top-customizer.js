@@ -5,20 +5,46 @@
     * jQuery を使ってページに変更を反映します。
     */
    ( function( $ ) {
-   	       // リアルタイムにサイトタイトルを変更
-       wp.customize( 'lightning_theme_options[header_top_contact_txt]', function( value ) {
-           value.bind( function( newval ) {
-              if ( newval ){
-                if ( jQuery('#headerTop .container div:last-child' ).hasClass('headerTop_contactBtn') ){
-                  $( '.headerTop_contactBtn a' ).html( newval );
-                } else {
-                  $( '#headerTop .container').append( '<div class="headerTop_contactBtn"><a href="" class="btn btn-primary">' + newval + '</a></div>' );
-                }
-              } else {
-                $( '.headerTop_contactBtn' ).remove();
-              }
-           } );
-       } );
+
+      wp.customize( 'lightning_theme_options[header_top_contact_txt]', function( contact_txt_value ) {
+        contact_txt_value.bind( function( contact_txt_new_val ) {
+          wp.customize( 'lightning_theme_options[header_top_contact_url]', function( contact_url_value ) {
+            contact_url_value.bind( function( contact_url_new_val ) {
+              header_top_contact_btn( contact_txt_new_val, contact_url_new_val );
+            } );
+          } );
+        } );
+      } );
+      wp.customize( 'lightning_theme_options[header_top_contact_url]', function( contact_url_value ) {
+        contact_url_value.bind( function( contact_url_new_val ) {
+          wp.customize( 'lightning_theme_options[header_top_contact_txt]', function( contact_txt_value ) {
+            contact_txt_value.bind( function( contact_txt_new_val ) {
+              header_top_contact_btn( contact_txt_new_val, contact_url_new_val );
+            } );
+          } );
+        } );
+      } );
+
+      function header_top_contact_btn( contact_txt_new_val, contact_url_new_val ){
+        if ( contact_txt_new_val && contact_url_new_val ){
+
+          // 既にボタンが存在している場合はテキストのみ打ち替える
+          if ( jQuery('#headerTop .container div:last-child' ).hasClass('headerTop_contactBtn') ){
+
+            $( '.headerTop_contactBtn a' ).html( contact_txt_new_val );
+
+          // ボタンが無い場合は新規追加
+          } else {
+
+            $( '#headerTop .container').append( '<div class="headerTop_contactBtn"><a href="'+contact_url_new_val+'" class="btn btn-primary">' + contact_txt_new_val + '</a></div>' );
+
+          }
+        } else {
+
+          $( '.headerTop_contactBtn' ).remove();
+
+        }
+      }
        wp.customize( 'lightning_theme_options[header_top_tel_number]', function( value ) {
            value.bind( function( newval ) {
               var tel = '<a class="headerTop_tel_wrap" href="tel:' + newval+ '">' + newval + '</a></li>';
