@@ -1,5 +1,5 @@
 @charset "UTF-8";
-.media_post { display: block; overflow: hidden; position: relative; }
+.media_post { display: block; overflow: hidden; position: relative; background-color: #fff; }
 .media_post .media_post_label_new { background: rgba(255, 0, 0, 0.8); color: #FFF; font-size: 10px; padding: 60px 0px 5px; position: absolute; left: -104px; top: -44px; text-align: center; width: 200px; transform: rotate(-45deg); -ms-transform: rotate(-45deg); -moz-transform: rotate(-45deg); -webkit-transform: rotate(-45deg); -o-transform: rotate(-45deg); }
 .media_post .media_post_image { z-index: 1; display: block; overflow: hidden; }
 .media_post .media_post_image img { width: 100%; opacity: 1; transition: transform 0.3s, transform 0.6s; }
@@ -34,7 +34,8 @@
 /*-------------------------------------------*/
 /*	.image_1st
 /*-------------------------------------------*/
-@media (min-width: 768px) { .image_1st .media_post.first { float: left; width: 66%; }
+@media (min-width: 768px) { .image_1st .media_post { margin-bottom: 10px; }
+  .image_1st .media_post.first { float: left; width: 66%; }
   .image_1st .media_post.normal { float: right; width: 32%; }
   .image_1st .media_post.left { float: left; margin-right: 2%; }
   .image_1st .media_post.clear { clear: both; } }
