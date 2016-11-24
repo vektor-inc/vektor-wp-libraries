@@ -32,18 +32,17 @@ $margin_section_bottom : 30px;
 	body.headerMenuOpen .headerTop { display: block; }
 	.headerTop {
 		margin-bottom:20px;
-		background-color:$color_blk;
 		.container { padding: 0; }
-		ul { border-top:$border_horizontal;margin-bottom:10px;
-			a { color:#999;border-bottom:$border_horizontal; }
+		ul { margin-bottom:10px;
+			// a { color:#999;border-bottom:$border_horizontal; }
 			a:hover,
 			a:active,
 			a:focus  { background-color:rgba(255,255,255,0.2);transition: background-color 0.4s;}
 		}
 		.headerTop_tel { padding:0 15px; }
-		a.headerTop_tel_wrap { border:1px solid #999; }
-		.headerTop_tel_wrap { display:block; overflow:hidden;text-align: center; color:#999;
-			padding: 6px 0;margin:5px 0 0; border-radius: 4px; }
+		.headerTop_tel_wrap { display:block; overflow:hidden;text-align: center; color:#999;margin-top:15px;  }
+		span.headerTop_tel_wrap { font-size:1.4em; }
+		a.headerTop_tel_wrap { border:1px solid #999;border-radius: 4px;padding: 6px 0; }
 	}
 	.headerTop_contactBtn { text-align: center;padding:0 15px;
 		.btn { display: block; }
@@ -53,7 +52,9 @@ $margin_section_bottom : 30px;
 @media (max-width: 991px){
 	.headerTop .container { width: 100%; }
 }
+
 $header_top_offset : 10px;
+
 @media (min-width: 768px){
 .headerTop { color:#666;background-color: #f9f9f9;margin-top:-$header_top_offset;border-bottom:1px solid #efefef;
 	.container { padding: 0px 15px;display: flex;overflow: visible; }

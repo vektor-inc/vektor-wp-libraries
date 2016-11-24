@@ -10,14 +10,14 @@
 @media (max-width: 767px) { .headerTop_description { display: none; }
   .headerTop { display: none; }
   body.headerMenuOpen .headerTop { display: block; }
-  .headerTop { margin-bottom: 20px; background-color: #191919; }
+  .headerTop { margin-bottom: 20px; }
   .headerTop .container { padding: 0; }
-  .headerTop ul { border-top: 1px solid rgba(255, 255, 255, 0.15); margin-bottom: 10px; }
-  .headerTop ul a { color: #999; border-bottom: 1px solid rgba(255, 255, 255, 0.15); }
+  .headerTop ul { margin-bottom: 10px; }
   .headerTop ul a:hover, .headerTop ul a:active, .headerTop ul a:focus { background-color: rgba(255, 255, 255, 0.2); transition: background-color 0.4s; }
   .headerTop .headerTop_tel { padding: 0 15px; }
-  .headerTop a.headerTop_tel_wrap { border: 1px solid #999; }
-  .headerTop .headerTop_tel_wrap { display: block; overflow: hidden; text-align: center; color: #999; padding: 6px 0; margin: 5px 0 0; border-radius: 4px; }
+  .headerTop .headerTop_tel_wrap { display: block; overflow: hidden; text-align: center; color: #999; margin-top: 15px; }
+  .headerTop span.headerTop_tel_wrap { font-size: 1.4em; }
+  .headerTop a.headerTop_tel_wrap { border: 1px solid #999; border-radius: 4px; padding: 6px 0; }
   .headerTop_contactBtn { text-align: center; padding: 0 15px; }
   .headerTop_contactBtn .btn { display: block; } }
 @media (max-width: 991px) { .headerTop .container { width: 100%; } }
