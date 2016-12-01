@@ -6,22 +6,28 @@
     */
    ( function( $ ) {
 
+     var contact_txt = jQuery('.headerTop_contactBtn a').html();
+     var contact_url = jQuery('.headerTop_contactBtn a').attr("href");
+
+      // テキストが変更された時
       wp.customize( 'lightning_theme_options[header_top_contact_txt]', function( contact_txt_value ) {
         contact_txt_value.bind( function( contact_txt_new_val ) {
-          wp.customize( 'lightning_theme_options[header_top_contact_url]', function( contact_url_value ) {
-            contact_url_value.bind( function( contact_url_new_val ) {
-              header_top_contact_btn( contact_txt_new_val, contact_url_new_val );
-            } );
-          } );
+          // グローバルのテキストを書き換えておく 
+          // contact_txt = contact_txt_value.get();
+          contact_txt = contact_txt_new_val;
+          // console.log( contact_txt_new_val + ' : ' + contact_url );
+          header_top_contact_btn( contact_txt, contact_url );
         } );
       } );
-      wp.customize( 'lightning_theme_options[header_top_contact_url]', function( contact_url_value ) {
+
+      // URLが変更された時
+      wp.customize( 'lightning_theme_options[header_top_contact_url]', function( contact_url_value ) {         
         contact_url_value.bind( function( contact_url_new_val ) {
-          wp.customize( 'lightning_theme_options[header_top_contact_txt]', function( contact_txt_value ) {
-            contact_txt_value.bind( function( contact_txt_new_val ) {
-              header_top_contact_btn( contact_txt_new_val, contact_url_new_val );
-            } );
-          } );
+          // グローバルのURLを書き換えておく
+          // contact_url = contact_url_value.get();
+          contact_url = contact_url_new_val;
+          // console.log( contact_txt + ' : ' + contact_url_new_val );
+          header_top_contact_btn( contact_txt, contact_url );
         } );
       } );
 
@@ -45,6 +51,8 @@
 
         }
       }
+
+      // 電話番号
        wp.customize( 'lightning_theme_options[header_top_tel_number]', function( value ) {
            value.bind( function( newval ) {
               var tel = '<a class="headerTop_tel_wrap" href="tel:' + newval+ '">' + newval + '</a></li>';
@@ -63,12 +71,5 @@
                 }
            } );
        } );
-       // リアルタイムにリンク色を変更
-       // wp.customize( 'mytheme_options[link_textcolor]', function( value ) {
-       //     value.bind( function( newval ) {
-       //         $('a').css('color', newval );
-       //     } );
-       // } );
-
 
    } )( jQuery );

@@ -17,7 +17,7 @@
   .headerTop .headerTop_tel { padding: 0 15px; }
   .headerTop .headerTop_tel_wrap { display: block; overflow: hidden; text-align: center; color: #999; margin-top: 15px; }
   .headerTop span.headerTop_tel_wrap { font-size: 1.4em; }
-  .headerTop a.headerTop_tel_wrap { border: 1px solid #999; border-radius: 4px; padding: 6px 0; }
+  .headerTop a.headerTop_tel_wrap { border-radius: 4px; padding: 6px 0; border: 1px solid #d43f3a; background-color: #d9534f; color: #fff; }
   .headerTop_contactBtn { text-align: center; padding: 0 15px; }
   .headerTop_contactBtn .btn { display: block; } }
 @media (max-width: 991px) { .headerTop .container { width: 100%; } }
