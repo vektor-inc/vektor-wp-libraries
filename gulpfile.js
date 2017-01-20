@@ -43,6 +43,10 @@ gulp.task( 'copy_post-type-manager', function() {
     .pipe( gulp.dest( '../themes/biz-vektor/plugins/post-type-manager/' ) )
     .pipe( gulp.dest( '../plugins/vk-all-in-one-expansion-unit/plugins/post-type-manager/' ) );
 } );
+gulp.task( 'copy_custom-field-builder', function() {
+    gulp.src( './custom-field-builder/package/**' )
+    .pipe( gulp.dest( '../themes/bill-vektor/inc/custom-field-builder/' ) );
+} );
 // Watch
 gulp.task('watch', function() {
 	gulp.watch('./vk-admin/package/images/**', ['copy_vk-admin']);
@@ -54,6 +58,7 @@ gulp.task('watch', function() {
     gulp.watch('./header-top/package/css/**', ['copy_header-top']);
     gulp.watch('./media-posts/package/**', ['copy_media-posts']);
     gulp.watch('./post-type-manager/package/**', ['copy_post-type-manager']);
+    gulp.watch('./custom-field-builder/package/**', ['copy_custom-field-builder']);
     // gulp.watch('./font-awesome-selector/package/**', ['copy_font-awesome-selector']);
     // gulp.watch('js/*.js', ['scripts']);
     // gulp.watch('vk-admin', ['scripts','scripts_header_fixed']);
