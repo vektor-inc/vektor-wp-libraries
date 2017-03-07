@@ -43,7 +43,7 @@ class Lightning_Media_Admin {
 		if ( isset($_POST) && !empty($_POST)
 			&& isset($_POST['lightning-media-unit-nonce']) && wp_verify_nonce( $_POST['lightning-media-unit-nonce'], 'lightning-media-unit-submit' ) ) {
 
-			$post_types = self::$post_types;
+			$post_types = Lightning_media_posts::get_custom_types() + self::$post_types;
 			$post_types['author'] = 0;
 
 			foreach ( $post_types as $type => $value ) {
