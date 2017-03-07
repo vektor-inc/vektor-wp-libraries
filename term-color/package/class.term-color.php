@@ -171,7 +171,13 @@ if ( ! class_exists( 'Vk_term_color' ) ) {
 			/* 	管理画面 _ 各種処理発火
 			/*-------------------------------------------*/
 			// カラーピッカーを追加するタクソノミー
-			$taxonomies = array('category','post_tag');
+
+			global $vk_term_color_taxonomies;
+			if ( $vk_term_color_taxonomies ) {
+				$taxonomies = $vk_term_color_taxonomies;
+			} else {
+				$taxonomies = array('category','post_tag');
+			}
 
 			// 該当のタクソノミー分ループ処理する
 			foreach ($taxonomies as $key => $value) {
