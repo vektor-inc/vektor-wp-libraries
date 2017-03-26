@@ -3,8 +3,7 @@
 $border_primary : 1px solid #e3e3e3;
 $item_bottom_margin : 25px;
 
-// .sitePreHeader { position:absolute;padding-top:10px;}
-
+.widget_ltg_media_posts_media_post .row:before { display: block;content:""; }
 .media_post { display:block; overflow:hidden;position: relative; background-color: #fff;
 	.media_post_label_new { 
 	  background:rgba(255,0,0,0.8);
