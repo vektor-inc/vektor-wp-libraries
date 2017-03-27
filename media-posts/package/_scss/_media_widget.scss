@@ -75,10 +75,12 @@ $item_bottom_margin : 25px;
 	justify-content: space-between;
   	flex-wrap: wrap;
 	align-items: stretch;
-	.flex_height_col { margin-bottom:$item_bottom_margin; }
+	.flex_height_col { 
+		margin-bottom:$item_bottom_margin;
+		display: flex; // ここをflex指定しないとsafariで .media_post の高さが揃わない
+	}
 	.media_post { 
-		height:100%;
-		// height:95%;
+		// height:100%; // height:100%を指定すると Safariで 高さが揃わなくなる
 	}
 }
 } // @media (min-width: 768px){
