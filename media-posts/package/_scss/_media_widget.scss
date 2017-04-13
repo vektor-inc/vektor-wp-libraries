@@ -72,7 +72,6 @@ $item_bottom_margin : 25px;
 @media (min-width: 768px){
 .flex_height {
 	display: flex;
-	justify-content: space-between;
   	flex-wrap: wrap;
 	align-items: stretch;
 	.flex_height_col { 
