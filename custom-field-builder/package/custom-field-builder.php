@@ -44,13 +44,13 @@ class VK_Custom_Field_Builder {
         $value = '';
         global $post;
         $value = esc_attr( get_post_meta( $post->ID, $post_field, true ) );
-          if ( isset( $_POST[$post_field] ) && $_POST[$post_field] ) {
-            if ( isset( $type ) && $type == 'textarea' ) {
-              // n2brはフォームにbrがそのまま入ってしまうので入れない
-                $value = esc_textarea( $_POST[$post_field] );
-            } else {
-                $value = esc_attr( $_POST[$post_field] );
-            }
+        if ( isset( $_POST[$post_field] ) && $_POST[$post_field] ) {
+          if ( isset( $type ) && $type == 'textarea' ) {
+            // n2brはフォームにbrがそのまま入ってしまうので入れない
+              $value = esc_textarea( $_POST[$post_field] );
+          } else {
+              $value = esc_attr( $_POST[$post_field] );
+          }
         }
         return $value;
   }
