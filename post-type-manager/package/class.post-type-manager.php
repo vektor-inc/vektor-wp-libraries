@@ -148,8 +148,6 @@ if ( ! class_exists( 'Vk_post_type_manager' ) ) {
 			echo '</table>';
 
 
-			echo '<hr>';
-
 			$taxonomy = array( 
 				array ( 'category' => 'カテゴリー' ),
 			 );
