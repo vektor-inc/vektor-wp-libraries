@@ -51,6 +51,10 @@ gulp.task( 'copy_call-to-action', function() {
     gulp.src( './call-to-action/package/**' )
     .pipe( gulp.dest( '../plugins/vk-all-in-one-expansion-unit/plugins/call-to-action/' ) );
 } );
+gulp.task( 'copy_vk-mobile-nav', function() {
+    gulp.src( './vk-mobile-nav/package/**' )
+    .pipe( gulp.dest( '../plugins/vk-mobile-nav/inc/vk-mobile-nav/' ) );
+} );
 
 // Watch
 gulp.task('watch', function() {
@@ -65,6 +69,7 @@ gulp.task('watch', function() {
     gulp.watch('./post-type-manager/package/**', ['copy_post-type-manager']);
     gulp.watch('./custom-field-builder/package/**', ['copy_custom-field-builder']);
     gulp.watch('./call-to-action/package/**', ['copy_call-to-action']);
+    gulp.watch('./vk-mobile-nav/package/**', ['copy_vk-mobile-nav']);
     // gulp.watch('./font-awesome-selector/package/**', ['copy_font-awesome-selector']);
     // gulp.watch('js/*.js', ['scripts']);
     // gulp.watch('vk-admin', ['scripts','scripts_header_fixed']);
