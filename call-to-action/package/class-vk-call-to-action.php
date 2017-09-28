@@ -124,7 +124,7 @@ class Vk_Call_To_Action
 
 
 	public static function render_meta_box_cta() {
-		
+
 		global $vk_call_to_action_textdomain;
 
 		echo '<input type="hidden" name="_nonce_vkExUnit_custom_cta" id="_nonce_vkExUnit__custom_field_metaKeyword" value="'.wp_create_nonce( plugin_basename( __FILE__ ) ).'" />';
@@ -431,7 +431,11 @@ if ( $target_blank == "window_self") {
 		// Ligthning Advanced Unit のウィジェットだと...思う...
 		if ( self::is_contentsarea_posts_widget() ) { return $content; }
 		// 抜粋の場合
-		if ( vkExUnit_is_excerpt() ) { return $content; }
+		//
+		if ( vkExUnit_is_excerpt() ) {
+
+			return $content;
+		}
 		// 上記以外の場合に出力
 		$content .= self::render_cta_content( self::is_cta_id() );
 		return $content;

@@ -1,8 +1,15 @@
 /*-------------------------------------------*/
 /* .veu_cta
 /*-------------------------------------------*/
+
+$section_margin : 30px;
+
+@mixin veu_content_bottom_section { display:block; overflow:hidden;margin-top:$section_margin;margin-bottom:$section_margin;background-color: #efefef; }
+@mixin veu_content_bottom_section_title { display:block; overflow:hidden;margin:0;padding: 12px 20px 10px;background-color: #333;color:#fff;font-size:22px;line-height: 1.2em; }
+@mixin veu_content_bottom_section_body { display:block; overflow:hidden; padding:1.5em 1.5em 2em; }
+
 .veu_cta { @include veu_content_bottom_section;
-	h1.cta_title { @include veu_content_bottom_section_title; }
+	.cta_title { @include veu_content_bottom_section_title; }
 	.cta_body { @include veu_content_bottom_section_body;line-height: 170%; }
 	.cta_body_image { margin-bottom:1.5em; }
 	.cta_body_image img { max-width: 250px; }
