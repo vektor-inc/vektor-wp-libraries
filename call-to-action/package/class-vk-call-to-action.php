@@ -124,6 +124,9 @@ class Vk_Call_To_Action
 
 
 	public static function render_meta_box_cta() {
+		
+		global $vk_call_to_action_textdomain;
+
 		echo '<input type="hidden" name="_nonce_vkExUnit_custom_cta" id="_nonce_vkExUnit__custom_field_metaKeyword" value="'.wp_create_nonce( plugin_basename( __FILE__ ) ).'" />';
 		$imgid = get_post_meta( get_the_id(), 'vkExUnit_cta_img', true );
 		$cta_image = wp_get_attachment_image_src( $imgid, 'large' );
