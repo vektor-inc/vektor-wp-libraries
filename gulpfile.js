@@ -16,6 +16,7 @@ gulp.task( 'copy_vk-admin', function() {
     .pipe( gulp.dest( '../plugins/vk-post-author-display/inc/vk-admin/' ) )
     .pipe( gulp.dest( '../plugins/lightning-skin-variety/inc/vk-admin/' ) )
     .pipe( gulp.dest( '../plugins/lightning-origin-pro/inc/vk-admin/' ) )
+    .pipe( gulp.dest( '../plugins/vk-call-to-action/inc/vk-admin/' ) )
     .pipe( gulp.dest( '../plugins/wp-easy-responsive-tabs-to-accordion/vk-admin/' ) );
 } );
 gulp.task( 'copy_term-color', function() {
