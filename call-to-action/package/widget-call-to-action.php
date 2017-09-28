@@ -6,7 +6,7 @@ https://github.com/vektor-inc/vektor-wp-libraries
 にあります。修正の際は上記リポジトリのデータを修正してください。
 */
 
-namespace Vektor\ExUnit\Package\Cta;
+// namespace Vektor\ExUnit\Package\Cta;
 
 
 /*-------------------------------------------*/

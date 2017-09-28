@@ -6,9 +6,9 @@ https://github.com/vektor-inc/vektor-wp-libraries
 にあります。修正の際は上記リポジトリのデータを修正してください。
 */
 
-namespace Vektor\ExUnit\Package\Cta;
+// namespace Vektor\ExUnit\Package\Cta;
 
-if ( ! class_exists( 'Vektor\ExUnit\Package\Cta\Vk_Call_To_Action' ) )
+if ( ! class_exists( 'Vk_Call_To_Action' ) )
 {
 
 class Vk_Call_To_Action
@@ -30,7 +30,7 @@ class Vk_Call_To_Action
 	}
 
 	public static function widget_init() {
-	    return register_widget("Vektor\ExUnit\Package\Cta\Widget_CTA");
+	    return register_widget( 'Widget_CTA' );
 	}
 
 	public static function set_content_loopend($query )
