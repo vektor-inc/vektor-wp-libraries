@@ -49,6 +49,7 @@ gulp.task( 'copy_custom-field-builder', function() {
 } );
 gulp.task( 'copy_call-to-action', function() {
     gulp.src( './call-to-action/package/**' )
+    .pipe( gulp.dest( '../plugins/vk-call-to-action/inc/vk-call-to-action-package/' ) )
     .pipe( gulp.dest( '../plugins/vk-all-in-one-expansion-unit/plugins/call-to-action/' ) );
 } );
 
