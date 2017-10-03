@@ -53,6 +53,7 @@ gulp.task( 'copy_call-to-action', function() {
 } );
 gulp.task( 'copy_vk-mobile-nav', function() {
     gulp.src( './vk-mobile-nav/package/**' )
+		.pipe( gulp.dest( '../plugins/lightning-skin-jpnstyle/inc/vk-mobile-nav/' ) )
     .pipe( gulp.dest( '../plugins/vk-mobile-nav/inc/vk-mobile-nav/' ) );
 } );
 
@@ -73,6 +74,11 @@ gulp.task('watch', function() {
     // gulp.watch('./font-awesome-selector/package/**', ['copy_font-awesome-selector']);
     // gulp.watch('js/*.js', ['scripts']);
     // gulp.watch('vk-admin', ['scripts','scripts_header_fixed']);
+});
+
+// Watch
+gulp.task('watch_mobile', function() {
+  gulp.watch('./vk-mobile-nav/package/**', ['copy_vk-mobile-nav']);
 });
 
 gulp.task('default', ['watch']);
