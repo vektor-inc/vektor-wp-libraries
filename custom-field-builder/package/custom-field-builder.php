@@ -67,6 +67,8 @@ class VK_Custom_Field_Builder {
       wp_nonce_field(wp_create_nonce(__FILE__), 'noncename__fields');
 
       global $post;
+			global $custom_field_builder_dir;
+			global $custom_field_builder_textdomain;
 
       $form_html = '';
 
@@ -140,11 +142,11 @@ class VK_Custom_Field_Builder {
               } else if ( $post->$key ){
                 $form_html .= wp_get_attachment_image( $post->$key, 'medium', false, $attr );
               } else {
-                $form_html .= '<img src="'.VK_PORTAL_URL.'/images/no_image.png" id="thumb_'.$key.'" alt="" class="input_thumb" style="width:200px;height:auto;">';
+                $form_html .= '<img src="'.$custom_field_builder_dir.'/images/no_image.png" id="thumb_'.$key.'" alt="" class="input_thumb" style="width:200px;height:auto;">';
               }
-              
-              $form_html .= '<input type="hidden" name="'.$key.'" id="'.$key.'" value="'.VK_Custom_Field_Builder::form_post_value($key).'" style="width:60%;" /> 
-<button id="media_'.$key.'" class="media_btn btn btn-default button button-default">'.__('画像を選択', '').'</button>';
+
+              $form_html .= '<input type="hidden" name="'.$key.'" id="'.$key.'" value="'.VK_Custom_Field_Builder::form_post_value($key).'" style="width:60%;" />
+<button id="media_'.$key.'" class="media_btn btn btn-default button button-default">'.__('Choose Image', $custom_field_builder_textdomain).'</button>';
           }
           if ( $value['description'] ) {
               $form_html .= '<div class="description">'.apply_filters('the_content', $value['description'] ).'</div>';
@@ -169,7 +171,7 @@ class VK_Custom_Field_Builder {
   public static function save_cf_value( $custom_fields_array ){
 
       global $post;
-      
+
       //設定したnonce を取得（CSRF対策）
       $noncename__fields = isset( $_POST['noncename__fields'] ) ? $_POST['noncename__fields'] : null;
 

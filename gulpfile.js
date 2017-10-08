@@ -45,6 +45,7 @@ gulp.task( 'copy_post-type-manager', function() {
 } );
 gulp.task( 'copy_custom-field-builder', function() {
     gulp.src( './custom-field-builder/package/**' )
+		.pipe( gulp.dest( '../plugins/lightning-skin-jpnstyle/inc/custom-field-builder/' ) )
     .pipe( gulp.dest( '../themes/bill-vektor/inc/custom-field-builder/' ) );
 } );
 gulp.task( 'copy_call-to-action', function() {
@@ -79,6 +80,9 @@ gulp.task('watch', function() {
 // Watch
 gulp.task('watch_mobile', function() {
   gulp.watch('./vk-mobile-nav/package/**', ['copy_vk-mobile-nav']);
+});
+gulp.task('watch_cf', function() {
+  gulp.watch('./custom-field-builder/package/**', ['copy_custom-field-builder']);
 });
 
 gulp.task('default', ['watch']);
