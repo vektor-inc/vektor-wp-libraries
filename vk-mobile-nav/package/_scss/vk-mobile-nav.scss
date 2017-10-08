@@ -1,0 +1,30 @@
+@charset "utf-8";
+@import "compass";
+
+$border_primary : 1px solid #e5e5e5;
+$color_font_default : #464646;
+$color_key : #337ab7;
+
+body { overflow-x:hidden; }
+#bodyInner { display:block; overflow:hidden; }
+#wrap { z-index: auto; }
+
+/*-------------------------------------------*/
+/* .navSection
+/*-------------------------------------------*/
+.navSection .searchform { display: none; }
+
+@media (max-width: 991px){
+  .gMenu_outer { overflow:hidden;height: auto;}
+  .menuBtn { position: fixed;top:inherit; }
+  .navSection { overflow:scroll; display: none;position: fixed;height:100%;z-index: 1000;
+    .searchform { margin:10px;overflow:hidden;padding: 0 3em 0;
+    }
+    &.navSection_open_left .searchform,
+    &.navSection_open_right .searchform { display: block; }
+  }
+  .navSection_open_left { border-right:$border_primary; }
+  // .navSection_open_left .searchform { padding-left:4em }
+  .navSection_open_right { border-left:$border_primary; }
+  // .navSection_open_right .searchform { padding-right:4em }
+} // @media (max-width: 767px){
