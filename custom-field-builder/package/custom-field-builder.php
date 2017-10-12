@@ -1,5 +1,4 @@
 <?php
-
 /*
 このファイルの元ファイルは
 https://github.com/vektor-inc/vektor-wp-libraries
@@ -13,7 +12,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 class VK_Custom_Field_Builder {
 
-  public static $version = '0.0.0';
+  public static $version = '0.0.1';
 
   // define( 'Bill_URL', get_template_directory_uri() );
 
@@ -132,21 +131,22 @@ class VK_Custom_Field_Builder {
             $form_html .= '</ul>';
 
           } else if ( $value['type'] == 'image' ){
-              $attr = array(
-                'id'    => 'thumb_'.$key,
-                'src'   => '',
-                'class' => 'input_thumb',
-                );
               if ( isset( $_POST[$key] ) && $_POST[$key] ){
-                $form_html .= wp_get_attachment_image( $_POST[$key], 'medium', false, $attr );
+								$thumb_image = wp_get_attachment_image_src( $image_key, 'medium', false );
+								$thumb_image_url = $thumb_image[0];
               } else if ( $post->$key ){
-                $form_html .= wp_get_attachment_image( $post->$key, 'medium', false, $attr );
+								$thumb_image = wp_get_attachment_image_src( $post->$key, 'medium', false );
+								$thumb_image_url = $thumb_image[0];
               } else {
-                $form_html .= '<img src="'.$custom_field_builder_dir.'/images/no_image.png" id="thumb_'.$key.'" alt="" class="input_thumb" style="width:200px;height:auto;">';
+								$thumb_image_url = $custom_field_builder_dir.'/images/no_image.png';
               }
+							$form_html .= $post->vk_page_header_image;
+							$form_html .= '<img src="'.$thumb_image_url.'" id="thumb_'.$key.'" alt="" class="input_thumb" style="width:200px;height:auto;">';
 
               $form_html .= '<input type="hidden" name="'.$key.'" id="'.$key.'" value="'.VK_Custom_Field_Builder::form_post_value($key).'" style="width:60%;" />
-<button id="media_'.$key.'" class="media_btn btn btn-default button button-default">'.__('Choose Image', $custom_field_builder_textdomain).'</button>';
+<button id="media_'.$key.'" class="media_btn btn btn-default button button-default">'.__('Choose Image', $custom_field_builder_textdomain).'</button> ';
+							$form_html .= '<button id="media_reset_'.$key.'" class="media_reset_btn btn btn-default button button-default">'.__('Delete Image', $custom_field_builder_textdomain).'</button>';
+
           }
           if ( $value['description'] ) {
               $form_html .= '<div class="description">'.apply_filters('the_content', $value['description'] ).'</div>';
