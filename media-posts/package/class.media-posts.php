@@ -13,54 +13,54 @@ if ( ! class_exists( 'Lightning_media_posts' ) )
 		public static function patterns(){
 			global $vk_ltg_media_posts_textdomain;
 			$patterns = array(
-				'image_1st' => array( 
+				'image_1st' => array(
 					'label' => __( 'Image card 1st feature', 'lightning-media-unit' ),
 					'class_outer' => 'image_1st',
 					// 1stは２件目以降とpostのクラスが異なるためここに値が無い
 				 ),
-				'image_3' => array( 
+				'image_3' => array(
 					'label' => __( 'Image card 3 colmun', 'lightning-media-unit' ),
 					'class_outer' => 'row image_3',
 					'class_post_outer' => 'col-sm-6 col-lg-4 col-md-4',
 					'class_post_item' => ' image_card',
 				 ),
-				'image_1' => array( 
+				'image_1' => array(
 					'label' => __( 'Image card 1 colmun', 'lightning-media-unit' ),
 					'class_outer' => 'row image_1',
 					'class_post_outer' => 'col-sm-12',
 					'class_post_item' => ' image_card'
 				 ),
-				'vert_3' => array( 
+				'vert_3' => array(
 					'label' => __( 'Vertical card 3 column', 'lightning-media-unit' ),
 					'class_outer' => 'row vert_3 flex_height',
 					'class_post_outer' => 'col-sm-6 col-lg-4 col-md-4 flex_height_col',
 					'class_post_item' => ' vertical_card normal_image'
 				 ),
-				'vert_1' => array( 
+				'vert_1' => array(
 					'label' => __( 'Vertical card 1 column', 'lightning-media-unit' ),
 					'class_outer' => 'row vert_1',
 					'class_post_outer' => 'col-sm-12',
 					'class_post_item' => ' vertical_card normal_image'
 				 ),
-				'vert_large_image_3' => array( 
+				'vert_large_image_3' => array(
 					'label' => __( 'Vertical card large image 3 column', 'lightning-media-unit' ),
 					'class_outer' => 'row vert_large_image_3 flex_height',
 					'class_post_outer' => 'col-sm-6 col-lg-4 col-md-4 flex_height_col',
 					'class_post_item' => ' vertical_card large_image'
 				 ),
-				'vert_large_image_1' => array( 
+				'vert_large_image_1' => array(
 					'label' => __( 'Vertical card large image 1 column', 'lightning-media-unit' ),
 					'class_outer' => 'row vert_large_image_1',
 					'class_post_outer' => 'col-sm-12',
 					'class_post_item' => ' vertical_card large_image'
 				 ),
-				'oblong_1' => array( 
+				'oblong_1' => array(
 					'label' => __( 'Oblong card 1 column', 'lightning-media-unit' ),
 					'class_outer' => 'row oblong_1',
 					'class_post_outer' => 'col-sm-12',
 					'class_post_item' => ' oblong_card normal_image'
 				 ),
-				'oblong_large_image_1' => array( 
+				'oblong_large_image_1' => array(
 					'label' => __( 'Oblong card large image 1 column', 'lightning-media-unit' ),
 					'class_outer' => 'row oblong_large_image_1',
 					'class_post_outer' => 'col-sm-12',
@@ -138,33 +138,33 @@ if ( ! class_exists( 'Lightning_media_posts' ) )
 			register_sidebar( array(
 				'name' => __( 'Home content top after left', $vk_ltg_media_posts_textdomain ),
 				'id' => 'home-content-top-after-left-widget-area',
-				'before_widget' => '<section class="widget %2$s" id="%1$s">',
-				'after_widget' => '</section>',
-				'before_title' => '<h1 class="mainSection-title">',
-				'after_title' => '</h1>',
+				'before_widget' => '<div class="widget %2$s" id="%1$s">',
+				'after_widget' => '</div>',
+				'before_title' => '<h2 class="mainSection-title">',
+				'after_title' => '</h2>',
 			) );
 			register_sidebar( array(
 				'name' => __( 'Home content top after right', $vk_ltg_media_posts_textdomain ),
 				'id' => 'home-content-top-after-right-widget-area',
-				'before_widget' => '<section class="widget %2$s" id="%1$s">',
-				'after_widget' => '</section>',
-				'before_title' => '<h1 class="mainSection-title">',
-				'after_title' => '</h1>',
+				'before_widget' => '<div class="widget %2$s" id="%1$s">',
+				'after_widget' => '</div>',
+				'before_title' => '<h2 class="mainSection-title">',
+				'after_title' => '</h2>',
 			) );
 			register_sidebar( array(
 				'name' => __( 'Home content top bottom widget', $vk_ltg_media_posts_textdomain ),
 				'id' => 'home-content-top-bottom-widget-area',
-				'before_widget' => '<section class="widget %2$s" id="%1$s">',
-				'after_widget' => '</section>',
-				'before_title' => '<h1 class="mainSection-title">',
-				'after_title' => '</h1>',
+				'before_widget' => '<div class="widget %2$s" id="%1$s">',
+				'after_widget' => '</div>',
+				'before_title' => '<h2 class="mainSection-title">',
+				'after_title' => '</h2>',
 			) );
 		}
-		
+
 		static function add_widget_area()
 		{
-			if ( 
-				is_active_sidebar( 'home-content-top-after-left-widget-area' ) || 
+			if (
+				is_active_sidebar( 'home-content-top-after-left-widget-area' ) ||
 				is_active_sidebar( 'home-content-top-after-right-widget-area' )
 				) :
 				echo '<div class="row">';
@@ -192,8 +192,8 @@ if ( ! class_exists( 'Lightning_media_posts' ) )
 		/*-------------------------------------------*/
 		/*  Add media unit css
 		/*-------------------------------------------*/
-		
-		static function print_css() 
+
+		static function print_css()
 		{
 			// デフォルトでは出力しない
 			$print_css_default = false;
@@ -207,7 +207,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) )
 	    /*-------------------------------------------*/
 
 	    public function __construct(){
-	    	
+
 	    	add_action( 'wp_enqueue_scripts',  array( $this, 'print_css' ) );
 	    	add_action( 'lightning_home_content_top_widget_area_after', array( $this, 'add_widget_area' ) );
 	    	add_action( 'widgets_init', array( $this, 'widgets_init' ), 100 );
@@ -239,10 +239,10 @@ if ( ! class_exists( 'Lightning_media_posts' ) )
 
 		if ( isset ( $ltg_media_unit_archive_loop_layout[$postType] ) ) {
 
-			if ( 
-				( $ltg_media_unit_archive_loop_layout[$postType] != 'default' ) || 
+			if (
+				( $ltg_media_unit_archive_loop_layout[$postType] != 'default' ) ||
 				( !$ltg_media_unit_archive_loop_layout[$postType] )
-				) 
+				)
 			{
 					add_action( 'lightning_extend_loop', 'lmu_do_loop_layout_change' );
 					$flag = true;
