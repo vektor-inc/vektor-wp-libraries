@@ -140,7 +140,6 @@ class VK_Custom_Field_Builder {
               } else {
 								$thumb_image_url = $custom_field_builder_dir.'/images/no_image.png';
               }
-							$form_html .= $post->vk_page_header_image;
 							$form_html .= '<img src="'.$thumb_image_url.'" id="thumb_'.$key.'" alt="" class="input_thumb" style="width:200px;height:auto;">';
 
               $form_html .= '<input type="hidden" name="'.$key.'" id="'.$key.'" value="'.VK_Custom_Field_Builder::form_post_value($key).'" style="width:60%;" />
