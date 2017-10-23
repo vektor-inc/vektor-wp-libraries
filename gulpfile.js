@@ -16,6 +16,7 @@ gulp.task( 'copy_vk-admin', function() {
     .pipe( gulp.dest( '../plugins/vk-post-author-display/inc/vk-admin/' ) )
     .pipe( gulp.dest( '../plugins/lightning-skin-variety/inc/vk-admin/' ) )
     .pipe( gulp.dest( '../plugins/lightning-origin-pro/inc/vk-admin/' ) )
+    .pipe( gulp.dest( '../plugins/vk-call-to-action/inc/vk-admin/' ) )
     .pipe( gulp.dest( '../plugins/wp-easy-responsive-tabs-to-accordion/vk-admin/' ) );
 } );
 gulp.task( 'copy_term-color', function() {
@@ -52,6 +53,7 @@ gulp.task( 'copy_custom-field-builder', function() {
 } );
 gulp.task( 'copy_call-to-action', function() {
     gulp.src( './call-to-action/package/**' )
+    .pipe( gulp.dest( '../plugins/vk-call-to-action/inc/vk-call-to-action-package/' ) )
     .pipe( gulp.dest( '../plugins/vk-all-in-one-expansion-unit/plugins/call-to-action/' ) );
 } );
 gulp.task( 'copy_vk-mobile-nav', function() {
@@ -59,6 +61,12 @@ gulp.task( 'copy_vk-mobile-nav', function() {
 		.pipe( gulp.dest( '../plugins/lightning-skin-jpnstyle/inc/vk-mobile-nav/' ) )
     .pipe( gulp.dest( '../plugins/vk-mobile-nav/inc/vk-mobile-nav/' ) );
 } );
+gulp.task( 'copy_template-tags', function() {
+    gulp.src( './template-tags/package/**' )
+    .pipe( gulp.dest( '../plugins/vk-call-to-action/inc/template-tags/' ) )
+    .pipe( gulp.dest( '../plugins/vk-all-in-one-expansion-unit/plugins/template-tags/' ) );
+} );
+
 
 // Watch
 gulp.task('watch', function() {
@@ -74,6 +82,8 @@ gulp.task('watch', function() {
     gulp.watch('./custom-field-builder/package/**', ['copy_custom-field-builder']);
     gulp.watch('./call-to-action/package/**', ['copy_call-to-action']);
     gulp.watch('./vk-mobile-nav/package/**', ['copy_vk-mobile-nav']);
+
+		gulp.watch('./template-tags/package/**', ['copy_template-tags']);
     // gulp.watch('./font-awesome-selector/package/**', ['copy_font-awesome-selector']);
     // gulp.watch('js/*.js', ['scripts']);
     // gulp.watch('vk-admin', ['scripts','scripts_header_fixed']);

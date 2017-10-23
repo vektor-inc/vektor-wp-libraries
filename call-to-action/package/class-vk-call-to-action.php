@@ -6,7 +6,10 @@ https://github.com/vektor-inc/vektor-wp-libraries
 にあります。修正の際は上記リポジトリのデータを修正してください。
 */
 
-namespace Vektor\ExUnit\Package\Cta;
+// namespace Vektor\ExUnit\Package\Cta;
+
+if ( ! class_exists( 'Vk_Call_To_Action' ) )
+{
 
 class Vk_Call_To_Action
 {
@@ -20,10 +23,15 @@ class Vk_Call_To_Action
 		add_action( 'vkExUnit_package_init', array( __CLASS__, 'option_init' ) );
 		add_action( 'admin_menu', array( __CLASS__, 'add_custom_field' ) );
 		add_action( 'save_post',  array( __CLASS__, 'save_custom_field' ) );
+		add_action( 'widgets_init', array( __CLASS__, 'widget_init' ) );
 		if( veu_content_filter_state() == 'content' )  add_filter( 'the_content', array( __CLASS__, 'content_filter' ), self::CONTENT_NUMBER, 1 );
 		else add_action( 'loop_end', array( __CLASS__, 'set_content_loopend' ), self::CONTENT_NUMBER, 1 );
+		require_once dirname( __FILE__ ) . '/widget-call-to-action.php';
 	}
 
+	public static function widget_init() {
+	    return register_widget( 'Widget_CTA' );
+	}
 
 	public static function set_content_loopend($query )
 	{
@@ -77,6 +85,7 @@ class Vk_Call_To_Action
 
 	public static function add_custom_field()
 	{
+		global $vk_call_to_action_textdomain;
 		$post_types = get_post_types( array( '_builtin' => false, 'public' => true ) );
 		while ( list($key, $post ) = each( $post_types ) ) {
 			add_meta_box( 'vkExUnit_cta', __( 'Call to Action setting', $vk_call_to_action_textdomain ), array( __CLASS__, 'render_meta_box' ), $post, 'normal', 'high' );
@@ -87,9 +96,24 @@ class Vk_Call_To_Action
 		add_meta_box( 'vkExUnit_cta_url', __( 'CTA Contents', $vk_call_to_action_textdomain ), array( __CLASS__, 'render_meta_box_cta' ), self::POST_TYPE, 'normal', 'high' );
 	}
 
+	/**
+	 * CTAメイン設定画面のurl
+	 * ExUnitと単体プラグインなどによって変動する
+	 * @return [type] [description]
+	 */
+	public static function setting_page_url()
+	{
+		if ( veu_is_cta_active() ){
+			$setting_page_url = admin_url( 'admin.php?page=vkExUnit_main_setting#vkExUnit_cta_settings' );
+		} else {
+			$setting_page_url = admin_url( 'options-general.php?page=vk_cta_options' );
+		}
+		return $setting_page_url;
+	}
 
 	public static function render_meta_box()
 	{
+		global $vk_call_to_action_textdomain;
 		echo '<input type="hidden" name="_nonce_vkExUnit_custom_cta" id="_nonce_vkExUnit__custom_field_metaKeyword" value="'.wp_create_nonce( plugin_basename( __FILE__ ) ).'" />';
 
 		$ctas    = self::get_ctas( true, '  - ' );
@@ -107,7 +131,7 @@ class Vk_Call_To_Action
 <?php endforeach; ?>
 </select>
 <p>
-<a href="<?php echo admin_url( 'admin.php?page=vkExUnit_main_setting#vkExUnit_cta_settings' ); ?>" class="button button-default" target="_blank"><?php _e( 'CTA common setting', $vk_call_to_action_textdomain ); ?></a>
+<a href="<?php echo self::setting_page_url(); ?>" class="button button-default" target="_blank"><?php _e( 'CTA common setting', $vk_call_to_action_textdomain ); ?></a>
 <a href="<?php echo admin_url( 'edit.php?post_type=cta' ) ?>" class="button button-default" target="_blank"><?php _e( 'Show CTA index page', $vk_call_to_action_textdomain ); ?></a>
 </p>
 		<?php
@@ -115,6 +139,9 @@ class Vk_Call_To_Action
 
 
 	public static function render_meta_box_cta() {
+
+		global $vk_call_to_action_textdomain;
+
 		echo '<input type="hidden" name="_nonce_vkExUnit_custom_cta" id="_nonce_vkExUnit__custom_field_metaKeyword" value="'.wp_create_nonce( plugin_basename( __FILE__ ) ).'" />';
 		$imgid = get_post_meta( get_the_id(), 'vkExUnit_cta_img', true );
 		$cta_image = wp_get_attachment_image_src( $imgid, 'large' );
@@ -419,7 +446,11 @@ if ( $target_blank == "window_self") {
 		// Ligthning Advanced Unit のウィジェットだと...思う...
 		if ( self::is_contentsarea_posts_widget() ) { return $content; }
 		// 抜粋の場合
-		if ( vkExUnit_is_excerpt() ) { return $content; }
+		//
+		if ( vkExUnit_is_excerpt() ) {
+
+			return $content;
+		}
 		// 上記以外の場合に出力
 		$content .= self::render_cta_content( self::is_cta_id() );
 		return $content;
@@ -510,6 +541,7 @@ if ( $target_blank == "window_self") {
 
 	public static function render_configPage()
 	{
+		global $vk_call_to_action_textdomain;
 		$options = self::get_option();
 		$ctas    = self::get_ctas( true, '  - ' );
 
@@ -521,3 +553,7 @@ if ( $target_blank == "window_self") {
 		include dirname( __FILE__ ) . '/view-adminsetting.php';
 	}
 }
+
+Vk_Call_To_Action::init();
+
+} // if ( ! class_exists( 'Vk_Call_To_Action' ) )

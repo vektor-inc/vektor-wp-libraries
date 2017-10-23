@@ -6,7 +6,7 @@ https://github.com/vektor-inc/vektor-wp-libraries
 にあります。修正の際は上記リポジトリのデータを修正してください。
 */
 
-namespace Vektor\ExUnit\Package\Cta;
+// namespace Vektor\ExUnit\Package\Cta;
 
 
 /*-------------------------------------------*/
@@ -24,7 +24,7 @@ class Widget_CTA extends \WP_Widget
             'vkExUnit_cta',
             $widget_name,
             array(
-                'description' => sprintf( __( 'Select CTA and display it.', $vk_call_to_action_textdomain ),vkExUnit_get_little_short_name() ),
+                'description' => __( 'Select CTA and display it.', $vk_call_to_action_textdomain ),
                 )
         );
     }
@@ -82,8 +82,12 @@ class Widget_CTA extends \WP_Widget
 </select>
 </div>
 <div style="padding-bottom: 1em;">
-<a href="<?php echo admin_url( 'edit.php?post_type=cta' ) ?>" class="button button-default" target="_blank"><?php _e( 'Show CTA index page', $vk_call_to_action_textdomain ); ?></a>
-<a href="<?php echo admin_url( 'admin.php?page=vkExUnit_main_setting#vkExUnit_cta_settings' ); ?>" class="button button-default" target="_blank"><?php _e( 'CTA setting', $vk_call_to_action_textdomain ); ?></a>
+<a href="<?php echo admin_url( 'edit.php?post_type=cta' ) ?>" class="button button-default" target="_blank">
+	<?php _e( 'Show CTA index page', $vk_call_to_action_textdomain ); ?>
+</a>
+<a href="<?php echo admin_url( 'admin.php?page=vkExUnit_main_setting#vkExUnit_cta_settings' ); ?>" class="button button-default" target="_blank">
+	<?php _e( 'CTA setting', $vk_call_to_action_textdomain ); ?>
+</a>
 </div>
 <?php
         return $instance;
