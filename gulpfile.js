@@ -22,6 +22,7 @@ gulp.task( 'copy_term-color', function() {
     gulp.src( './term-color/package/**' )
     .pipe( gulp.dest( '../plugins/vk-post-author-display/inc/term-color/' ) )
     .pipe( gulp.dest( '../plugins/lightning-skin-variety/inc/term-color/' ) )
+		.pipe( gulp.dest( '../plugins/lightning-skin-jpnstyle/inc/term-color/' ) )
     .pipe( gulp.dest( '../plugins/lightning-origin-pro/inc/term-color/' ) );
 } );
 gulp.task( 'copy_header-top', function() {
@@ -32,6 +33,7 @@ gulp.task( 'copy_header-top', function() {
 gulp.task( 'copy_media-posts', function() {
     gulp.src( './media-posts/package/**' )
     .pipe( gulp.dest( '../plugins/lightning-skin-variety/inc/media-posts/' ) )
+		.pipe( gulp.dest( '../plugins/lightning-skin-jpnstyle/inc/media-posts/' ) )
     .pipe( gulp.dest( '../plugins/lightning-origin-pro/inc/media-posts/' ) );
 } );
 // gulp.task( 'copy_font-awesome-selector', function() {
@@ -83,6 +85,13 @@ gulp.task('watch_mobile', function() {
 });
 gulp.task('watch_cf', function() {
   gulp.watch('./custom-field-builder/package/**', ['copy_custom-field-builder']);
+});
+gulp.task('watch_media', function() {
+  gulp.watch('./media-posts/package/**', ['copy_media-posts']);
+	gulp.watch('./media-posts/package/**', ['copy_term-color']);
+});
+gulp.task('watch_admin', function() {
+  gulp.watch('./vk-admin/package/**', ['copy_vk-admin']);
 });
 
 gulp.task('default', ['watch']);
