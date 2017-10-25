@@ -103,5 +103,9 @@ gulp.task('watch_media', function() {
 gulp.task('watch_admin', function() {
   gulp.watch('./vk-admin/package/**', ['copy_vk-admin']);
 });
+gulp.task('watch_template-tags', function() {
+  gulp.watch('./template-tags/package/**', ['copy_template-tags']);
+});
+
 
 gulp.task('default', ['watch']);
