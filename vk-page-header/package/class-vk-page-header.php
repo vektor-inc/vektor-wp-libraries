@@ -7,6 +7,12 @@ https://github.com/vektor-inc/vektor-wp-libraries
 
 /*-------------------------------------------*/
 /*  Template Tags
+/*		is_theme()
+/*		default_option()
+/*		vk_get_page_for_posts()
+/*		vk_get_post_type()
+/*		get_all_post_types_info()
+/*		header_image_url()
 /*-------------------------------------------*/
 /*  Customizer
 /*-------------------------------------------*/
@@ -37,7 +43,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		/*-------------------------------------------*/
 
 		/*	テーマで使用されているかプラグインで使用されているか
-		--------------------------------------------- */
+		/*		is_theme()
+		/*-------------------------------------------*/
 		public static function is_theme()
 		{
 			$path = __FILE__;
@@ -49,8 +56,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			}
 		}
 
-		/*	default options
-		--------------------------------------------- */
+		/*		default_option()
+		/*-------------------------------------------*/
 		public static function default_option(){
 
 			if ( self::is_theme() ){
@@ -73,7 +80,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			return $option;
 		}
 
-		/*  Chack use post top page
+		/*  	Chack use post top page
+		/*		vk_get_page_for_posts()
 		/*-------------------------------------------*/
 		public static 	function vk_get_page_for_posts() {
 			// Get post top page by setting display page.
@@ -88,9 +96,10 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			return $page_for_posts;
 		}
 
-		/*  Chack post type info
+		/*  	Chack post type info
+		/*		vk_get_post_type()
 		/*-------------------------------------------*/
-		public static 	function vk_get_post_type() {
+		public static function vk_get_post_type() {
 
 			$page_for_posts = self::vk_get_page_for_posts();
 
@@ -131,10 +140,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			return $postType;
 		}
 
-
-
-
-
+		/*		get_all_post_types_info()
+		/*-------------------------------------------*/
 		public static function get_all_post_types_info() {
 
 			//gets all custom post types set PUBLIC
@@ -152,6 +159,58 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 			return $custom_types_labels;
 		}
+
+		/*		header_image_url()
+		/*-------------------------------------------*/
+		public function header_image_url(){
+
+			$options = self::options_load();
+			$post_type = self::vk_get_post_type();
+
+			if ( isset( $options['image_basic'] ) && $options['image_basic'] )
+			{
+				$image_url = $options['image_basic'];
+			} else {
+				// $options['image_basic']は空だが$optionsの他の値は入ってるというイレギュラーな状況の対応（本来は不要な範囲）
+				// 共通設定の画像を削除された場合などにデフォルトのサンプル画像を表示する
+				$default_option = self::default_option();
+				$image_url = $default_option['image_basic'];
+			}
+
+			$image_url_field = 'image_'.$post_type['slug'];
+			if ( isset( $options[$image_url_field] ) && $options[$image_url_field] ){
+				$image_url = $options[$image_url_field];
+			}
+
+			// 固定ページの場合
+			if ( $post_type['slug'] == 'page' ){
+				 global $post;
+				 if ( $post->vk_page_header_image ){
+					 // 今の固定ページに画像が登録されていればそのまま使用
+					 $image_id = $post->vk_page_header_image;
+				 } else {
+					 // 先祖階層を取得
+						$ancestors = array_reverse( get_post_ancestors( $post->ID ) );
+						// array_push( $ancestors, $post->ID );
+						foreach ( $ancestors as $ancestor ) {
+							$vk_page_header_image = '';
+							// 親階層から順に画像を取得し、下階層に画像があれば上書きしていく
+							$vk_page_header_image = get_post_meta( $ancestor,'vk_page_header_image', true );
+							if ( $vk_page_header_image ) {
+								$image_id = $vk_page_header_image;
+							}
+						}
+				 } // if ( $post->vk_page_header_image ){
+
+				// 固定ページで画像の登録があった場合のみ $image_url を上書きする
+				 if ( isset( $image_id ) && $image_id ) {
+						$image_url = wp_get_attachment_image_src( $image_id, 'full', false);
+						$image_url = $image_url[0];
+				 }
+			} // if ( $post_type == 'page' ){
+			return $image_url;
+		}
+
 
 		/*-------------------------------------------*/
 		/*  Customizer
@@ -296,55 +355,6 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		/*  print head style
 		/*-------------------------------------------*/
 
-		public function header_image_url(){
-
-			$options = self::options_load();
-			$post_type = self::vk_get_post_type();
-
-			if ( isset( $options['image_basic'] ) && $options['image_basic'] )
-			{
-				$image_url = $options['image_basic'];
-			} else {
-				// $options['image_basic']は空だが$optionsの他の値は入ってるというイレギュラーな状況の対応（本来は不要な範囲）
-				// 共通設定の画像を削除された場合などにデフォルトのサンプル画像を表示する
-				$default_option = self::default_option();
-				$image_url = $default_option['image_basic'];
-			}
-
-			$image_url_field = 'image_'.$post_type['slug'];
-			if ( isset( $options[$image_url_field] ) && $options[$image_url_field] ){
-				$image_url = $options[$image_url_field];
-			}
-
-			// 固定ページの場合
-			if ( $post_type['slug'] == 'page' ){
-				 global $post;
-				 if ( $post->vk_page_header_image ){
-					 // 今の固定ページに画像が登録されていればそのまま使用
-					 $image_id = $post->vk_page_header_image;
-				 } else {
-					 // 先祖階層を取得
-						$ancestors = array_reverse( get_post_ancestors( $post->ID ) );
-						// array_push( $ancestors, $post->ID );
-						foreach ( $ancestors as $ancestor ) {
-							$vk_page_header_image = '';
-							// 親階層から順に画像を取得し、下階層に画像があれば上書きしていく
-							$vk_page_header_image = get_post_meta( $ancestor,'vk_page_header_image', true );
-							if ( $vk_page_header_image ) {
-								$image_id = $vk_page_header_image;
-							}
-						}
-				 } // if ( $post->vk_page_header_image ){
-
-				// 固定ページで画像の登録があった場合のみ $image_url を上書きする
-				 if ( isset( $image_id ) && $image_id ) {
-						$image_url = wp_get_attachment_image_src( $image_id, 'full', false);
-						$image_url = $image_url[0];
-				 }
-			} // if ( $post_type == 'page' ){
-			return $image_url;
-		}
-
 		public function dynamic_header_css(){
 
 			// ページヘッダーPC画像設定
@@ -355,7 +365,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				// ヘッダー背景画像URL取得
 				$image_url = self::header_image_url();
 
-				$skin_dynamic_css .= ".page-header{
+				global $vk_page_header_output_class;
+				$skin_dynamic_css .= $vk_page_header_output_class."{
 					background: url(".esc_url( $image_url ).") no-repeat 50% center;
 					background-size: cover;
 				}";

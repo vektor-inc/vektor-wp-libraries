@@ -11,6 +11,9 @@ if ( ! class_exists( 'Vk_Page_Header' ) )
 	global $vk_page_header_textdomain;
 	$vk_page_header_textdomain = 'lightning_skin_jpnstyle';
 
+	global $vk_page_header_output_class;
+	$vk_page_header_output_class = '.page-header';
+
 	global $customize_setting_prefix;
 	$customize_setting_prefix = 'Lightning';
 
