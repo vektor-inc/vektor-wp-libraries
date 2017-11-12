@@ -4,6 +4,18 @@
 https://github.com/vektor-inc/vektor-wp-libraries
 にあります。修正の際は上記リポジトリのデータを修正してください。
 */
+
+/*-------------------------------------------*/
+/*  Template Tags
+/*-------------------------------------------*/
+/*  Customizer
+/*-------------------------------------------*/
+/*  page meta box
+/*-------------------------------------------*/
+/*  print head style
+/*-------------------------------------------*/
+
+
 if ( ! class_exists( 'Vk_Page_Header' ) ) {
 	class Vk_Page_Header
 	{
@@ -141,9 +153,9 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			return $custom_types_labels;
 		}
 
-		/* ---------------------------------------------
-			Customizer
-		--------------------------------------------- */
+		/*-------------------------------------------*/
+		/*  Customizer
+		/*-------------------------------------------*/
 		public function customize_register( $wp_customize )
 		{
 
@@ -155,10 +167,45 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				'priority' => 700,
 			) );
 
-			$wp_customize->selective_refresh->add_partial( 'vk_page_header[image_basic]', array(
+			$wp_customize->selective_refresh->add_partial( 'vk_page_header[text_color]', array(
 	      'selector' => '.page-header .container',
 	      'render_callback' => '',
 	    ) );
+
+			// color
+			$wp_customize->add_setting( 'vk_page_header[text_color]', array(
+				'default'			=> '',
+				'type'				=> 'option',
+				'capability'		=> 'edit_theme_options',
+				'sanitize_callback' => 'sanitize_hex_color',
+			) );
+			$wp_customize->add_control( new WP_Customize_Color_Control($wp_customize, 'text_color', array(
+				'label'    => __( 'Text color', $vk_page_header_textdomain ),
+				'section'  => 'vk_page_header_setting',
+				'settings' => 'vk_page_header[text_color]',
+				// 'priority' => $priority,
+			)));
+
+			// text position
+	    $wp_customize->add_setting( 'vk_page_header[text_align]',  array(
+	      'default'           => '',
+	      'type'              => 'option',
+	      'capability'        => 'edit_theme_options',
+	      'sanitize_callback' => 'esc_attr',
+	    ) );
+	    $wp_customize->add_control( 'text_align', array(
+	  		'label'     => __( 'Text align', $vk_page_header_textdomain ),
+	  		'section'   => 'vk_page_header_setting',
+	  		'settings'  => 'vk_page_header[text_align]',
+	  		'type' => 'radio',
+	      // 'priority' => $priority,
+	  		'choices' => array(
+					'left' => __( 'Left', $vk_page_header_textdomain ),
+	  			'center' => __( 'Center', $vk_page_header_textdomain ),
+	  			'right' => __( 'Right', $vk_page_header_textdomain ),
+	  			),
+	  	));
+
 
 			/*	background common image
 			--------------------------------------------- */
@@ -208,7 +255,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		}
 
 		/*-------------------------------------------*/
-		/*  page meta boz
+		/*  page meta box
 		/*-------------------------------------------*/
 		/* static にすると環境によってmetabox内のコールバック関数が反応しない */
 		public function add_pagehead_setting_meta_box(){
@@ -245,9 +292,9 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			return $custom_fields_array;
 		} // custom_fields_array(){
 
-		/* ---------------------------------------------
-			print head style
-		--------------------------------------------- */
+		/*-------------------------------------------*/
+		/*  print head style
+		/*-------------------------------------------*/
 
 		public function header_image_url(){
 
