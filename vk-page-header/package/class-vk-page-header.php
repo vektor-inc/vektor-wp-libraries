@@ -9,8 +9,9 @@ https://github.com/vektor-inc/vektor-wp-libraries
 /*  Template Tags
 /*		is_theme()
 /*		default_option()
-/*		vk_get_page_for_posts()
-/*		vk_get_post_type()
+/*		options_load()
+/*		get_page_for_posts()
+/*		get_post_type()
 /*		get_all_post_types_info()
 /*		header_image_url()
 /*-------------------------------------------*/
@@ -74,16 +75,23 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			return $option = apply_filters( 'vk_page_header_default_option', $option );
 		}
 
+		/*		options_load()
+		/*-------------------------------------------*/
 		public static function options_load(){
+
+			// オプション値を取得 / オプション値が存在しなかったらデフォルトオプションを取得
 			$option = get_option( 'vk_page_header', self::default_option() );
+
+			// オプション値が存在しているが空の場合はデフォルトオプションを返す
 			if( !$option ){ $option = self::default_option(); }
+
 			return $option;
 		}
 
 		/*  	Chack use post top page
-		/*		vk_get_page_for_posts()
+		/*		get_page_for_posts()
 		/*-------------------------------------------*/
-		public static 	function vk_get_page_for_posts() {
+		public static 	function get_page_for_posts() {
 			// Get post top page by setting display page.
 			$page_for_posts['post_top_id'] = get_option( 'page_for_posts' );
 
@@ -97,11 +105,11 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		}
 
 		/*  	Chack post type info
-		/*		vk_get_post_type()
+		/*		get_post_type()
 		/*-------------------------------------------*/
-		public static function vk_get_post_type() {
+		public static function get_post_type() {
 
-			$page_for_posts = self::vk_get_page_for_posts();
+			$page_for_posts = self::get_page_for_posts();
 
 			// Get post type slug
 			/*-------------------------------------------*/
@@ -165,7 +173,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		public function header_image_url(){
 
 			$options = self::options_load();
-			$post_type = self::vk_get_post_type();
+			$post_type = self::get_post_type();
 
 			if ( isset( $options['image_basic'] ) && $options['image_basic'] )
 			{
@@ -242,6 +250,20 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				'label'    => __( 'Text color', $vk_page_header_textdomain ),
 				'section'  => 'vk_page_header_setting',
 				'settings' => 'vk_page_header[text_color]',
+				// 'priority' => $priority,
+			)));
+
+			// color
+			$wp_customize->add_setting( 'vk_page_header[text_shadow_color]', array(
+				'default'			=> '',
+				'type'				=> 'option',
+				'capability'		=> 'edit_theme_options',
+				'sanitize_callback' => 'sanitize_hex_color',
+			) );
+			$wp_customize->add_control( new WP_Customize_Color_Control($wp_customize, 'text_shadow_color', array(
+				'label'    => __( 'Text shadow color', $vk_page_header_textdomain ),
+				'section'  => 'vk_page_header_setting',
+				'settings' => 'vk_page_header[text_shadow_color]',
 				// 'priority' => $priority,
 			)));
 
@@ -360,18 +382,42 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			// ページヘッダーPC画像設定
 			if( !is_front_page() ){
 
-				$skin_dynamic_css = '';
+				$dynamic_css = '';
 
 				// ヘッダー背景画像URL取得
 				$image_url = self::header_image_url();
+				if ( $image_url )
+				{
+					$dynamic_css .= 'background: url('.esc_url( $image_url ).') no-repeat 50% center;';
+					$dynamic_css .= 'background-size: cover;';
+				}
 
-				global $vk_page_header_output_class;
-				$skin_dynamic_css .= $vk_page_header_output_class."{
-					background: url(".esc_url( $image_url ).") no-repeat 50% center;
-					background-size: cover;
-				}";
+				$options = self::options_load();
 
-				wp_add_inline_style( 'lightning-design-style', $skin_dynamic_css );
+				if ( isset( $options['text_color'] ) && $options['text_color'] ){
+					$dynamic_css .= 'color:'.$options['text_color'].';';
+				}
+
+				if ( isset( $options['text_shadow_color'] ) && $options['text_shadow_color'] ){
+					$dynamic_css .= 'text-shadow:0px 0px 10px '.$options['text_shadow_color'].';';
+				}
+
+				if ( isset( $options['text_align'] ) && $options['text_align'] ) {
+					// left 指定の場合は出力しないようにしたかったが、中央揃えがデフォルトのスキンもあるので、leftでもcss出力
+					// if ( $options['text_align'] != 'left' ){
+					$dynamic_css .= 'text-align:'.$options['text_align'].';';
+					// }
+				}
+
+				// CSS が存在している場合のみ出力
+				if ( $dynamic_css ) {
+					// 対象とするclass名を取得
+					global $vk_page_header_output_class;
+					$dynamic_css = $vk_page_header_output_class."{".$dynamic_css."}";
+					// 出力を実行
+					wp_add_inline_style( 'lightning-design-style', $dynamic_css );
+				}
+
 			} // if( !is_front_page() ){
 
 		} // public function skin_dynamic_css(){
