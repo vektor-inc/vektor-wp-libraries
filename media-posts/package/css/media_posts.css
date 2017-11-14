@@ -1,12 +1,14 @@
 @charset "UTF-8";
-.media_post { display: block; overflow: hidden; position: relative; background-color: #fff; }
+.row.flex_height:before { display: block; content: ""; }
+
+.media_post { display: block; overflow: hidden; position: relative; background-color: #fff; width: 100%; }
 .media_post .media_post_label_new { background: rgba(255, 0, 0, 0.8); color: #FFF; font-size: 10px; padding: 60px 0px 5px; position: absolute; left: -104px; top: -44px; text-align: center; width: 200px; transform: rotate(-45deg); -ms-transform: rotate(-45deg); -moz-transform: rotate(-45deg); -webkit-transform: rotate(-45deg); -o-transform: rotate(-45deg); }
 .media_post .media_post_image { z-index: 1; display: block; overflow: hidden; }
 .media_post .media_post_image img { width: 100%; opacity: 1; transition: transform 0.3s, transform 0.6s; }
 .media_post .media_post_text { display: block; overflow: hidden; }
 .media_post .media_post_text .media_post_meta { margin-bottom: 2px; font-size: 12px; }
 .media_post .media_post_text .media_post_meta .media_post_date { opacity: 0.8; margin-right: 8px; }
-.media_post .media_post_text .media_post_meta .media_post_term { display: inline-block; font-size: 10px; line-height: 1.1em; color: #fff; padding: 1px 5px; position: relative; top: -1px; }
+.media_post .media_post_text .media_post_meta .media_post_term { display: inline-block; font-size: 10px; line-height: 1.1em; color: #fff; padding: 3px 1em 2px; position: relative; top: -1px; border-radius: 1em; }
 .media_post .media_post_text .media_post_meta .vcard.author { display: none; }
 .media_post .media_post_text h4.media_post_title { background: none; padding: 0; margin-bottom: 2px; font-size: 12px; transition: font-size 0.6s, transform 0.6s; overflow: hidden; text-overflow: ellipsis; }
 .media_post .media_post_text .media_post_excerpt { display: none; }
@@ -19,9 +21,8 @@
 /*-------------------------------------------*/
 /*	高さを揃える
 /*-------------------------------------------*/
-@media (min-width: 768px) { .flex_height { display: flex; justify-content: space-between; flex-wrap: wrap; align-items: stretch; }
-  .flex_height .flex_height_col { margin-bottom: 25px; }
-  .flex_height .media_post { height: 100%; } }
+@media (min-width: 768px) { .flex_height { display: flex; flex-wrap: wrap; align-items: stretch; }
+  .flex_height .flex_height_col { margin-bottom: 25px; display: flex; } }
 /*-------------------------------------------*/
 /*	.image_card
 /*-------------------------------------------*/
