@@ -33,7 +33,7 @@ class Lightning_Media_Admin {
 	}
 
 	//valid admin form and save post types selected by user in DB
-	private static function validSettings() 
+	private static function validSettings()
 	{
 		global $vk_ltg_media_posts_textdomain;
 
