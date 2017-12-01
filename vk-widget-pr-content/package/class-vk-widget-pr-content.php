@@ -12,9 +12,14 @@ class VK_Widget_Pr_Content extends WP_Widget {
   **/
   function __construct() {
     global $pr_content_textdomain;
-    $widget_name = vkExUnit_get_short_name(). '_' . __( 'pr_content', $pr_content_textdomain );
+    if ( function_exists('vkExUnit_get_short_name') ) {
+      $prefix = vkExUnit_get_short_name();
+    } else {
+      $prefix = 'VK';
+    }
+    $widget_name = $prefix. '_' . __( 'PR Content', $pr_content_textdomain );
     parent::__construct(
-        'WP_Widget_vkExUnit_pr_content', //ID
+        'VK_Widget_Pr_Content', //ID
         $widget_name, //widget_name
         array( 'description' => __( 'Content PR widget', $pr_content_textdomain ) ) //Widgetの説明
     );
