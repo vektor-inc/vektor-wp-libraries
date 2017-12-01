@@ -72,6 +72,11 @@ gulp.task( 'copy_page-header', function() {
     .pipe( gulp.dest( '../plugins/lightning-skin-jpnstyle/inc/vk-page-header/' ) )
     .pipe( gulp.dest( '../plugins/lightning-origin-pro/inc/vk-page-header/' ) );
 } );
+gulp.task( 'copy_widget-pr-content', function() {
+    gulp.src( './vk-widget-pr-content/package/**' )
+    // .pipe( gulp.dest( '../plugins/lightning-skin-jpnstyle/inc/vk-wodget-pr-content/' ) )
+    .pipe( gulp.dest( '../plugins/lightning-origin-pro/inc/vk-widget-pr-content/' ) );
+} );
 
 // Watch
 gulp.task('watch', function() {
@@ -113,6 +118,9 @@ gulp.task('watch_template-tags', function() {
 });
 gulp.task('watch_page-header', function() {
   gulp.watch('./vk-page-header/package/**', ['copy_page-header','copy_custom-field-builder']);
+});
+gulp.task('watch_pr-content', function() {
+  gulp.watch('./vk-widget-pr-content/package/**', ['copy_widget-pr-content']);
 });
 
 
