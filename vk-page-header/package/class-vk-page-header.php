@@ -118,11 +118,14 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				global $wp_query;
 				if ( $wp_query->query_vars['post_type'] ) {
 					$postType['slug'] = $wp_query->query_vars['post_type'];
-				} else {
-					// Case of tax archive and no posts
+				} elseif ( is_tax() ) {
+			  	// Case of tax archive and no posts
 					$taxonomy = get_queried_object()->taxonomy;
 					$postType['slug'] = get_taxonomy( $taxonomy )->object_type[0];
-				}
+			  } else {
+					// This is necessary that when no posts.
+			  	$postType['slug'] = 'post';
+			  }
 			}
 
 			// Get post type name
