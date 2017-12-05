@@ -134,8 +134,6 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		echo $args['after_widget'];
   }
 
-
-
   function form( $instance )
   {
       global $pr_content_textdomain;
@@ -219,22 +217,9 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 }
 
-
-/**
-  *自作ウィジェットを使えるようにする処理
-**/
-
-// メディアアップローダーjs
-add_action( 'admin_print_scripts', 'pr_content_admin_scripts_media' );
-function pr_content_admin_scripts_media() {
-	wp_enqueue_media();
-	wp_register_script( 'vk-admin-widget', plugin_dir_url( __FILE__ ) . 'js/admin-widget.js', array( 'jquery' ), false, true );
-	wp_enqueue_script( 'vk-admin-widget' );
+if ( ! function_exists('vk_widget_register_pr_content') ){
+	add_action('widgets_init', 'vk_widget_register_pr_content');
+	function vk_widget_register_pr_content(){
+		return register_widget("VK_Widget_Pr_Content");
+	}
 }
-
-add_action('widgets_init', 'vkExUnit_widget_register_pr_content');
-function vkExUnit_widget_register_pr_content(){
-	return register_widget("VK_Widget_Pr_Content");
-}
-
-?>
