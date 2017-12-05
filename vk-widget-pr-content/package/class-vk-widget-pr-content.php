@@ -28,7 +28,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
   /**
     * 入力された値とデフォルト値を結合するメソッド
   **/
-  public static function default_options( $instance = array() )
+  public static function options( $instance = array() )
   {
     $defaults = array(
       'pr_content_title'       => '',
@@ -50,7 +50,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
   function widget( $args, $instance )
   {
     // 入力された値とデフォルトで指定した値を あーん して$options にいれる
-    $options = self::default_options( $instance );
+    $options = self::options( $instance );
     echo $args['before_widget'];
     ?>
 
@@ -139,7 +139,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
   function form( $instance )
   {
       global $pr_content_textdomain;
-      $options = self::default_options( $instance );
+      $options = self::options( $instance );
       ?>
       <br>
       <label for="<?php echo $this->get_field_id('pr_content_title'); ?>" ><?php _e('Title:', $pr_content_textdomain); ?></label>
