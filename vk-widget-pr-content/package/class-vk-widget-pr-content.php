@@ -39,7 +39,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
       'pr_content_btn_text'    => '',
       'pr_content_btn_url'     => '',
       'pr_content_btn_blank'   => false,
-      'pr_content_btn_color'   => 'primary',
+      'pr_content_btn_color'   => null,
     );
     return wp_parse_args( (array) $instance, $defaults );
   }
@@ -134,6 +134,25 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		echo $args['after_widget'];
   }
 
+	/*-------------------------------------------*/
+	/*  update
+	/*-------------------------------------------*/
+
+	public function update( $new_instance, $old_instance )
+	{
+		$instance = $old_instance;
+		$instance[ 'pr_content_title' ] = wp_kses_post( $new_instance[ 'pr_content_title' ] );
+		$instance[ 'pr_content_text' ] = wp_kses_post( $new_instance[ 'pr_content_text' ] );
+		$instance[ 'pr_content_media_image' ] = wp_kses_post( $new_instance[ 'pr_content_media_image' ] );
+		$instance[ 'pr_content_media_alt' ] = esc_attr( $new_instance[ 'pr_content_media_alt' ] );
+		$instance[ 'pr_content_btn_text' ] = wp_kses_post( $new_instance[ 'pr_content_btn_text' ] );
+		$instance[ 'pr_content_btn_url' ] = esc_url( $new_instance[ 'pr_content_btn_url' ] );
+		$instance[ 'pr_content_btn_blank' ] = ( isset( $new_instance[ 'pr_content_btn_blank' ] ) && $new_instance[ 'pr_content_btn_blank' ] ) ? true : false;
+		$instance[ 'pr_content_btn_color' ] = ( isset( $new_instance[ 'pr_content_btn_blank' ] ) && $new_instance[ 'pr_content_btn_color' ] ) ? sanitize_hex_color($new_instance[ 'pr_content_btn_color' ]) : false ;
+		return $instance;
+	}
+
+
   function form( $instance )
   {
       global $pr_content_textdomain;
@@ -215,7 +234,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
       <?php
   }
 
-}
+} // class VK_Widget_Pr_Content extends WP_Widget {
 
 if ( ! function_exists('vk_widget_register_pr_content') ){
 	add_action('widgets_init', 'vk_widget_register_pr_content');
