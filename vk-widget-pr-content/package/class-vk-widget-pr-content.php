@@ -74,7 +74,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
     <div class="col-sm-6"><?php
     // title
     if ( $options['pr_content_title'] ) {
-      echo '<h1>'.esc_html( $options['pr_content_title'] ).'</h1>';
+      echo '<h3 class="pr-content-title">'.esc_html( $options['pr_content_title'] ).'</h3>';
     }
     // text
     echo '<p>'.wp_kses_post( $options['pr_content_text'] ).'</p>';
