@@ -94,7 +94,41 @@ class VK_Widget_Pr_Content extends WP_Widget {
   		echo $more_link_html;
       ?>
     </div>
-    </div>
+		<style>
+		  .card {
+		    width: 100%;
+		    height: auto;
+		    padding: 2em 0;
+		  }
+
+		  .card-img {
+		    width: 50%;
+		  }
+
+		  .pr_content_media_imgage {
+		    width: 100%;
+		    height: auto;
+		    float: left;
+		  }
+
+		  .card-body {
+		    display: inline-block;
+		    width: 50%;
+		    padding: 0 0 0 30px;
+		    box-sizing: border-box;
+		  }
+
+		  .card-title {
+		    background-color: transparent;
+		    font-weight: bold;
+		    padding: 0;
+		  }
+
+		  .card-text {
+		    display: inline;
+		  }
+		</style>
+    <!-- </div> -->
     <?php
     echo '</div>';
 		echo $args['after_widget'];
@@ -204,38 +238,3 @@ function vkExUnit_widget_register_pr_content(){
 }
 
 ?>
-
-<style>
-  .card {
-    width: 100%;
-    height: auto;
-    padding: 2em 0;
-  }
-
-  .card-img {
-    width: 50%;
-  }
-
-  .pr_content_media_imgage {
-    width: 100%;
-    height: auto;
-    float: left;
-  }
-
-  .card-body {
-    display: inline-block;
-    width: 50%;
-    padding: 0 0 0 30px;
-    box-sizing: border-box;
-  }
-
-  .card-title {
-    background-color: transparent;
-    font-weight: bold;
-    padding: 0;
-  }
-
-  .card-text {
-    display: inline;
-  }
-</style>
