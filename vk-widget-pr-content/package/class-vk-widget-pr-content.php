@@ -148,7 +148,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
       <label for="<?php echo $this->get_field_id('pr_content_text'); ?>" ><?php _e('Text:', $pr_content_textdomain); ?></label>
       <textarea id="<?php echo $this->get_field_id('pr_content_text'); ?>" name="<?php echo $this->get_field_name('pr_content_text') ?>" style="width:100%; margin-bottom: 1.5em;"><?php echo esc_textarea( $options['pr_content_text'] ); ?></textarea>
 
-      <?php
+			<?php
       $image = null;
       // ちゃんと数字が入っているかどうか？
       if ( is_numeric( $options['pr_content_media_image'] ) ) {
@@ -169,7 +169,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
           <input type="hidden" class="__id" name="<?php echo $this->get_field_name( 'pr_content_media_image' ); ?>" value="<?php echo esc_attr( $options['pr_content_media_image'] ); ?>" />
       </div>
       </div>
-      <script type="text/javascript">
+			<script type="text/javascript">
       // 画像登録処理
       if ( pr_content_media_image_addiditional == undefined ){
       var pr_content_media_image_addiditional = function(e){
@@ -203,7 +203,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
       }
       </script>
 
-      <?php // Read more ?>
+			<?php // Read more ?>
       <label for="<?php echo $this->get_field_id( 'pr_content_btn_url' );  ?>"><?php _e( 'Destination URL:', $pr_content_textdomain ); ?></label><br/>
       <input type="text" id="<?php echo $this->get_field_id( 'pr_content_btn_url' ); ?>" name="<?php echo $this->get_field_name( 'pr_content_btn_url' ); ?>" value="<?php echo esc_attr( $options['pr_content_btn_url'] ); ?>" style="margin-bottom: 0.5em;" />
       <br /><br />
