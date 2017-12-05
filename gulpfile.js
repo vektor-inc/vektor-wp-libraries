@@ -23,6 +23,7 @@ gulp.task( 'copy_term-color', function() {
     gulp.src( './term-color/package/**' )
     .pipe( gulp.dest( '../plugins/vk-post-author-display/inc/term-color/' ) )
     .pipe( gulp.dest( '../plugins/lightning-skin-variety/inc/term-color/' ) )
+		.pipe( gulp.dest( '../plugins/lightning-skin-fort/inc/term-color/' ) )
 		.pipe( gulp.dest( '../plugins/lightning-skin-jpnstyle/inc/term-color/' ) )
     .pipe( gulp.dest( '../plugins/lightning-origin-pro/inc/term-color/' ) );
 } );
@@ -70,6 +71,7 @@ gulp.task( 'copy_template-tags', function() {
 gulp.task( 'copy_page-header', function() {
     gulp.src( './vk-page-header/package/**' )
     .pipe( gulp.dest( '../plugins/lightning-skin-jpnstyle/inc/vk-page-header/' ) )
+		.pipe( gulp.dest( '../plugins/lightning-skin-fort/inc/vk-page-header/' ) )
     .pipe( gulp.dest( '../plugins/lightning-origin-pro/inc/vk-page-header/' ) );
 } );
 
