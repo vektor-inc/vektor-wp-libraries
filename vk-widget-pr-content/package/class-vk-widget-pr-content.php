@@ -100,38 +100,26 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 
 		<style>
-		  .card {
-		    width: 100%;
-		    height: auto;
-		    padding: 2em 0;
-		  }
-
-		  .card-img {
-		    width: 50%;
-		  }
-
-		  .pr_content_media_imgage {
-		    width: 100%;
-		    height: auto;
-		    float: left;
-		  }
-
-		  .card-body {
-		    display: inline-block;
-		    width: 50%;
-		    padding: 0 0 0 30px;
-		    box-sizing: border-box;
-		  }
-
-		  .card-title {
+		  .pr-content-title {
 		    background-color: transparent;
 		    font-weight: bold;
 		    padding: 0;
 		  }
 
-		  .card-text {
-		    display: inline;
-		  }
+      h3.pr-content-title {
+        border-bottom: none;
+      }
+
+      h3.pr-content-title:after {
+        content: "";
+        line-height: 0;
+        display: block;
+        overflow: hidden;
+        position: absolute;
+        bottom: -1px;
+        width: 0;
+        border-bottom: none;
+      }
 		</style>
     <!-- </div> -->
     <?php
