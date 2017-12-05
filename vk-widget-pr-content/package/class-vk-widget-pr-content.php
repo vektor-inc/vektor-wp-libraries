@@ -54,46 +54,51 @@ class VK_Widget_Pr_Content extends WP_Widget {
     echo $args['before_widget'];
     ?>
 
-
-    <div class="card">
-      <?php
-      // media img
-      // 画像IDから画像のURLを取得
-      if ( ! empty( $instance['pr_content_media_image'] ) ) {
-        $image = wp_get_attachment_image_src( $instance['pr_content_media_image'], 'large' );
-        $image = $image[0];
+    <div>
+    <div class="container">
+    <div class="row">
+    <div class="col-sm-6"><?php
+    // media img
+    // 画像IDから画像のURLを取得
+    if ( ! empty( $instance['pr_content_media_image'] ) ) {
+      $image = wp_get_attachment_image_src( $instance['pr_content_media_image'], 'large' );
+      $image = $image[0];
+    } else {
+      $image = null;
+    }
+    // 画像が登録されている場合
+    if ( ! empty( $image ) ) {
+      echo  '<img class="pr_content_media_imgage" src="'.esc_url( $image ).'" alt="'.esc_attr( $options['pr_content_media_alt'] ).'" style="border: 1px solid #ccc;" class="card-img-top" />';
+    }
+    ?></div>
+    <div class="col-sm-6"><?php
+    // title
+    if ( $options['pr_content_title'] ) {
+      echo '<h1>'.esc_html( $options['pr_content_title'] ).'</h1>';
+    }
+    // text
+    echo '<p>'.wp_kses_post( $options['pr_content_text'] ).'</p>';
+    // link btn
+    if ( ! empty ( $options['pr_content_btn_text'] ) && ! empty ( $options['pr_content_btn_url'] )) {
+      $more_link_html = '<div>';
+      if( ! empty( $options['pr_content_btn_blank'] ) ) {
+        $blank = 'target="_blank"';
       } else {
-        $image = null;
+        $blank = '';
       }
-      // 画像が登録されている場合
-      if ( ! empty( $image ) ) {
-        echo  '<div class="card-img"><img class="pr_content_media_imgage" src="'.esc_url( $image ).'" alt="'.esc_attr( $options['pr_content_media_alt'] ).'" style="border: 1px solid #ccc;" class="card-img-top" /></div>';
-      }
-      ?>
-    <div class="card-body">
-      <?php
-      // title
-      if ( $options['pr_content_title'] ) {
-        echo '<h4 class="card-title">'.esc_html( $options['pr_content_title'] ).'</h4>';
-      }
-      // text
-      echo '<p class="card-text">'.wp_kses_post( $options['pr_content_text'] ).'</p>';
-      // link btn
-      if ( ! empty ( $options['pr_content_btn_text'] ) && ! empty ( $options['pr_content_btn_url'] )) {
-  			$more_link_html = '<div class="card-btn" style="margin-top:2em;">';
-        if( ! empty( $options['pr_content_btn_blank'] ) ) {
-          $blank = 'target="_blank"';
-        } else {
-          $blank = '';
-        }
-  			$more_link_html .= '<a href="'.esc_url( $options['pr_content_btn_url'] ).'" class="btn btn-primary btn-block"'. $blank.'>'.wp_kses_post( $options['pr_content_btn_text'] ).'</a>';
-  			$more_link_html .= '</div>';
-  		} else {
-  			$more_link_html = '';
-  		}
-  		echo $more_link_html;
-      ?>
+      $more_link_html .= '<a href="'.esc_url( $options['pr_content_btn_url'] ).'" class="btn btn-primary btn-block"'. $blank.'>'.wp_kses_post( $options['pr_content_btn_text'] ).'</a>';
+      $more_link_html .= '</div>';
+    } else {
+      $more_link_html = '';
+    }
+    echo $more_link_html;
+    ?></div>
     </div>
+    </div>
+    </div>
+
+
+
 		<style>
 		  .card {
 		    width: 100%;
