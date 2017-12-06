@@ -40,6 +40,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
       'pr_content_btn_url'     => '',
       'pr_content_btn_blank'   => false,
       'pr_content_btn_color'   => null,
+      'pr_content_bg_color'    => null,
     );
     return wp_parse_args( (array) $instance, $defaults );
   }
@@ -55,13 +56,21 @@ class VK_Widget_Pr_Content extends WP_Widget {
     ?>
 
     <div>
-    <div class="container">
+    <?php
+    if ( ! empty( $options['pr_content_bg_color'] ) ) {
+      $bg_color = sanitize_hex_color( $options['pr_content_bg_color'] );
+      $style = ' style="background-color: '.$bg_color.'"';
+    } else {
+      $style = null;
+    }
+    ?>
+    <div class="container" <?php $style ?>>
     <div class="row">
     <div class="col-sm-6"><?php
     // media img
     // 画像IDから画像のURLを取得
-    if ( ! empty( $instance['pr_content_media_image'] ) ) {
-      $image = wp_get_attachment_image_src( $instance['pr_content_media_image'], 'large' );
+    if ( ! empty( $options['pr_content_media_image'] ) ) {
+      $image = wp_get_attachment_image_src( $options['pr_content_media_image'], 'large' );
       $image = $image[0];
     } else {
       $image = null;
@@ -100,6 +109,10 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 
 		<style>
+      .container {
+        padding: 20px;
+      }
+
 		  .pr-content-title {
 		    background-color: transparent;
 		    font-weight: bold;
@@ -141,7 +154,8 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		$instance[ 'pr_content_btn_text' ] = wp_kses_post( $new_instance[ 'pr_content_btn_text' ] );
 		$instance[ 'pr_content_btn_url' ] = esc_url( $new_instance[ 'pr_content_btn_url' ] );
 		$instance[ 'pr_content_btn_blank' ] = ( isset( $new_instance[ 'pr_content_btn_blank' ] ) && $new_instance[ 'pr_content_btn_blank' ] ) ? true : false;
-		$instance[ 'pr_content_btn_color' ] = ( isset( $new_instance[ 'pr_content_btn_blank' ] ) && $new_instance[ 'pr_content_btn_color' ] ) ? sanitize_hex_color($new_instance[ 'pr_content_btn_color' ]) : false ;
+		$instance[ 'pr_content_btn_color' ] = ( isset( $new_instance[ 'pr_content_btn_blank' ] ) && $new_instance[ 'pr_content_btn_color' ] ) ? sanitize_hex_color( $new_instance[ 'pr_content_btn_color' ]) : false ;
+		$instance[ 'pr_content_bg_color' ] = sanitize_hex_color( $new_instance[ 'pr_content_bg_color' ] );
 		return $instance;
 	}
 
@@ -221,10 +235,18 @@ class VK_Widget_Pr_Content extends WP_Widget {
       <input type="text" placeholder="詳細を見る ≫" id="<?php echo $this->get_field_id( 'pr_content_btn_text' ); ?>" name="<?php echo $this->get_field_name( 'pr_content_btn_text' ); ?>" value="<?php echo esc_attr( $options['pr_content_btn_text'] ); ?>" style="margin-bottom: 1.5em;" />
       <br>
 
-      <input type="checkbox" id="<?php echo $this->get_field_id('pr_content_btn_blank'); ?>" name="<?php echo $this->get_field_name('pr_content_btn_blank') ?>" value="true" <?php if($options['pr_content_btn_blank']) echo 'checked'; ?> />
+      <?php // target blank ?>
+      <input type="checkbox" id="<?php echo $this->get_field_id('pr_content_btn_blank'); ?>" name="<?php echo $this->get_field_name('pr_content_btn_blank'); ?>" value="true" <?php if($options['pr_content_btn_blank']) echo 'checked'; ?> />
       <label for="<?php echo $this->get_field_id('pr_content_btn_blank'); ?>" ><?php _e('Open with new tab', $pr_content_textdomain); ?></label>
       <br><br>
-      <?php
+
+      <?php // bg color ?>
+  		<p class="color_picker_wrap">
+  		<label for="<?php $this->get_field_id( 'pr_content_bg_color' ); ?>"><?php __( 'Background color:', $pr_content_textdomain ); ?></label><br/>
+  		<input type="text" id="<?php $this->get_field_id( 'pr_content_bg_color' ); ?>" class="color_picker" name="<?php $this->get_field_name( 'pr_content_bg_color' ); ?>" value="<?php sanitize_hex_color( $options[ 'pr_content_bg_color' ] ); ?>" /></p>
+      <br><br>
+
+  <?php
   }
 
 } // class VK_Widget_Pr_Content extends WP_Widget {
