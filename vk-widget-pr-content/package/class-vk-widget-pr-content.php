@@ -53,11 +53,11 @@ class VK_Widget_Pr_Content extends WP_Widget {
     // 入力された値とデフォルトで指定した値を あーん して$options にいれる
     $options = self::options( $instance );
     echo $args['before_widget'];
-    echo '<div class="pr-content">';
     if ( ! empty( $options['pr_content_bg_color'] ) ) {
       $bg_color = sanitize_hex_color( $options['pr_content_bg_color'] );
-      echo '<div class="container" style="background-color:'.$bg_color.';">';
+      echo '<div class="pr-content" style="background-color:'.$bg_color.';">';
     }
+    echo '<div class="container">';
     ?>
     <div class="row">
     <div class="col-sm-6"><?php
@@ -100,8 +100,9 @@ class VK_Widget_Pr_Content extends WP_Widget {
     </div><!-- .container -->
 
 		<style>
-      .pr-content .container {
-        padding: 0;
+      .pr-content {
+        margin: 0 calc(50% - 50vw) 3em;
+        padding: 3em calc(50vw - 50%);
       }
 
 		  .pr-content-title {
