@@ -53,18 +53,12 @@ class VK_Widget_Pr_Content extends WP_Widget {
     // 入力された値とデフォルトで指定した値を あーん して$options にいれる
     $options = self::options( $instance );
     echo $args['before_widget'];
-    ?>
-
-    <div>
-    <?php
+    echo '<div class="pr-content">';
     if ( ! empty( $options['pr_content_bg_color'] ) ) {
       $bg_color = sanitize_hex_color( $options['pr_content_bg_color'] );
-      $style = ' style="background-color: '.$bg_color.'"';
-    } else {
-      $style = null;
+      echo '<div class="container" style="background-color:'.$bg_color.';">';
     }
     ?>
-    <div class="container" <?php $style ?>>
     <div class="row">
     <div class="col-sm-6"><?php
     // media img
@@ -79,7 +73,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
     if ( ! empty( $image ) ) {
       echo  '<img class="pr_content_media_imgage" src="'.esc_url( $image ).'" alt="'.esc_attr( $options['pr_content_media_alt'] ).'" style="border: 1px solid #ccc;" class="card-img-top" />';
     }
-    ?></div>
+    ?></div><!-- .col-sm-6 -->
     <div class="col-sm-6"><?php
     // title
     if ( $options['pr_content_title'] ) {
@@ -101,16 +95,13 @@ class VK_Widget_Pr_Content extends WP_Widget {
       $more_link_html = '';
     }
     echo $more_link_html;
-    ?></div>
-    </div>
-    </div>
-    </div>
-
-
+    ?></div><!-- .col-sm-6 -->
+    </div><!-- .row -->
+    </div><!-- .container -->
 
 		<style>
-      .container {
-        padding: 20px;
+      .pr-content .container {
+        padding: 0;
       }
 
 		  .pr-content-title {
@@ -121,6 +112,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
       h3.pr-content-title {
         border-bottom: none;
+        box-shadow: none;
       }
 
       h3.pr-content-title:after {
@@ -134,9 +126,9 @@ class VK_Widget_Pr_Content extends WP_Widget {
         border-bottom: none;
       }
 		</style>
-    <!-- </div> -->
+
     <?php
-    echo '</div>';
+    echo '</div>'; // .pr-content
 		echo $args['after_widget'];
   }
 
@@ -241,11 +233,9 @@ class VK_Widget_Pr_Content extends WP_Widget {
       <br><br>
 
       <?php // bg color ?>
-  		<p class="color_picker_wrap">
-  		<label for="<?php $this->get_field_id( 'pr_content_bg_color' ); ?>"><?php __( 'Background color:', $pr_content_textdomain ); ?></label><br/>
-  		<input type="text" id="<?php $this->get_field_id( 'pr_content_bg_color' ); ?>" class="color_picker" name="<?php $this->get_field_name( 'pr_content_bg_color' ); ?>" value="<?php sanitize_hex_color( $options[ 'pr_content_bg_color' ] ); ?>" /></p>
+      <label for="<?php echo $this->get_field_id( 'pr_content_bg_color' ); ?>" class="color_picker_wrap"><?php _e( 'Background color:', $pr_content_textdomain); ?></label>
+      <input type="text" id="<?php echo $this->get_field_id( 'pr_content_bg_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'pr_content_bg_color'); ?>" value="<?php if($options['pr_content_bg_color']) echo esc_attr( $options['pr_content_bg_color']); ?>" />
       <br><br>
-
   <?php
   }
 
