@@ -104,23 +104,12 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		<style>
       .pr-content {
         margin: 0 calc(50% - 50vw);
-        padding: calc(50vw - 50%);
+        padding: 3em calc(50vw - 50%);
       }
 
       .bg-color-none {
-        margin-bottom: 5em;
+        margin-bottom: 6em;
       }
-
-      @media (min-width: 768px) {
-        .mainSection .widget {
-            margin-bottom: 0;
-      }
-      }
-
-      .mainSection .widget {
-            margin-bottom: 0;
-      }
-
 
 		  .pr-content-title {
 		    background-color: transparent;
@@ -131,6 +120,12 @@ class VK_Widget_Pr_Content extends WP_Widget {
       h3.pr-content-title {
         border-bottom: none;
         box-shadow: none;
+      }
+
+      @media (max-width: 767px) {
+        h3.pr-content-title {
+          margin-top: 30px;
+        }
       }
 
       h3.pr-content-title:after {
