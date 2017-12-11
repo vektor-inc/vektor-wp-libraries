@@ -56,6 +56,8 @@ class VK_Widget_Pr_Content extends WP_Widget {
     if ( ! empty( $options['pr_content_bg_color'] ) ) {
       $bg_color = sanitize_hex_color( $options['pr_content_bg_color'] );
       echo '<div class="pr-content" style="background-color:'.$bg_color.';">';
+    } else {
+      echo '<div class="bg-color-none">';
     }
     echo '<div class="container">';
     ?>
@@ -101,9 +103,24 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 		<style>
       .pr-content {
-        margin: 0 calc(50% - 50vw) 3em;
-        padding: 3em calc(50vw - 50%);
+        margin: 0 calc(50% - 50vw);
+        padding: calc(50vw - 50%);
       }
+
+      .bg-color-none {
+        margin-bottom: 5em;
+      }
+
+      @media (min-width: 768px) {
+        .mainSection .widget {
+            margin-bottom: 0;
+      }
+      }
+
+      .mainSection .widget {
+            margin-bottom: 0;
+      }
+
 
 		  .pr-content-title {
 		    background-color: transparent;
