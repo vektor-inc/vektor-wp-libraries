@@ -31,7 +31,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
   public static function options( $instance = array() )
   {
     $defaults = array(
-      'pr_content_title'       => '',
+      'title'       => '',
       'pr_content_text'        => '',
       'pr_content_media_image' => null,
       'pr_content_media_alt'   => null,
@@ -78,8 +78,8 @@ class VK_Widget_Pr_Content extends WP_Widget {
     ?></div><!-- .col-sm-6 -->
     <div class="col-sm-6 pr-content-col-right"><?php
     // title
-    if ( $options['pr_content_title'] ) {
-      echo '<h3 class="pr-content-title">'.esc_html( $options['pr_content_title'] ).'</h3>';
+    if ( $options['title'] ) {
+      echo '<h3 class="pr-content-title">'.esc_html( $options['title'] ).'</h3>';
     }
     // text
     echo '<p>'.wp_kses_post( $options['pr_content_text'] ).'</p>';
@@ -164,7 +164,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 	public function update( $new_instance, $old_instance )
 	{
 		$instance = $old_instance;
-		$instance[ 'pr_content_title' ] = wp_kses_post( $new_instance[ 'pr_content_title' ] );
+		$instance[ 'title' ] = wp_kses_post( $new_instance[ 'title' ] );
 		$instance[ 'pr_content_text' ] = wp_kses_post( $new_instance[ 'pr_content_text' ] );
 		$instance[ 'pr_content_media_image' ] = wp_kses_post( $new_instance[ 'pr_content_media_image' ] );
 		$instance[ 'pr_content_media_alt' ] = esc_attr( $new_instance[ 'pr_content_media_alt' ] );
@@ -184,11 +184,11 @@ class VK_Widget_Pr_Content extends WP_Widget {
       $options = self::options( $instance );
       ?>
       <br>
-      <label for="<?php echo $this->get_field_id('pr_content_title'); ?>" ><?php _e('Title:', $pr_content_textdomain); ?></label>
-      <input type="text" id="<?php echo $this->get_field_id('pr_content_title'); ?>" name="<?php echo $this->get_field_name('pr_content_title') ?>" style="width:100%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options['pr_content_title'] ); ?>"></input>
+      <label for="<?php echo $this->get_field_id('title'); ?>" ><?php _e('Title:', $pr_content_textdomain); ?></label>
+      <input type="text" id="<?php echo $this->get_field_id('title'); ?>-title" name="<?php echo $this->get_field_name('title'); ?>" style="width:100%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options['title'] ); ?>"></input>
 
       <label for="<?php echo $this->get_field_id('pr_content_text'); ?>" ><?php _e('Text:', $pr_content_textdomain); ?></label>
-      <textarea id="<?php echo $this->get_field_id('pr_content_text'); ?>" name="<?php echo $this->get_field_name('pr_content_text') ?>" style="width:100%; margin-bottom: 1.5em;"><?php echo esc_textarea( $options['pr_content_text'] ); ?></textarea>
+      <textarea id="<?php echo $this->get_field_id('pr_content_text'); ?>" name="<?php echo $this->get_field_name('pr_content_text'); ?>" style="width:100%; margin-bottom: 1.5em;"><?php echo esc_textarea( $options['pr_content_text'] ); ?></textarea>
 
 			<?php
       $image = null;
