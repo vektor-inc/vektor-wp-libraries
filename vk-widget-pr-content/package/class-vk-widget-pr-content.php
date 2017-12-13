@@ -34,12 +34,11 @@ class VK_Widget_Pr_Content extends WP_Widget {
       'title'       => '',
       'text'        => '',
       'media_image' => null,
-      'media_alt'   => null,
-      'pr_content_btn_text'    => '',
-      'pr_content_btn_url'     => '',
-      'pr_content_btn_blank'   => false,
-      'pr_content_btn_color'   => null,
-      'pr_content_bg_color'    => null,
+      'btn_text'    => '',
+      'btn_url'     => '',
+      'btn_blank'   => false,
+      // 'btn_color'   => null,
+      'bg_color'    => null,
     );
     return wp_parse_args( (array) $instance, $defaults );
   }
@@ -52,8 +51,8 @@ class VK_Widget_Pr_Content extends WP_Widget {
     // 入力された値とデフォルトで指定した値を あーん して$options にいれる
     $options = self::options( $instance );
     echo $args['before_widget'];
-    if ( ! empty( $options['pr_content_bg_color'] ) ) {
-      $bg_color = sanitize_hex_color( $options['pr_content_bg_color'] );
+    if ( ! empty( $options['bg_color'] ) ) {
+      $bg_color = sanitize_hex_color( $options['bg_color'] );
       echo '<div class="pr-content" style="background-color:'.$bg_color.';">';
     } else {
       echo '<div class="pr-content">';
@@ -64,16 +63,13 @@ class VK_Widget_Pr_Content extends WP_Widget {
     <div class="col-sm-6 pr-content-col-left"><?php
     // media img
     // 画像IDから画像のURLを取得
-    if ( ! empty( $options['media_image'] ) ) {
-      $image = wp_get_attachment_image_src( $options['media_image'], 'large' );
-      $image = $image[0];
-    } else {
-      $image = null;
+    if ( ! empty( $options['media_image'] ) && is_numeric( $options['media_image'] ) ) {
+      $attr = array(
+          'class' => "pr_content_media_imgage", //任意の class名を追記する
+      );
+      echo wp_get_attachment_image( $options['media_image'], 'large', false, $attr );
     }
-    // 画像が登録されている場合
-    if ( ! empty( $image ) ) {
-      echo  '<img class="pr_content_media_imgage" src="'.esc_url( $image ).'" alt="'.esc_attr( $options['media_alt'] ).'" style="border: 1px solid #ccc;" class="card-img-top" />';
-    }
+
     ?></div><!-- .col-sm-6 -->
     <div class="col-sm-6 pr-content-col-right"><?php
     // title
@@ -83,14 +79,14 @@ class VK_Widget_Pr_Content extends WP_Widget {
     // text
     echo '<p>'.wp_kses_post( $options['text'] ).'</p>';
     // link btn
-    if ( ! empty ( $options['pr_content_btn_text'] ) && ! empty ( $options['pr_content_btn_url'] )) {
+    if ( ! empty ( $options['btn_text'] ) && ! empty ( $options['btn_url'] )) {
       $more_link_html = '<div class="pr-content-btn">';
-      if( ! empty( $options['pr_content_btn_blank'] ) ) {
+      if( ! empty( $options['btn_blank'] ) ) {
         $blank = 'target="_blank"';
       } else {
         $blank = '';
       }
-      $more_link_html .= '<a href="'.esc_url( $options['pr_content_btn_url'] ).'" class="btn btn-primary btn-block"'. $blank.'>'.wp_kses_post( $options['pr_content_btn_text'] ).'</a>';
+      $more_link_html .= '<a href="'.esc_url( $options['btn_url'] ).'" class="btn btn-primary btn-block btn-lg"'. $blank.'>'.wp_kses_post( $options['btn_text'] ).'</a>';
       $more_link_html .= '</div>';
     } else {
       $more_link_html = '';
@@ -101,23 +97,23 @@ class VK_Widget_Pr_Content extends WP_Widget {
     </div><!-- .container -->
 
 		<style>
+
       .mainSection .widget_vk_widget_pr_content {
         margin-bottom:0;
       }
+
       .pr-content {
         margin: 0 calc(50% - 50vw);
         padding: 6em calc(50vw - 50%);
       }
+
       .pr-content-col-right {
         padding-left:2em;
       }
+
       .pr-content-col-left{
         padding-right:2em;
       }
-
-      /*.bg-color-none {
-        margin-bottom: 6em;
-      }*/
 
 		  .pr-content-title {
 		    background-color: transparent;
@@ -146,9 +142,15 @@ class VK_Widget_Pr_Content extends WP_Widget {
         width: 0;
         border-bottom: none;
       }
+
+      .pr_content_media_imgage {
+        border: 1px solid #ccc;
+      }
+
       .pr-content-btn {
         margin-top:3em;
       }
+
 		</style>
 
     <?php
@@ -166,13 +168,12 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		$instance[ 'title' ] = wp_kses_post( $new_instance[ 'title' ] );
 		$instance[ 'text' ] = wp_kses_post( $new_instance[ 'text' ] );
 		$instance[ 'media_image' ] = wp_kses_post( $new_instance[ 'media_image' ] );
-		$instance[ 'media_alt' ] = esc_attr( $new_instance[ 'media_alt' ] );
-		$instance[ 'pr_content_btn_text' ] = wp_kses_post( $new_instance[ 'pr_content_btn_text' ] );
-		$instance[ 'pr_content_btn_url' ] = esc_url( $new_instance[ 'pr_content_btn_url' ] );
-		$instance[ 'pr_content_btn_blank' ] = ( isset( $new_instance[ 'pr_content_btn_blank' ] ) && $new_instance[ 'pr_content_btn_blank' ] ) ? true : false;
-		$instance[ 'pr_content_btn_color' ] = ( isset( $new_instance[ 'pr_content_btn_blank' ] ) && $new_instance[ 'pr_content_btn_color' ] ) ? sanitize_hex_color( $new_instance[ 'pr_content_btn_color' ]) : false ;
-		// $instance[ 'pr_content_bg_color' ] = sanitize_hex_color( $new_instance[ 'pr_content_bg_color' ] );
-		$instance[ 'pr_content_bg_color' ] = $new_instance[ 'pr_content_bg_color' ];
+		$instance[ 'btn_text' ] = wp_kses_post( $new_instance[ 'btn_text' ] );
+		$instance[ 'btn_url' ] = esc_url( $new_instance[ 'btn_url' ] );
+		$instance[ 'btn_blank' ] = ( isset( $new_instance[ 'btn_blank' ] ) && $new_instance[ 'btn_blank' ] ) ? true : false;
+		$instance[ 'btn_color' ] = ( isset( $new_instance[ 'btn_blank' ] ) ) ? sanitize_hex_color( $new_instance[ 'btn_color' ]) : false ;
+		// $instance[ 'btn_color' ] = ( isset( $new_instance[ 'btn_blank' ] ) && $new_instance[ 'btn_color' ] ) ? sanitize_hex_color( $new_instance[ 'btn_color' ]) : false ;
+		$instance[ 'bg_color' ] = $new_instance[ 'bg_color' ];
 		return $instance;
 	}
 
@@ -246,21 +247,21 @@ class VK_Widget_Pr_Content extends WP_Widget {
       </script>
 
 			<?php // Read more ?>
-      <label for="<?php echo $this->get_field_id( 'pr_content_btn_url' );  ?>"><?php _e( 'Destination URL:', $pr_content_textdomain ); ?></label><br/>
-      <input type="text" id="<?php echo $this->get_field_id( 'pr_content_btn_url' ); ?>" name="<?php echo $this->get_field_name( 'pr_content_btn_url' ); ?>" value="<?php echo esc_attr( $options['pr_content_btn_url'] ); ?>" style="margin-bottom: 0.5em;" />
+      <label for="<?php echo $this->get_field_id( 'btn_url' );  ?>"><?php _e( 'Destination URL:', $pr_content_textdomain ); ?></label><br/>
+      <input type="text" id="<?php echo $this->get_field_id( 'btn_url' ); ?>" name="<?php echo $this->get_field_name( 'btn_url' ); ?>" value="<?php echo esc_attr( $options['btn_url'] ); ?>" style="margin-bottom: 0.5em;" />
       <br /><br />
-      <label for="<?php echo $this->get_field_id( 'pr_content_btn_text' );  ?>"><?php _e( 'Notation text:', $pr_content_textdomain ); ?></label><br/>
-      <input type="text" placeholder="詳細を見る ≫" id="<?php echo $this->get_field_id( 'pr_content_btn_text' ); ?>" name="<?php echo $this->get_field_name( 'pr_content_btn_text' ); ?>" value="<?php echo esc_attr( $options['pr_content_btn_text'] ); ?>" style="margin-bottom: 1.5em;" />
+      <label for="<?php echo $this->get_field_id( 'btn_text' );  ?>"><?php _e( 'Notation text:', $pr_content_textdomain ); ?></label><br/>
+      <input type="text" placeholder="詳細を見る ≫" id="<?php echo $this->get_field_id( 'btn_text' ); ?>" name="<?php echo $this->get_field_name( 'btn_text' ); ?>" value="<?php echo esc_attr( $options['btn_text'] ); ?>" style="margin-bottom: 1.5em;" />
       <br>
 
       <?php // target blank ?>
-      <input type="checkbox" id="<?php echo $this->get_field_id('pr_content_btn_blank'); ?>" name="<?php echo $this->get_field_name('pr_content_btn_blank'); ?>" value="true" <?php if($options['pr_content_btn_blank']) echo 'checked'; ?> />
-      <label for="<?php echo $this->get_field_id('pr_content_btn_blank'); ?>" ><?php _e('Open with new tab', $pr_content_textdomain); ?></label>
+      <input type="checkbox" id="<?php echo $this->get_field_id('btn_blank'); ?>" name="<?php echo $this->get_field_name('btn_blank'); ?>" value="true" <?php if($options['btn_blank']) echo 'checked'; ?> />
+      <label for="<?php echo $this->get_field_id('btn_blank'); ?>" ><?php _e('Open with new tab', $pr_content_textdomain); ?></label>
       <br><br>
 
       <?php // bg color ?>
-      <label for="<?php echo $this->get_field_id( 'pr_content_bg_color' ); ?>" class="color_picker_wrap"><?php _e( 'Background color:', $pr_content_textdomain); ?></label>
-      <input type="text" id="<?php echo $this->get_field_id( 'pr_content_bg_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'pr_content_bg_color'); ?>" value="<?php if($options['pr_content_bg_color']) echo esc_attr( $options['pr_content_bg_color']); ?>" />
+      <label for="<?php echo $this->get_field_id( 'bg_color' ); ?>" class="color_picker_wrap"><?php _e( 'Background color:', $pr_content_textdomain); ?></label>
+      <input type="text" id="<?php echo $this->get_field_id( 'bg_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'bg_color'); ?>" value="<?php if($options['bg_color']) echo esc_attr( $options['bg_color']); ?>" />
       <br><br>
   <?php
   }
