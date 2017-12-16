@@ -209,7 +209,6 @@ class VK_Widget_Pr_Content extends WP_Widget {
       <button class="button button-default button-block" style="display:block;width:100%;text-align: center; margin:4px 0;" onclick="javascript:vk_title_bg_image_delete(this);return false;"><?php _e('Delete image', $pr_content_textdomain ); ?></button>
       <div class="_form" style="line-height: 2em">
           <input type="hidden" class="__id" name="<?php echo $this->get_field_name( 'media_image' ); ?>" value="<?php echo esc_attr( $options['media_image'] ); ?>" />
-          <input type="hidden" class="_alt" name="<?php echo $this->get_field_name( 'media_alt' ); ?>" value="<?php echo esc_attr( $options['media_alt'] ); ?>" />
       </div>
       </div>
 			<script type="text/javascript">
