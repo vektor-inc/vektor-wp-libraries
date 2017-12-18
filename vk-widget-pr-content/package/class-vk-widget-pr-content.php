@@ -23,12 +23,13 @@ class VK_Widget_Pr_Content extends WP_Widget {
         $widget_name, //widget_name
         array( 'description' => __( 'Content PR widget', $pr_content_textdomain ) ) //Widgetの説明
     );
+		add_action( 'wp_head', array( $this, 'print_css' ), 2);
   }
 
   /**
     * 入力された値とデフォルト値を結合するメソッド
   **/
-  public static function options( $instance = array() )
+  function options( $instance = array() )
   {
     $defaults = array(
       'title'       => '',
@@ -95,64 +96,6 @@ class VK_Widget_Pr_Content extends WP_Widget {
     ?></div><!-- .col-sm-6 -->
     </div><!-- .row -->
     </div><!-- .container -->
-
-		<style>
-
-      .mainSection .widget_vk_widget_pr_content {
-        margin-bottom:0;
-      }
-
-      .pr-content {
-        margin: 0 calc(50% - 50vw);
-        padding: 6em calc(50vw - 50%);
-      }
-
-		  .pr-content-title {
-		    background-color: transparent;
-		    font-weight: bold;
-		    padding: 0;
-		  }
-
-      h3.pr-content-title {
-        border-bottom: none;
-        box-shadow: none;
-      }
-
-      @media (max-width: 767px) {
-        h3.pr-content-title {
-          margin-top: 30px;
-        }
-      }
-			@media (min-width: 768px) {
-				.pr-content-col-right {
-	        padding-left:2em;
-	      }
-	      .pr-content-col-left{
-	        padding-right:2em;
-	      }
-      }
-
-      h3.pr-content-title:after {
-        content: "";
-        line-height: 0;
-        display: block;
-        overflow: hidden;
-        position: absolute;
-        bottom: -1px;
-        width: 0;
-        border-bottom: none;
-      }
-
-      .pr_content_media_imgage {
-        border: 1px solid #ccc;
-      }
-
-      .pr-content-btn {
-        margin-top:3em;
-      }
-
-		</style>
-
     <?php
     echo '</div>'; // .pr-content
 		echo $args['after_widget'];
@@ -162,7 +105,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 	/*  update
 	/*-------------------------------------------*/
 
-	public function update( $new_instance, $old_instance )
+	function update( $new_instance, $old_instance )
 	{
 		$instance = $old_instance;
 		$instance[ 'title' ] = wp_kses_post( $new_instance[ 'title' ] );
@@ -264,6 +207,75 @@ class VK_Widget_Pr_Content extends WP_Widget {
       <br><br>
   <?php
   }
+
+
+	/*-------------------------------------------*/
+	/*  Position Change
+	/*-------------------------------------------*/
+
+	function print_css(){
+			$custom_css = '.mainSection .widget_vk_widget_pr_content {
+			        margin-bottom:0;
+			      }
+
+			      .pr-content {
+			        margin: 0 calc(50% - 50vw);
+			        padding: 6em calc(50vw - 50%);
+			      }
+
+					  .pr-content-title {
+					    background-color: transparent;
+					    font-weight: bold;
+					    padding: 0;
+					  }
+
+			      .pr-content-title {
+			        border-bottom: none;
+			        box-shadow: none;
+			      }
+
+			      @media (max-width: 767px) {
+			        .pr-content-title,
+							.pr-content-title:first-child {
+			          margin-top: 30px;
+			        }
+			      }
+						@media (min-width: 768px) {
+							.pr-content-col-right {
+				        padding-left:2em;
+				      }
+				      .pr-content-col-left{
+				        padding-right:2em;
+				      }
+			      }
+
+			      .pr-content-title:after {
+			        content: "";
+			        line-height: 0;
+			        display: block;
+			        overflow: hidden;
+			        position: absolute;
+			        bottom: -1px;
+			        width: 0;
+			        border-bottom: none;
+			      }
+
+			      .pr_content_media_imgage {
+			        border: 1px solid #ccc;
+			      }
+
+			      .pr-content-btn {
+			        margin-top:3em;
+			      }';
+			// 両サイドのスペースを消す
+			$custom_css = trim($custom_css);
+			// 改行、タブをスペースへ
+			$custom_css = preg_replace('/[\n\r\t]/', '', $custom_css);
+			// 複数スペースを一つへ
+			$custom_css = preg_replace('/\s(?=\s)/', '', $custom_css);
+			wp_add_inline_style( 'lightning-design-style', $custom_css );
+	}
+
 
 } // class VK_Widget_Pr_Content extends WP_Widget {
 
