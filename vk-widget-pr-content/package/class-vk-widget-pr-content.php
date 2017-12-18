@@ -107,14 +107,6 @@ class VK_Widget_Pr_Content extends WP_Widget {
         padding: 6em calc(50vw - 50%);
       }
 
-      .pr-content-col-right {
-        padding-left:2em;
-      }
-
-      .pr-content-col-left{
-        padding-right:2em;
-      }
-
 		  .pr-content-title {
 		    background-color: transparent;
 		    font-weight: bold;
@@ -130,6 +122,14 @@ class VK_Widget_Pr_Content extends WP_Widget {
         h3.pr-content-title {
           margin-top: 30px;
         }
+      }
+			@media (min-width: 768px) {
+				.pr-content-col-right {
+	        padding-left:2em;
+	      }
+	      .pr-content-col-left{
+	        padding-right:2em;
+	      }
       }
 
       h3.pr-content-title:after {
