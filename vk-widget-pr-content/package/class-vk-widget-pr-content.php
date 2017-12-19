@@ -32,14 +32,16 @@ class VK_Widget_Pr_Content extends WP_Widget {
   function options( $instance = array() )
   {
     $defaults = array(
-      'title'       => '',
-      'text'        => '',
-      'media_image' => null,
-      'btn_text'    => '',
-      'btn_url'     => '',
-      'btn_blank'   => false,
+      'title'          => '',
+      'text'           => '',
+      'media_image'    => null,
+      'btn_text'       => '',
+      'btn_url'        => '',
+      'btn_blank'      => false,
       // 'btn_color'   => null,
-      'bg_color'    => null,
+      'bg_color'       => null,
+      'margin_top'     => null,
+      'margin_bottom'  => null,
     );
     return wp_parse_args( (array) $instance, $defaults );
   }
@@ -51,6 +53,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
   {
     // 入力された値とデフォルトで指定した値を あーん して$options にいれる
     $options = self::options( $instance );
+    echo '<style type="text/css">.mainSection #'.$args['widget_id'].'.widget_vk_widget_pr_content { margin-top:'.$options['margin_top'].'; margin-bottom:'.$options['margin_bottom'].';}</style>';
     echo $args['before_widget'];
     if ( ! empty( $options['bg_color'] ) ) {
       $bg_color = sanitize_hex_color( $options['bg_color'] );
@@ -114,9 +117,9 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		$instance[ 'btn_text' ] = wp_kses_post( $new_instance[ 'btn_text' ] );
 		$instance[ 'btn_url' ] = esc_url( $new_instance[ 'btn_url' ] );
 		$instance[ 'btn_blank' ] = ( isset( $new_instance[ 'btn_blank' ] ) && $new_instance[ 'btn_blank' ] ) ? true : false;
-		$instance[ 'btn_color' ] = ( isset( $new_instance[ 'btn_blank' ] ) ) ? sanitize_hex_color( $new_instance[ 'btn_color' ]) : false ;
-		// $instance[ 'btn_color' ] = ( isset( $new_instance[ 'btn_blank' ] ) && $new_instance[ 'btn_color' ] ) ? sanitize_hex_color( $new_instance[ 'btn_color' ]) : false ;
-		$instance[ 'bg_color' ] = $new_instance[ 'bg_color' ];
+		$instance[ 'bg_color' ] = ( isset( $new_instance[ 'bg_color' ] ) ) ? sanitize_hex_color( $new_instance[ 'bg_color' ]) : false ;
+		$instance[ 'margin_top' ] = wp_kses_post( mb_convert_kana($new_instance[ 'margin_top' ], 'a') );
+		$instance[ 'margin_bottom' ] = wp_kses_post( mb_convert_kana($new_instance[ 'margin_bottom' ], 'a') );
 		return $instance;
 	}
 
@@ -205,6 +208,14 @@ class VK_Widget_Pr_Content extends WP_Widget {
       <label for="<?php echo $this->get_field_id( 'bg_color' ); ?>" class="color_picker_wrap"><?php _e( 'Background color:', $pr_content_textdomain); ?></label>
       <input type="text" id="<?php echo $this->get_field_id( 'bg_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'bg_color'); ?>" value="<?php if($options['bg_color']) echo esc_attr( $options['bg_color']); ?>" />
       <br><br>
+
+      <?php // margin_top . margin_bottom ?>
+      <label for="<?php echo $this->get_field_id('margin_top'); ?>" ><?php _e('Margin-top<br>Please also enter the unit. (Example: 30px):', $pr_content_textdomain); ?></label>
+      <input type="text" id="<?php echo $this->get_field_id('margin_top'); ?>-margin_top" name="<?php echo $this->get_field_name('margin_top'); ?>" style="width:100%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options['margin_top'] ); ?>"></input>
+
+      <label for="<?php echo $this->get_field_id('margin_bottom'); ?>" ><?php _e('Margin-bottom<br>Please also enter the unit. (Example: 30px):', $pr_content_textdomain); ?></label>
+      <input type="text" id="<?php echo $this->get_field_id('margin_bottom'); ?>-margin_bottom" name="<?php echo $this->get_field_name('margin_bottom'); ?>" style="width:100%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options['margin_bottom'] ); ?>"></input>
+
   <?php
   }
 
@@ -219,8 +230,9 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			      }
 
 			      .pr-content {
-			        margin: 0 calc(50% - 50vw);
-			        padding: 6em calc(50vw - 50%);
+              margin: 0 calc(50% - 50vw);
+              padding: 6em calc(50vw - 50%);
+
 			      }
 
 					  .pr-content-title {
