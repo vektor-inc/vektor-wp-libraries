@@ -1,5 +1,14 @@
 var gulp = require('gulp');
 
+// sass compiler
+var sass = require('gulp-sass');
+
+var cmq = require('gulp-merge-media-queries');
+// add vender prifix
+var autoprefixer = require('gulp-autoprefixer');
+
+var cleanCss = require('gulp-clean-css');
+
 var cssmin = require('gulp-cssmin');
 // ファイルリネーム（.min作成用）
 var rename = require('gulp-rename');
@@ -9,6 +18,19 @@ var concat = require('gulp-concat');
 var jsmin = require('gulp-jsmin');
 // エラーでも監視を続行させる
 var plumber = require('gulp-plumber');
+
+
+gulp.task('sass_vk-admin', function() {
+    // gulp.src( '**/_scss/**/*.scss' )
+		gulp.src( 'vk-admin/package/_scss/**/*.scss' )
+        .pipe(plumber())
+        .pipe(sass())
+				.pipe(cmq({log:true}))
+        .pipe(autoprefixer())
+				.pipe(cleanCss())
+        .pipe(gulp.dest('./vk-admin/package/css/'));
+});
+
 
 gulp.task( 'copy_vk-admin', function() {
     gulp.src( './vk-admin/package/**' )
@@ -113,6 +135,7 @@ gulp.task('watch_media', function() {
 	gulp.watch('./media-posts/package/**', ['copy_term-color']);
 });
 gulp.task('watch_admin', function() {
+  gulp.watch('./vk-admin/package/_scss/**', ['sass_vk-admin']);
   gulp.watch('./vk-admin/package/**', ['copy_vk-admin']);
 });
 gulp.task('watch_template-tags', function() {
