@@ -117,14 +117,31 @@ if ( ! class_exists( 'Vk_post_type_manager' ) ) {
 
             echo '<hr>';
 
-			// Custom taxonomies
-			echo '<h4>'.__('Custom taxonomies(optional)', $vk_post_type_manager_textdomain).'</h4>';
+				/* Export to Rest api
+				/*-------------------------------------------*/
+				echo '<h4>'.__('Export to REST API(optional)', $vk_post_type_manager_textdomain ).'</h4>';
 
-			echo '<p>';
-			echo __('Custom taxonomy is like a category in post.',$vk_post_type_manager_textdomain ).'<br />';
-			echo __('However, it refers to the "category" itself, not to the “item” of the category.',$vk_post_type_manager_textdomain ).'<br />';
-			echo __('For example, if you create a post type "construction result", Custom taxonomy will be "construction type", "construction area", etc.',$vk_post_type_manager_textdomain );
-			echo '</p>';
+				// 現在保存されているカスタムフィールドの値を取得
+				$export_to_api_value = get_post_meta( $post->ID,'veu_post_type_export_to_api',true );
+
+				// 保存されているデータが true だったら $checked = ' checked' にする。
+				if ( $export_to_api_value ) {
+					 $checked = ' checked';
+				} else {
+					$checked = '';
+				}
+
+				echo '<label>'.'<input type="checkbox" id="veu_post_type_export_to_api" name="veu_post_type_export_to_api" value="true"'.$checked.'> '.__('Export to REST API').'</label>';
+				echo '<hr>';
+
+				// Custom taxonomies
+				echo '<h4>'.__('Custom taxonomies(optional)', $vk_post_type_manager_textdomain).'</h4>';
+
+				echo '<p>';
+				echo __('Custom taxonomy is like a category in post.',$vk_post_type_manager_textdomain ).'<br />';
+				echo __('However, it refers to the "category" itself, not to the “item” of the category.',$vk_post_type_manager_textdomain ).'<br />';
+				echo __('For example, if you create a post type "construction result", Custom taxonomy will be "construction type", "construction area", etc.',$vk_post_type_manager_textdomain );
+				echo '</p>';
 
 			$taxonomies = array( 'taxonomy_id', 'taxonomy_lavel');
 			echo '<table class="table table-border">';
@@ -184,7 +201,14 @@ if ( ! class_exists( 'Vk_post_type_manager' ) ) {
 		    //自動保存ルーチンかどうかチェック。そうだった場合は何もしない（記事の自動保存処理として呼び出された場合の対策）
 		    if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) { return $post_id; }
 
-		    $fields = array( 'veu_post_type_id','veu_post_type_items','veu_menu_position','veu_taxonomy' );
+				// 保存しているカスタムフィールド
+		    $fields = array(
+					'veu_post_type_id',
+					'veu_post_type_items',
+					'veu_menu_position',
+					'veu_post_type_export_to_api',
+					'veu_taxonomy'
+				);
 
 		    foreach ($fields as $key => $field) {
 			    $field_value = ( isset( $_POST[$field] ) ) ? $_POST[$field] : '';
