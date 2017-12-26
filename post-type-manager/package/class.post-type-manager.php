@@ -251,7 +251,7 @@ if ( ! class_exists( 'Vk_post_type_manager' ) ) {
 
 
 		/*-------------------------------------------*/
-		/*	作成したカスタム投稿タイプを追加
+		/*	登録したカスタム投稿タイプを実際に作成
 		/*-------------------------------------------*/
 
 		function add_post_type() {
@@ -263,8 +263,8 @@ if ( ! class_exists( 'Vk_post_type_manager' ) ) {
 				'orderby'          => 'menu_order',
 				'suppress_filters' => true
 			);
-		    $custom_post_types = get_posts($args);
-		    if ( $custom_post_types ) {
+			$custom_post_types = get_posts($args);
+			if ( $custom_post_types ) {
 				foreach ($custom_post_types as $key => $post) {
 
 					/*  投稿タイプ追加
@@ -280,19 +280,34 @@ if ( ! class_exists( 'Vk_post_type_manager' ) ) {
 					foreach ($post_type_items as $key => $value) {
 						$supports[] = $key;
 					}
-					// print '<pre style="text-align:left">';print_r($post_type_items);print '</pre>';
-					$menu_position = intval( mb_convert_kana ( get_post_meta( $post->ID, 'veu_menu_position', true ), 'n' ) );
-					if ( !$menu_position ) $menu_position = 5;
-					$args = array(
-						'labels'             => $labels,
-						'public'             => true,
-						'has_archive'        => true,
-						'menu_position'      => $menu_position,
-						'supports'           => $supports
-					);
 
+					// カスタム投稿タイプのスラッグ
 					$post_type_id = esc_html( get_post_meta( $post->ID, 'veu_post_type_id', true ) );
+
 					if ( $post_type_id ) {
+
+						$menu_position = intval( mb_convert_kana ( get_post_meta( $post->ID, 'veu_menu_position', true ), 'n' ) );
+						if ( !$menu_position ) $menu_position = 5;
+						$args = array(
+							'labels'             => $labels,
+							'public'             => true,
+							'has_archive'        => true,
+							'menu_position'      => $menu_position,
+							'supports'           => $supports
+						);
+
+						// REST API に出力するかどうかをカスタムフィールドから取得
+						$rest_api = get_post_meta( $post->ID, 'veu_post_type_export_to_api', true );
+						// REST APIに出力する場合
+						if ( $rest_api ) {
+							$rest_args = array(
+								'show_in_rest' => true,
+								'rest_base' => $post_type_id,
+							);
+							$args = array_merge( $args, $rest_args );
+						}
+
+						// カスタム投稿タイプを発行
 						register_post_type( $post_type_id, $args );
 
 						/*	カスタム分類を追加
