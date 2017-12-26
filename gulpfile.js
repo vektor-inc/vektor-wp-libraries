@@ -130,6 +130,9 @@ gulp.task('watch_mobile', function() {
 gulp.task('watch_cf', function() {
   gulp.watch('./custom-field-builder/package/**', ['copy_custom-field-builder']);
 });
+gulp.task('watch_ptm', function() {
+  gulp.watch('./post-type-manager/package/**', ['copy_post-type-manager']);
+});
 gulp.task('watch_media', function() {
   gulp.watch('./media-posts/package/**', ['copy_media-posts']);
 	gulp.watch('./media-posts/package/**', ['copy_term-color']);
