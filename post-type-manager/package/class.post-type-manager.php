@@ -137,7 +137,8 @@ if ( ! class_exists( 'Vk_post_type_manager' ) ) {
 				echo '<label>'.'<input type="checkbox" id="veu_post_type_export_to_api" name="veu_post_type_export_to_api" value="true"'.$checked.'> '.__('Export to REST API').'</label>';
 				echo '<hr>';
 
-				// Custom taxonomies
+				/* Custom taxonomies
+				/*-------------------------------------------*/
 				echo '<h4>'.__('Custom taxonomies(optional)', $vk_post_type_manager_textdomain).'</h4>';
 
 				echo '<p>';
@@ -146,18 +147,27 @@ if ( ! class_exists( 'Vk_post_type_manager' ) ) {
 				echo __('For example, if you create a post type "construction result", Custom taxonomy will be "construction type", "construction area", etc.',$vk_post_type_manager_textdomain );
 				echo '</p>';
 
-			$taxonomies = array( 'taxonomy_id', 'taxonomy_lavel');
 			echo '<table class="table table-border">';
 
+			// カスタム分類の情報は カスタムフィールドの veu_taxonomy に連想配列で格納している
 			$taxonomy = get_post_meta( $post->ID, 'veu_taxonomy', true );
+
+			// if ( ! $taxonomy ){
+			// 	$taxonomy = array(array());
+			// }
+
 			for ($i=1; $i <= 3; $i++) {
-				// echo '<tr>';
+
 				$slug = ( isset( $taxonomy[$i]['slug'] ) ) ? $taxonomy[$i]['slug'] : '';
 				$label = ( isset( $taxonomy[$i]['label'] ) ) ? $taxonomy[$i]['label'] : '';
 				$tag = ( isset( $taxonomy[$i]['tag'] ) ) ? $taxonomy[$i]['tag'] : '';
+				$rest_api = ( isset( $taxonomy[$i]['rest_api'] ) ) ? $taxonomy[$i]['rest_api'] : '';
 
 				echo '<tr>';
-				echo '<th rowspan="3">'.$i.'</th>';
+
+				echo '<th rowspan="4">'.$i.'</th>';
+
+				// slug
 				echo '<td>'.__('Custon taxonomy name(slug)', $vk_post_type_manager_textdomain ).'</td>';
 				echo '<td><input type="text" id="veu_taxonomy['.$i.'][slug]" name="veu_taxonomy['.$i.'][slug]" value="'.esc_attr($slug).'" size="20">';
 				$locale = get_locale();
@@ -166,23 +176,31 @@ if ( ! class_exists( 'Vk_post_type_manager' ) ) {
 				}
 				echo '</td>';
 
+				// 表示名
 				echo '<tr>';
 				echo '<td>'.__('Custon taxonomy label', $vk_post_type_manager_textdomain ).'</td>';
 				echo '<td><input type="text" id="veu_taxonomy['.$i.'][label]" name="veu_taxonomy['.$i.'][label]" value="'.esc_attr($label).'" size="20"></td>';
 				echo '</tr>';
 
+				// tag
+				echo '<tr>';
 				$checked = ( isset( $taxonomy[$i]['tag'] ) && $taxonomy[$i]['tag'] ) ? ' checked':'';
-
 				echo '<td>'.__('Hierarchy', $vk_post_type_manager_textdomain ).'</td>';
 				echo '<td><label><input type="checkbox" id="veu_taxonomy['.$i.'][tag]" name="veu_taxonomy['.$i.'][tag]" value="true"'.$checked.'> '.__('Make it a tag (do not hierarchize)',  $vk_post_type_manager_textdomain).'</label></td>';
 				echo '</tr>';
+
+				// RERT API
+				echo '<tr>';
+
+				// チェックが元々入ってるかどうか
+				$checked = ( isset( $taxonomy[$i]['rest_api'] ) && $taxonomy[$i]['rest_api'] ) ? ' checked':'';
+
+				echo '<td>'.__('REST API(optional)', $vk_post_type_manager_textdomain ).'</td>';
+				echo '<td><label><input type="checkbox" id="veu_taxonomy['.$i.'][rest_api]" name="veu_taxonomy['.$i.'][rest_api]" value="true"'.$checked.'> '.__('Use for REST API',  $vk_post_type_manager_textdomain).'</label></td>';
+				echo '</tr>';
+
 			}
 			echo '</table>';
-
-
-			$taxonomy = array(
-				array ( 'category' => 'カテゴリー' ),
-			 );
 
 		}
 
@@ -312,24 +330,33 @@ if ( ! class_exists( 'Vk_post_type_manager' ) ) {
 
 						/*	カスタム分類を追加
 						/*-------------------------------------------*/
+
+						// カスタムフィールドに連想配列で格納しておいたカスタム分類の情報を取得
 						$veu_taxonomies = get_post_meta( $post->ID, 'veu_taxonomy', true );
 
 						foreach ($veu_taxonomies as $key => $taxonomy) {
-							// print '<pre style="text-align:left">';print_r($taxonomy);print '</pre>';
+
 							if ( $taxonomy['slug'] && $taxonomy['label']){
 
+								// カスタム分類を階層化するかどうか
 								$hierarchical_true = ( empty( $taxonomy['tag'] ) ) ? true : false;
+								// REST API を使用するかどうか
+								$rest_api_true = ( empty( $taxonomy['rest_api'] ) ) ? false : true;
+
+								$args = array(
+									'hierarchical' => $hierarchical_true,
+									'update_count_callback' => '_update_post_term_count',
+									'label' => $taxonomy['label'],
+									'singular_label' => $taxonomy['label'],
+									'public' => true,
+									'show_ui' => true,
+									'show_in_rest' => $rest_api_true,
+								);
+
 								register_taxonomy(
 										$taxonomy['slug'],
 										$post_type_id,
-										array(
-											'hierarchical' => $hierarchical_true,
-											'update_count_callback' => '_update_post_term_count',
-											'label' => $taxonomy['label'],
-											'singular_label' => $taxonomy['label'],
-											'public' => true,
-											'show_ui' => true,
-										)
+										$args
 									);
 							} // if ( $taxonomy['slug'] && $taxonomy['label']){
 
