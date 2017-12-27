@@ -52,32 +52,14 @@ class Vk_Admin {
 	/*--------------------------------------------------*/
 	/*  admin_banner
 	/*--------------------------------------------------*/
-	/*  get_news_body
+	/*  get_news_body_rss
 	/*--------------------------------------------------*/
-	/*  admin_sub
+	/*  admin _ Dashboard Widget
 	/*--------------------------------------------------*/
-	/*  admin_page_frame
+	/*  admin _ sub
 	/*--------------------------------------------------*/
-
-
+	/*  admin _ page_frame
 	/*--------------------------------------------------*/
-	/*  Print Dashboard Widget
-	/*--------------------------------------------------*/
-	public static function dashboard_widget() {
-		global $vk_admin_textdomain;
-		wp_add_dashboard_widget(
-			'vk_dashboard_widget',
-			__( 'Vektor WordPress Information',$vk_admin_textdomain ),
-			array( __CLASS__, 'dashboard_widget_body' )
-		);
-	}
-
-	public static function dashboard_widget_body() {
-		// echo vkExUnit_get_systemlogo();
-		// echo Vk_Admin::get_news_body();
-		echo Vk_Admin::get_news_from_rest_api();
-		echo Vk_Admin::admin_banner();
-	}
 
 	/*--------------------------------------------------*/
 	/*  admin_banner
@@ -126,15 +108,16 @@ class Vk_Admin {
 
 		$banner .= '</div>';
 
-		return apply_filters( 'vk_admin_banner_html' , $banner );
+		echo apply_filters( 'vk_admin_banner_html' , $banner );
 	}
 
 	/*--------------------------------------------------*/
-	/*  get_news_body
+	/*  get_news_body_api
 	/*--------------------------------------------------*/
 
-	public static function get_news_from_rest_api()
+	public static function news_from_rest_api()
 	{
+
 		$html = '<h3 class="vk-metabox-sub-title">';
 		$html .= 'Vektor WordPress Information';
 		$html .= '<a href="https://www.vektor-inc.co.jp/info-cat/vk-wp-info/" target="_blank" class="vk-metabox-more-link">記事一覧<span aria-hidden="true" class="dashicons dashicons-external"></span></a>';
@@ -153,13 +136,61 @@ class Vk_Admin {
 		$html .= '</h3>';
 		$html .= '<ul id="vk-wp-forum" class="vk-metabox-post-list"></ul>';
 
-		return $html;
+		$html = apply_filters( 'vk_admin_news_html' , $html );
+		echo $html;
+		?>
+
+		<script>
+		/*-------------------------------------------*/
+		/* REST API でお知らせを取得
+		/*-------------------------------------------*/
+		;(function($){
+		jQuery(function() {
+
+				$.getJSON( "https://vektor-inc.co.jp/wp-json/wp/v2/info?info-cat=111&per_page=2",
+				function(results) {
+						// 取得したJSONの内容をループする
+						$.each(results, function(i, item) {
+							// 日付のデータを取得
+							var date = new Date(item.date_gmt);
+							var formate_date = date.toLocaleDateString();
+							// JSONの内容の要素を</ul>の前に出力する
+							$("ul#vk-wp-info").append('<li><span class="date">'+ formate_date +'</span><a href="' + item.link + '" target="_blank">' + item.title.rendered + '</a></li>');
+						});
+				});
+
+				$.getJSON( "https://www.vektor-inc.co.jp/wp-json/wp/v2/posts/?categories=55&per_page=3",
+				function(results) {
+						// 取得したJSONの内容をループする
+						$.each(results, function(i, item) {
+							// 日付のデータを取得
+							var date = new Date(item.date_gmt);
+							var formate_date = date.toLocaleDateString();
+							// JSONの内容の要素を</ul>の前に出力する
+							$("ul#vk-wp-blog").append('<li><span class="date">'+ formate_date +'</span><a href="' + item.link + '" target="_blank">' + item.title.rendered + '</a></li>');
+						});
+				});
+
+				$.getJSON( "http://forum.bizvektor.com/wp-json/wp/v2/topics/?per_page=5",
+				function(results) {
+						$.each(results, function(i, item) {
+							var date = new Date(item.date_gmt);
+							var formate_date = date.toLocaleDateString();
+							 $("ul#vk-wp-forum").append('<li><a href="' + item.link + '" target="_blank">' + item.title.rendered + '</a></li>');
+						});
+				});
+
+		});
+		})(jQuery);
+		</script>
+		<?php
 	}
 
 	/*--------------------------------------------------*/
-	/*  get_news_body
+	/*  get_news_body_rss
+	/*	RSS方針で現在は不使用
 	/*--------------------------------------------------*/
-	public static function get_news_body() {
+	public static function get_news_body_rss() {
 
 		$output = '';
 
@@ -220,7 +251,24 @@ class Vk_Admin {
 	}
 
 	/*--------------------------------------------------*/
-	/*  admin_sub
+	/*  admin _ Dashboard Widget
+	/*--------------------------------------------------*/
+	public static function dashboard_widget() {
+		global $vk_admin_textdomain;
+		wp_add_dashboard_widget(
+			'vk_dashboard_widget',
+			__( 'Vektor WordPress Information',$vk_admin_textdomain ),
+			array( __CLASS__, 'dashboard_widget_body' )
+		);
+	}
+
+	public static function dashboard_widget_body() {
+		Vk_Admin::news_from_rest_api();
+		Vk_Admin::admin_banner();
+	}
+
+	/*--------------------------------------------------*/
+	/*  admin _ sub
 	/*--------------------------------------------------*/
 	// 2016.08.07 ExUnitの有効化ページでは直接 admin_subを呼び出しているので注意
 	public static function admin_sub() {
@@ -232,7 +280,7 @@ class Vk_Admin {
 	}
 
 	/*--------------------------------------------------*/
-	/*  admin_page_frame
+	/*  admin _ page_frame
 	/*--------------------------------------------------*/
 	public static function admin_page_frame( $get_page_title, $the_body_callback, $get_logo_html = '' , $get_menu_html = '', $get_layout = 'column_3' ) { ?>
 		<div class="wrap vk_admin_page">
