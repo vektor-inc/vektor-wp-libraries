@@ -9,12 +9,19 @@ https://github.com/vektor-inc/vektor-wp-libraries
 各プラグインのリポジトリにプルリクエストで結構です。
 */
 
+if ( ! class_exists( 'Vk_Admin' ) )
+{
+
+// ダッシュボード表示用のメタボックス読み込み
+// require_once( 'class-vk-admin-info.php' );
+
 class Vk_Admin {
 
 	public static $version = '1.2.1';
 
 	static function init(){
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_common_css' ) );
+		add_action( 'wp_dashboard_setup', array( __CLASS__, 'dashboard_widget'), 1 );
 	}
 
 	static function admin_directory_url (){
@@ -32,11 +39,43 @@ class Vk_Admin {
 		wp_enqueue_script( 'vk-admin-js', self::admin_directory_url().'js/vk_admin.js', array( 'jquery' ), self::$version );
 	}
 
+	// 管理画面用のjsを読み込むページを配列で指定する
+	// $admin_pages は vk-admin-config.php に記載
 	static function admin_scripts( $admin_pages ){
 		foreach ($admin_pages as $key => $value) {
 			$hook = 'admin_print_styles-'.$value;
 			add_action( $hook, array( __CLASS__, 'admin_enqueue_scripts' ) );
 		}
+	}
+
+
+	/*--------------------------------------------------*/
+	/*  admin_banner
+	/*--------------------------------------------------*/
+	/*  get_news_body
+	/*--------------------------------------------------*/
+	/*  admin_sub
+	/*--------------------------------------------------*/
+	/*  admin_page_frame
+	/*--------------------------------------------------*/
+
+
+	/*--------------------------------------------------*/
+	/*  Print Dashboard Widget
+	/*--------------------------------------------------*/
+	public static function dashboard_widget() {
+		global $vk_admin_textdomain;
+		wp_add_dashboard_widget(
+			'vk_dashboard_widget',
+			__( 'Vektor WordPress Information',$vk_admin_textdomain ),
+			array( __CLASS__, 'dashboard_widget_body' )
+		);
+	}
+
+	public static function dashboard_widget_body() {
+		// echo vkExUnit_get_systemlogo();
+		// echo Vk_Admin::get_news_body();
+		echo Vk_Admin::get_news_from_rest_api();
 	}
 
 	/*--------------------------------------------------*/
@@ -66,6 +105,33 @@ class Vk_Admin {
 	/*--------------------------------------------------*/
 	/*  get_news_body
 	/*--------------------------------------------------*/
+
+	public static function get_news_from_rest_api()
+	{
+		$html = '<h3 class="vk-metabox-sub-title">';
+		$html .= 'Vektor WordPress Information';
+		$html .= '<a href="https://www.vektor-inc.co.jp/info-cat/vk-wp-info/" target="_blank" class="vk-metabox-more-link">記事一覧<span aria-hidden="true" class="dashicons dashicons-external"></span></a>';
+		$html .= '</h3>';
+		$html .= '<ul id="vk-wp-info" class="vk-metabox-post-list"></ul>';
+
+		$html .= '<h3 class="vk-metabox-sub-title">';
+		$html .= 'Vektor WordPress Blog';
+		$html .= '<a href="https://www.vektor-inc.co.jp/category/wordpress-info/" target="_blank" class="vk-metabox-more-link">記事一覧<span aria-hidden="true" class="dashicons dashicons-external"></span></a>';
+		$html .= '</h3>';
+		$html .= '<ul id="vk-wp-blog" class="vk-metabox-post-list"></ul>';
+
+		$html .= '<h3 class="vk-metabox-sub-title">';
+		$html .= __( 'Vektor WordPress フォーラム' );
+		$html .= '<a href="http://forum.bizvektor.com/" target="_blank" class="vk-metabox-more-link">記事一覧<span aria-hidden="true" class="dashicons dashicons-external"></span></a>';
+		$html .= '</h3>';
+		$html .= '<ul id="vk-wp-forum" class="vk-metabox-post-list"></ul>';
+
+		return $html;
+	}
+
+	/*--------------------------------------------------*/
+	/*  get_news_body
+	/*--------------------------------------------------*/
 	public static function get_news_body() {
 
 		$output = '';
@@ -74,6 +140,7 @@ class Vk_Admin {
 
 		if ( 'ja' == get_locale() ) {
 			$exUnit_feed_url = apply_filters( 'vkAdmin_news_RSS_URL_ja', 'https://ex-unit.nagoya/ja/feed' );
+			// $exUnit_feed_url = apply_filters( 'vkAdmin_news_RSS_URL_ja', 'https://www.vektor-inc.co.jp/feed/?category_name=internship' );
 		} else {
 			$exUnit_feed_url = apply_filters( 'vkAdmin_news_RSS_URL', 'https://ex-unit.nagoya/feed' );
 		}
@@ -90,7 +157,6 @@ class Vk_Admin {
 
 				$maxitems = $rss->get_item_quantity( 5 ); //number of news to display (maximum)
 				$rss_items = $rss->get_items( 0, $maxitems );
-
 				$output .= '<div class="rss-widget">';
 				$output .= '<h4 class="adminSub_title">'.apply_filters( 'vk-admin-sub-title-text', 'Information' ).'</h4>';
 				$output .= '<ul>';
@@ -139,7 +205,7 @@ class Vk_Admin {
 	}
 
 	/*--------------------------------------------------*/
-	/*  admin_banner
+	/*  admin_page_frame
 	/*--------------------------------------------------*/
 	public static function admin_page_frame( $get_page_title, $the_body_callback, $get_logo_html = '' , $get_menu_html = '', $get_layout = 'column_3' ) { ?>
 		<div class="wrap vk_admin_page">
@@ -183,6 +249,7 @@ class Vk_Admin {
 
 	}
 }
+} // if ( ! class_exists( 'Vk_Admin' ) )
 
 Vk_Admin::init();
 $Vk_Admin = new Vk_Admin();

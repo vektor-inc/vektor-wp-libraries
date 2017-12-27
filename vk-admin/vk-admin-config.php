@@ -5,8 +5,11 @@
 /*-------------------------------------------*/
 if ( ! class_exists( 'Vk_Admin' ) )
 {
-	require_once( 'vk-admin/class.vk-admin.php' );
+	require_once( 'vk-admin/class-vk-admin.php' );
 }
+
+global $vk_admin_textdomain;
+$vk_admin_textdomain = 'XXXX_plugin_text_domain_XXXX';
 
 /*-------------------------------------------*/
 /*	$admin_pages の配列にいれる識別値は下記をコメントアウト解除すればブラウザのコンソールで確認出来る
@@ -21,7 +24,11 @@ if ( ! class_exists( 'Vk_Admin' ) )
 // 		}
 // }
 
-$admin_pages = array( 'toplevel_page_vkExUnit_setting_page', 'vk-exunit_page_vkExUnit_main_setting' );
+$admin_pages = array(
+	'toplevel_page_vkExUnit_setting_page',
+	'vk-exunit_page_vkExUnit_main_setting',
+	''
+);
 Vk_Admin::admin_scripts( $admin_pages );
 
 /*-------------------------------------------*/

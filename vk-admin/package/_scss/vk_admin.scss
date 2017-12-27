@@ -1,11 +1,40 @@
 @charset "utf-8";
-@import "compass";
+// @import "compass";
 
 .text-left { text-align: left; }
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .text-warning { color: #a94442;}
 
+#dashboard-widgets .vk-metabox-sub-title,
+.vk-metabox-sub-title {
+	display:block; overflow:hidden;
+	border-bottom:1px solid #ccc;
+	margin-top:1em;
+	padding-bottom:0.3em;
+	.dashicons {
+		position: relative;
+		top:-2px;
+		margin-left:3px;
+	}
+}
+.vk-metabox-more-link {
+	float:right;
+}
+.vk-metabox-post-list {
+	margin-bottom:2em;
+	li {
+		border-bottom:1px dotted #ccc;
+		padding-bottom:3px;
+		display: flex;
+		.date {
+			font-size:11px;
+			margin-right:1em;
+			// display:block; overflow:hidden;
+			// display: none;
+		}
+	}
+}
 
 .wp-core-ui .button-block { display:block;width:100%; text-align: center; }
 
