@@ -76,6 +76,7 @@ class Vk_Admin {
 		// echo vkExUnit_get_systemlogo();
 		// echo Vk_Admin::get_news_body();
 		echo Vk_Admin::get_news_from_rest_api();
+		echo Vk_Admin::admin_banner();
 	}
 
 	/*--------------------------------------------------*/
@@ -86,18 +87,44 @@ class Vk_Admin {
 		$dir_url = self::admin_directory_url();
 		$lang = ( get_locale() == 'ja' ) ? 'ja' : 'en' ;
 
+		$banner .= '<div class="vk-admin-banner">';
+		$banner .= '<div class="vk-admin-banner-grid">';
+
+		// プラグイン VK Aost Author Display を有効化していない人にバナーを表示
 		if ( !is_plugin_active('vk-post-author-display/post-author-display.php') ){
 			$banner .= '<a href="//wordpress.org/plugins/vk-post-author-display/" target="_blank" class="admin_banner"><img src="'.$dir_url.'images/post_author_display_bnr_'.$lang .'.jpg" alt="VK Post Author
 			Display" /></a>';
 		}
 
-		if ( $lang == 'ja' ) {
-			$banner .= '<a href="//lightning.nagoya/ja/" target="_blank" class="admin_banner"><img src="'.$dir_url.'images/lightning_bnr_ja.jpg" alt="lightning_bnr_ja" /></a>';
-		} else {
-			$banner .= '<a href="//lightning.nagoya/" target="_blank" class="admin_banner"><img src="'.$dir_url.'images/lightning_bnr_en.jpg" alt="lightning_bnr_en" /></a>';
+		// 現在のテーマを取得
+		$theme = wp_get_theme()->get('Template');
+
+		// Lightningを使用していない人にLightningのバナーを表示
+		if ( $theme != 'lightning' ) {
+			if ( $lang == 'ja' ) {
+				$banner .= '<a href="//lightning.nagoya/ja/" target="_blank" class="admin_banner"><img src="'.$dir_url.'images/lightning_bnr_ja.jpg" alt="lightning_bnr_ja" /></a>';
+			} else {
+				$banner .= '<a href="//lightning.nagoya/" target="_blank" class="admin_banner"><img src="'.$dir_url.'images/lightning_bnr_en.jpg" alt="lightning_bnr_en" /></a>';
+			}
+		} // if ( $theme != 'lightning' ) {
+
+		if ( $lang == 'ja' && $theme != 'bill-vektor' ) {
+				$banner .= '<a href="//billvektor.com" target="_blank" class="admin_banner"><img src="'.$dir_url.'images/billvektor_banner.png" alt="見積書・請求書管理用WordPressテーマ" /></a>';
 		}
 
-		$banner .= '<a href="//www.vektor-inc.co.jp" class="vektor_logo" target="_blank" class="admin_banner"><img src="'.$dir_url.'images/vektor_logo.png" alt="lightning_bnr_en" /></a>';
+		if ( $lang == 'ja' && !is_plugin_active('lightning-skin-jpnstyle/lightning_skin_jpnstyle.php') ){
+				$banner .= '<a href="//lightning.nagoya/ja/plugins/ex_plugin/lightning-jpnstyle" target="_blank" class="admin_banner"><img src="'.$dir_url.'images/jpnstyle-bnr.jpg" alt="" /></a>';
+		}
+
+		if ( $lang == 'ja' && !is_plugin_active('vk-all-in-one-expansion-unit/vkExUnit.php') ){
+				$banner .= '<a href="https://ex-unit.nagoya/ja/" target="_blank" class="admin_banner"><img src="'.$dir_url.'images/ExUnit_bnr.png" alt="" /></a>';
+		}
+
+		$banner .= '</div>';
+
+		$banner .= '<a href="//www.vektor-inc.co.jp" class="vektor_logo" target="_blank" class="admin_banner"><img src="'.$dir_url.'images/vektor_logo.png" alt="Vektor,Inc." /></a>';
+
+		$banner .= '</div>';
 
 		return apply_filters( 'vk_admin_banner_html' , $banner );
 	}
@@ -199,7 +226,7 @@ class Vk_Admin {
 	public static function admin_sub() {
 		$adminSub = '<div class="adminSub scrTracking">'."\n";
 		$adminSub .= '<div class="infoBox">'.Vk_Admin::get_news_body().'</div>'."\n";
-		$adminSub .= '<div class="adminBnr_section">'.Vk_Admin::admin_banner().'</div>'."\n";
+		$adminSub .= '<div class="vk-admin-banner">'.Vk_Admin::admin_banner().'</div>'."\n";
 		$adminSub .= '</div><!-- [ /.adminSub ] -->'."\n";
 		return $adminSub;
 	}
