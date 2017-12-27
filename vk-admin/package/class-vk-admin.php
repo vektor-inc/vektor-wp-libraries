@@ -137,13 +137,13 @@ class Vk_Admin {
 		$html .= '<ul id="vk-wp-info" class="vk-metabox-post-list"></ul>';
 
 		$html .= '<h4 class="vk-metabox-sub-title">';
-		$html .= 'Vektor WordPress Blog';
+		$html .= 'Vektor WordPress ブログ';
 		$html .= '<a href="https://www.vektor-inc.co.jp/category/wordpress-info/" target="_blank" class="vk-metabox-more-link">記事一覧<span aria-hidden="true" class="dashicons dashicons-external"></span></a>';
 		$html .= '</h4>';
 		$html .= '<ul id="vk-wp-blog" class="vk-metabox-post-list"></ul>';
 
 		$html .= '<h4 class="vk-metabox-sub-title">';
-		$html .= __( 'Vektor WordPress フォーラム' );
+		$html .= 'Vektor WordPress フォーラム';
 		$html .= '<a href="http://forum.bizvektor.com/" target="_blank" class="vk-metabox-more-link">記事一覧<span aria-hidden="true" class="dashicons dashicons-external"></span></a>';
 		$html .= '</h4>';
 		$html .= '<ul id="vk-wp-forum" class="vk-metabox-post-list"></ul>';
