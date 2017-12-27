@@ -12,12 +12,9 @@ https://github.com/vektor-inc/vektor-wp-libraries
 if ( ! class_exists( 'Vk_Admin' ) )
 {
 
-// ダッシュボード表示用のメタボックス読み込み
-// require_once( 'class-vk-admin-info.php' );
-
 class Vk_Admin {
 
-	public static $version = '1.2.1';
+	public static $version = '2.0.0';
 
 	static function init(){
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_common_css' ) );
@@ -147,7 +144,7 @@ class Vk_Admin {
 		;(function($){
 		jQuery(function() {
 
-				$.getJSON( "https://vektor-inc.co.jp/wp-json/wp/v2/info?info-cat=111&per_page=2",
+				$.getJSON( "https://vektor-inc.co.jp/wp-json/wp/v2/info?info-cat=111&per_page=3",
 				function(results) {
 						// 取得したJSONの内容をループする
 						$.each(results, function(i, item) {
