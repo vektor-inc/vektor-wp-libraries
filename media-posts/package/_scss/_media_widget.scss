@@ -22,9 +22,11 @@ $item_bottom_margin : 25px;
 	  -o-transform: rotate(-45deg);
 	}
 	.media_post_image { z-index: 1;display:block; overflow:hidden;
-		img { width: 100%;
+		img {
+			width: 100%;
+			height:auto;
 			opacity: 1;
-		    transition: transform 0.3s, transform 0.6s;
+		  transition: transform 0.3s, transform 0.6s;
 		}
 	}
 	.media_post_text { display:block; overflow:hidden;
