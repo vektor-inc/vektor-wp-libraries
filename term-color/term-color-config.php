@@ -9,9 +9,10 @@ if ( ! class_exists( 'Vk_term_color' ) )
 	global $vk_term_color_textdomain;
 	$vk_term_color_textdomain = 'XXXX_plugin_text_domain_XXXX';
 
+	//色選択機能をつける対象のターム
 	global $vk_term_color_taxonomies;
 	$vk_term_color_taxonomies = array('category','post_tag');
-	
+
 	require_once( 'term-color/class.term-color.php' );
 
 	/*  transrate
