@@ -1,7 +1,6 @@
 <?php
-
 /*-------------------------------------------*/
-/*  Load modules
+/*  Load modules ( master config )
 /*-------------------------------------------*/
 if ( ! class_exists( 'Vk_Page_Header' ) )
 {
@@ -16,6 +15,12 @@ if ( ! class_exists( 'Vk_Page_Header' ) )
 
 	global $customize_setting_prefix;
 	$customize_setting_prefix = 'Lightning';
+
+	global $vk_page_header_default_bg_url;
+	// このファイルがテーマで使われた場合の例
+	$vk_page_header_default_bg_url = get_template_directory_uri('/inc/vk-page-header/images/header-sample.jpg');
+	// プラグインの場合の例
+	$vk_page_header_default_bg_url = plugins_url('/images/header-sample.jpg',__FILE__);
 
 }
 

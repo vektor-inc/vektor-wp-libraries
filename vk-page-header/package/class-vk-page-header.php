@@ -61,16 +61,15 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		/*-------------------------------------------*/
 		public static function default_option(){
 
-			if ( self::is_theme() ){
-				// このファイルがテーマで使われた場合
-				$sample_image_url = get_template_directory_uri('/inc/vk-page-header/images/header-sample.jpg');
-			} else {
+			$option = array();
 
-				// プラグインの場合
-				$sample_image_url = plugins_url('/images/header-sample.jpg',__FILE__);
-			}
+			/*
+			以前はデフォルトの画像をここで指定していたが、
+			利用先によってデフォルト設定したい画像は異なるので configファイルで指定するように変更
+			 */
 
-			$option['image_basic'] = $sample_image_url;
+			global $vk_page_header_default_bg_url;
+			$option['image_basic'] = $vk_page_header_default_bg_url;
 
 			return $option = apply_filters( 'vk_page_header_default_option', $option );
 		}
@@ -83,7 +82,10 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			$option = get_option( 'vk_page_header', self::default_option() );
 
 			// オプション値が存在しているが空の場合はデフォルトオプションを返す
-			if( !$option ){ $option = self::default_option(); }
+			if( is_array( $option ) && !isset( $option['image_basic'] ) ){
+				global $vk_page_header_default_bg_url;
+				$option['image_basic'] = $vk_page_header_default_bg_url;
+			}
 
 			return $option;
 		}
@@ -113,10 +115,11 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 			// Get post type slug
 			/*-------------------------------------------*/
+			$postType = array(); // PHP7.2対策
 			$postType['slug'] = get_post_type();
 			if ( ! $postType['slug'] ) {
 				global $wp_query;
-				if ( $wp_query->query_vars['post_type'] ) {
+				if ( !empty( $wp_query->query_vars['post_type'] ) ) {
 					$postType['slug'] = $wp_query->query_vars['post_type'];
 				} elseif ( is_tax() ) {
 			  	// Case of tax archive and no posts
@@ -173,19 +176,27 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 		/*		header_image_url()
 		/*-------------------------------------------*/
-		public function header_image_url(){
+		public static function header_image_url(){
 
-			$options = self::options_load();
+			$options = get_option( 'vk_page_header' );
+			// print '<pre style="text-align:left">';print_r($options);print '</pre>';
 			$post_type = self::get_post_type();
 
 			if ( isset( $options['image_basic'] ) && $options['image_basic'] )
 			{
+
+
+				// 普通に画像が登録されている場合
 				$image_url = $options['image_basic'];
-			} else {
-				// $options['image_basic']は空だが$optionsの他の値は入ってるというイレギュラーな状況の対応（本来は不要な範囲）
-				// 共通設定の画像を削除された場合などにデフォルトのサンプル画像を表示する
+
+			} else if ( !isset( $options['image_basic'] ) ){
+				// この機能を新規インストールされた時のように画像が一度も登録されておらず、配列が存在しない場合
 				$default_option = self::default_option();
 				$image_url = $default_option['image_basic'];
+
+			} else if ( isset( $options['image_basic'] ) && !$options['image_basic'] ) {
+				// 画像が意図的に未指定の場合
+				$image_url = '';
 			}
 
 			$image_url_field = 'image_'.$post_type['slug'];
@@ -293,8 +304,9 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 			/*	background common image
 			--------------------------------------------- */
+			global $vk_page_header_default_bg_url;
 			$wp_customize->add_setting( 'vk_page_header[image_basic]', array(
-				'default' => '',
+				'default' => $vk_page_header_default_bg_url,
 				'type' => 'option',
 				'capability' => 'edit_theme_options',
 				'sanitize_callback' => 'esc_url'
