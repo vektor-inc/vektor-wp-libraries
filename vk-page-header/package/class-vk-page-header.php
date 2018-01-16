@@ -179,12 +179,10 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		public static function header_image_url(){
 
 			$options = get_option( 'vk_page_header' );
-			// print '<pre style="text-align:left">';print_r($options);print '</pre>';
 			$post_type = self::get_post_type();
 
 			if ( isset( $options['image_basic'] ) && $options['image_basic'] )
 			{
-
 
 				// 普通に画像が登録されている場合
 				$image_url = $options['image_basic'];
@@ -248,10 +246,24 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				'priority' => 700,
 			) );
 
-			$wp_customize->selective_refresh->add_partial( 'vk_page_header[text_color]', array(
+			$wp_customize->selective_refresh->add_partial( 'vk_page_header[bg_color]', array(
 	      'selector' => '.page-header .container',
 	      'render_callback' => '',
 	    ) );
+
+			// bgcolor
+			$wp_customize->add_setting( 'vk_page_header[bg_color]', array(
+				'default'			=> '',
+				'type'				=> 'option',
+				'capability'		=> 'edit_theme_options',
+				'sanitize_callback' => 'sanitize_hex_color',
+			) );
+			$wp_customize->add_control( new WP_Customize_Color_Control($wp_customize, 'bg_color', array(
+				'label'    => __( 'Background color', $vk_page_header_textdomain ),
+				'section'  => 'vk_page_header_setting',
+				'settings' => 'vk_page_header[bg_color]',
+				// 'priority' => $priority,
+			)));
 
 			// color
 			$wp_customize->add_setting( 'vk_page_header[text_color]', array(
@@ -399,13 +411,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 				$dynamic_css = '';
 
-				// ヘッダー背景画像URL取得
-				$image_url = self::header_image_url();
-				if ( $image_url )
-				{
-					$dynamic_css .= 'background: url('.esc_url( $image_url ).') no-repeat 50% center;';
-					$dynamic_css .= 'background-size: cover;';
-				}
+
 
 				$options = self::options_load();
 
@@ -422,6 +428,18 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					// if ( $options['text_align'] != 'left' ){
 					$dynamic_css .= 'text-align:'.$options['text_align'].';';
 					// }
+				}
+
+				if ( isset( $options['bg_color'] ) && $options['bg_color'] ){
+					$dynamic_css .= 'background-color:'.$options['bg_color'].';';
+				}
+
+				// ヘッダー背景画像URL取得
+				$image_url = self::header_image_url();
+				if ( $image_url )
+				{
+					$dynamic_css .= 'background: url('.esc_url( $image_url ).') no-repeat 50% center;';
+					$dynamic_css .= 'background-size: cover;';
 				}
 
 				// CSS が存在している場合のみ出力
