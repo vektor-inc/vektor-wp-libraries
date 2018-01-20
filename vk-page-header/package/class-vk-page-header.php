@@ -32,7 +32,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 		public function __construct(){
 			add_action( 'customize_register', array( $this, 'customize_register' ) );
-			add_action( 'wp_head', array( $this, 'dynamic_header_css' ), 3 );
+			add_action( 'wp_head', array( $this, 'dynamic_header_css' ), 5 );
 			// add_action( 'customize_preview_init', array( $this, 'customize_pageinfo' ) );
 			add_action( 'add_meta_boxes', array( $this, 'add_pagehead_setting_meta_box' ) );
 			add_action( 'save_post' , array( $this, 'save_custom_fields'), 10, 2);
@@ -411,8 +411,6 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 				$dynamic_css = '';
 
-
-
 				$options = self::options_load();
 
 				if ( isset( $options['text_color'] ) && $options['text_color'] ){
@@ -447,6 +445,14 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					// 対象とするclass名を取得
 					global $vk_page_header_output_class;
 					$dynamic_css = $vk_page_header_output_class."{".$dynamic_css."}";
+
+					// delete before after space
+					$dynamic_css = trim( $dynamic_css );
+					// convert tab and br to space
+					$dynamic_css = preg_replace('/[\n\r\t]/', '', $dynamic_css );
+					// Change multiple spaces to single space
+					$dynamic_css = preg_replace('/\s(?=\s)/', '', $dynamic_css );
+
 					// 出力を実行
 					wp_add_inline_style( 'lightning-design-style', $dynamic_css );
 				}
