@@ -1,9 +1,124 @@
 @charset "utf-8";
 // @import "compass";
 
-$border_primary : 1px solid #e5e5e5;
-$color_font_default : #464646;
-$color_key : #337ab7;
+$border_primary : 1px solid #666;
+$color_font_default : rgba(255,255,255,0.8);
+$time_transition:0.5s;
+
+body.admin-bar {
+	.vk-mobile-nav {
+		top:46px;
+	}
+}
+
+.vk-mobile-nav {
+	position: fixed;
+	top:0;
+	z-index: 1000;
+	width:100%;
+	background-color: #333;
+	.global-nav {
+		margin-top:60px;
+	}
+	nav ul {
+		padding:0;
+		margin:0;
+		li {
+			list-style: none;
+			a {
+				padding: 0.7em 1em;
+				color:$color_font_default;
+				display:block; overflow:hidden;
+				border-bottom:$border_primary;
+				&:hover {
+					text-decoration: none;
+				}
+			}
+
+		}
+		li li a { padding-left:2em;}
+		li li li a { padding-left:3em;}
+		li li li li a { padding-left:4em;}
+	}
+}
+.nav-body {
+
+}
+
+
+
+/*-------------------------------------------*/
+/* vk-menu-acc--common
+/*-------------------------------------------*/
+.vk-menu-acc {
+	position: relative;
+	.menu-parent > li {
+		position: relative;
+		z-index: 100;
+		a {
+			display: inline-block;
+		}
+	}
+	li {
+		position: relative;
+	}
+	.acc-btn {
+		position: absolute;
+		right:8px;
+		top:9px;
+		width:24px;
+		height:24px;
+		border:1px solid $color_font_default;
+		border-radius: 2px;
+		background:url('../images/vk-menu-acc-icon-open-white.svg') center 50% no-repeat;
+		background-size: 24px 24px;
+		cursor: pointer;
+		z-index: 1000;
+		transition: transform $time_transition ease-out;
+	}
+	.acc-btn:before{
+		position: relative;
+		top:-5px;
+		left:4px;
+		font-size:16px;
+	}
+	.acc-btn-open{
+
+	}
+	.acc-btn-close{
+		transform: rotate(180deg);
+	}
+	ul.sub-menu {
+		max-height:0;
+		overflow:hidden;
+		transition: max-height $time_transition ease-in;
+		position: relative;
+		z-index: 1;
+		display:block;
+		li {
+			a {
+				display:block; overflow:hidden;
+			}
+		}
+	}
+	ul.acc-child-open {
+		transition: max-height $time_transition ease-in;
+		max-height:500px;
+	}
+	ul.acc-child-close {
+		transition: max-height $time_transition ease-out;
+		max-height:0;
+	}
+	li a {
+		padding-left:1em;
+	}
+	li li a {
+		padding-left:2em;
+	}
+	li li li a {
+		padding-left:3em;
+	}
+}
 
 body { overflow-x:hidden; }
 #bodyInner { display:block; overflow:hidden; }

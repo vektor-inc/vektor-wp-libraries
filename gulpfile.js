@@ -31,6 +31,17 @@ gulp.task('sass_vk-admin', function() {
         .pipe(gulp.dest('./vk-admin/package/css/'));
 });
 
+gulp.task('sass_vk-mobile-nav', function() {
+    // gulp.src( '**/_scss/**/*.scss' )
+		gulp.src( 'vk-mobile-nav/package/_scss/**/*.scss' )
+        .pipe(plumber())
+        .pipe(sass())
+				.pipe(cmq({log:true}))
+        .pipe(autoprefixer())
+				.pipe(cleanCss())
+        .pipe(gulp.dest('./vk-mobile-nav/package/css/'));
+});
+
 
 gulp.task( 'copy_vk-admin', function() {
     gulp.src( './vk-admin/package/**' )
@@ -85,7 +96,7 @@ gulp.task( 'copy_call-to-action', function() {
 } );
 gulp.task( 'copy_vk-mobile-nav', function() {
     gulp.src( './vk-mobile-nav/package/**' )
-		.pipe( gulp.dest( '../plugins/lightning-skin-jpnstyle/inc/vk-mobile-nav/' ) )
+		.pipe( gulp.dest( '../plugins/lightning-advanced-unit/inc/vk-mobile-nav/' ) )
     .pipe( gulp.dest( '../plugins/vk-mobile-nav/inc/vk-mobile-nav/' ) );
 } );
 gulp.task( 'copy_template-tags', function() {
@@ -128,6 +139,7 @@ gulp.task('watch', function() {
 
 // Watch
 gulp.task('watch_mobile', function() {
+	gulp.watch('./vk-mobile-nav/package/_scss/**', ['sass_vk-mobile-nav']);
   gulp.watch('./vk-mobile-nav/package/**', ['copy_vk-mobile-nav']);
 });
 gulp.task('watch_cf', function() {

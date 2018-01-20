@@ -6,18 +6,16 @@ https://github.com/vektor-inc/vektor-wp-libraries
 */
 
 if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
-	class Vk_Mobile_Nav
-	{
+	class Vk_Mobile_Nav {
 
 		public static $version = '0.0.0';
 
-		public function __construct(){
+		public function __construct() {
 			add_action( 'after_setup_theme', array( $this, 'setup' ) );
 			add_action( 'wp_footer', array( $this, 'menu_set_html' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'add_script' ) );
 		}
-		public static function init()
-		{
+		public static function init() {
 
 			// add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 		}
@@ -26,18 +24,23 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 		 * モバイル用メニュー追加
 		 * @return [type] [description]
 		 */
-		public static function setup(){
-				register_nav_menus( array( 'vk-mobile-nav' => 'Mobile Navigation', ) );
+		public static function setup() {
+				register_nav_menus( array( 'vk-mobile-nav' => 'Mobile Navigation' ) );
 		}
 
-		public static function menu_set_html(){
-			wp_nav_menu( array(
-				'theme_location'    => 'vk-mobile-nav',
-				'container'         => 'div',
-				'items_wrap'        => '<nav><ul id="%1$s" class="%2$s">%3$s</ul></nav>',
-				'fallback_cb'       => '',
-				'depth'             => 1
-				) );
+		public static function menu_set_html() {
+			echo '<div class="menu-btn">MENU</div>';
+			echo '<div class="vk-mobile-nav">';
+			wp_nav_menu(
+				array(
+					'theme_location' => 'vk-mobile-nav',
+					'container'      => '',
+					'items_wrap'     => '<nav class="global-nav"><ul id="%1$s" class="vk-menu-acc  %2$s">%3$s</ul></nav>',
+					'fallback_cb'    => '',
+					// 'depth'          => 1,
+				)
+			);
+			echo '</div>';
 		}
 
 		/*-------------------------------------------*/
@@ -45,9 +48,9 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 		/*-------------------------------------------*/
 
 		public static function add_script() {
-		    wp_register_script( 'vk-mobile-nav-js' , plugin_dir_path( __FILE__ ).'inc/vk-mobile-nav/js/vk-mobile-nav.js', array( 'jquery' ), self::$version );
-		    wp_enqueue_script( 'vk-mobile-nav-js' );
-		    wp_enqueue_style( 'vk-mobile-nav-css', plugin_dir_path( __FILE__ ).'inc/vk-mobile-nav/css/vk-mobile-nav.css', array(), self::$version, 'all' );
+			wp_register_script( 'vk-mobile-nav-js', plugin_dir_url( __FILE__ ) . 'js/vk-mobile-nav.js', array( 'jquery' ), self::$version );
+			wp_enqueue_script( 'vk-mobile-nav-js' );
+			wp_enqueue_style( 'vk-mobile-nav-css', plugin_dir_url( __FILE__ ) . 'css/vk-mobile-nav.css', array(), self::$version, 'all' );
 		}
 
 	} // class Vk_Mobile_Nav
