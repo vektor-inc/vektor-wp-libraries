@@ -1,5 +1,24 @@
 ;
 (function($) {
+	/*-------------------------------------*/
+	/*
+	/*-------------------------------------*/
+	jQuery(document).ready(function() {
+		/* ※ vk-mobile-menu の読み込みが遅いので document).ready(function() しないと動作しない */
+		jQuery('.vk-mobile-nav-menu-btn').click(function() {
+			if (jQuery(this).hasClass('menu-open')) {
+				jQuery(this).removeClass('menu-open');
+				jQuery('.vk-mobile-nav').removeClass('vk-mobile-nav-open');
+			} else {
+				jQuery(this).addClass('menu-open');
+				jQuery('.vk-mobile-nav').addClass('vk-mobile-nav-open');
+			}
+		});
+	});
+})(jQuery);
+
+;
+(function($) {
 
 	function vk_menu_acc_run() {
 		var breakPoint = 767;

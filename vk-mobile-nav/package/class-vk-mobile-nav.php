@@ -29,7 +29,7 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 		}
 
 		public static function menu_set_html() {
-			echo '<div class="menu-btn">MENU</div>';
+			echo '<div class="vk-mobile-nav-menu-btn">MENU</div>';
 			echo '<div class="vk-mobile-nav">';
 			wp_nav_menu(
 				array(

@@ -4,21 +4,60 @@
 $border_primary : 1px solid #666;
 $color_font_default : rgba(255,255,255,0.8);
 $time_transition:0.5s;
+$btn_radius:2px;
 
 body.admin-bar {
+	.vk-mobile-nav-menu-btn {
+		top:56px;
+	}
 	.vk-mobile-nav {
+		top:-1000px;
+	}
+	.vk-mobile-nav.vk-mobile-nav-open{
 		top:46px;
 	}
 }
 
+.vk-mobile-nav-menu-btn {
+	position: fixed;
+	top:10px;
+	left:10px;
+	z-index: 2000;
+	display:block; overflow:hidden;
+	border:1px solid #333;
+	border-radius: 2px;
+	width:34px;
+	height:34px;
+	cursor: pointer;
+	text-indent: -9999px;
+	background:url('../images/vk-menu-btn.svg') center 50% no-repeat;
+	background-size: 24px 24px;
+	transition: border-color $time_transition ease-out;
+}
+.vk-mobile-nav-menu-btn.menu-open {
+	border:1px solid $color_font_default;
+	background:url('../images/vk-menu-btn-close.svg') center 50% no-repeat;
+}
+
+/*-------------------------------------------*/
+/* .vk-mobile-nav
+/*-------------------------------------------*/
+.vk-mobile-nav.vk-mobile-nav-open{
+
+}
 .vk-mobile-nav {
 	position: fixed;
 	top:0;
 	z-index: 1000;
 	width:100%;
+	height:100%;
 	background-color: #333;
+	transition: top $time_transition ease-out;
 	.global-nav {
 		margin-top:60px;
+	}
+	nav > ul {
+		border-top:$border_primary;
 	}
 	nav ul {
 		padding:0;
@@ -86,7 +125,8 @@ body.admin-bar {
 
 	}
 	.acc-btn-close{
-		transform: rotate(180deg);
+		// transform: rotate(180deg);
+		background:url('../images/vk-menu-btn-close.svg') center 50% no-repeat;
 	}
 	ul.sub-menu {
 		max-height:0;
