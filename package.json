@@ -1,0 +1,32 @@
+{
+  "name": "vektor-wp-libraries",
+  "version": "1.0.0",
+  "description": "* WordPress開発環境の wp-content ディレクトリにこの vektor-wp-libraries を置いて gulpを走らせます。",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://kurudrive@github.com/vektor-inc/vektor-wp-libraries.git"
+  },
+  "author": "",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/vektor-inc/vektor-wp-libraries/issues"
+  },
+  "homepage": "https://github.com/vektor-inc/vektor-wp-libraries#readme",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^4.0.0"
+  },
+  "devDependencies": {
+    "gulp-clean-css": "^3.9.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-cssmin": "^0.2.0",
+    "gulp-jsmin": "^0.1.5",
+    "gulp-merge-media-queries": "^0.2.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-sass": "^3.1.0"
+  }
+}
