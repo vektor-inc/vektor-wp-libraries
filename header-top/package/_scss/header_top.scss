@@ -8,7 +8,7 @@ $margin_section_bottom : 30px;
 /*-------------------------------------------*/
 /*	.headerTop
 /*-------------------------------------------*/
-.headerTop { 
+.headerTop {
 	font-size:12px;
 	.headerTop_contactBtn {
 		z-index: 100;
@@ -53,14 +53,14 @@ $margin_section_bottom : 30px;
 $header_top_offset : 10px;
 
 @media (min-width: 992px){
-.headerTop { color:#666;background-color: #f9f9f9;margin-top:-$header_top_offset;border-bottom:1px solid #efefef;
+.headerTop { color:#666;background-color: #f9f9f9;margin-top:-$header_top_offset;border-bottom:1px solid #f3f3f3;
 	.container { padding: 0px 15px;display: flex;overflow: visible; }
 	.headerTop_description { position:relative;top:$header_top_offset;display:block;
 		margin:0;padding: 7px 20px 18px 0;width:1000px; line-height: 1.4em;
 	}
 	nav { position:relative;top:$header_top_offset; }
 	ul { display: flex;line-height: 1.4em; }
-	li { 
+	li {
 		a,
 		span { padding:7px 15px;font-size:12px; white-space: nowrap;display: block; }
 		a:hover { background:none; }
