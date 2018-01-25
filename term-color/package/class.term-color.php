@@ -167,6 +167,28 @@ if ( ! class_exists( 'Vk_term_color' ) ) {
 		}
 
 		/*-------------------------------------------*/
+		/* 	term color を有効化する taxonomy
+		/*-------------------------------------------*/
+		public function get_term_color_taxonomies() {
+			/*
+			最初Global変数指定をしていたが、 Global変数では
+			複数の term color が存在した場合に実行タイミングの都合上任意に指定が効かないため、
+			フックでの指定を行う
+			 */
+			global $vk_term_color_taxonomies;
+			if ( $vk_term_color_taxonomies ) {
+				$taxonomies = $vk_term_color_taxonomies;
+			} else {
+				$taxonomies = array( 'category', 'post_tag' );
+			}
+			$taxonomies = apply_filters( 'term_color_taxonomies_custom', $taxonomies );
+			// 重複の値を削除
+			$taxonomies = array_unique( $taxonomies );
+			// 特に影響はないがキーを振り直す
+			$taxonomies = array_values( $taxonomies );
+			return $taxonomies;
+		}
+		/*-------------------------------------------*/
 		/*  実行
 		/*-------------------------------------------*/
 		public function __construct() {
@@ -178,12 +200,7 @@ if ( ! class_exists( 'Vk_term_color' ) ) {
 			/*-------------------------------------------*/
 			// カラーピッカーを追加するタクソノミー
 
-			global $vk_term_color_taxonomies;
-			if ( $vk_term_color_taxonomies ) {
-				$taxonomies = $vk_term_color_taxonomies;
-			} else {
-				$taxonomies = array( 'category', 'post_tag' );
-			}
+			$taxonomies = Vk_term_color::get_term_color_taxonomies();
 
 			// 該当のタクソノミー分ループ処理する
 			foreach ( $taxonomies as $key => $value ) {
