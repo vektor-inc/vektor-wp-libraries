@@ -17,11 +17,15 @@
 	});
 })(jQuery);
 
+/*-------------------------------------*/
+/*	sub item accordion
+/*-------------------------------------*/
 ;
 (function($) {
 
 	function vk_menu_acc_run() {
-		var breakPoint = 767;
+		// var breakPoint = 767;
+		var breakPoint = 5000;
 		// var bodyWidth = jQuery(window).width();
 		/*
 		cssのメディアクエリがスクロールバーを含んだ幅になるので、
