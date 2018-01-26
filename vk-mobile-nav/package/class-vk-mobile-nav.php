@@ -14,10 +14,22 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 			add_action( 'after_setup_theme', array( $this, 'setup' ) );
 			add_action( 'wp_footer', array( $this, 'menu_set_html' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'add_script' ) );
+			add_filter( 'body_class', array( $this, 'add_body_class_mobile_device' ) );
 		}
 		public static function init() {
 
 			// add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+		}
+
+		/**
+		 * body class 端末識別クラス追加
+		 * @return [type] [description]
+		 */
+		function add_body_class_mobile_device( $class ) {
+			if ( wp_is_mobile() ) {
+				$class[] = 'mobile-device';
+			}
+			return $class;
 		}
 
 		/**
