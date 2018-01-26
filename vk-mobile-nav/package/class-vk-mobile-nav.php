@@ -62,7 +62,7 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 		public static function add_script() {
 			wp_register_script( 'vk-mobile-nav-js', plugin_dir_url( __FILE__ ) . 'js/vk-mobile-nav.js', array( 'jquery' ), self::$version );
 			wp_enqueue_script( 'vk-mobile-nav-js' );
-			wp_enqueue_style( 'vk-mobile-nav-css', plugin_dir_url( __FILE__ ) . 'css/vk-mobile-nav.css', array(), self::$version, 'all' );
+			wp_enqueue_style( 'vk-mobile-nav-css', plugin_dir_url( __FILE__ ) . 'css/vk-mobile-nav-bright.css', array(), self::$version, 'all' );
 		}
 
 	} // class Vk_Mobile_Nav

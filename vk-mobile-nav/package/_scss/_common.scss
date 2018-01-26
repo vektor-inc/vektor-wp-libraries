@@ -57,13 +57,9 @@ body.mobile-device {
 	height:100%;
 	display:block;
 	overflow:scroll;
-	background-color: #333;
 	transition: top $time_transition ease-out;
 	.global-nav {
 		margin-top:60px;
-	}
-	nav > ul {
-		border-top:$border_primary;
 	}
 	nav ul {
 		padding:0;
@@ -72,19 +68,14 @@ body.mobile-device {
 			list-style: none;
 			a {
 				padding: 0.7em 1em;
-				color:$color_font_default;
 				display:block; overflow:hidden;
-				border-bottom:$border_primary;
 				&:hover {
 					text-decoration: none;
 				}
 			}
-
 		}
 		li li a { padding-left:2em;}
 		li li li a { padding-left:3em;}
 		li li li li a { padding-left:4em;}
 	}
 }
-
-@import "sub_item_accordion";
