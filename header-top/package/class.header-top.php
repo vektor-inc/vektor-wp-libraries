@@ -12,18 +12,57 @@ https://github.com/vektor-inc/vektor-wp-libraries
 if ( ! class_exists( 'Lightning_header_top' ) ) {
 	class Lightning_header_top {
 
-
 		/*-------------------------------------------*/
-		/*	Header top nav
+		/*  実行
+		/*-------------------------------------------*/
+		// static function init(){
+		// 	add_action( 'after_setup_theme', array( __CLASS__, 'header_top_add_menu' ) );
+		// }
+
+		public function __construct() {
+			define( 'LTG_HEADER_TOP_URL', plugin_dir_url( __FILE__ ) );
+			define( 'LTG_HEADER_TOP_DIR', plugin_dir_path( __FILE__ ) );
+			define( 'LTG_HEADER_TOP_VERSION', '1.1' );
+			add_action( 'after_setup_theme', array( $this, 'header_top_add_menu' ) );
+			add_action( 'lightning_header_prepend', array( $this, 'header_top_prepend_item' ) );
+			add_action( 'customize_preview_init', array( $this, 'header_top_add_script' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'header_top_add_css' ) );
+			require_once( 'header-top-customizer.php' );
+		}
+		/*-------------------------------------------*/
+		/*	Header top html
 		/*-------------------------------------------*/
 
 		public static function header_top_prepend_item() {
-			$header_prepend  = '<div class="headerTop" id="headerTop">';
+
+			/*
+			カスタマイズプレビュー画面で get_option が最新の内容で取得できないので、
+			やや処理が複雑になっている
+			 */
+
+			$options = get_option( 'Lightning_theme_options' );
+
+			// 非表示にチェックが入っていてカスタマイズ画面でない場合には表示しない
+			// /*
+			// プレビュー画面で get_option がリアルタイムで取れていないため、
+			// プレビュー画面においては 表示・非表示はjsで制御している。
+			// よって、最初から表示されてないとjsでdom要素を追加しないといけなくなってしまうので、
+			// プレビュー画面ではdom要素も強制的に表示処理としている。
+			//  */
+			if ( ! empty( $options['header_top_hidden'] ) && ! is_customize_preview() ) {
+				return;
+			}
+
+			$header_top_style = '';
+			// ヘッダートップ非表示指定 で カスタマイズ画面の時
+			if ( ! empty( $options['header_top_hidden'] ) && is_customize_preview() ) {
+				$header_top_style = ' style="display:none;"';
+			}
+
+			$header_prepend  = '<div class="headerTop" id="headerTop"' . $header_top_style . '>';
 			$header_prepend .= '<div class="container">';
 			$header_prepend .= '<p class="headerTop_description">' . get_bloginfo( 'description' ) . '</p>';
 
-			global $options;
-			global $vkExUnit_contact;
 			if ( isset( $options['header_top_tel_number'] ) && $options['header_top_tel_number'] ) {
 				$tel_number = mb_convert_kana( esc_attr( $options['header_top_tel_number'] ), 'n' );
 				/* ここで追加するHTMLは header-top-customizer.js でも修正する必要があるので注意 */
@@ -57,8 +96,8 @@ if ( ! class_exists( 'Lightning_header_top' ) ) {
 		}
 
 		static function header_top_contact_btn() {
-			global $options;
-			global $vkExUnit_contact;
+			$options          = get_option( 'Lightning_theme_options' );
+			$vkExUnit_contact = get_option( 'vkExUnit_contact' );
 
 			if ( isset( $options['header_top_contact_txt'] ) && $options['header_top_contact_txt'] ) {
 				$btn_txt = esc_html( $options['header_top_contact_txt'] );
@@ -104,28 +143,6 @@ if ( ! class_exists( 'Lightning_header_top' ) ) {
 		static function header_top_add_script() {
 			wp_register_script( 'ltg_header_top_customizer_js', plugin_dir_url( __FILE__ ) . '/header-top-customizer.js', array( 'jquery', 'customize-preview' ), LTG_HEADER_TOP_VERSION, true );
 			wp_enqueue_script( 'ltg_header_top_customizer_js' );
-		}
-
-		/*-------------------------------------------*/
-		/*  実行
-		/*-------------------------------------------*/
-		// static function init(){
-		// 	add_action( 'after_setup_theme', array( __CLASS__, 'header_top_add_menu' ) );
-		// }
-
-		public function __construct() {
-			define( 'LTG_HEADER_TOP_URL', plugin_dir_url( __FILE__ ) );
-			define( 'LTG_HEADER_TOP_DIR', plugin_dir_path( __FILE__ ) );
-			define( 'LTG_HEADER_TOP_VERSION', '1.1' );
-			global $options;
-			global $vkExUnit_contact;
-			$options          = get_option( 'Lightning_theme_options' );
-			$vkExUnit_contact = get_option( 'vkExUnit_contact' );
-			add_action( 'after_setup_theme', array( $this, 'header_top_add_menu' ) );
-			add_action( 'lightning_header_prepend', array( $this, 'header_top_prepend_item' ) );
-			add_action( 'customize_preview_init', array( $this, 'header_top_add_script' ) );
-			add_action( 'wp_enqueue_scripts', array( $this, 'header_top_add_css' ) );
-			require_once( 'header-top-customizer.php' );
 		}
 
 	} // class Lightning_header_top
