@@ -13,13 +13,25 @@ $color_font_default : rgba(255,255,255,0.8);
 
 .vk-mobile-nav {
 	background-color: #333;
-	nav > ul {
+	border-bottom:666;
+
+	// WordPress標準のカスタムメニュー
+	.widget_nav_menu ul.menu {
 		border-top:$border_primary;
 	}
-	nav ul li a {
-		color:$color_font_default;
-		border-bottom:$border_primary;
+	// VK Mobile Nav 標準の埋め込みメニュー
+	nav > ul {
+			border-top:$border_primary;
+		}
+
+	.widget_nav_menu,
+	nav {
+		ul li a {
+			color:$color_font_default;
+			border-bottom:$border_primary;
+		}
 	}
+
 }
 
 .vk-menu-acc .acc-btn {

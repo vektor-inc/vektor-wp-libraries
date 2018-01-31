@@ -5,9 +5,13 @@
 	/*-------------------------------------*/
 	jQuery(document).ready(function() {
 		/* ※ vk-mobile-menu の読み込みが遅いので document).ready(function() しないと動作しない */
+		// クリックされた時
 		jQuery('.vk-mobile-nav-menu-btn').click(function() {
+			// メニューボタンに .menu-open クラスがついていたら
 			if (jQuery(this).hasClass('menu-open')) {
+				// .menu-open を外す
 				jQuery(this).removeClass('menu-open');
+				// メニュー本体から .vk-mobile-nav-open を削除
 				jQuery('.vk-mobile-nav').removeClass('vk-mobile-nav-open');
 			} else {
 				jQuery(this).addClass('menu-open');
@@ -15,6 +19,7 @@
 			}
 		});
 	});
+
 })(jQuery);
 
 /*-------------------------------------*/

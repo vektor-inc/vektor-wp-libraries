@@ -6,12 +6,41 @@ $color_font_default : rgba(255,255,255,0.8);
 $time_transition:0.5s;
 $btn_radius:2px;
 
+$admin_bar_height_pc:32px;
+$admin_bar_height_mobile:46px;
+
+$manu_btn_margin:10px;
+
 body.admin-bar {
 	.vk-mobile-nav-menu-btn {
-		top:56px;
+		top:calc( #{$admin_bar_height_pc} + #{$manu_btn_margin} );
+		@media screen and (max-width: 782px){
+			top:calc( #{$admin_bar_height_mobile} + #{$manu_btn_margin} );
+		}
 	}
 	.vk-mobile-nav.vk-mobile-nav-open{
-		top:46px;
+		top:$admin_bar_height_pc;
+		@media screen and (max-width: 782px){
+			top:$admin_bar_height_mobile;
+		}
+	}
+}
+
+body.device-pc {
+	// PCで画面が広い時に非表示
+	@media ( min-width: 992px){
+		.vk-mobile-nav-menu-btn {
+			display: none;
+		}
+		.vk-mobile-nav {
+			display: none;
+		}
+	}
+}
+body.device-mobile {
+	/* モバイル端末では画面サイズ関係なく表示 */
+	.vk-mobile-nav-menu-btn {
+		display: block;
 	}
 }
 
@@ -20,8 +49,8 @@ body.admin-bar {
 /*-------------------------------------------*/
 .vk-mobile-nav-menu-btn {
 	position: fixed;
-	top:10px;
-	left:10px;
+	top:$manu_btn_margin;
+	left:$manu_btn_margin;
 	z-index: 2000;
 	overflow:hidden;
 	border:1px solid #333;
@@ -39,20 +68,15 @@ body.admin-bar {
 	background:url('../images/vk-menu-btn-close.svg') center 50% no-repeat;
 }
 
-body.mobile-device {
-	/* モバイル端末では画面サイズ関係なく強制的に表示 */
-	.vk-mobile-nav-menu-btn {
-		display: block;
-	}
-}
-
 /*-------------------------------------------*/
 /* .vk-mobile-nav
 /*-------------------------------------------*/
 $margin-section-bottom:1.5em;
+// メニューボタンがタップされてたら
 .vk-mobile-nav.vk-mobile-nav-open{
 	top:0;
 }
+
 .vk-mobile-nav {
 	position: fixed;
 	top:-2000px;
@@ -60,9 +84,10 @@ $margin-section-bottom:1.5em;
 	width:100%;
 	height:100%;
 	display:block;
-	padding:60px 0;
+	padding:60px 10px;
 	overflow:scroll;
 	transition: top $time_transition ease-out;
+	box-shadow:1px 1px 4px rgba(0,0,0,0.1);
 	.global-nav {
 		margin-bottom:$margin-section-bottom;
 	}
@@ -72,20 +97,19 @@ $margin-section-bottom:1.5em;
 		li {
 			list-style: none;
 			a {
-				padding: 0.7em 1em;
+				padding: 0.7em 0.5em;
 				display:block; overflow:hidden;
 				&:hover {
 					text-decoration: none;
 				}
 			}
 		}
-		li li a { padding-left:2em;}
-		li li li a { padding-left:3em;}
-		li li li li a { padding-left:4em;}
+		li li a { padding-left:1.5em;}
+		li li li a { padding-left:2.5em;}
+		li li li li a { padding-left:3.5em;}
 	}
 }
 .vk-mobile-nav-widget {
-	padding:0 10px;
 	margin-bottom:$margin-section-bottom
 }
 

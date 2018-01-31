@@ -16,12 +16,17 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 /*-------------------------------------------*/
 
 /*
-メニューボタン .vk-mobile-nav-menu-btn は初期状態ではCSSで非表示にしてある
+■ メニューボタン
+.vk-mobile-nav-menu-btn は初期状態ではCSSで非表示にしてある
 .vk-mobile-nav-menu-btn がクリックされる
-	メニューボタンである .vk-mobile-nav-menu-btn に .menu-open を付与
+	メニューボタン .vk-mobile-nav-menu-btn に .menu-open を付与
 		.vk-mobile-nav-menu-btn.menu-open になったらCSSで見た目をクローズボタンに変更
-	メニュー本体である .vk-mobile-nav に .vk-mobile-nav-open が付与される。
+	メニュー本体 .vk-mobile-nav に .vk-mobile-nav-open が付与される。
 		.vk-mobile-nav.vk-mobile-nav-open に対してCSSで表示処理
+
+■ body class
+wp_is_mobile でモバイル判定された場合はPHPでフックを使用してbodyタグに .mobile-device を付与している
+
  */
 
 
