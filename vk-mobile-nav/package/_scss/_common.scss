@@ -51,7 +51,7 @@ body.device-mobile {
 	position: fixed;
 	top:$manu_btn_margin;
 	left:$manu_btn_margin;
-	z-index: 2000;
+	z-index: 2100;
 	overflow:hidden;
 	border:1px solid #333;
 	border-radius: 2px;
@@ -59,13 +59,13 @@ body.device-mobile {
 	height:34px;
 	cursor: pointer;
 	text-indent: -9999px;
-	background:url('../images/vk-menu-btn.svg') center 50% no-repeat;
+	background:url('../images/vk-menu-btn-black.svg') center 50% no-repeat;
 	background-size: 24px 24px;
 	transition: border-color $time_transition ease-out;
 }
 .vk-mobile-nav-menu-btn.menu-open {
 	border:1px solid $color_font_default;
-	background:url('../images/vk-menu-btn-close.svg') center 50% no-repeat;
+	background:url('../images/vk-menu-close-black.svg') center 50% no-repeat;
 }
 
 /*-------------------------------------------*/
@@ -80,7 +80,7 @@ $margin-section-bottom:1.5em;
 .vk-mobile-nav {
 	position: fixed;
 	top:-2000px;
-	z-index: 1000;
+	z-index: 2000;
 	width:100%;
 	height:100%;
 	display:block;

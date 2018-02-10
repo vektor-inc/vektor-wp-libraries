@@ -72,26 +72,53 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 		}
 
 		public static function menu_set_html() {
+
+			global $vk_mobile_nav_textdomain;
+
 			echo '<div class="vk-mobile-nav-menu-btn">MENU</div>';
 
 			echo '<div class="vk-mobile-nav">';
 			if ( is_active_sidebar( 'vk-mobile-nav-upper' ) ) {
 				dynamic_sidebar( 'vk-mobile-nav-upper' );
+			} else {
+				if ( current_user_can( 'edit_theme_options' ) ) {
+					echo '<div class="veu_adminEdit alert alert-info">';
+					echo '<p>' . sprintf( __( 'This is the widget area.<br>You can set widget item from [ <a href="%s">Appearance > Customize</a> ] Page -> "Widgets" panel -> "Mobile Nav Upper" Panel.', $vk_mobile_nav_textdomain ), admin_url( 'customize.php' ) ) . '</p>';
+					echo '<p>' . __( '* This message is displayed only to users with editing authority.', $vk_mobile_nav_textdomain ) . '</p>';
+					echo '</div>';
+				}
 			}
 
-			wp_nav_menu(
+			$menu = wp_nav_menu(
 				array(
 					'theme_location' => 'vk-mobile-nav',
 					'container'      => '',
 					'items_wrap'     => '<nav class="global-nav"><ul id="%1$s" class="vk-menu-acc  %2$s">%3$s</ul></nav>',
 					'fallback_cb'    => '',
-					'echo'           => true,
+					'echo'           => false,
 					// 'depth'          => 1,
 				)
 			);
+			if ( $menu ) {
+				echo $menu;
+			} else {
+				if ( current_user_can( 'edit_theme_options' ) ) {
+					echo '<div class="veu_adminEdit alert alert-danger">';
+					echo '<p>' . sprintf( __( 'Menu is not set.<br>Please set menu from [ <a href="%s">Appearance > Customize</a> ] Page -> "Menus" panel -> Menu Locations "Mobile Navigation".', $vk_mobile_nav_textdomain ), admin_url( 'customize.php' ) ) . '</p>';
+					echo '<p>' . __( '* This message is displayed only to users with editing authority.', $vk_mobile_nav_textdomain ) . '</p>';
+					echo '</div>';
+				}
+			}
 
 			if ( is_active_sidebar( 'vk-mobile-nav-bottom' ) ) {
 				dynamic_sidebar( 'vk-mobile-nav-bottom' );
+			} else {
+				if ( current_user_can( 'edit_theme_options' ) ) {
+					echo '<div class="veu_adminEdit alert alert-info">';
+					echo '<p>' . sprintf( __( 'This is the widget area.<br>You can set widget item from [ <a href="%s">Appearance > Customize</a> ] Page -> "Widgets" panel -> "Mobile Nav Bottom" Panel.', $vk_mobile_nav_textdomain ), admin_url( 'customize.php' ) ) . '</p>';
+					echo '<p>' . __( '* This message is displayed only to users with editing authority.', $vk_mobile_nav_textdomain ) . '</p>';
+					echo '</div>';
+				}
 			}
 
 			echo '</div>';
