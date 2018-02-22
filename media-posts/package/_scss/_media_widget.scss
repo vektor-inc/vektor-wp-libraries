@@ -76,7 +76,7 @@ $item_bottom_margin : 25px;
 @media (min-width: 768px){
 .flex_height {
 	display: flex;
-  	flex-wrap: wrap;
+  flex-wrap: wrap;
 	align-items: stretch;
 	.flex_height_col {
 		margin-bottom:$item_bottom_margin;
@@ -92,7 +92,7 @@ $item_bottom_margin : 25px;
 /*	.image_card
 /*-------------------------------------------*/
 .media_post.image_card {
-		margin-bottom:$item_bottom_margin;
+	margin-bottom:$item_bottom_margin;
 	.media_post_text { position: absolute;bottom: 0; z-index: 10; color: #fff;width:100%;
 		background-color: rgba(0,0,0,0.8);
 		transition: background-color 0.6s, transform 0.6s;

@@ -2,25 +2,29 @@
 /*-------------------------------------------*/
 /*  Load modules ( master config )
 /*-------------------------------------------*/
-if ( ! class_exists( 'Vk_Page_Header' ) )
-{
+if ( ! class_exists( 'Vk_Page_Header' ) ) {
 	require_once( 'vk-page-header/class-vk-page-header.php' );
 	require_once( 'custom-field-builder-config.php' );
 
 	global $vk_page_header_textdomain;
 	$vk_page_header_textdomain = 'lightning_skin_jpnstyle';
 
-	global $vk_page_header_output_class;
-	$vk_page_header_output_class = '.page-header';
-
 	global $customize_setting_prefix;
 	$customize_setting_prefix = 'Lightning';
 
+	global $vk_page_header_output_class;
+	$vk_page_header_output_class = '.page-header';
+
+	global $vk_page_header_default;
+	$vk_page_header_default = array(
+		'text_color' => '#333',
+	);
+
 	global $vk_page_header_default_bg_url;
 	// このファイルがテーマで使われた場合の例
-	$vk_page_header_default_bg_url = get_template_directory_uri('/inc/vk-page-header/images/header-sample.jpg');
+	$vk_page_header_default_bg_url = get_template_directory_uri( '/inc/vk-page-header/images/header-sample.jpg' );
 	// プラグインの場合の例
-	$vk_page_header_default_bg_url = plugins_url('/images/header-sample.jpg',__FILE__);
+	$vk_page_header_default_bg_url = plugins_url( '/images/header-sample.jpg', __FILE__ );
 
 }
 

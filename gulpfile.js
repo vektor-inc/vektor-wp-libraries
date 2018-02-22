@@ -76,6 +76,7 @@ gulp.task('copy_media-posts', function() {
 	gulp.src('./media-posts/package/**')
 		.pipe(gulp.dest('../plugins/lightning-skin-variety/inc/media-posts/'))
 		.pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/media-posts/'))
+		.pipe(gulp.dest('../plugins/lightning-skin-fort/inc/media-posts/'))
 		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/media-posts/'));
 });
 // gulp.task( 'copy_font-awesome-selector', function() {
