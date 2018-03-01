@@ -7,6 +7,7 @@ https://github.com/vektor-inc/vektor-wp-libraries
 修正の際は上記リポジトリのデータを修正してください。
 編集権限を持っていない方で何か修正要望などありましたら
 各プラグインのリポジトリにプルリクエストで結構です。
+
 */
 
 if ( ! class_exists( 'Lightning_header_top' ) ) {
