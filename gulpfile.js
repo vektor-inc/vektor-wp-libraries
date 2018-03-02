@@ -70,6 +70,7 @@ gulp.task('copy_header-top', function() {
 	gulp.src('./header-top/package/**')
 		.pipe(gulp.dest('../plugins/lightning-skin-variety/inc/header-top/'))
 		.pipe(gulp.dest('../plugins/lightning-skin-fort/inc/header-top/'))
+		.pipe(gulp.dest('../plugins/lightning-skin-pale/inc/header-top/'))
 		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/header-top/'));
 });
 gulp.task('copy_media-posts', function() {
@@ -77,6 +78,7 @@ gulp.task('copy_media-posts', function() {
 		.pipe(gulp.dest('../plugins/lightning-skin-variety/inc/media-posts/'))
 		.pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/media-posts/'))
 		.pipe(gulp.dest('../plugins/lightning-skin-fort/inc/media-posts/'))
+		.pipe(gulp.dest('../plugins/lightning-skin-pale/inc/media-posts/'))
 		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/media-posts/'));
 });
 // gulp.task( 'copy_font-awesome-selector', function() {
