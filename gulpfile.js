@@ -176,5 +176,8 @@ gulp.task('watch_pr-content', function() {
 gulp.task('watch_header-top', function() {
 	gulp.watch('./header-top/package/**', ['copy_header-top']);
 });
+gulp.task('watch_cta', function() {
+	gulp.watch('./call-to-action/package/**', ['copy_call-to-action']);
+});
 
 gulp.task('default', ['watch']);
