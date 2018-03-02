@@ -115,6 +115,7 @@ gulp.task('copy_page-header', function() {
 	gulp.src('./vk-page-header/package/**')
 		.pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/vk-page-header/'))
 		.pipe(gulp.dest('../plugins/lightning-skin-fort/inc/vk-page-header/'))
+		.pipe(gulp.dest('../plugins/lightning-skin-pale/inc/vk-page-header/'))
 		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/vk-page-header/'));
 });
 gulp.task('copy_widget-pr-content', function() {
