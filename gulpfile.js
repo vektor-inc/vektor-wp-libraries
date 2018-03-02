@@ -62,6 +62,7 @@ gulp.task('copy_term-color', function() {
 		.pipe(gulp.dest('../plugins/vk-post-author-display/inc/term-color/'))
 		.pipe(gulp.dest('../plugins/lightning-skin-variety/inc/term-color/'))
 		.pipe(gulp.dest('../plugins/lightning-skin-fort/inc/term-color/'))
+		.pipe(gulp.dest('../plugins/lightning-skin-pale/inc/term-color/'))
 		.pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/term-color/'))
 		.pipe(gulp.dest('../themes/lightning-child-rerise/inc/term-color/'))
 		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/term-color/'));
