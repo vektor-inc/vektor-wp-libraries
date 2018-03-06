@@ -772,9 +772,9 @@ class Vk_Font_Awesome_Selector {
 
 	static function admin_font_awesome( $name ){
 		// font-awesome
-		$awesome_ver = '4.6.1';
 		$awesome_path = get_template_directory_uri().'/library/font-awesome/' . $awesome_ver . '/css/font-awesome.min.css';
 		$array = get_headers( $awesome_path );
+		$awesome_ver  = '4.7.0';
 
 		if( strpos( $array[0],'OK' ) ) {
 			$awesome_ver = '4.6.3';
