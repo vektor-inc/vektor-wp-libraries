@@ -1,4 +1,4 @@
-<?php 
+<?php
 class Vk_Font_Awesome_Selector {
 	/**
 	 * font_awesome_variables
@@ -732,32 +732,31 @@ class Vk_Font_Awesome_Selector {
 		return $variables;
 	}
 
-	static function selectors( $name = '' , $current = '' , $customizer = false ){
+	static function selectors( $name = '', $current = '', $customizer = false ) {
 		global $vk_ltg_media_posts_textdomain;
-		$icons = Vk_Font_Awesome_Selector::font_awesome_variables();
-		$select_html = '';
+		$icons        = Vk_Font_Awesome_Selector::font_awesome_variables();
+		$select_html  = '';
 		$select_html .= '<ul class="font-awesome-selector">';
-		$checked = ( $current == '' ) ? ' checked' : '' ;
+		$checked      = ( $current == '' ) ? ' checked' : '';
 
-		if ( !$customizer ) {
-			$select_html .= '<li><label><input type="radio" name="'.$name.'" value=""'.$checked.' />'.__('No icon' , $vk_ltg_media_posts_textdomain ).'</label></li>';		
+		if ( ! $customizer ) {
+			$select_html .= '<li><label><input type="radio" name="' . $name . '" value=""' . $checked . ' />' . __( 'No icon', $vk_ltg_media_posts_textdomain ) . '</label></li>';
 		} else {
-			$select_html .= '<li><label><input type="radio"  data-customize-setting-link="'.$name.'" />'.__('No icon' , $vk_ltg_media_posts_textdomain ).'</label></li>';	
+			$select_html .= '<li><label><input type="radio"  data-customize-setting-link="' . $name . '" />' . __( 'No icon', $vk_ltg_media_posts_textdomain ) . '</label></li>';
 			// WP_Customize_Control
 		}
 
-		foreach ($icons as $key => $value) {
+		foreach ( $icons as $key => $value ) {
 			$select_html .= '<li><label>';
-			
 
-			if ( !$customizer ) {
-				$checked = ( $current == $value ) ? ' checked' : '' ;
-				$select_html .= '<input type="radio" name="'.$name.'" value="'.$value.'"'.$checked.' />';
+			if ( ! $customizer ) {
+				$checked      = ( $current == $value ) ? ' checked' : '';
+				$select_html .= '<input type="radio" name="' . $name . '" value="' . $value . '"' . $checked . ' />';
 			} else {
-				$select_html .= '<input type="radio" data-customize-setting-link="'.$name.'" />';
+				$select_html .= '<input type="radio" data-customize-setting-link="' . $name . '" />';
 			}
 
-			$select_html .= '<i class="fa fa-'.$value.'" aria-hidden="true"></i>'.$value.'</label></li>';
+			$select_html .= '<i class="fa fa-' . $value . '" aria-hidden="true"></i>' . $value . '</label></li>';
 		}
 		$select_html .= '</ul>';
 
@@ -770,14 +769,14 @@ class Vk_Font_Awesome_Selector {
 		echo $select_html;
 	}
 
-	static function admin_font_awesome( $name ){
+	static function admin_font_awesome( $name ) {
 		// font-awesome
-		$awesome_path = get_template_directory_uri().'/library/font-awesome/' . $awesome_ver . '/css/font-awesome.min.css';
-		$array = get_headers( $awesome_path );
 		$awesome_ver  = '4.7.0';
+		$awesome_path = get_template_directory_uri() . '/library/font-awesome/' . $awesome_ver . '/css/font-awesome.min.css';
+		$array        = get_headers( $awesome_path );
 
-		if( strpos( $array[0],'OK' ) ) {
-			$awesome_ver = '4.6.3';
+		if ( strpos( $array[0], 'OK' ) ) {
+			$awesome_ver  = '4.6.3';
 			$awesome_path = 'https://maxcdn.bootstrapcdn.com/font-awesome/' . $awesome_ver . '/css/font-awesome.min.css';
 		}
 		wp_enqueue_style( 'font-awesome', $awesome_path, array(), $awesome_ver );
@@ -788,13 +787,13 @@ class Vk_Font_Awesome_Selector {
 		.font-awesome-selector i { margin-right:5px; }
 		</style>
 		<?php
-        // $custom_css = "
-        //         .font-awesome-selector{ display:block; overflow:scroll;height:100px;border:1px solid #ff0000; }
-        //         ";
-        // wp_add_inline_style( 'font-awesome-selector-style', $custom_css );
+		// $custom_css = "
+		//         .font-awesome-selector{ display:block; overflow:scroll;height:100px;border:1px solid #ff0000; }
+		//         ";
+		// wp_add_inline_style( 'font-awesome-selector-style', $custom_css );
 	}
 
-	public function __construct(){
+	public function __construct() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_font_awesome' ), 9999 );
 	}
 }

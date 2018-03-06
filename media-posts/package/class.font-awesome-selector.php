@@ -1,4 +1,4 @@
-<?php 
+<?php
 class Vk_Font_Awesome_Selector {
 	/**
 	 * font_awesome_variables
@@ -732,28 +732,28 @@ class Vk_Font_Awesome_Selector {
 		return $variables;
 	}
 
-	static function selectors( $name = '' , $current = '' ){
+	static function selectors( $name = '', $current = '' ) {
 		global $vk_ltg_media_posts_textdomain;
-		$icons = Vk_Font_Awesome_Selector::font_awesome_variables();
-		$select_html = '';
+		$icons        = Vk_Font_Awesome_Selector::font_awesome_variables();
+		$select_html  = '';
 		$select_html .= '<ul class="font-awesome-selector">';
-		$checked = ( $current == '' ) ? ' checked' : '' ;
-		$select_html .= '<li><label><input type="radio" name="'.$name.'" value=""'.$checked.' />'.__('No icon' , $vk_ltg_media_posts_textdomain ).'</label></li>';
-		foreach ($icons as $key => $value) {
+		$checked      = ( $current == '' ) ? ' checked' : '';
+		$select_html .= '<li><label><input type="radio" name="' . $name . '" value=""' . $checked . ' />' . __( 'No icon', $vk_ltg_media_posts_textdomain ) . '</label></li>';
+		foreach ( $icons as $key => $value ) {
 			$select_html .= '<li><label>';
-			$checked = ( $current == $value ) ? ' checked' : '' ;
-			$select_html .= '<input type="radio" name="'.$name.'" value="'.$value.'"'.$checked.' />';
-			$select_html .= '<i class="fa fa-'.$value.'" aria-hidden="true"></i>'.$value.'</label></li>';
+			$checked      = ( $current == $value ) ? ' checked' : '';
+			$select_html .= '<input type="radio" name="' . $name . '" value="' . $value . '"' . $checked . ' />';
+			$select_html .= '<i class="fa fa-' . $value . '" aria-hidden="true"></i>' . $value . '</label></li>';
 		}
 		$select_html .= '</ul>';
 
 		echo $select_html;
 	}
 
-	static function admin_font_awesome( $name ){
+	static function admin_font_awesome( $name ) {
 		// font-awesome
-		$awesome_path = get_template_directory_uri().'/library/font-awesome/' . $awesome_ver . '/css/font-awesome.min.css';
 		$awesome_ver  = '4.7.0';
+		$awesome_path = get_template_directory_uri() . '/library/font-awesome/' . $awesome_ver . '/css/font-awesome.min.css';
 
 		// サーバーによってエラーになるためテーマディレクトリのfontawesomeのみ使用
 		// $array = get_headers( $awesome_path );
@@ -769,13 +769,13 @@ class Vk_Font_Awesome_Selector {
 		.font-awesome-selector i { margin-right:5px; }
 		</style>
 		<?php
-        // $custom_css = "
-        //         .font-awesome-selector{ display:block; overflow:scroll;height:100px;border:1px solid #ff0000; }
-        //         ";
-        // wp_add_inline_style( 'font-awesome-selector-style', $custom_css );
+		// $custom_css = "
+		//         .font-awesome-selector{ display:block; overflow:scroll;height:100px;border:1px solid #ff0000; }
+		//         ";
+		// wp_add_inline_style( 'font-awesome-selector-style', $custom_css );
 	}
 
-	public function __construct(){
+	public function __construct() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_font_awesome' ), 9999 );
 	}
 }
