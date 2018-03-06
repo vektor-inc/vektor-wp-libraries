@@ -17,13 +17,13 @@
 	.acc-btn {
 		position: absolute;
 		right:8px;
-		top:9px;
-		width:24px;
-		height:24px;
+		top:8px;
+		width:28px;
+		height:28px;
 		border:1px solid $color_font_default;
 		border-radius: 2px;
 		background:url('../images/vk-menu-acc-icon-open-white.svg') center 50% no-repeat;
-		background-size: 24px 24px;
+		background-size: 28px 28px;
 		cursor: pointer;
 		z-index: 1000;
 		transition: transform $time_transition ease-out;
