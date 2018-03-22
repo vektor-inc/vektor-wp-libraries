@@ -10,6 +10,8 @@ class VK_Widget_Pr_Content extends WP_Widget {
   /**
      * Widgetを登録する
   **/
+  public static $version = '0.0.0';
+
   function __construct() {
     global $pr_content_textdomain;
     if ( function_exists('vkExUnit_get_short_name') ) {
@@ -24,7 +26,13 @@ class VK_Widget_Pr_Content extends WP_Widget {
         array( 'description' => __( 'Content PR widget', $pr_content_textdomain ) ) //Widgetの説明
     );
 		add_action( 'wp_head', array( $this, 'print_css' ), 2);
+    add_action( 'wp_enqueue_scripts', array( $this, 'add_script' ) );
   }
+
+  public static function add_script() {
+    wp_enqueue_style( 'vk-admin-style', plugin_dir_url( __FILE__ ) . 'css/vk-widget-pr-content.css', array(), self::$version, 'all' );
+  }
+
 
   /**
     * 入力された値とデフォルト値を結合するメソッド
@@ -42,6 +50,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
       'bg_color'       => null,
       'margin_top'     => null,
       'margin_bottom'  => null,
+      'layout_type'    => null,
     );
     return wp_parse_args( (array) $instance, $defaults );
   }
@@ -64,7 +73,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
     echo '<div class="container">';
     ?>
     <div class="row">
-    <div class="col-sm-6 pr-content-col-left"><?php
+    <div class="col-sm-6 pr-content-col-img"><?php
     // media img
     // 画像IDから画像のURLを取得
     if ( ! empty( $options['media_image'] ) && is_numeric( $options['media_image'] ) ) {
@@ -75,7 +84,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
     }
 
     ?></div><!-- .col-sm-6 -->
-    <div class="col-sm-6 pr-content-col-right"><?php
+    <div class="col-sm-6 pr-content-col-text"><?php
     // title
     if ( $options['title'] ) {
       echo '<h3 class="pr-content-title">'.esc_html( $options['title'] ).'</h3>';
@@ -120,9 +129,13 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		$instance[ 'bg_color' ] = ( isset( $new_instance[ 'bg_color' ] ) ) ? sanitize_hex_color( $new_instance[ 'bg_color' ]) : false ;
 		$instance[ 'margin_top' ] = wp_kses_post( mb_convert_kana($new_instance[ 'margin_top' ], 'a') );
 		$instance[ 'margin_bottom' ] = wp_kses_post( mb_convert_kana($new_instance[ 'margin_bottom' ], 'a') );
+    $instance[ 'layout_type' ] = $new_instance[ 'layout_type' ];
 		return $instance;
 	}
 
+  /*-------------------------------------------*/
+  /*  form
+  /*-------------------------------------------*/
 
   function form( $instance )
   {
@@ -216,6 +229,29 @@ class VK_Widget_Pr_Content extends WP_Widget {
       <label for="<?php echo $this->get_field_id('margin_bottom'); ?>" ><?php _e('Margin-bottom<br>Please also enter the unit. (Example: 30px):', $pr_content_textdomain); ?></label>
       <input type="text" id="<?php echo $this->get_field_id('margin_bottom'); ?>-margin_bottom" name="<?php echo $this->get_field_name('margin_bottom'); ?>" style="width:100%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options['margin_bottom'] ); ?>"></input>
 
+      <?php // layout_type ?>
+      <p><?php _e('Select layout type:', $pr_content_textdomain); //レイアウトタイプを選択 ?><br>
+        <?php
+        $checked = '';
+        if (
+          // $instance[ 'layout_type' ] が定義されていて、値がleftの場合
+          ( isset( $instance[ 'layout_type' ] ) && $instance[ 'layout_type' ] === 'left' ) ||
+          // $instance[ 'layout_type' ] が定義されていない場合
+          empty( $instance[ 'layout_type' ] )
+         ) {
+          // ' checked'を指定する
+          $checked = ' checked';
+        } ?>
+        <input type="radio" name="<?php echo $this->get_field_name( 'layout_type' ); ?>" value="left" <?php echo $checked ?> />
+        <label for="<?php echo $this->get_field_id( 'layout_type' ); ?>"> <?php _e( 'Put the image to the left', $pr_content_textdomain ); ?></label>
+        <br>
+        <?php $checked = ( isset( $instance[ 'layout_type' ] ) && $instance[ 'layout_type' ] === 'right' ) ? ' checked' : ''; ?>
+        <input type="radio" name="<?php echo $this->get_field_name( 'layout_type' ); ?>" value="right" <?php echo $checked ?> />
+        <label for="<?php $this->get_field_id( 'layout_type' ); ?>"> <?php _e( 'Put the image to the right', $pr_content_textdomain ); ?></label>
+      </p>
+      <br><br>
+
+
   <?php
   }
 
@@ -225,60 +261,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 	/*-------------------------------------------*/
 
 	function print_css(){
-			$custom_css = '.mainSection .widget_vk_widget_pr_content {
-			        margin-bottom:0;
-			      }
-
-			      .pr-content {
-              margin: 0 calc(50% - 50vw);
-              padding: 6em calc(50vw - 50%);
-
-			      }
-
-					  .pr-content-title {
-					    background-color: transparent;
-					    font-weight: bold;
-					    padding: 0;
-					  }
-
-			      .pr-content-title {
-			        border-bottom: none;
-			        box-shadow: none;
-			      }
-
-			      @media (max-width: 767px) {
-			        .pr-content-title,
-							.pr-content-title:first-child {
-			          margin-top: 30px;
-			        }
-			      }
-						@media (min-width: 768px) {
-							.pr-content-col-right {
-				        padding-left:2em;
-				      }
-				      .pr-content-col-left{
-				        padding-right:2em;
-				      }
-			      }
-
-			      .pr-content-title:after {
-			        content: "";
-			        line-height: 0;
-			        display: block;
-			        overflow: hidden;
-			        position: absolute;
-			        bottom: -1px;
-			        width: 0;
-			        border-bottom: none;
-			      }
-
-			      .pr_content_media_imgage {
-			        border: 1px solid #ccc;
-			      }
-
-			      .pr-content-btn {
-			        margin-top:3em;
-			      }';
+			$custom_css = '';
 			// 両サイドのスペースを消す
 			$custom_css = trim($custom_css);
 			// 改行、タブをスペースへ
