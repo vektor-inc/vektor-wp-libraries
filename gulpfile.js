@@ -46,6 +46,19 @@ gulp.task('sass_vk-mobile-nav', function() {
 		.pipe(gulp.dest('./vk-mobile-nav/package/css/'));
 });
 
+gulp.task('sass_vk-widget-pr-content', function() {
+	// gulp.src( '**/_scss/**/*.scss' )
+	gulp.src('vk-widget-pr-content/package/_scss/**/*.scss')
+		.pipe(plumber())
+		.pipe(sass())
+		.pipe(cmq({
+			log: true
+		}))
+		.pipe(autoprefixer())
+		.pipe(cleanCss())
+		.pipe(gulp.dest('./vk-widget-pr-content/package/css/'));
+});
+
 
 gulp.task('copy_vk-admin', function() {
 	gulp.src('./vk-admin/package/**')
