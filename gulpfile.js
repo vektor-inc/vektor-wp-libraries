@@ -188,6 +188,7 @@ gulp.task('watch_page-header', function() {
 	gulp.watch('./vk-page-header/package/**', ['copy_page-header', 'copy_custom-field-builder']);
 });
 gulp.task('watch_pr-content', function() {
+	gulp.watch('./vk-widget-pr-content/package/_scss/**', ['sass_vk-widget-pr-content']);
 	gulp.watch('./vk-widget-pr-content/package/**', ['copy_widget-pr-content']);
 });
 gulp.task('watch_header-top', function() {
