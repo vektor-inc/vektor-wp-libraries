@@ -71,8 +71,14 @@ class VK_Widget_Pr_Content extends WP_Widget {
       echo '<div class="pr-content">';
     }
     echo '<div class="container">';
+
+    if ( $instance[ 'layout_type' ] === 'left' ) {
+      $layout_type = 'left';
+    } else {
+      $layout_type = 'right';
+    }
     ?>
-    <div class="row">
+    <div class="row <?php echo $layout_type ?>">
     <div class="col-sm-6 pr-content-col-img"><?php
     // media img
     // 画像IDから画像のURLを取得
