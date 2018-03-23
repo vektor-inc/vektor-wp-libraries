@@ -46,9 +46,8 @@ class VK_Widget_Pr_Content extends WP_Widget {
       'btn_text'       => '',
       'btn_url'        => '',
       'btn_blank'      => false,
-      // 'btn_color'   => null,
       'bg_color'       => null,
-      'bg_image'         => null,
+      'bg_image'       => null,
       'margin_top'     => null,
       'margin_bottom'  => null,
       'layout_type'    => null,
@@ -59,15 +58,27 @@ class VK_Widget_Pr_Content extends WP_Widget {
   /**
      * 表側の Widget を出力する（表示用コード）
   **/
+
   function widget( $args, $instance )
   {
+    // 画像IDから画像のURLを取得
+    if ( ! empty( $instance['bg_image'] ) ) {
+      $bg_image = wp_get_attachment_image_src( $instance['bg_image'], 'full' );
+      $bg_image = $bg_image[0];
+    } else {
+      $bg_image = null;
+    }
+
     // 入力された値とデフォルトで指定した値を あーん して$options にいれる
     $options = self::options( $instance );
     echo '<style type="text/css">.mainSection #'.$args['widget_id'].'.widget_vk_widget_pr_content { margin-top:'.$options['margin_top'].'; margin-bottom:'.$options['margin_bottom'].';}</style>';
     echo $args['before_widget'];
-    if ( ! empty( $options['bg_color'] ) ) {
+    if ( ( ! empty( $options['bg_color'] ) ) && ( empty( $options['bg_image'] ) ) ) {
       $bg_color = sanitize_hex_color( $options['bg_color'] );
       echo '<div class="pr-content" style="background-color:'.$bg_color.';">';
+    } else if ( ( ! empty( $options['bg_image'] && empty( $options['bg_color'] ) ) || ( ! empty( $options['bg_color'] ) && ! empty( $options['bg_image'] ) ) ) ) {
+      $bg_image = wp_kses_post( $bg_image );
+      echo '<div class="pr-content" style="background-image: url(\''.$bg_image.'\'); background-size: cover;">';
     } else {
       echo '<div class="pr-content">';
     }
@@ -242,7 +253,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
         <label for="<?php echo $this->get_field_id( 'bg_image' ); ?>"><?php _e( 'Background image:<br>If both the background color and the background image are set, the background image is reflected.', $pr_content_textdomain); ?></label>
       <div class="_display" style="height:auto">
           <?php if ( $bg_image ): ?>
-              <img src="<?php echo esc_url( $image[0] ); ?>" style="width:100%; height:auto; border: 1px solid #ccc; margin: 0 0 15px;" />
+              <img src="<?php echo esc_url( $bg_image[0] ); ?>" style="width:100%; height:auto; border: 1px solid #ccc; margin: 0 0 15px;" />
           <?php endif; ?>
       </div>
       <button class="button button-default button-block" style="display:block;width:100%;text-align: center; margin:0;" onclick="javascript:bg_image_addiditional(this);return false;"><?php _e('Set image', $pr_content_textdomain ); ?></button>
@@ -254,33 +265,33 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			<script type="text/javascript">
       // 画像登録処理
       if ( bg_image_addiditional == undefined ){
-      var bg_image_addiditional = function(e){
+      var bg_image_addiditional = function(ef){
       		// プレビュー画像を表示するdiv
-          var d=jQuery(e).parent().children("._display");
+          var de=jQuery(ef).parent().children("._display");
       		// 画像IDを保存するinputタグ
-          var w=jQuery(e).parent().children("._form").children('.__id')[0];
-          var u=wp.media({library:{type:'image'},multiple:false}).on('select', function(e){
-              u.state().get('selection').each(function(f){
-      					d.children().remove();
-      					d.append(jQuery('<img style="width:100%;mheight:auto">').attr('src',f.toJSON().url));
-      					jQuery(w).val(f.toJSON().id).change();
+          var wx=jQuery(ef).parent().children("._form").children('.__id')[0];
+          var uv=wp.media({library:{type:'image'},multiple:false}).on('select', function(ef){
+              uv.state().get('selection').each(function(fg){
+      					de.children().remove();
+      					de.append(jQuery('<img style="width:100%;mheight:auto">').attr('src',fg.toJSON().url));
+      					jQuery(wx).val(fg.toJSON().id).change();
       				});
           });
-          u.open();
+          uv.open();
       };
       }
       // 背景画像削除処理
       if ( bg_image_delete == undefined ){
-      var bg_image_delete = function(e){
+      var bg_image_delete = function(ef){
       		// プレビュー画像を表示するdiv
-      		var d=jQuery(e).parent().children("._display");
+      		var de=jQuery(ef).parent().children("._display");
       		// 画像IDを保存するinputタグ
-      		var w=jQuery(e).parent().children("._form").children('.__id')[0];
+      		var wx=jQuery(ef).parent().children("._form").children('.__id')[0];
 
       		// プレビュー画像のimgタグを削除
-      		d.children().remove();
+      		de.children().remove();
       		// w.attr("value","");
-      		jQuery(e).parent().children("._form").children('.__id').attr("value","").change();
+      		jQuery(ef).parent().children("._form").children('.__id').attr("value","").change();
       };
       }
       </script>
