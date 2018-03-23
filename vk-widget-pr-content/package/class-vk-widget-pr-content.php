@@ -78,7 +78,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
       echo '<div class="pr-content" style="background-color:'.$bg_color.';">';
     } else if ( ( ! empty( $options['bg_image'] && empty( $options['bg_color'] ) ) || ( ! empty( $options['bg_color'] ) && ! empty( $options['bg_image'] ) ) ) ) {
       $bg_image = wp_kses_post( $bg_image );
-      echo '<div class="pr-content" style="background-image: url(\''.$bg_image.'\'); background-size: cover;">';
+      echo '<div class="pr-content" style="background: url(\''.$bg_image.'\') no-repeat center; background-size: cover;">';
     } else {
       echo '<div class="pr-content">';
     }
