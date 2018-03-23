@@ -48,6 +48,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
       'btn_blank'      => false,
       // 'btn_color'   => null,
       'bg_color'       => null,
+      'bg_image'         => null,
       'margin_top'     => null,
       'margin_bottom'  => null,
       'layout_type'    => null,
@@ -72,7 +73,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
     }
     echo '<div class="container">';
 
-    if ( $instance[ 'layout_type' ] === 'left' ) {
+    if ( $options[ 'layout_type' ] === 'left' ) {
       $layout_type = 'left';
     } else {
       $layout_type = 'right';
@@ -133,9 +134,10 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		$instance[ 'btn_url' ] = esc_url( $new_instance[ 'btn_url' ] );
 		$instance[ 'btn_blank' ] = ( isset( $new_instance[ 'btn_blank' ] ) && $new_instance[ 'btn_blank' ] ) ? true : false;
 		$instance[ 'bg_color' ] = ( isset( $new_instance[ 'bg_color' ] ) ) ? sanitize_hex_color( $new_instance[ 'bg_color' ]) : false ;
+		$instance[ 'bg_image' ] = wp_kses_post( $new_instance[ 'bg_image' ] );
 		$instance[ 'margin_top' ] = wp_kses_post( mb_convert_kana($new_instance[ 'margin_top' ], 'a') );
 		$instance[ 'margin_bottom' ] = wp_kses_post( mb_convert_kana($new_instance[ 'margin_bottom' ], 'a') );
-    $instance[ 'layout_type' ] = $new_instance[ 'layout_type' ];
+    $instance[ 'layout_type' ] = esc_attr( $new_instance[ 'layout_type' ] );
 		return $instance;
 	}
 
@@ -226,6 +228,62 @@ class VK_Widget_Pr_Content extends WP_Widget {
       <?php // bg color ?>
       <label for="<?php echo $this->get_field_id( 'bg_color' ); ?>" class="color_picker_wrap"><?php _e( 'Background color:', $pr_content_textdomain); ?></label>
       <input type="text" id="<?php echo $this->get_field_id( 'bg_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'bg_color'); ?>" value="<?php if($options['bg_color']) echo esc_attr( $options['bg_color']); ?>" />
+      <br><br>
+
+      <?php // bg img
+      $bg_image = null;
+      // ちゃんと数字が入っているかどうか？
+      if ( is_numeric( $options['bg_image'] ) ) {
+        // 数字だったら、その数字の画像を large サイズで取得
+          $bg_image = wp_get_attachment_image_src( $options['bg_image'], 'large' );
+      }
+      ?>
+      <div class="pr_content_media_area" style="padding: 0.5em 0 3.0em;">
+        <label for="<?php echo $this->get_field_id( 'bg_image' ); ?>"><?php _e( 'Background image:<br>If both the background color and the background image are set, the background image is reflected.', $pr_content_textdomain); ?></label>
+      <div class="_display" style="height:auto">
+          <?php if ( $bg_image ): ?>
+              <img src="<?php echo esc_url( $image[0] ); ?>" style="width:100%; height:auto; border: 1px solid #ccc; margin: 0 0 15px;" />
+          <?php endif; ?>
+      </div>
+      <button class="button button-default button-block" style="display:block;width:100%;text-align: center; margin:0;" onclick="javascript:bg_image_addiditional(this);return false;"><?php _e('Set image', $pr_content_textdomain ); ?></button>
+      <button class="button button-default button-block" style="display:block;width:100%;text-align: center; margin:4px 0;" onclick="javascript:vk_title_bg_image_delete(this);return false;"><?php _e('Delete image', $pr_content_textdomain ); ?></button>
+      <div class="_form" style="line-height: 2em">
+          <input type="hidden" class="__id" name="<?php echo $this->get_field_name( 'bg_image' ); ?>" value="<?php echo esc_attr( $options['bg_image'] ); ?>" />
+      </div>
+      </div>
+			<script type="text/javascript">
+      // 画像登録処理
+      if ( bg_image_addiditional == undefined ){
+      var bg_image_addiditional = function(e){
+      		// プレビュー画像を表示するdiv
+          var d=jQuery(e).parent().children("._display");
+      		// 画像IDを保存するinputタグ
+          var w=jQuery(e).parent().children("._form").children('.__id')[0];
+          var u=wp.media({library:{type:'image'},multiple:false}).on('select', function(e){
+              u.state().get('selection').each(function(f){
+      					d.children().remove();
+      					d.append(jQuery('<img style="width:100%;mheight:auto">').attr('src',f.toJSON().url));
+      					jQuery(w).val(f.toJSON().id).change();
+      				});
+          });
+          u.open();
+      };
+      }
+      // 背景画像削除処理
+      if ( bg_image_delete == undefined ){
+      var bg_image_delete = function(e){
+      		// プレビュー画像を表示するdiv
+      		var d=jQuery(e).parent().children("._display");
+      		// 画像IDを保存するinputタグ
+      		var w=jQuery(e).parent().children("._form").children('.__id')[0];
+
+      		// プレビュー画像のimgタグを削除
+      		d.children().remove();
+      		// w.attr("value","");
+      		jQuery(e).parent().children("._form").children('.__id').attr("value","").change();
+      };
+      }
+      </script>
       <br><br>
 
       <?php // margin_top . margin_bottom ?>
