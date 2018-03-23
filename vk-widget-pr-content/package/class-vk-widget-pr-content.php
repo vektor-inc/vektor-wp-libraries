@@ -250,13 +250,13 @@ class VK_Widget_Pr_Content extends WP_Widget {
       }
       ?>
       <div class="pr_content_media_area" style="padding: 0.5em 0 3.0em;">
-        <label for="<?php echo $this->get_field_id( 'bg_image' ); ?>"><?php _e( 'Background image:<br>If both the background color and the background image are set, the background image is reflected.', $pr_content_textdomain); ?></label>
+        <label for="<?php echo $this->get_field_id( 'bg_image' ); ?>"><?php _e( 'Background image:<br>If both the background color and the background image are set, the background image is reflected.<br>', $pr_content_textdomain); ?></label>
       <div class="_display" style="height:auto">
           <?php if ( $bg_image ): ?>
-              <img src="<?php echo esc_url( $bg_image[0] ); ?>" style="width:100%; height:auto; border: 1px solid #ccc; margin: 0 0 15px;" />
+              <img src="<?php echo esc_url( $bg_image[0] ); ?>" style="width:100%; height:auto; border: 1px solid #ccc; margin: 15px 0 0;" />
           <?php endif; ?>
       </div>
-      <button class="button button-default button-block" style="display:block;width:100%;text-align: center; margin:0;" onclick="javascript:bg_image_addiditional(this);return false;"><?php _e('Set image', $pr_content_textdomain ); ?></button>
+      <button class="button button-default button-block" style="display:block;width:100%;text-align: center; margin:15px 0 0;" onclick="javascript:bg_image_addiditional(this);return false;"><?php _e('Set image', $pr_content_textdomain ); ?></button>
       <button class="button button-default button-block" style="display:block;width:100%;text-align: center; margin:4px 0;" onclick="javascript:vk_title_bg_image_delete(this);return false;"><?php _e('Delete image', $pr_content_textdomain ); ?></button>
       <div class="_form" style="line-height: 2em">
           <input type="hidden" class="__id" name="<?php echo $this->get_field_name( 'bg_image' ); ?>" value="<?php echo esc_attr( $options['bg_image'] ); ?>" />
