@@ -48,6 +48,8 @@ class VK_Widget_Pr_Content extends WP_Widget {
       'btn_blank'      => false,
       'bg_color'       => null,
       'bg_image'       => null,
+      'bg_cover_color' => null,
+      'bg_cover_depth' => '0',
       'margin_top'     => null,
       'margin_bottom'  => null,
       'layout_type'    => null,
@@ -62,23 +64,50 @@ class VK_Widget_Pr_Content extends WP_Widget {
   function widget( $args, $instance )
   {
     // 画像IDから画像のURLを取得
-    if ( ! empty( $instance['bg_image'] ) ) {
-      $bg_image = wp_get_attachment_image_src( $instance['bg_image'], 'full' );
+    if ( ! empty( $instance[ 'bg_image' ] ) ) {
+      $bg_image = wp_get_attachment_image_src( $instance[ 'bg_image' ], 'full' );
       $bg_image = $bg_image[0];
     } else {
       $bg_image = null;
     }
 
+    // カラーコードの16進数を10進数に変換する
+    //RGB数値に変換するカラーコード
+    $bg_cover_color = '';
+    if ( ! empty( $instance[ 'bg_cover_color' ] ) ) {
+      $bg_cover_color = $instance[ 'bg_cover_color' ];
+    }
+    //「#******」のような形でカラーコードがわたってきた場合「#」を削除する
+    $bg_cover_color = preg_replace("/#/", "", $bg_cover_color);
+    //「******」という形になっているはずなので、2つずつ「**」に区切る
+    //そしてhexdec関数で変換して配列に格納する
+    $array_bg_cover_color[ 'red' ] = hexdec( substr( $bg_cover_color, 0, 2 ) );
+    $array_bg_cover_color[ 'green' ] = hexdec( substr( $bg_cover_color, 2, 2 ) );
+    $array_bg_cover_color[ 'blue' ] = hexdec( substr( $bg_cover_color, 4, 2 ) );
+    //配列の中身を変数に代入
+    $bg_cover_color_red = $array_bg_cover_color[ 'red' ];
+    $bg_cover_color_green = $array_bg_cover_color[ 'green' ];
+    $bg_cover_color_blue = $array_bg_cover_color[ 'blue' ];
+
     // 入力された値とデフォルトで指定した値を あーん して$options にいれる
     $options = self::options( $instance );
-    echo '<style type="text/css">.mainSection #'.$args['widget_id'].'.widget_vk_widget_pr_content { margin-top:'.$options['margin_top'].'; margin-bottom:'.$options['margin_bottom'].';}</style>';
-    echo $args['before_widget'];
-    if ( ( ! empty( $options['bg_color'] ) ) && ( empty( $options['bg_image'] ) ) ) {
-      $bg_color = sanitize_hex_color( $options['bg_color'] );
+    echo '<style type="text/css">.mainSection #'.$args[ 'widget_id' ].'.widget_vk_widget_pr_content { margin-top:'.$options[ 'margin_top' ].'; margin-bottom:'.$options[ 'margin_bottom' ].';}</style>';
+    echo $args[ 'before_widget' ];
+    if ( ( ! empty( $options[ 'bg_color' ] ) ) && ( empty( $options[ 'bg_image' ] ) ) ) {
+      $bg_color = sanitize_hex_color( $options[ 'bg_color' ] );
       echo '<div class="pr-content" style="background-color:'.$bg_color.';">';
-    } else if ( ( ! empty( $options['bg_image'] && empty( $options['bg_color'] ) ) || ( ! empty( $options['bg_color'] ) && ! empty( $options['bg_image'] ) ) ) ) {
+    } else if ( ( ! empty( $options[ 'bg_image' ] && empty( $options[ 'bg_color' ] ) ) || ( ! empty( $options[ 'bg_color' ] ) && ! empty( $options[ 'bg_image' ] ) ) ) ) {
+      // 画像が設定されていたら
+      // 変数に代入
       $bg_image = wp_kses_post( $bg_image );
-      echo '<div class="pr-content" style="background: url(\''.$bg_image.'\') no-repeat center; background-size: cover;">';
+      // 被せる色の濃さが入力されていたら値を小数に変換して代入
+      if ( ! empty( $options[ 'bg_cover_depth' ] ) ) {
+        $bg_cover_depth = ( $options[ 'bg_cover_depth' ] ) / 100;
+      }
+      // background: linear-gradient で画像の上に $bg_cover_color を透過（$bg_cover_depth）させて被せる
+      // →１個めの rgba() と２個目の rgba() の値を別々で設定すればグラデーションもできる
+      $bg_image = '<div class="pr-content" style="background: linear-gradient( rgba( '.$bg_cover_color_red.', '.$bg_cover_color_green.', '.$bg_cover_color_blue.', '.$bg_cover_depth.'), rgba('.$bg_cover_color_red.', '.$bg_cover_color_green.', '.$bg_cover_color_blue.', '.$bg_cover_depth.') ), url(\''.$bg_image.'\') no-repeat center; background-size: cover;">';
+      echo $bg_image;
     } else {
       echo '<div class="pr-content">';
     }
@@ -146,8 +175,10 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		$instance[ 'btn_blank' ] = ( isset( $new_instance[ 'btn_blank' ] ) && $new_instance[ 'btn_blank' ] ) ? true : false;
 		$instance[ 'bg_color' ] = ( isset( $new_instance[ 'bg_color' ] ) ) ? sanitize_hex_color( $new_instance[ 'bg_color' ]) : false ;
 		$instance[ 'bg_image' ] = wp_kses_post( $new_instance[ 'bg_image' ] );
-		$instance[ 'margin_top' ] = wp_kses_post( mb_convert_kana($new_instance[ 'margin_top' ], 'a') );
-		$instance[ 'margin_bottom' ] = wp_kses_post( mb_convert_kana($new_instance[ 'margin_bottom' ], 'a') );
+    $instance[ 'bg_cover_color' ] = sanitize_hex_color( $new_instance[ 'bg_cover_color' ] );
+    $instance[ 'bg_cover_depth' ] = esc_attr( mb_convert_kana( $new_instance[ 'bg_cover_depth' ], 'a' ) );
+		$instance[ 'margin_top' ] = wp_kses_post( mb_convert_kana( $new_instance[ 'margin_top' ], 'a' ) );
+		$instance[ 'margin_bottom' ] = wp_kses_post( mb_convert_kana( $new_instance[ 'margin_bottom' ], 'a' ) );
     $instance[ 'layout_type' ] = esc_attr( $new_instance[ 'layout_type' ] );
 		return $instance;
 	}
@@ -163,7 +194,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
       ?>
       <br>
       <label for="<?php echo $this->get_field_id('title'); ?>" ><?php _e('Title:', $pr_content_textdomain); ?></label>
-      <input type="text" id="<?php echo $this->get_field_id('title'); ?>-title" name="<?php echo $this->get_field_name('title'); ?>" style="width:100%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options['title'] ); ?>"></input>
+      <input type="text" id="<?php echo $this->get_field_id('title'); ?>-title" name="<?php echo $this->get_field_name('title'); ?>" style="width:100%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options['title'] ); ?>">
 
       <label for="<?php echo $this->get_field_id('text'); ?>" ><?php _e('Text:', $pr_content_textdomain); ?></label>
       <textarea id="<?php echo $this->get_field_id('text'); ?>" name="<?php echo $this->get_field_name('text'); ?>" style="width:100%; margin-bottom: 1.5em;"><?php echo esc_textarea( $options['text'] ); ?></textarea>
@@ -295,14 +326,23 @@ class VK_Widget_Pr_Content extends WP_Widget {
       };
       }
       </script>
+
+      <?php // bg cover color ?>
+      <label for="<?php echo $this->get_field_id( 'bg_cover_color' ); ?>" class="color_picker_wrap"><?php _e( 'Cover color:', $pr_content_textdomain); // 画像に被せる色： ?></label>
+      <input type="text" id="<?php echo $this->get_field_id( 'bg_cover_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'bg_cover_color'); ?>" value="<?php if($options['bg_cover_color']) echo esc_attr( $options['bg_cover_color']); ?>" />
+      <br><br>
+
+      <?php // cover color depth ?>
+      <label for="<?php echo $this->get_field_id('bg_cover_depth'); ?>" ><?php _e('Depth of color to cover:<br>To cancel the color overlay overlay on the image, enter "0" to this value.', $pr_content_textdomain); // 画像に被せる色の濃さ：画像に色をつけるオーバーレイを解除するには、この値に "0"を入力してください。?></label>
+      <input type="text" id="<?php echo $this->get_field_id('bg_cover_depth'); ?>" name="<?php echo $this->get_field_name('bg_cover_depth'); ?>" style="width:50%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options['bg_cover_depth'] ); ?>" />&nbsp;%
       <br><br>
 
       <?php // margin_top . margin_bottom ?>
       <label for="<?php echo $this->get_field_id('margin_top'); ?>" ><?php _e('Margin-top<br>Please also enter the unit. (Example: 30px):', $pr_content_textdomain); ?></label>
-      <input type="text" id="<?php echo $this->get_field_id('margin_top'); ?>-margin_top" name="<?php echo $this->get_field_name('margin_top'); ?>" style="width:100%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options['margin_top'] ); ?>"></input>
+      <input type="text" id="<?php echo $this->get_field_id('margin_top'); ?>-margin_top" name="<?php echo $this->get_field_name('margin_top'); ?>" style="width:100%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options['margin_top'] ); ?>" />
 
       <label for="<?php echo $this->get_field_id('margin_bottom'); ?>" ><?php _e('Margin-bottom<br>Please also enter the unit. (Example: 30px):', $pr_content_textdomain); ?></label>
-      <input type="text" id="<?php echo $this->get_field_id('margin_bottom'); ?>-margin_bottom" name="<?php echo $this->get_field_name('margin_bottom'); ?>" style="width:100%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options['margin_bottom'] ); ?>"></input>
+      <input type="text" id="<?php echo $this->get_field_id('margin_bottom'); ?>-margin_bottom" name="<?php echo $this->get_field_name('margin_bottom'); ?>" style="width:100%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options['margin_bottom'] ); ?>" />
 
       <?php // layout_type ?>
       <p><?php _e('Select layout type:', $pr_content_textdomain); //レイアウトタイプを選択 ?><br>

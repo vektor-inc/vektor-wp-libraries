@@ -8,10 +8,16 @@
 	margin-bottom:0;
 }
 
+@media (max-width: 767px) {
+	.pr-content {
+		margin: 0 calc(50% - 50vw);
+		padding: 3em calc(50vw - 50%);
+	}
+}
+
 .pr-content {
 	margin: 0 calc(50% - 50vw);
 	padding: 6em calc(50vw - 50%);
-
 }
 
 .pr-content-title {
@@ -20,17 +26,18 @@
 	padding: 0;
 }
 
-.pr-content-title {
-	border-bottom: none;
-	box-shadow: none;
-}
-
 @media (max-width: 767px) {
 	.pr-content-title,
 	.pr-content-title:first-child {
 		margin-top: 30px;
 	}
 }
+
+.pr-content-title {
+	border-bottom: none;
+	box-shadow: none;
+}
+
 @media (min-width: 768px) {
 	.row.left {
 		display: flex;
