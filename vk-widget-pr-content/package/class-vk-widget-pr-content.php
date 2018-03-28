@@ -95,7 +95,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
     $bg_cover_color_green = $array_bg_cover_color[ 'green' ];
     $bg_cover_color_blue = $array_bg_cover_color[ 'blue' ];
 
-    // 入力された値とデフォルトで指定した値を あーん して$options にいれる
+    // 入力された値とデフォルトで指定した値をマージして$options にいれる
     $options = self::options( $instance );
     echo '<style type="text/css">.mainSection #'.$args[ 'widget_id' ].'.widget_vk_widget_pr_content { margin-top:'.$options[ 'margin_top' ].'; margin-bottom:'.$options[ 'margin_bottom' ].';}</style>';
     echo $args[ 'before_widget' ];
