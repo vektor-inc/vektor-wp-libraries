@@ -100,13 +100,16 @@ class VK_Widget_Pr_Content extends WP_Widget {
       // 画像が設定されていたら
       // 変数に代入
       $bg_image = wp_kses_post( $bg_image );
-      // 被せる色の濃さが入力されていたら値を小数に変換して代入
-      if ( ! empty( $options[ 'bg_cover_depth' ] ) ) {
+      // 被せる色の濃さ（0以外）が入力されていたら値を小数に変換して代入
+      if ( ! empty( $options[ 'bg_cover_depth' ] ) && $options[ 'bg_cover_depth' ] !== 0 ) {
         $bg_cover_depth = ( $options[ 'bg_cover_depth' ] ) / 100;
+      } else {
+        $bg_cover_depth = $options[ 'bg_cover_depth' ];
       }
       // background: linear-gradient で画像の上に $bg_cover_color を透過（$bg_cover_depth）させて被せる
       // →１個めの rgba() と２個目の rgba() の値を別々で設定すればグラデーションもできる
       $bg_image = '<div class="pr-content" style="background: linear-gradient( rgba( '.$bg_cover_color_red.', '.$bg_cover_color_green.', '.$bg_cover_color_blue.', '.$bg_cover_depth.'), rgba('.$bg_cover_color_red.', '.$bg_cover_color_green.', '.$bg_cover_color_blue.', '.$bg_cover_depth.') ), url(\''.$bg_image.'\') no-repeat center; background-size: cover;">';
+      // $bg_image = '<div class="pr-content" style="background: linear-gradient( rgba( '.$bg_cover_color_red.', '.$bg_cover_color_green.', '.$bg_cover_color_blue.', 0), rgba('.$bg_cover_color_red.', '.$bg_cover_color_green.', '.$bg_cover_color_blue.', 0) ), url(\''.$bg_image.'\') no-repeat center; background-size: cover;">';
       echo $bg_image;
     } else {
       echo '<div class="pr-content">';
