@@ -41,7 +41,9 @@ class VK_Widget_Pr_Content extends WP_Widget {
   {
     $defaults = array(
       'title'          => '',
+      'title_color'    => null,
       'text'           => '',
+      'text_color'     => null,
       'media_image'    => null,
       'btn_text'       => '',
       'btn_url'        => '',
@@ -137,10 +139,10 @@ class VK_Widget_Pr_Content extends WP_Widget {
     <div class="col-sm-6 pr-content-col-text"><?php
     // title
     if ( $options['title'] ) {
-      echo '<h3 class="pr-content-title">'.esc_html( $options['title'] ).'</h3>';
+      echo '<h3 class="pr-content-title" style="color:'.sanitize_hex_color( $options[ 'title_color' ] ).';">'.esc_html( $options['title'] ).'</h3>';
     }
     // text
-    echo '<p>'.wp_kses_post( $options['text'] ).'</p>';
+    echo '<p style="color:'.sanitize_hex_color( $options[ 'text_color' ] ).';">'.wp_kses_post( $options['text'] ).'</p>';
     // link btn
     if ( ! empty ( $options['btn_text'] ) && ! empty ( $options['btn_url'] )) {
       $more_link_html = '<div class="pr-content-btn">';
@@ -171,7 +173,9 @@ class VK_Widget_Pr_Content extends WP_Widget {
 	{
 		$instance = $old_instance;
 		$instance[ 'title' ] = wp_kses_post( $new_instance[ 'title' ] );
+    $instance[ 'title_color' ] = sanitize_hex_color( $new_instance[ 'title_color' ] );
 		$instance[ 'text' ] = wp_kses_post( $new_instance[ 'text' ] );
+    $instance[ 'text_color' ] = sanitize_hex_color( $new_instance[ 'text_color' ] );
 		$instance[ 'media_image' ] = wp_kses_post( $new_instance[ 'media_image' ] );
 		$instance[ 'btn_text' ] = wp_kses_post( $new_instance[ 'btn_text' ] );
 		$instance[ 'btn_url' ] = esc_url( $new_instance[ 'btn_url' ] );
@@ -196,13 +200,26 @@ class VK_Widget_Pr_Content extends WP_Widget {
       $options = self::options( $instance );
       ?>
       <br>
+      <?php // title ?>
       <label for="<?php echo $this->get_field_id('title'); ?>" ><?php _e('Title:', $pr_content_textdomain); ?></label>
       <input type="text" id="<?php echo $this->get_field_id('title'); ?>-title" name="<?php echo $this->get_field_name('title'); ?>" style="width:100%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options['title'] ); ?>">
 
+      <?php // title_color ?>
+      <label for="<?php echo $this->get_field_id( 'title_color' ); ?>" class="color_picker_wrap"><?php _e( 'Title color:', $pr_content_textdomain); ?></label>
+      <input type="text" id="<?php echo $this->get_field_id( 'title_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'title_color'); ?>" value="<?php if($options['title_color']) echo esc_attr( $options['title_color']); ?>" />
+      <br><br>
+
+
+      <?php // text ?>
       <label for="<?php echo $this->get_field_id('text'); ?>" ><?php _e('Text:', $pr_content_textdomain); ?></label>
       <textarea id="<?php echo $this->get_field_id('text'); ?>" name="<?php echo $this->get_field_name('text'); ?>" style="width:100%; margin-bottom: 1.5em;"><?php echo esc_textarea( $options['text'] ); ?></textarea>
 
-			<?php
+      <?php // text_color ?>
+      <label for="<?php echo $this->get_field_id( 'text_color' ); ?>" class="color_picker_wrap"><?php _e( 'Txst color:', $pr_content_textdomain); ?></label>
+      <input type="text" id="<?php echo $this->get_field_id( 'text_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'text_color'); ?>" value="<?php if($options['text_color']) echo esc_attr( $options['text_color']); ?>" />
+      <br><br>
+
+      <?php // media_image
       $image = null;
       // ちゃんと数字が入っているかどうか？
       if ( is_numeric( $options['media_image'] ) ) {
