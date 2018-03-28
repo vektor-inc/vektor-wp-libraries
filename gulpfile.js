@@ -135,7 +135,10 @@ gulp.task('copy_page-header', function() {
 gulp.task('copy_widget-pr-content', function() {
 	gulp.src('./vk-widget-pr-content/package/**')
 		// .pipe( gulp.dest( '../plugins/lightning-skin-jpnstyle/inc/vk-wodget-pr-content/' ) )
-		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/vk-widget-pr-content/'));
+		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/vk-widget-pr-content/'))
+		.pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/vk-widget-pr-content/'))
+		.pipe(gulp.dest('../plugins/lightning-skin-fort/inc/vk-widget-pr-content/'))
+		.pipe(gulp.dest('../plugins/lightning-skin-pale/inc/vk-widget-pr-content/'));
 });
 
 // Watch
