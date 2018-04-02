@@ -55,8 +55,8 @@ class VK_Widget_Pr_Content extends WP_Widget {
       'bg_image'       => null,
       'bg_cover_color' => null,
       'bg_cover_depth' => '0',
-      'margin_top'     => null,
-      'margin_bottom'  => null,
+      'margin_top'     => '0',
+      'margin_bottom'  => '0',
       'layout_type'    => null,
     );
     return wp_parse_args( (array) $instance, $defaults );
@@ -78,7 +78,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
     }
 
     // カラーコードの16進数を10進数に変換する
-    //RGB数値に変換するカラーコード
+    // RGB数値に変換するカラーコード
     $bg_cover_color = '';
     if ( ! empty( $instance[ 'bg_cover_color' ] ) ) {
       $bg_cover_color = $instance[ 'bg_cover_color' ];
@@ -86,11 +86,11 @@ class VK_Widget_Pr_Content extends WP_Widget {
     //「#******」のような形でカラーコードがわたってきた場合「#」を削除する
     $bg_cover_color = preg_replace( "/#/", "", $bg_cover_color );
     //「******」という形になっているはずなので、2つずつ「**」に区切る
-    //そしてhexdec関数で変換して配列に格納する
+    // そしてhexdec関数で変換して配列に格納する
     $array_bg_cover_color[ 'red' ] = hexdec( substr( $bg_cover_color, 0, 2 ) );
     $array_bg_cover_color[ 'green' ] = hexdec( substr( $bg_cover_color, 2, 2 ) );
     $array_bg_cover_color[ 'blue' ] = hexdec( substr( $bg_cover_color, 4, 2 ) );
-    //配列の中身を変数に代入
+    // 配列の中身を変数に代入
     $bg_cover_color_red = $array_bg_cover_color[ 'red' ];
     $bg_cover_color_green = $array_bg_cover_color[ 'green' ];
     $bg_cover_color_blue = $array_bg_cover_color[ 'blue' ];
@@ -114,11 +114,12 @@ class VK_Widget_Pr_Content extends WP_Widget {
       }
       // background: linear-gradient で画像の上に $bg_cover_color を透過（$bg_cover_depth）させて被せる
       // →１個めの rgba() と２個目の rgba() の値を別々で設定すればグラデーションもできる
-      $bg_image = '<div class="pr-content" style="background: linear-gradient( rgba( '.$bg_cover_color_red.', '.$bg_cover_color_green.', '.$bg_cover_color_blue.', '.$bg_cover_depth.'), rgba('.$bg_cover_color_red.', '.$bg_cover_color_green.', '.$bg_cover_color_blue.', '.$bg_cover_depth.') ), url(\''.$bg_image.'\') no-repeat center; background-size: cover;">';
+      $bg_image = '<div class="pr-content" style="background: linear-gradient( rgba( '.$bg_cover_color_red.', '.$bg_cover_color_green.', '.$bg_cover_color_blue.', '.$bg_cover_depth.'), rgba('.$bg_cover_color_red.', '.$bg_cover_color_green.', '.$bg_cover_color_blue.', '.$bg_cover_depth.') ), url(\''.$bg_image.'\') no-repeat center center; background-size: cover;">';
       echo $bg_image;
     } else {
       echo '<div class="pr-content">';
     }
+
     echo '<div class="container">';
 
     // レイアウトタイプを選択
@@ -129,25 +130,32 @@ class VK_Widget_Pr_Content extends WP_Widget {
     }
     ?>
     <div class="row <?php echo $layout_type ?>">
-    <div class="col-sm-6 pr-content-col-img"><?php
-      // media img
-      // 画像IDから画像のURLを取得
-      if ( ! empty( $options[ 'media_image' ] ) && is_numeric( $options[ 'media_image' ] ) ) {
-        $attr = array(
-            'class' => "pr_content_media_imgage", //任意の class名を追記する
-        );
-        echo wp_get_attachment_image( $options[ 'media_image' ], 'large', false, $attr );
-      } ?>
-    </div><!-- .col-sm-6 -->
+      <?php if ( $options[ 'media_image' ] ) { ?>
+        <div class="col-sm-6 pr-content-col-img">
+          <?php
+          // media img
+          // 画像IDから画像のURLを取得
+          if ( ! empty( $options[ 'media_image' ] ) && is_numeric( $options[ 'media_image' ] ) ) {
+            $attr = array(
+                'class' => "pr_content_media_imgage", //任意の class名を追記する
+            );
+            echo wp_get_attachment_image( $options[ 'media_image' ], 'large', false, $attr );
+          } ?>
+        </div><!-- .col-sm-6 -->
+      <?php } ?>
     <div class="col-sm-6 pr-content-col-text">
       <?php // title
         if ( $options[ 'title' ] ) {
           echo '<h3 class="pr-content-title" style="color:'.sanitize_hex_color( $options[ 'title_color' ] ).';">'.esc_html( $options[ 'title' ] ).'</h3>';
         }
         // text
-        echo '<p style="color:'.sanitize_hex_color( $options[ 'text_color' ] ).';">'.wp_kses_post( $options[ 'text' ] ).'</p>';
+        if ( $options[ 'text' ] && $options[ 'text_color' ] ) {
+          echo '<p style="color:'.sanitize_hex_color( $options[ 'text_color' ] ).';">'.wp_kses_post( $options[ 'text' ] ).'</p>';
+        } else if ( ! empty( $options[ 'text' ] ) && empty( $options[ 'text_color' ] ) ) {
+          echo '<p>'.wp_kses_post( $options[ 'text' ] ).'</p>';
+        }
         // link btn
-        if ( ! empty ( $options[ 'btn_text' ] ) && ! empty ( $options[ 'btn_url' ] )) {
+        if ( $options[ 'btn_text' ] && $options[ 'btn_url' ] ) {
           $more_link_html = '<div class="pr-content-btn">';
           if( ! empty( $options[ 'btn_blank' ] ) ) {
             $blank = 'target="_blank"';
