@@ -25,7 +25,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
     parent::__construct(
         'VK_Widget_Pr_Content', //ID
         $widget_name, //widget_name
-        array( 'description' => __( 'Content PR widget', $pr_content_textdomain ) ) //Widgetの説明
+        array( 'description' => __( 'This widget can be used when 1 column display is selected.', $pr_content_textdomain ) ) //Widgetの説明
     );
 		add_action( 'wp_head', array( $this, 'print_css' ), 2);
     add_action( 'wp_enqueue_scripts', array( $this, 'add_script' ) );
@@ -360,12 +360,12 @@ class VK_Widget_Pr_Content extends WP_Widget {
       </script>
 
       <?php // bg cover color ?>
-      <label for="<?php echo $this->get_field_id( 'bg_cover_color' ); ?>" class="color_picker_wrap"><?php _e( 'Cover color:', $pr_content_textdomain); // 画像に被せる色： ?></label>
+      <label for="<?php echo $this->get_field_id( 'bg_cover_color' ); ?>" class="color_picker_wrap"><?php _e( 'Cover color:', $pr_content_textdomain); ?></label>
       <input type="text" id="<?php echo $this->get_field_id( 'bg_cover_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'bg_cover_color' ); ?>" value="<?php if( $options[ 'bg_cover_color' ] ) echo esc_attr( $options[ 'bg_cover_color' ] ); ?>" />
       <br><br>
 
       <?php // cover color depth ?>
-      <label for="<?php echo $this->get_field_id( 'bg_cover_depth' ); ?>" ><?php _e( 'Depth of color to cover:<br>To cancel the color overlay overlay on the image, enter "0" to this value.', $pr_content_textdomain ); // 画像に被せる色の濃さ：画像に色をつけるオーバーレイを解除するには、この値に "0"を入力してください。?></label>
+      <label for="<?php echo $this->get_field_id( 'bg_cover_depth' ); ?>" ><?php _e( 'Depth of color to cover:<br>To cancel the color overlay overlay on the image, enter "0" to this value.', $pr_content_textdomain ); ?></label>
       <input type="text" id="<?php echo $this->get_field_id( 'bg_cover_depth' ); ?>" name="<?php echo $this->get_field_name( 'bg_cover_depth' ); ?>" style="width:50%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options[ 'bg_cover_depth' ] ); ?>" />&nbsp;%
       <br><br>
 
@@ -377,7 +377,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
       <input type="text" id="<?php echo $this->get_field_id( 'margin_bottom' ); ?>-margin_bottom" name="<?php echo $this->get_field_name( 'margin_bottom' ); ?>" style="width:100%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options[ 'margin_bottom' ] ); ?>" />
 
       <?php // layout_type ?>
-      <p><?php _e( 'Select layout type:', $pr_content_textdomain ); //レイアウトタイプを選択 ?><br>
+      <p><?php _e( 'Select layout type:', $pr_content_textdomain ); ?><br>
         <?php
         $checked = '';
         if (
