@@ -26,10 +26,10 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 		}
 
 		/*
-		-------------------------------------------*/
-		/*
+		-------------------------------------------
 		管理画面用共通js読み込み（記述場所によっては動作しないので注意）
-		/*-------------------------------------------*/
+		-------------------------------------------
+		*/
 		public static function print_script() {
 			wp_register_script( 'datepicker', self::admin_directory_url() . 'js/datepicker.js', array( 'jquery', 'jquery-ui-datepicker' ), self::$version, true );
 			wp_enqueue_script( 'datepicker' );
@@ -170,10 +170,10 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 		} // public static function form_table( $custom_fields_array, $befor_items, $echo = true ){
 
 		/*
-		-------------------------------------------*/
-		/*
+		-------------------------------------------
 		入力された値の保存
-		/*-------------------------------------------*/
+		-------------------------------------------
+		*/
 		public static function save_cf_value( $custom_fields_array ) {
 
 			global $post;
@@ -210,10 +210,10 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 
 		/*
-		-------------------------------------------*/
-		/*
+		-------------------------------------------
 		実行
-		/*-------------------------------------------*/
+		-------------------------------------------
+		*/
 		public function __construct() {
 			// add_action( 'init', array( $this, 'add_post_type' ),0 );
 		}
