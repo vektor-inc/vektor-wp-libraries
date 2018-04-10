@@ -230,36 +230,51 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 	/*-------------------------------------------*/
 	/*  Archive Loop change
 	/*-------------------------------------------*/
+	/* アーカイブループのレイアウトを改変するかどうかの判定 */
+	function lmu_is_loop_layout_change_flag( $post_type = 'post' ) {
+		$flag                               = false;
+		$ltg_media_unit_archive_loop_layout = get_option( 'ltg_media_unit_archive_loop_layout' );
+		// 指定の投稿タイプアーカイブのレイアウトに値が存在する場合
+		if ( ! empty( $ltg_media_unit_archive_loop_layout[ $post_type ] ) ) {
+			// デフォルトじゃない場合
+			if ( $ltg_media_unit_archive_loop_layout[ $post_type ] != 'default' ) {
+				$flag = true;
+			} // if ( $ltg_media_unit_archive_loop_layout[ $postType ] != 'default' ) {
+		}
+		return $flag;
+	}
+
+	/* アーカイブループを改変するかどうかの指定 */
 	add_filter( 'is_lightning_extend_loop', 'lmu_is_loop_layout_change' );
 	function lmu_is_loop_layout_change( $flag ) {
-		$ltg_media_unit_archive_loop_layout = get_option( 'ltg_media_unit_archive_loop_layout' );
-		$post_type                          = lightning_get_post_type();
-		$postType                           = $post_type['slug'];
+		$post_type_info = lightning_get_post_type();
+		$post_type      = $post_type_info['slug'];
 
 		if ( is_author() ) {
 				$postType = 'author';
 		}
 
-		if ( isset( $ltg_media_unit_archive_loop_layout[ $postType ] ) ) {
-
-			if (
-				( $ltg_media_unit_archive_loop_layout[ $postType ] != 'default' ) ||
-				( ! $ltg_media_unit_archive_loop_layout[ $postType ] )
-				) {
-					add_action( 'lightning_extend_loop', 'lmu_do_loop_layout_change' );
-					$flag = true;
-			}
-		} // if ( isset ( $ltg_media_unit_archive_loop_layout[$postType] ) ) {
+		$flag = lmu_is_loop_layout_change_flag( $post_type );
 		return $flag;
 	}
 
-	function lmu_do_loop_layout_change() {
-		$ltg_media_unit_archive_loop_layout = get_option( 'ltg_media_unit_archive_loop_layout' );
-		$post_type                          = lightning_get_post_type();
-		$post_type_slug                     = $post_type['slug'];
-		$post_type_slug                     = ( is_author() ) ? 'author' : $post_type['slug'];
-		if ( isset( $ltg_media_unit_archive_loop_layout[ $post_type_slug ] ) ) {
+	// 発火不良の時用
+	// add_action( 'after_setup_theme', 'lmu_do_loop_layout_change_trigger' );
+	// function lmu_do_loop_layout_change_trigger() {
+	// 	add_action( 'lightning_extend_loop', 'lmu_do_loop_layout_change' );
+	// }
 
+	add_action( 'lightning_extend_loop', 'lmu_do_loop_layout_change' );
+	function lmu_do_loop_layout_change() {
+
+		$ltg_media_unit_archive_loop_layout = get_option( 'ltg_media_unit_archive_loop_layout' );
+
+		$post_type      = lightning_get_post_type();
+		$post_type_slug = $post_type['slug'];
+		$post_type_slug = ( is_author() ) ? 'author' : $post_type['slug'];
+
+		$flag = lmu_is_loop_layout_change_flag( $post_type_slug );
+		if ( $flag ) {
 			$layout                       = $ltg_media_unit_archive_loop_layout[ $post_type_slug ];
 			$instance['new_icon_display'] = 7;
 			echo '<div class="loop_outer">';

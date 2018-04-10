@@ -94,6 +94,12 @@ gulp.task('copy_media-posts', function() {
 		.pipe(gulp.dest('../plugins/lightning-skin-fort/inc/media-posts/'))
 		.pipe(gulp.dest('../plugins/lightning-skin-pale/inc/media-posts/'))
 		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/media-posts/'));
+		gulp.src('./media-posts/tests/**')
+			.pipe(gulp.dest('../plugins/lightning-skin-variety/tests/'))
+			.pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/tests/'))
+			.pipe(gulp.dest('../plugins/lightning-skin-fort/tests/'))
+			.pipe(gulp.dest('../plugins/lightning-skin-pale/tests/'))
+			.pipe(gulp.dest('../plugins/lightning-origin-pro/tests/'));
 });
 // gulp.task( 'copy_font-awesome-selector', function() {
 //     gulp.src( './font-awesome-selector/package/**' )
@@ -177,6 +183,7 @@ gulp.task('watch_ptm', function() {
 	gulp.watch('./post-type-manager/package/**', ['copy_post-type-manager']);
 });
 gulp.task('watch_media', function() {
+	gulp.watch('./media-posts/tests/**', ['copy_media-posts']);
 	gulp.watch('./media-posts/package/**', ['copy_media-posts']);
 	gulp.watch('./media-posts/package/**', ['copy_term-color']);
 });
