@@ -107,7 +107,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		echo '<style type="text/css">.mainSection #' . $args['widget_id'] . '.widget_vk_widget_pr_content { margin-top:' . $options['margin_top'] . '; margin-bottom:' . $options['margin_bottom'] . ';}</style>';
 		echo $args['before_widget'];
 		if ( ( ! empty( $options['bg_color'] ) ) && ( empty( $options['bg_image'] ) ) ) {
-			$bg_color = sanitize_hex_color( $options['bg_color'] );
+			$bg_color = esc_attr( $options['bg_color'] );
 			echo '<div class="pr-content" style="background-color:' . $bg_color . ';">';
 		} elseif ( ( ! empty( $options['bg_image'] && empty( $options['bg_color'] ) ) || ( ! empty( $options['bg_color'] ) && ! empty( $options['bg_image'] ) ) ) ) {
 			// 画像が設定されていたら
@@ -155,11 +155,11 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		<?php
 		// title
 		if ( $options['title'] ) {
-			echo '<h3 class="pr-content-title" style="color:' . sanitize_hex_color( $options['title_color'] ) . ';">' . esc_html( $options['title'] ) . '</h3>';
+			echo '<h3 class="pr-content-title" style="color:' . esc_attr( $options['title_color'] ) . ';">' . esc_html( $options['title'] ) . '</h3>';
 		}
 		// text
 		if ( $options['text'] && $options['text_color'] ) {
-			echo '<p style="color:' . sanitize_hex_color( $options['text_color'] ) . ';">' . wp_kses_post( $options['text'] ) . '</p>';
+			echo '<p style="color:' . esc_attr( $options['text_color'] ) . ';">' . wp_kses_post( $options['text'] ) . '</p>';
 		} elseif ( ! empty( $options['text'] ) && empty( $options['text_color'] ) ) {
 			echo '<p>' . wp_kses_post( $options['text'] ) . '</p>';
 		}
