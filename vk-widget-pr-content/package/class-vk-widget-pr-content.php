@@ -91,7 +91,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 			// 画像IDから画像のURLを取得
 			$bg_image = wp_get_attachment_image_src( $instance['bg_image'], 'full' );
-			$bg_image = $bg_image[0];
+			$bg_image = esc_url( $bg_image[0] );
 
 			// 画像に被せる色の処理
 			// カラーコードの16進数を10進数に変換する
@@ -112,8 +112,6 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			$bg_cover_color_green = $array_bg_cover_color['green'];
 			$bg_cover_color_blue  = $array_bg_cover_color['blue'];
 
-			// 変数に代入
-			$bg_image = wp_kses_post( $bg_image );
 			// 被せる色の濃さ（0以外）が入力されていたら値を小数に変換して代入
 			if ( ! empty( $options['bg_cover_depth'] ) && $options['bg_cover_depth'] !== 0 ) {
 				$bg_cover_depth = ( $options['bg_cover_depth'] ) / 100;
