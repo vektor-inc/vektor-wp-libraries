@@ -418,14 +418,18 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			  $checked = ' checked';
 		}
 		?>
-		  <input type="radio" name="<?php echo $this->get_field_name( 'layout_type' ); ?>" value="left" <?php echo $checked; ?> />
-		  <label for="<?php echo $this->get_field_id( 'layout_type' ); ?>"> <?php _e( 'Put the image to the left', $pr_content_textdomain ); ?></label>
-		  <br>
-			<?php $checked = ( isset( $instance['layout_type'] ) && $instance['layout_type'] === 'right' ) ? ' checked' : ''; ?>
-		  <input type="radio" name="<?php echo $this->get_field_name( 'layout_type' ); ?>" value="right" <?php echo $checked; ?> />
-		  <label for="<?php $this->get_field_id( 'layout_type' ); ?>"> <?php _e( 'Put the image to the right', $pr_content_textdomain ); ?></label>
+		<label>
+			<input type="radio" name="<?php echo $this->get_field_name( 'layout_type' ); ?>" value="left" <?php echo $checked; ?> />
+			<?php _e( 'Put the image to the left', $pr_content_textdomain ); ?>
+		</label>
+		<br>
+		<?php $checked = ( isset( $instance['layout_type'] ) && $instance['layout_type'] === 'right' ) ? ' checked' : ''; ?>
+		<label>
+			<input type="radio" name="<?php echo $this->get_field_name( 'layout_type' ); ?>" value="right" <?php echo $checked; ?> />
+			<?php _e( 'Put the image to the right', $pr_content_textdomain ); ?>
+		</label>
 		</p>
-		<br><br>
+
 	<?php
 	} // function form( $instance )
 
