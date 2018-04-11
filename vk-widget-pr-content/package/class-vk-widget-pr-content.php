@@ -76,31 +76,6 @@ class VK_Widget_Pr_Content extends WP_Widget {
 	/*-------------------------------------------*/
 
 	function widget( $args, $instance ) {
-		// 画像IDから画像のURLを取得
-		if ( ! empty( $instance['bg_image'] ) ) {
-			$bg_image = wp_get_attachment_image_src( $instance['bg_image'], 'full' );
-			$bg_image = $bg_image[0];
-		} else {
-			$bg_image = null;
-		}
-
-		// カラーコードの16進数を10進数に変換する
-		// RGB数値に変換するカラーコード
-		$bg_cover_color = '';
-		if ( ! empty( $instance['bg_cover_color'] ) ) {
-			$bg_cover_color = $instance['bg_cover_color'];
-		}
-		//「#******」のような形でカラーコードがわたってきた場合「#」を削除する
-		$bg_cover_color = preg_replace( '/#/', '', $bg_cover_color );
-		//「******」という形になっているはずなので、2つずつ「**」に区切る
-		// そしてhexdec関数で変換して配列に格納する
-		$array_bg_cover_color['red']   = hexdec( substr( $bg_cover_color, 0, 2 ) );
-		$array_bg_cover_color['green'] = hexdec( substr( $bg_cover_color, 2, 2 ) );
-		$array_bg_cover_color['blue']  = hexdec( substr( $bg_cover_color, 4, 2 ) );
-		// 配列の中身を変数に代入
-		$bg_cover_color_red   = $array_bg_cover_color['red'];
-		$bg_cover_color_green = $array_bg_cover_color['green'];
-		$bg_cover_color_blue  = $array_bg_cover_color['blue'];
 
 		// 入力された値とデフォルトで指定した値をマージして$options にいれる
 		$options = self::options( $instance );
@@ -110,9 +85,33 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		// 背景色指定があって背景画像指定がない場合
 		if ( ( ! empty( $options['bg_color'] ) ) && ( empty( $options['bg_image'] ) ) ) {
 			$pr_content_style = ' style="background-color:' . esc_attr( $options['bg_color'] ) . '"';
+
 			// 背景画像指定がある場合
 		} elseif ( ! empty( $options['bg_image'] ) ) {
-			// 画像が設定されていたら
+
+			// 画像IDから画像のURLを取得
+			$bg_image = wp_get_attachment_image_src( $instance['bg_image'], 'full' );
+			$bg_image = $bg_image[0];
+
+			// 画像に被せる色の処理
+			// カラーコードの16進数を10進数に変換する
+			// RGB数値に変換するカラーコード
+			$bg_cover_color = '';
+			if ( ! empty( $instance['bg_cover_color'] ) ) {
+				$bg_cover_color = $instance['bg_cover_color'];
+			}
+			//「#******」のような形でカラーコードがわたってきた場合「#」を削除する
+			$bg_cover_color = preg_replace( '/#/', '', $bg_cover_color );
+			//「******」という形になっているはずなので、2つずつ「**」に区切る
+			// そしてhexdec関数で変換して配列に格納する
+			$array_bg_cover_color['red']   = hexdec( substr( $bg_cover_color, 0, 2 ) );
+			$array_bg_cover_color['green'] = hexdec( substr( $bg_cover_color, 2, 2 ) );
+			$array_bg_cover_color['blue']  = hexdec( substr( $bg_cover_color, 4, 2 ) );
+			// 配列の中身を変数に代入
+			$bg_cover_color_red   = $array_bg_cover_color['red'];
+			$bg_cover_color_green = $array_bg_cover_color['green'];
+			$bg_cover_color_blue  = $array_bg_cover_color['blue'];
+
 			// 変数に代入
 			$bg_image = wp_kses_post( $bg_image );
 			// 被せる色の濃さ（0以外）が入力されていたら値を小数に変換して代入
