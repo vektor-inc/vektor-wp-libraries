@@ -109,8 +109,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 		// 背景色指定があって背景画像指定がない場合
 		if ( ( ! empty( $options['bg_color'] ) ) && ( empty( $options['bg_image'] ) ) ) {
-			echo '<div class="pr-content" style="background-color:' . esc_attr( $options['bg_color'] ) . ';">';
-
+			$pr_content_style = ' style="background-color:' . esc_attr( $options['bg_color'] ) . '"';
 			// 背景画像指定がある場合
 		} elseif ( ! empty( $options['bg_image'] ) ) {
 			// 画像が設定されていたら
@@ -124,11 +123,10 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			}
 			// background: linear-gradient で画像の上に $bg_cover_color を透過（$bg_cover_depth）させて被せる
 			// →１個めの rgba() と２個目の rgba() の値を別々で設定すればグラデーションもできる
-			$bg_image = '<div class="pr-content" style="background: linear-gradient( rgba( ' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . '), rgba(' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . ') ), url(\'' . $bg_image . '\') no-repeat center center; background-size: cover;">';
-			echo $bg_image;
-		} else {
-			echo '<div class="pr-content">';
+			$pr_content_style = ' style="background: linear-gradient( rgba( ' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . '), rgba(' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . ') ), url(\'' . $bg_image . '\') no-repeat center center; background-size: cover;"';
+
 		}
+		echo '<div class="pr-content"' . $pr_content_style . '>';
 
 		echo '<div class="container">';
 
