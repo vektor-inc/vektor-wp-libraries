@@ -155,7 +155,12 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		<?php
 		// title
 		if ( $options['title'] ) {
-			echo '<h3 class="pr-content-title" style="color:' . esc_attr( $options['title_color'] ) . ';">' . esc_html( $options['title'] ) . '</h3>';
+			if ( $options['title_color'] ) {
+				$color = ' style="color:' . esc_attr( $options['title_color'] ) . '"';
+			} else {
+				$color = '';
+			}
+			echo '<h3 class="pr-content-title"' . $color . '>' . esc_html( $options['title'] ) . '</h3>';
 		}
 		// text
 		if ( $options['text'] && $options['text_color'] ) {
