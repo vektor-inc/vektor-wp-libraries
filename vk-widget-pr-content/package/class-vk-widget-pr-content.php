@@ -112,7 +112,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			echo '<div class="pr-content" style="background-color:' . esc_attr( $options['bg_color'] ) . ';">';
 
 			// 背景画像指定がある場合
-		} elseif ( ( ! empty( $options['bg_image'] && empty( $options['bg_color'] ) ) || ( ! empty( $options['bg_color'] ) && ! empty( $options['bg_image'] ) ) ) ) {
+		} elseif ( ! empty( $options['bg_image'] ) ) {
 			// 画像が設定されていたら
 			// 変数に代入
 			$bg_image = wp_kses_post( $bg_image );
