@@ -226,29 +226,20 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		<input type="text" id="<?php echo $this->get_field_id( 'title' ); ?>-title" name="<?php echo $this->get_field_name( 'title' ); ?>" style="width:100%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options['title'] ); ?>">
 
 		<?php // title_color ?>
-		<label for="<?php echo $this->get_field_id( 'title_color' ); ?>" class="color_picker_wrap"><?php _e( 'Title color:', $pr_content_textdomain ); ?></label>
-		<input type="text" id="<?php echo $this->get_field_id( 'title_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'title_color' ); ?>" value="
-											<?php
-											if ( $options['title_color'] ) {
-												echo esc_attr( $options['title_color'] );}
-?>
-" />
-		<br><br>
-
+		<p class="color_picker_wrap">
+		<label for="<?php echo $this->get_field_id( 'title_color' ); ?>"><?php _e( 'Title color:', $pr_content_textdomain ); ?></label>
+		<input type="text" id="<?php echo $this->get_field_id( 'title_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'title_color' ); ?>" value="<?php echo esc_attr( $options['title_color'] ); ?>" />
+		</p>
 
 		<?php // text ?>
 		<label for="<?php echo $this->get_field_id( 'text' ); ?>" ><?php _e( 'Text:', $pr_content_textdomain ); ?></label>
 		<textarea id="<?php echo $this->get_field_id( 'text' ); ?>" name="<?php echo $this->get_field_name( 'text' ); ?>" style="width:100%; margin-bottom: 1.5em;"><?php echo esc_textarea( $options['text'] ); ?></textarea>
 
 		<?php // text_color ?>
-		<label for="<?php echo $this->get_field_id( 'text_color' ); ?>" class="color_picker_wrap"><?php _e( 'Txst color:', $pr_content_textdomain ); ?></label>
-		<input type="text" id="<?php echo $this->get_field_id( 'text_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'text_color' ); ?>" value="
-											<?php
-											if ( $options['text_color'] ) {
-												echo esc_attr( $options['text_color'] );}
-?>
-" />
-		<br><br>
+		<p class="color_picker_wrap">
+		<label for="<?php echo $this->get_field_id( 'text_color' ); ?>"><?php _e( 'Txst color:', $pr_content_textdomain ); ?></label>
+		<input type="text" id="<?php echo $this->get_field_id( 'text_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'text_color' ); ?>" value="<?php echo esc_attr( $options['text_color'] ); ?>" />
+		</p>
 
 		<?php
 		// media_image
@@ -324,14 +315,10 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		<br><br>
 
 		<?php // bg color ?>
-		<label for="<?php echo $this->get_field_id( 'bg_color' ); ?>" class="color_picker_wrap"><?php _e( 'Background color:', $pr_content_textdomain ); ?></label>
-		<input type="text" id="<?php echo $this->get_field_id( 'bg_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'bg_color' ); ?>" value="
-											<?php
-											if ( $options['bg_color'] ) {
-												echo esc_attr( $options['bg_color'] );}
-?>
-" />
-		<br><br>
+		<p class="color_picker_wrap">
+		<label for="<?php echo $this->get_field_id( 'bg_color' ); ?>"><?php _e( 'Background color:', $pr_content_textdomain ); ?></label>
+		<input type="text" id="<?php echo $this->get_field_id( 'bg_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'bg_color' ); ?>" value="<?php echo esc_attr( $options['bg_color'] ); ?>" />
+		</p>
 
 		<?php
 		// bg img
