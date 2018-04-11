@@ -314,7 +314,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		<br>
 
 		<?php // target blank ?>
-		<input type="checkbox" id="<?php echo $this->get_field_id( 'btn_blank' ); ?>" name="<?php echo $this->get_field_name( 'btn_blank' ); ?>" value="true" 
+		<input type="checkbox" id="<?php echo $this->get_field_id( 'btn_blank' ); ?>" name="<?php echo $this->get_field_name( 'btn_blank' ); ?>" value="true"
 												<?php
 												if ( $options['btn_blank'] ) {
 													echo 'checked';}
