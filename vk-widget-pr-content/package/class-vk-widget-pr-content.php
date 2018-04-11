@@ -106,9 +106,12 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		$options = self::options( $instance );
 		echo '<style type="text/css">.mainSection #' . $args['widget_id'] . '.widget_vk_widget_pr_content { margin-top:' . $options['margin_top'] . '; margin-bottom:' . $options['margin_bottom'] . ';}</style>';
 		echo $args['before_widget'];
+
+		// 背景色指定があって背景画像指定がない場合
 		if ( ( ! empty( $options['bg_color'] ) ) && ( empty( $options['bg_image'] ) ) ) {
-			$bg_color = esc_attr( $options['bg_color'] );
-			echo '<div class="pr-content" style="background-color:' . $bg_color . ';">';
+			echo '<div class="pr-content" style="background-color:' . esc_attr( $options['bg_color'] ) . ';">';
+
+			// 背景画像指定がある場合
 		} elseif ( ( ! empty( $options['bg_image'] && empty( $options['bg_color'] ) ) || ( ! empty( $options['bg_color'] ) && ! empty( $options['bg_image'] ) ) ) ) {
 			// 画像が設定されていたら
 			// 変数に代入
