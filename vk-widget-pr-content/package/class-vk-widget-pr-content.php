@@ -32,7 +32,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 	}
 
 	public static function add_script() {
-		wp_enqueue_style( 'vk-admin-style', plugin_dir_url( __FILE__ ) . 'css/vk-widget-pr-content.css', array(), self::$version, 'all' );
+		wp_enqueue_style( 'vk-widget-pr-content-style', plugin_dir_url( __FILE__ ) . 'css/vk-widget-pr-content.css', array(), self::$version, 'all' );
 	}
 
 
