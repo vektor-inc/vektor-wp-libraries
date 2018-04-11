@@ -229,7 +229,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		<br>
 		<?php // title ?>
 		<label for="<?php echo $this->get_field_id( 'title' ); ?>" ><?php _e( 'Title:', $pr_content_textdomain ); ?></label>
-		<input type="text" id="<?php echo $this->get_field_id( 'title' ); ?>-title" name="<?php echo $this->get_field_name( 'title' ); ?>" style="width:100%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options['title'] ); ?>">
+		<input type="text" id="<?php echo $this->get_field_id( 'title' ); ?>-title" name="<?php echo $this->get_field_name( 'title' ); ?>" style="width:100%; margin-bottom: 1.2em;" value="<?php echo esc_attr( $options['title'] ); ?>">
 
 		<?php // title_color ?>
 		<p class="color_picker_wrap">
@@ -239,7 +239,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 		<?php // text ?>
 		<label for="<?php echo $this->get_field_id( 'text' ); ?>" ><?php _e( 'Text:', $pr_content_textdomain ); ?></label>
-		<textarea id="<?php echo $this->get_field_id( 'text' ); ?>" name="<?php echo $this->get_field_name( 'text' ); ?>" style="width:100%; margin-bottom: 1.5em;"><?php echo esc_textarea( $options['text'] ); ?></textarea>
+		<textarea id="<?php echo $this->get_field_id( 'text' ); ?>" name="<?php echo $this->get_field_name( 'text' ); ?>" style="width:100%; margin-bottom: 1.2em;"><?php echo esc_textarea( $options['text'] ); ?></textarea>
 
 		<?php // text_color ?>
 		<p class="color_picker_wrap">
@@ -307,7 +307,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		<input type="text" id="<?php echo $this->get_field_id( 'btn_url' ); ?>" name="<?php echo $this->get_field_name( 'btn_url' ); ?>" value="<?php echo esc_attr( $options['btn_url'] ); ?>" style="margin-bottom: 0.5em;" />
 		<br /><br />
 		<label for="<?php echo $this->get_field_id( 'btn_text' ); ?>"><?php _e( 'Notation text:', $pr_content_textdomain ); ?></label><br/>
-		<input type="text" placeholder="詳細を見る ≫" id="<?php echo $this->get_field_id( 'btn_text' ); ?>" name="<?php echo $this->get_field_name( 'btn_text' ); ?>" value="<?php echo esc_attr( $options['btn_text'] ); ?>" style="margin-bottom: 1.5em;" />
+		<input type="text" placeholder="詳細を見る ≫" id="<?php echo $this->get_field_id( 'btn_text' ); ?>" name="<?php echo $this->get_field_name( 'btn_text' ); ?>" value="<?php echo esc_attr( $options['btn_text'] ); ?>" style="margin-bottom: 1.2em;" />
 		<br>
 
 		<?php // target blank ?>
@@ -394,15 +394,15 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 		<?php // cover color depth ?>
 		<label for="<?php echo $this->get_field_id( 'bg_cover_depth' ); ?>" ><?php _e( 'Depth of color to cover:<br>To cancel the color overlay overlay on the image, enter "0" to this value.', $pr_content_textdomain ); ?></label>
-		<input type="text" id="<?php echo $this->get_field_id( 'bg_cover_depth' ); ?>" name="<?php echo $this->get_field_name( 'bg_cover_depth' ); ?>" style="width:50%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options['bg_cover_depth'] ); ?>" />&nbsp;%
+		<input type="text" id="<?php echo $this->get_field_id( 'bg_cover_depth' ); ?>" name="<?php echo $this->get_field_name( 'bg_cover_depth' ); ?>" style="width:50%; margin-bottom: 1.2em;" value="<?php echo esc_attr( $options['bg_cover_depth'] ); ?>" />&nbsp;%
 		<br><br>
 
 		<?php // margin_top . margin_bottom ?>
 		<label for="<?php echo $this->get_field_id( 'margin_top' ); ?>" ><?php _e( 'Margin-top<br>Please also enter the unit. (Example: 30px):', $pr_content_textdomain ); ?></label>
-		<input type="text" id="<?php echo $this->get_field_id( 'margin_top' ); ?>-margin_top" name="<?php echo $this->get_field_name( 'margin_top' ); ?>" style="width:100%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options['margin_top'] ); ?>" />
+		<input type="text" id="<?php echo $this->get_field_id( 'margin_top' ); ?>-margin_top" name="<?php echo $this->get_field_name( 'margin_top' ); ?>" style="width:100%; margin-bottom: 1.2em;" value="<?php echo esc_attr( $options['margin_top'] ); ?>" />
 
 		<label for="<?php echo $this->get_field_id( 'margin_bottom' ); ?>" ><?php _e( 'Margin-bottom<br>Please also enter the unit. (Example: 30px):', $pr_content_textdomain ); ?></label>
-		<input type="text" id="<?php echo $this->get_field_id( 'margin_bottom' ); ?>-margin_bottom" name="<?php echo $this->get_field_name( 'margin_bottom' ); ?>" style="width:100%; margin-bottom: 1.5em;" value="<?php echo esc_attr( $options['margin_bottom'] ); ?>" />
+		<input type="text" id="<?php echo $this->get_field_id( 'margin_bottom' ); ?>-margin_bottom" name="<?php echo $this->get_field_name( 'margin_bottom' ); ?>" style="width:100%; margin-bottom: 1.2em;" value="<?php echo esc_attr( $options['margin_bottom'] ); ?>" />
 
 		<?php // layout_type ?>
 		<p><?php _e( 'Select layout type:', $pr_content_textdomain ); ?><br>
