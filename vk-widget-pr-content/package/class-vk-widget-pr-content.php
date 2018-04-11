@@ -16,8 +16,8 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 	function __construct() {
 		global $pr_content_textdomain;
-		if ( function_exists( 'vkExUnit_get_short_name' ) ) {
-			$prefix = vkExUnit_get_short_name();
+		if ( function_exists( 'veu_get_short_name' ) ) {
+			$prefix = veu_get_short_name();
 		} else {
 			$prefix = 'VK';
 		}
