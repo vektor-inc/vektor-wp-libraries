@@ -163,10 +163,13 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			echo '<h3 class="pr-content-title"' . $color . '>' . esc_html( $options['title'] ) . '</h3>';
 		}
 		// text
-		if ( $options['text'] && $options['text_color'] ) {
-			echo '<p style="color:' . esc_attr( $options['text_color'] ) . ';">' . wp_kses_post( $options['text'] ) . '</p>';
-		} elseif ( ! empty( $options['text'] ) && empty( $options['text_color'] ) ) {
-			echo '<p>' . wp_kses_post( $options['text'] ) . '</p>';
+		if ( $options['text'] ) {
+			if ( $options['text_color'] ) {
+				$color = ' style="color:' . esc_attr( $options['text_color'] ) . '"';
+			} else {
+				$color = '';
+			}
+			echo '<p' . $color . '>' . wp_kses_post( $options['text'] ) . '</p>';
 		}
 		  // link btn
 		if ( $options['btn_text'] && $options['btn_url'] ) {
