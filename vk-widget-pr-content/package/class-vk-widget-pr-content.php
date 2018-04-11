@@ -27,8 +27,17 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			$widget_name, //widget_name
 			array( 'description' => __( 'This widget can be used when 1 column display is selected.', $pr_content_textdomain ) ) //Widgetの説明
 		);
-		  add_action( 'wp_head', array( $this, 'print_css' ), 2 );
-		add_action( 'wp_enqueue_scripts', array( $this, 'add_script' ) );
+		add_action( 'wp_head', array( $this, 'print_css' ), 2 );
+
+		/*
+		 PR Content ウィジェット用のCSSを デザインスキンなどで結合して出力し、
+		 このディレクトリ内のcssの読み込みを停止する場合、
+		 vk-widget-pr-config.php で $pr_content_dont_load_css に対して true を指定する
+		 */
+		global $pr_content_dont_load_css;
+		if ( ! $pr_content_dont_load_css ) {
+			add_action( 'wp_enqueue_scripts', array( $this, 'add_script' ) );
+		}
 	}
 
 	public static function add_script() {

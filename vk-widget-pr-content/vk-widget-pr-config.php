@@ -10,6 +10,10 @@ if ( ! class_exists( 'VK_Widget_Pr_Content' ) )
 	global $pr_content_textdomain;
 	$pr_content_textdomain = 'lightning_skin_jpnstyle';
 
+	// PR Contet ウィジェットのCSSファイルを単独で読み込むかどうか
+	global $pr_content_dont_load_css;
+	$pr_content_dont_load_css = false;
+
 	// global $vk_page_header_output_class;
 	// $vk_page_header_output_class = '.page-header';
   //
