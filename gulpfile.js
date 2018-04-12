@@ -144,7 +144,8 @@ gulp.task('copy_widget-pr-content', function() {
 		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/vk-widget-pr-content/'))
 		.pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/vk-widget-pr-content/'))
 		.pipe(gulp.dest('../plugins/lightning-skin-fort/inc/vk-widget-pr-content/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-pale/inc/vk-widget-pr-content/'));
+		.pipe(gulp.dest('../plugins/lightning-skin-pale/inc/vk-widget-pr-content/'))
+		.pipe(gulp.dest('../plugins/lightning-skin-variety/inc/vk-widget-pr-content/'));
 });
 
 // Watch

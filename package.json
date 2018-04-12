@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/vektor-inc/vektor-wp-libraries#readme",
   "dependencies": {
-    "gulp": "^3.9.1",
     "gulp-autoprefixer": "^4.0.0"
   },
   "devDependencies": {
