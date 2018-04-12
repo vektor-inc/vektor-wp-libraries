@@ -81,6 +81,8 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		echo '<style type="text/css">.mainSection #' . $args['widget_id'] . '.widget_vk_widget_pr_content { margin-top:' . $options['margin_top'] . '; margin-bottom:' . $options['margin_bottom'] . ';}</style>';
 		echo $args['before_widget'];
 
+		$pr_content_style = '';
+
 		// 背景色指定があって背景画像指定がない場合
 		if ( ( ! empty( $options['bg_color'] ) ) && ( empty( $options['bg_image'] ) ) ) {
 			$pr_content_style = ' style="background-color:' . esc_attr( $options['bg_color'] ) . '"';
@@ -91,7 +93,6 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			// 画像IDから画像のURLを取得
 			$bg_image = wp_get_attachment_image_src( $instance['bg_image'], 'full' );
 			$bg_image = esc_url( $bg_image[0] );
-
 			// 画像に被せる色の処理
 			// カラーコードの16進数を10進数に変換する
 			// RGB数値に変換するカラーコード
@@ -120,12 +121,11 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				// →１個めの rgba() と２個目の rgba() の値を別々で設定すればグラデーションもできる
 				$pr_content_style = ' style="background: linear-gradient( rgba( ' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . '), rgba(' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . ') ), url(\'' . $bg_image . '\') no-repeat center center; background-size: cover;"';
 
-			// 画像に色を被せない場合
+				// 画像に色を被せない場合
 			} else {
 				$pr_content_style = ' style="background:
 				url(\'' . $bg_image . '\') no-repeat center center; background-size: cover;"';
 			}
-
 		}
 		echo '<div class="pr-content"' . $pr_content_style . '>';
 
@@ -320,7 +320,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		if ( $options['btn_blank'] ) {
 			echo 'checked';}
 		?>
- 		/>
+		 />
 		<label for="<?php echo $this->get_field_id( 'btn_blank' ); ?>" ><?php _e( 'Open with new tab', $pr_content_textdomain ); ?></label>
 		<br><br>
 
