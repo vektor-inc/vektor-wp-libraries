@@ -76,7 +76,6 @@ class VK_Widget_Pr_Content extends WP_Widget {
 	/*-------------------------------------------*/
 
 	function widget( $args, $instance ) {
-
 		// 入力された値とデフォルトで指定した値をマージして$options にいれる
 		$options = self::options( $instance );
 		echo '<style type="text/css">.mainSection #' . $args['widget_id'] . '.widget_vk_widget_pr_content { margin-top:' . $options['margin_top'] . '; margin-bottom:' . $options['margin_bottom'] . ';}</style>';
@@ -96,31 +95,36 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			// 画像に被せる色の処理
 			// カラーコードの16進数を10進数に変換する
 			// RGB数値に変換するカラーコード
-			$bg_cover_color = '';
-			if ( ! empty( $instance['bg_cover_color'] ) ) {
-				$bg_cover_color = $instance['bg_cover_color'];
-			}
-			//「#******」のような形でカラーコードがわたってきた場合「#」を削除する
-			$bg_cover_color = preg_replace( '/#/', '', $bg_cover_color );
-			//「******」という形になっているはずなので、2つずつ「**」に区切る
-			// そしてhexdec関数で変換して配列に格納する
-			$array_bg_cover_color['red']   = hexdec( substr( $bg_cover_color, 0, 2 ) );
-			$array_bg_cover_color['green'] = hexdec( substr( $bg_cover_color, 2, 2 ) );
-			$array_bg_cover_color['blue']  = hexdec( substr( $bg_cover_color, 4, 2 ) );
-			// 配列の中身を変数に代入
-			$bg_cover_color_red   = $array_bg_cover_color['red'];
-			$bg_cover_color_green = $array_bg_cover_color['green'];
-			$bg_cover_color_blue  = $array_bg_cover_color['blue'];
+			if ( ! empty( $options['bg_cover_color'] ) ) {
+				$bg_cover_color = $options['bg_cover_color'];
+				//「#******」のような形でカラーコードがわたってきた場合「#」を削除する
+				$bg_cover_color = preg_replace( '/#/', '', $bg_cover_color );
+				//「******」という形になっているはずなので、2つずつ「**」に区切る
+				// そしてhexdec関数で変換して配列に格納する
+				$array_bg_cover_color['red']   = hexdec( substr( $bg_cover_color, 0, 2 ) );
+				$array_bg_cover_color['green'] = hexdec( substr( $bg_cover_color, 2, 2 ) );
+				$array_bg_cover_color['blue']  = hexdec( substr( $bg_cover_color, 4, 2 ) );
+				// 配列の中身を変数に代入
+				$bg_cover_color_red   = $array_bg_cover_color['red'];
+				$bg_cover_color_green = $array_bg_cover_color['green'];
+				$bg_cover_color_blue  = $array_bg_cover_color['blue'];
 
-			// 被せる色の濃さ（0以外）が入力されていたら値を小数に変換して代入
-			if ( ! empty( $options['bg_cover_depth'] ) && $options['bg_cover_depth'] !== 0 ) {
-				$bg_cover_depth = ( $options['bg_cover_depth'] ) / 100;
+				// 被せる色の濃さ（0以外）が入力されていたら値を小数に変換して代入
+				if ( ! empty( $options['bg_cover_depth'] ) && $options['bg_cover_depth'] !== 0 ) {
+					$bg_cover_depth = ( $options['bg_cover_depth'] ) / 100;
+				} else {
+					$bg_cover_depth = $options['bg_cover_depth'];
+				}
+
+				// background: linear-gradient で画像の上に $bg_cover_color を透過（$bg_cover_depth）させて被せる
+				// →１個めの rgba() と２個目の rgba() の値を別々で設定すればグラデーションもできる
+				$pr_content_style = ' style="background: linear-gradient( rgba( ' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . '), rgba(' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . ') ), url(\'' . $bg_image . '\') no-repeat center center; background-size: cover;"';
+
+			// 画像に色を被せない場合
 			} else {
-				$bg_cover_depth = $options['bg_cover_depth'];
+				$pr_content_style = ' style="background:
+				url(\'' . $bg_image . '\') no-repeat center center; background-size: cover;"';
 			}
-			// background: linear-gradient で画像の上に $bg_cover_color を透過（$bg_cover_depth）させて被せる
-			// →１個めの rgba() と２個目の rgba() の値を別々で設定すればグラデーションもできる
-			$pr_content_style = ' style="background: linear-gradient( rgba( ' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . '), rgba(' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . ') ), url(\'' . $bg_image . '\') no-repeat center center; background-size: cover;"';
 
 		}
 		echo '<div class="pr-content"' . $pr_content_style . '>';
@@ -209,7 +213,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		$instance['btn_blank']      = ( isset( $new_instance['btn_blank'] ) && $new_instance['btn_blank'] ) ? true : false;
 		$instance['bg_color']       = ( isset( $new_instance['bg_color'] ) ) ? sanitize_hex_color( $new_instance['bg_color'] ) : false;
 		$instance['bg_image']       = wp_kses_post( $new_instance['bg_image'] );
-		$instance['bg_cover_color'] = sanitize_hex_color( $new_instance['bg_cover_color'] );
+		$instance['bg_cover_color'] = ( isset( $new_instance['bg_cover_color'] ) ) ? sanitize_hex_color( $new_instance['bg_cover_color'] ) : false;
 		$instance['bg_cover_depth'] = esc_attr( mb_convert_kana( $new_instance['bg_cover_depth'], 'a' ) );
 		$instance['margin_top']     = wp_kses_post( mb_convert_kana( $new_instance['margin_top'], 'a' ) );
 		$instance['margin_bottom']  = wp_kses_post( mb_convert_kana( $new_instance['margin_bottom'], 'a' ) );
@@ -268,7 +272,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		  <input type="hidden" class="__id" name="<?php echo $this->get_field_name( 'media_image' ); ?>" value="<?php echo esc_attr( $options['media_image'] ); ?>" />
 		</div>
 		</div>
-			<script type="text/javascript">
+		<script type="text/javascript">
 		// 画像登録処理
 		if ( media_image_addiditional == undefined ){
 		var media_image_addiditional = function(e){
@@ -302,7 +306,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		}
 		</script>
 
-			<?php // Read more ?>
+		<?php // Read more ?>
 		<label for="<?php echo $this->get_field_id( 'btn_url' ); ?>"><?php _e( 'Destination URL:', $pr_content_textdomain ); ?></label><br/>
 		<input type="text" id="<?php echo $this->get_field_id( 'btn_url' ); ?>" name="<?php echo $this->get_field_name( 'btn_url' ); ?>" value="<?php echo esc_attr( $options['btn_url'] ); ?>" style="margin-bottom: 0.5em;" />
 		<br /><br />
@@ -312,11 +316,11 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 		<?php // target blank ?>
 		<input type="checkbox" id="<?php echo $this->get_field_id( 'btn_blank' ); ?>" name="<?php echo $this->get_field_name( 'btn_blank' ); ?>" value="true"
-												<?php
-												if ( $options['btn_blank'] ) {
-													echo 'checked';}
-?>
- />
+		<?php
+		if ( $options['btn_blank'] ) {
+			echo 'checked';}
+		?>
+ 		/>
 		<label for="<?php echo $this->get_field_id( 'btn_blank' ); ?>" ><?php _e( 'Open with new tab', $pr_content_textdomain ); ?></label>
 		<br><br>
 
@@ -348,7 +352,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		  <input type="hidden" class="__id" name="<?php echo $this->get_field_name( 'bg_image' ); ?>" value="<?php echo esc_attr( $options['bg_image'] ); ?>" />
 		</div>
 		</div>
-			<script type="text/javascript">
+		<script type="text/javascript">
 		// 画像登録処理
 		if ( bg_image_addiditional == undefined ){
 		var bg_image_addiditional = function(ef){
@@ -383,13 +387,10 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		</script>
 
 		<?php // bg cover color ?>
-		<label for="<?php echo $this->get_field_id( 'bg_cover_color' ); ?>" class="color_picker_wrap"><?php _e( 'Cover color:', $pr_content_textdomain ); ?></label>
-		<input type="text" id="<?php echo $this->get_field_id( 'bg_cover_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'bg_cover_color' ); ?>" value="
-											<?php
-											if ( $options['bg_cover_color'] ) {
-												echo esc_attr( $options['bg_cover_color'] );}
-?>
-" />
+		<p class="color_picker_wrap">
+		<label for="<?php echo $this->get_field_id( 'bg_cover_color' ); ?>"><?php _e( 'Cover color:', $pr_content_textdomain ); ?></label>
+		<input type="text" id="<?php echo $this->get_field_id( 'bg_cover_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'bg_cover_color' ); ?>" value="<?php echo esc_attr( $options['bg_cover_color'] ); ?>" />
+		</p>
 		<br><br>
 
 		<?php // cover color depth ?>

@@ -72,6 +72,10 @@
 	}
 }
 
+.pr-content-title {
+	border-left: none;
+}
+
 .pr-content-title:after {
 	content: "";
 	line-height: 0;
