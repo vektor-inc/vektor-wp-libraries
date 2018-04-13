@@ -230,27 +230,31 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		global $pr_content_textdomain;
 		$options = self::options( $instance );
 		?>
-		<br>
 		<?php // title ?>
-		<label for="<?php echo $this->get_field_id( 'title' ); ?>" ><?php _e( 'Title:', $pr_content_textdomain ); ?></label>
-		<input type="text" id="<?php echo $this->get_field_id( 'title' ); ?>-title" name="<?php echo $this->get_field_name( 'title' ); ?>" style="width:100%; margin-bottom: 1.2em;" value="<?php echo esc_attr( $options['title'] ); ?>">
+		<div class="admin_widget_section">
+		<h2 class="admin_widget_h2"><?php _e( 'Title', $pr_content_textdomain ); ?></h2>
+		<input type="text" id="<?php echo $this->get_field_id( 'title' ); ?>-title" name="<?php echo $this->get_field_name( 'title' ); ?>" class="admin_widget_input" value="<?php echo esc_attr( $options['title'] ); ?>">
 
-		<?php // title_color ?>
 		<p class="color_picker_wrap">
-		<label for="<?php echo $this->get_field_id( 'title_color' ); ?>"><?php _e( 'Title color:', $pr_content_textdomain ); ?></label>
+		<label for="<?php echo $this->get_field_id( 'title_color' ); ?>"><?php _e( 'Text color', $pr_content_textdomain ); ?> : </label>
 		<input type="text" id="<?php echo $this->get_field_id( 'title_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'title_color' ); ?>" value="<?php echo esc_attr( $options['title_color'] ); ?>" />
 		</p>
+		</div><!-- [ /.admin_widget_section ] -->
 
 		<?php // text ?>
-		<label for="<?php echo $this->get_field_id( 'text' ); ?>" ><?php _e( 'Text:', $pr_content_textdomain ); ?></label>
-		<textarea id="<?php echo $this->get_field_id( 'text' ); ?>" name="<?php echo $this->get_field_name( 'text' ); ?>" style="width:100%; margin-bottom: 1.2em;"><?php echo esc_textarea( $options['text'] ); ?></textarea>
+		<div class="admin_widget_section">
+		<h2 class="admin_widget_h2"><?php _e( 'Text', $pr_content_textdomain ); ?></h2>
+		<textarea id="<?php echo $this->get_field_id( 'text' ); ?>" name="<?php echo $this->get_field_name( 'text' ); ?>" class="admin_widget_input"><?php echo esc_textarea( $options['text'] ); ?></textarea>
 
-		<?php // text_color ?>
 		<p class="color_picker_wrap">
-		<label for="<?php echo $this->get_field_id( 'text_color' ); ?>"><?php _e( 'Txst color:', $pr_content_textdomain ); ?></label>
+		<label for="<?php echo $this->get_field_id( 'text_color' ); ?>"><?php _e( 'Text color', $pr_content_textdomain ); ?> : </label>
 		<input type="text" id="<?php echo $this->get_field_id( 'text_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'text_color' ); ?>" value="<?php echo esc_attr( $options['text_color'] ); ?>" />
 		</p>
+		</div>
 
+		<?php // Image ?>
+		<div class="admin_widget_section">
+		<h2 class="admin_widget_h2"><?php _e( 'Image', $pr_content_textdomain ); ?></h2>
 		<?php
 		// media_image
 		$image = null;
@@ -260,7 +264,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			$image = wp_get_attachment_image_src( $options['media_image'], 'large' );
 		}
 		?>
-		<div class="pr_content_media_area" style="padding: 0.5em 0 3.0em;">
+		<div class="pr_content_media_area">
 		<div class="_display" style="height:auto">
 			<?php if ( $image ) : ?>
 			  <img src="<?php echo esc_url( $image[0] ); ?>" style="width:100%; height:auto; border: 1px solid #ccc; margin: 0 0 15px;" />
@@ -306,15 +310,25 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		}
 		</script>
 
-		<?php // Read more ?>
-		<label for="<?php echo $this->get_field_id( 'btn_url' ); ?>"><?php _e( 'Destination URL:', $pr_content_textdomain ); ?></label><br/>
-		<input type="text" id="<?php echo $this->get_field_id( 'btn_url' ); ?>" name="<?php echo $this->get_field_name( 'btn_url' ); ?>" value="<?php echo esc_attr( $options['btn_url'] ); ?>" style="margin-bottom: 0.5em;" />
-		<br /><br />
-		<label for="<?php echo $this->get_field_id( 'btn_text' ); ?>"><?php _e( 'Notation text:', $pr_content_textdomain ); ?></label><br/>
-		<input type="text" placeholder="詳細を見る ≫" id="<?php echo $this->get_field_id( 'btn_text' ); ?>" name="<?php echo $this->get_field_name( 'btn_text' ); ?>" value="<?php echo esc_attr( $options['btn_text'] ); ?>" style="margin-bottom: 1.2em;" />
-		<br>
+		<!-- [ 画像の枠線のカラーピッカーはこのあたりに入る想定 ] -->
+
+		</div><!-- [ /.admin_widget_section ] -->
+
+		<?php // Link button ?>
+		<div class="admin_widget_section">
+		<h2 class="admin_widget_h2"><?php _e( 'Link button', $pr_content_textdomain ); ?></h2>
+		<p>
+		<label for="<?php echo $this->get_field_id( 'btn_url' ); ?>"><?php _e( 'Link URL', $pr_content_textdomain ); ?> : </label>
+		<input type="text" id="<?php echo $this->get_field_id( 'btn_url' ); ?>" name="<?php echo $this->get_field_name( 'btn_url' ); ?>" value="<?php echo esc_attr( $options['btn_url'] ); ?>" class="admin_widget_input" />
+		</p>
+		<p>
+		<label for="<?php echo $this->get_field_id( 'btn_text' ); ?>"><?php _e( 'Notation text', $pr_content_textdomain ); ?> : </label>
+		<input type="text" placeholder="詳細を見る ≫" id="<?php echo $this->get_field_id( 'btn_text' ); ?>" name="<?php echo $this->get_field_name( 'btn_text' ); ?>" value="<?php echo esc_attr( $options['btn_text'] ); ?>" class="admin_widget_input" /><br>
+		<?php _e( 'ex) Read more  ≫', $pr_content_textdomain ); ?>
+		</p>
 
 		<?php // target blank ?>
+		<p>
 		<input type="checkbox" id="<?php echo $this->get_field_id( 'btn_blank' ); ?>" name="<?php echo $this->get_field_name( 'btn_blank' ); ?>" value="true"
 		<?php
 		if ( $options['btn_blank'] ) {
@@ -322,14 +336,18 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		?>
 		 />
 		<label for="<?php echo $this->get_field_id( 'btn_blank' ); ?>" ><?php _e( 'Open with new tab', $pr_content_textdomain ); ?></label>
-		<br><br>
+		</p>
+		</div><!-- [ /.admin_widget_section ] -->
 
-		<?php // bg color ?>
+		<?php // Background ?>
+		<div class="admin_widget_section">
+		<h2 class="admin_widget_h2"><?php _e( 'Background', $pr_content_textdomain ); ?></h2>
 		<p class="color_picker_wrap">
 		<label for="<?php echo $this->get_field_id( 'bg_color' ); ?>"><?php _e( 'Background color:', $pr_content_textdomain ); ?></label>
 		<input type="text" id="<?php echo $this->get_field_id( 'bg_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'bg_color' ); ?>" value="<?php echo esc_attr( $options['bg_color'] ); ?>" />
 		</p>
 
+		<div class="admin_widget_section">
 		<?php
 		// bg img
 		$bg_image = null;
@@ -339,18 +357,17 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			$bg_image = wp_get_attachment_image_src( $options['bg_image'], 'large' );
 		}
 		?>
-		<div class="pr_content_media_area" style="padding: 0.5em 0 3.0em;">
-		<label for="<?php echo $this->get_field_id( 'bg_image' ); ?>"><?php _e( 'Background image:<br>If both the background color and the background image are set, the background image is reflected.<br>', $pr_content_textdomain ); ?></label>
+		<label for="<?php echo $this->get_field_id( 'bg_image' ); ?>"><?php _e( 'Background image', $pr_content_textdomain ); ?> : </label>
+		<p><?php _e( 'If both the background color and the background image are set, the background image is reflected.', $pr_content_textdomain ); ?></p>
 		<div class="_display" style="height:auto">
 			<?php if ( $bg_image ) : ?>
-			  <img src="<?php echo esc_url( $bg_image[0] ); ?>" style="width:100%; height:auto; border: 1px solid #ccc; margin: 15px 0 0;" />
+			  <img src="<?php echo esc_url( $bg_image[0] ); ?>" style="width:100%; height:auto; border: 1px solid #ccc;" />
 			<?php endif; ?>
 		</div>
 		<button class="button button-default button-block" style="display:block;width:100%;text-align: center; margin:15px 0 0;" onclick="javascript:bg_image_addiditional(this);return false;"><?php _e( 'Set image', $pr_content_textdomain ); ?></button>
 		<button class="button button-default button-block" style="display:block;width:100%;text-align: center; margin:4px 0;" onclick="javascript:vk_title_bg_image_delete(this);return false;"><?php _e( 'Delete image', $pr_content_textdomain ); ?></button>
 		<div class="_form" style="line-height: 2em">
 		  <input type="hidden" class="__id" name="<?php echo $this->get_field_name( 'bg_image' ); ?>" value="<?php echo esc_attr( $options['bg_image'] ); ?>" />
-		</div>
 		</div>
 		<script type="text/javascript">
 		// 画像登録処理
@@ -385,25 +402,22 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		};
 		}
 		</script>
+		</div><!-- [ /.admin_widget_section ] -->
 
 		<?php // bg cover color ?>
 		<p class="color_picker_wrap">
-		<label for="<?php echo $this->get_field_id( 'bg_cover_color' ); ?>"><?php _e( 'Cover color:', $pr_content_textdomain ); ?></label>
+		<label for="<?php echo $this->get_field_id( 'bg_cover_color' ); ?>"><?php _e( 'Cover color', $pr_content_textdomain ); ?> : </label>
 		<input type="text" id="<?php echo $this->get_field_id( 'bg_cover_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'bg_cover_color' ); ?>" value="<?php echo esc_attr( $options['bg_cover_color'] ); ?>" />
 		</p>
-		<br><br>
 
 		<?php // cover color depth ?>
-		<label for="<?php echo $this->get_field_id( 'bg_cover_depth' ); ?>" ><?php _e( 'Depth of color to cover:<br>To cancel the color overlay overlay on the image, enter "0" to this value.', $pr_content_textdomain ); ?></label>
+		<label for="<?php echo $this->get_field_id( 'bg_cover_depth' ); ?>" ><?php _e( 'Depth of color to cover', $pr_content_textdomain ); ?> : </label>
+		<p><?php _e( 'To cancel the color overlay overlay on the image, enter "0" to this value.', $pr_content_textdomain ); ?></p>
 		<input type="text" id="<?php echo $this->get_field_id( 'bg_cover_depth' ); ?>" name="<?php echo $this->get_field_name( 'bg_cover_depth' ); ?>" style="width:50%; margin-bottom: 1.2em;" value="<?php echo esc_attr( $options['bg_cover_depth'] ); ?>" />&nbsp;%
-		<br><br>
+		</div><!-- [ /.admin_widget_section ] -->
 
-		<?php // margin_top . margin_bottom ?>
-		<label for="<?php echo $this->get_field_id( 'margin_top' ); ?>" ><?php _e( 'Margin-top<br>Please also enter the unit. (Example: 30px):', $pr_content_textdomain ); ?></label>
-		<input type="text" id="<?php echo $this->get_field_id( 'margin_top' ); ?>-margin_top" name="<?php echo $this->get_field_name( 'margin_top' ); ?>" style="width:100%; margin-bottom: 1.2em;" value="<?php echo esc_attr( $options['margin_top'] ); ?>" />
-
-		<label for="<?php echo $this->get_field_id( 'margin_bottom' ); ?>" ><?php _e( 'Margin-bottom<br>Please also enter the unit. (Example: 30px):', $pr_content_textdomain ); ?></label>
-		<input type="text" id="<?php echo $this->get_field_id( 'margin_bottom' ); ?>-margin_bottom" name="<?php echo $this->get_field_name( 'margin_bottom' ); ?>" style="width:100%; margin-bottom: 1.2em;" value="<?php echo esc_attr( $options['margin_bottom'] ); ?>" />
+		<div class="admin_widget_section">
+		<h2 class="admin_widget_h2"><?php _e( 'Layout', $pr_content_textdomain ); ?></h2>
 
 		<?php // layout_type ?>
 		<p><?php _e( 'Select layout type:', $pr_content_textdomain ); ?><br>
@@ -430,6 +444,21 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			<?php _e( 'Put the image to the right', $pr_content_textdomain ); ?>
 		</label>
 		</p>
+
+		<?php // margin_top . margin_bottom ?>
+		<p>
+		<label for="<?php echo $this->get_field_id( 'margin_top' ); ?>" ><?php _e( 'Margin-top', $pr_content_textdomain ); ?> : </label>
+		<input type="text" id="<?php echo $this->get_field_id( 'margin_top' ); ?>-margin_top" name="<?php echo $this->get_field_name( 'margin_top' ); ?>" class="admin_widget_input" value="<?php echo esc_attr( $options['margin_top'] ); ?>" />
+		<?php _e( 'Example', $pr_content_textdomain ); ?> : 30px
+		</p>
+
+		<p>
+		<label for="<?php echo $this->get_field_id( 'margin_bottom' ); ?>" ><?php _e( 'Margin-bottom', $pr_content_textdomain ); ?> : </label>
+		<input type="text" id="<?php echo $this->get_field_id( 'margin_bottom' ); ?>-margin_bottom" name="<?php echo $this->get_field_name( 'margin_bottom' ); ?>" class="admin_widget_input" value="<?php echo esc_attr( $options['margin_bottom'] ); ?>" />
+		<?php _e( 'Example', $pr_content_textdomain ); ?> : 30px
+		</p>
+		</div><!-- [ /.admin_widget_section ] -->
+
 
 	<?php
 	} // function form( $instance )
