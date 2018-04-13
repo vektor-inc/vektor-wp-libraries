@@ -6,7 +6,8 @@ https://github.com/vektor-inc/vektor-wp-libraries
 にあります。修正の際は上記リポジトリのデータを修正してください。
 */
 
-class VK_Widget_Pr_Content extends WP_Widget {
+class VK_Widget_Pr_Content extends WP_Widget
+{
 
 	/*-------------------------------------------*/
 	/*  Widgetを登録する
@@ -51,21 +52,22 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 	function options( $instance = array() ) {
 		$defaults = array(
-			'title'          => '',
-			'title_color'    => null,
-			'text'           => '',
-			'text_color'     => null,
-			'media_image'    => null,
-			'btn_text'       => '',
-			'btn_url'        => '',
-			'btn_blank'      => false,
-			'bg_color'       => null,
-			'bg_image'       => null,
-			'bg_cover_color' => null,
-			'bg_cover_depth' => '0',
-			'margin_top'     => '0',
-			'margin_bottom'  => '0',
-			'layout_type'    => null,
+			'title'              => '',
+			'title_color'        => null,
+			'text'               => '',
+			'text_color'         => null,
+			'media_image'        => null,
+			'media_border_color' => null,
+			'btn_text'           => '',
+			'btn_url'            => '',
+			'btn_blank'          => false,
+			'bg_color'           => null,
+			'bg_image'           => null,
+			'bg_cover_color'     => null,
+			'bg_cover_depth'     => '0',
+			'margin_top'         => '0',
+			'margin_bottom'      => '0',
+			'layout_type'        => null,
 		);
 		return wp_parse_args( (array) $instance, $defaults );
 	}
@@ -208,6 +210,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		$instance['text']           = wp_kses_post( $new_instance['text'] );
 		$instance['text_color']     = sanitize_hex_color( $new_instance['text_color'] );
 		$instance['media_image']    = wp_kses_post( $new_instance['media_image'] );
+		$instance['media_border_color']    = wp_kses_post( $new_instance['media_border_color'] );
 		$instance['btn_text']       = wp_kses_post( $new_instance['btn_text'] );
 		$instance['btn_url']        = esc_url( $new_instance['btn_url'] );
 		$instance['btn_blank']      = ( isset( $new_instance['btn_blank'] ) && $new_instance['btn_blank'] ) ? true : false;
@@ -275,6 +278,12 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		<div class="_form" style="line-height: 2em">
 		  <input type="hidden" class="__id" name="<?php echo $this->get_field_name( 'media_image' ); ?>" value="<?php echo esc_attr( $options['media_image'] ); ?>" />
 		</div>
+
+		<p class="color_picker_wrap">
+		<label for="<?php echo $this->get_field_id( 'media_border_color' ); ?>"><?php _e( 'Media border color', $pr_content_textdomain ); ?> : </label>
+		<input type="text" id="<?php echo $this->get_field_id( 'media_border_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'media_border_color' ); ?>" value="<?php echo esc_attr( $options['media_border_color'] ); ?>" />
+		</p>
+
 		</div>
 		<script type="text/javascript">
 		// 画像登録処理
