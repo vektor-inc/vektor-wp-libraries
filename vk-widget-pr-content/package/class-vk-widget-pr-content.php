@@ -324,7 +324,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		<p>
 		<label for="<?php echo $this->get_field_id( 'btn_text' ); ?>"><?php _e( 'Notation text', $pr_content_textdomain ); ?> : </label>
 		<input type="text" placeholder="詳細を見る ≫" id="<?php echo $this->get_field_id( 'btn_text' ); ?>" name="<?php echo $this->get_field_name( 'btn_text' ); ?>" value="<?php echo esc_attr( $options['btn_text'] ); ?>" class="admin_widget_input" /><br>
-		<?php _e( 'ex) Read more  ≫', $pr_content_textdomain ); ?>
+		<?php _e( 'Ex', $pr_content_textdomain ); ?> ) <?php _e( 'Read more  ≫', $pr_content_textdomain ); ?>
 		</p>
 
 		<?php // target blank ?>
@@ -449,13 +449,13 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		<p>
 		<label for="<?php echo $this->get_field_id( 'margin_top' ); ?>" ><?php _e( 'Margin-top', $pr_content_textdomain ); ?> : </label>
 		<input type="text" id="<?php echo $this->get_field_id( 'margin_top' ); ?>-margin_top" name="<?php echo $this->get_field_name( 'margin_top' ); ?>" class="admin_widget_input" value="<?php echo esc_attr( $options['margin_top'] ); ?>" />
-		<?php _e( 'Example', $pr_content_textdomain ); ?> : 30px
+		<?php _e( 'Ex', $pr_content_textdomain ); ?> ) 30px
 		</p>
 
 		<p>
 		<label for="<?php echo $this->get_field_id( 'margin_bottom' ); ?>" ><?php _e( 'Margin-bottom', $pr_content_textdomain ); ?> : </label>
 		<input type="text" id="<?php echo $this->get_field_id( 'margin_bottom' ); ?>-margin_bottom" name="<?php echo $this->get_field_name( 'margin_bottom' ); ?>" class="admin_widget_input" value="<?php echo esc_attr( $options['margin_bottom'] ); ?>" />
-		<?php _e( 'Example', $pr_content_textdomain ); ?> : 30px
+		<?php _e( 'Ex', $pr_content_textdomain ); ?> ) 30px
 		</p>
 		</div><!-- [ /.admin_widget_section ] -->
 
