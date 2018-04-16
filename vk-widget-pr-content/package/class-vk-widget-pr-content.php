@@ -6,8 +6,8 @@ https://github.com/vektor-inc/vektor-wp-libraries
 にあります。修正の際は上記リポジトリのデータを修正してください。
 */
 
-class VK_Widget_Pr_Content extends WP_Widget
-{
+class VK_Widget_Pr_Content extends WP_Widget {
+
 
 	/*-------------------------------------------*/
 	/*  Widgetを登録する
@@ -42,6 +42,9 @@ class VK_Widget_Pr_Content extends WP_Widget
 	}
 
 	public static function add_script() {
+		// wp_register_script( 'get-background-size-js', plugin_dir_url( __FILE__ ) . 'js/jquery.get-background-size.js', array( 'jquery' ), self::$version );
+		wp_register_script( 'vk-parallax-js', plugin_dir_url( __FILE__ ) . 'js/vk-parallax.js', array( 'jquery' ), self::$version );
+		wp_enqueue_script( 'vk-parallax-js' );
 		wp_enqueue_style( 'vk-widget-pr-content-style', plugin_dir_url( __FILE__ ) . 'css/vk-widget-pr-content.css', array(), self::$version, 'all' );
 	}
 
@@ -80,6 +83,7 @@ class VK_Widget_Pr_Content extends WP_Widget
 	function widget( $args, $instance ) {
 		// 入力された値とデフォルトで指定した値をマージして$options にいれる
 		$options = self::options( $instance );
+
 		echo '<style type="text/css">.mainSection #' . $args['widget_id'] . '.widget_vk_widget_pr_content { margin-top:' . $options['margin_top'] . '; margin-bottom:' . $options['margin_bottom'] . ';}</style>';
 		echo $args['before_widget'];
 
@@ -129,7 +133,7 @@ class VK_Widget_Pr_Content extends WP_Widget
 				url(\'' . $bg_image . '\') no-repeat center center; background-size: cover;"';
 			}
 		}
-		echo '<div class="pr-content"' . $pr_content_style . '>';
+		echo '<div class="pr-content vk-prlx"' . $pr_content_style . '>';
 
 		echo '<div class="container">';
 
@@ -204,23 +208,23 @@ class VK_Widget_Pr_Content extends WP_Widget
 	/*-------------------------------------------*/
 
 	function update( $new_instance, $old_instance ) {
-		$instance                   = $old_instance;
-		$instance['title']          = wp_kses_post( $new_instance['title'] );
-		$instance['title_color']    = sanitize_hex_color( $new_instance['title_color'] );
-		$instance['text']           = wp_kses_post( $new_instance['text'] );
-		$instance['text_color']     = sanitize_hex_color( $new_instance['text_color'] );
-		$instance['media_image']    = wp_kses_post( $new_instance['media_image'] );
-		$instance['media_border_color']    = wp_kses_post( $new_instance['media_border_color'] );
-		$instance['btn_text']       = wp_kses_post( $new_instance['btn_text'] );
-		$instance['btn_url']        = esc_url( $new_instance['btn_url'] );
-		$instance['btn_blank']      = ( isset( $new_instance['btn_blank'] ) && $new_instance['btn_blank'] ) ? true : false;
-		$instance['bg_color']       = ( isset( $new_instance['bg_color'] ) ) ? sanitize_hex_color( $new_instance['bg_color'] ) : false;
-		$instance['bg_image']       = wp_kses_post( $new_instance['bg_image'] );
-		$instance['bg_cover_color'] = ( isset( $new_instance['bg_cover_color'] ) ) ? sanitize_hex_color( $new_instance['bg_cover_color'] ) : false;
-		$instance['bg_cover_depth'] = esc_attr( mb_convert_kana( $new_instance['bg_cover_depth'], 'a' ) );
-		$instance['margin_top']     = wp_kses_post( mb_convert_kana( $new_instance['margin_top'], 'a' ) );
-		$instance['margin_bottom']  = wp_kses_post( mb_convert_kana( $new_instance['margin_bottom'], 'a' ) );
-		$instance['layout_type']    = esc_attr( $new_instance['layout_type'] );
+		$instance                       = $old_instance;
+		$instance['title']              = wp_kses_post( $new_instance['title'] );
+		$instance['title_color']        = sanitize_hex_color( $new_instance['title_color'] );
+		$instance['text']               = wp_kses_post( $new_instance['text'] );
+		$instance['text_color']         = sanitize_hex_color( $new_instance['text_color'] );
+		$instance['media_image']        = wp_kses_post( $new_instance['media_image'] );
+		$instance['media_border_color'] = wp_kses_post( $new_instance['media_border_color'] );
+		$instance['btn_text']           = wp_kses_post( $new_instance['btn_text'] );
+		$instance['btn_url']            = esc_url( $new_instance['btn_url'] );
+		$instance['btn_blank']          = ( isset( $new_instance['btn_blank'] ) && $new_instance['btn_blank'] ) ? true : false;
+		$instance['bg_color']           = ( isset( $new_instance['bg_color'] ) ) ? sanitize_hex_color( $new_instance['bg_color'] ) : false;
+		$instance['bg_image']           = wp_kses_post( $new_instance['bg_image'] );
+		$instance['bg_cover_color']     = ( isset( $new_instance['bg_cover_color'] ) ) ? sanitize_hex_color( $new_instance['bg_cover_color'] ) : false;
+		$instance['bg_cover_depth']     = esc_attr( mb_convert_kana( $new_instance['bg_cover_depth'], 'a' ) );
+		$instance['margin_top']         = wp_kses_post( mb_convert_kana( $new_instance['margin_top'], 'a' ) );
+		$instance['margin_bottom']      = wp_kses_post( mb_convert_kana( $new_instance['margin_bottom'], 'a' ) );
+		$instance['layout_type']        = esc_attr( $new_instance['layout_type'] );
 		return $instance;
 	}
 
