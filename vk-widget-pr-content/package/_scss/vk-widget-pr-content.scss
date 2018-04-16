@@ -88,7 +88,9 @@
 }
 
 .pr_content_media_imgage {
-	border: 1px solid #ccc;
+	max-width: 100%;
+  height: auto;
+	vertical-align: middle;
 }
 
 .pr-content-btn {
