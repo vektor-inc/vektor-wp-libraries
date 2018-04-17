@@ -29,6 +29,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			array( 'description' => __( 'This widget can be used when 1 column display is selected.', $pr_content_textdomain ) ) //Widgetの説明
 		);
 		add_action( 'wp_head', array( $this, 'print_css' ), 2 );
+		add_action( 'admin_print_footer_scripts', array( $this, 'print_admin_js' ), 2 );
 
 		/*
 		 PR Content ウィジェット用のCSSを デザインスキンなどで結合して出力し、
@@ -43,9 +44,14 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 	public static function add_script() {
 		// wp_register_script( 'get-background-size-js', plugin_dir_url( __FILE__ ) . 'js/jquery.get-background-size.js', array( 'jquery' ), self::$version );
-		wp_register_script( 'vk-parallax-js', plugin_dir_url( __FILE__ ) . 'js/vk-parallax.js', array( 'jquery' ), self::$version );
-		wp_enqueue_script( 'vk-parallax-js' );
+		// wp_register_script( 'vk-parallax-js', plugin_dir_url( __FILE__ ) . 'js/vk-parallax.js', array( 'jquery' ), self::$version );
+		// wp_enqueue_script( 'vk-parallax-js' );
 		wp_enqueue_style( 'vk-widget-pr-content-style', plugin_dir_url( __FILE__ ) . 'css/vk-widget-pr-content.css', array(), self::$version, 'all' );
+	}
+
+	public static function print_admin_js() {
+		wp_enqueue_script( 'admin-widget-color-js', plugin_dir_url( __FILE__ ) . 'js/admin-widget-color.js', array( 'jquery' ), date( 'His' ) );
+
 	}
 
 
