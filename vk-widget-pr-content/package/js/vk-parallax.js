@@ -13,15 +13,36 @@
 		var scrolled_Y = jQuery(window).scrollTop();
 		// ウィンドウの高さ
 		var window_height = document.documentElement.clientHeight;
-
+		$('.vk-prlx').getBackgroundSize(function(arg){
+			console.log('サイズ : '+arg);
+			// arg.width と arg.heightに背景サイズが入ってくる
+			// $('.vk-prlx').before('<table class="table">' +
+			// 	'<tr><th>width</th><th>height</th></tr>' +
+			// 	'<tr><td>' + arg.width + '</td><td>'+ arg.height + '</td></tr>' +
+			// 	'</table>'
+			// );
+		});
 		// .scr_item のクラスが付いている要素を
 		jQuery('.vk-prlx').each(function(i){
+			$(this).getBackgroundSize(function(arg){
+				console.log('サイズ : '+arg.width + ' / 高さ'+ arg.height);
+				// arg.width と arg.heightに背景サイズが入ってくる
+				// $(this).before('<table class="table">' +
+				// 	'<tr><th>width</th><th>height</th></tr>' +
+				// 	'<tr><td>' + arg.width + '</td><td>'+ arg.height + '</td></tr>' +
+				// 	'</table>'
+				// );
+		});
+// console.log('サイズ : ');
+
+
 
 			// 表示領域最上部から対象の最上部までの高さ
 			var position_Y = jQuery(this).offset().top;
 			console.log( 'ページ上部からの距離（変動しない） : ' + position_Y );
-			// 開始位置
+			// 開始位置 = パララックスエリアの位置 - ウィンドウの高さ
 			var prlx_start_Y = position_Y - window_height;
+
 
 			if ( prlx_start_Y < scrolled_Y ){
 
@@ -36,8 +57,6 @@
 				// 背景の位置を指定
 				var backgroundPosition = "center " + bg_position + "px";
 			}
-
-
 
 			// アニメーションを動作させるポイント
 			// var run_scrolled_Y = position_Y - run_offset_Y;

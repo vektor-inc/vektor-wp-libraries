@@ -43,9 +43,10 @@ class VK_Widget_Pr_Content extends WP_Widget {
 	}
 
 	public static function add_script() {
-		// wp_register_script( 'get-background-size-js', plugin_dir_url( __FILE__ ) . 'js/jquery.get-background-size.js', array( 'jquery' ), self::$version );
-		// wp_register_script( 'vk-parallax-js', plugin_dir_url( __FILE__ ) . 'js/vk-parallax.js', array( 'jquery' ), self::$version );
-		// wp_enqueue_script( 'vk-parallax-js' );
+		wp_register_script( 'get-background-size-js', plugin_dir_url( __FILE__ ) . 'js/jquery.get-background-size.js', array( 'jquery' ), self::$version );
+		wp_register_script( 'vk-parallax-js', plugin_dir_url( __FILE__ ) . 'js/vk-parallax.js', array( 'jquery' ), self::$version );
+		wp_enqueue_script( 'get-background-size-js' );
+		wp_enqueue_script( 'vk-parallax-js' );
 		wp_enqueue_style( 'vk-widget-pr-content-style', plugin_dir_url( __FILE__ ) . 'css/vk-widget-pr-content.css', array(), self::$version, 'all' );
 	}
 
@@ -131,7 +132,12 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 				// background: linear-gradient で画像の上に $bg_cover_color を透過（$bg_cover_depth）させて被せる
 				// →１個めの rgba() と２個目の rgba() の値を別々で設定すればグラデーションもできる
-				$pr_content_style = ' style="background: linear-gradient( rgba( ' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . '), rgba(' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . ') ), url(\'' . $bg_image . '\') no-repeat center center; background-size: cover;"';
+				$pr_content_style_background = 'background: no-repeat center center; background-size: cover;';
+				$pr_content_style_bg_image   = 'background-image:url(http://vccw.test/wp-content/uploads/2018/01/skyscraper-2561415_1280.jpg);';
+
+				$pr_content_style_bg_color = 'background-color:linear-gradient( rgba( ' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . '), rgba(' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . ') );';
+
+				$pr_content_style = ' style="' . $pr_content_style_bg_color . $pr_content_style_background . $pr_content_style_bg_image . '"';
 
 				// 画像に色を被せない場合
 			} else {
