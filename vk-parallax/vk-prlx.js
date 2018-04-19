@@ -1,5 +1,10 @@
+/*!
+ * vk-parallax.js v 0.0.0
+ * Copyright 2018 Vektor,Inc.
+ * MIT License
+ */
 /*
-外枠のdivに .prlx が付与する
+外枠のdivに .prlx を付与する
 外枠のdivのstyle属性に直接画像 url を記載する
 */
 ;
