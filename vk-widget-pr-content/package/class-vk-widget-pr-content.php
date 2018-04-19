@@ -210,7 +210,7 @@ class VK_Widget_Pr_Content extends WP_Widget
 					$btn_text_color = 'color: #fff;';
 
 			// ゴーストボタンの時
-			} else if ( $options['btn_type'] === 'ghost' ){
+			} elseif ( $options['btn_type'] === 'ghost' ){
 					// ボタンの色を文字色に指定
 					$btn_text_color = 'color:'.$options['btn_color'];
 			}
@@ -236,7 +236,7 @@ class VK_Widget_Pr_Content extends WP_Widget
 		if ( $options['btn_type'] === 'ghost' ) {
 			// ゴーストタイプでカラー設定がない時
 			$btn_color_style = ' background: transparent; border: 1px solid '.$btn_color.'; transition: .3s;';
-		} else if ( $options['btn_type'] === 'full' ) {
+		} elseif ( $options['btn_type'] === 'full' ) {
 			// 塗りつぶしタイプでカラー設定がない時
 			$btn_color_style = ' background-color:' . $btn_color . ' ; transition: .3s;';
 		}
@@ -256,7 +256,7 @@ class VK_Widget_Pr_Content extends WP_Widget
 			empty( $options['btn_type'] ) ) {
 				// 塗りつぶしの時
 				$btn_class = 'pr-content-btn-full';
-			} else if ( isset( $options['btn_type'] ) && $options['btn_type'] === 'ghost' ) {
+			} elseif ( isset( $options['btn_type'] ) && $options['btn_type'] === 'ghost' ) {
 				// ゴーストの時
 				$btn_class = 'pr-content-btn-ghost';
 			}
