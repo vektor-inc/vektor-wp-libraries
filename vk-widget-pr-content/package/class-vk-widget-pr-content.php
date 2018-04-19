@@ -52,6 +52,18 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		wp_enqueue_script( 'admin-widget-color-js', plugin_dir_url( __FILE__ ) . 'js/admin-widget-color.min.js', array( 'jquery' ), date( 'His' ) );
 	}
 
+
+	/**
+	 * 色の自動変更で255を越えてしまった時に255に強制的に抑える
+	 * @param  [type] $num RGBの10進数の数値
+	 * @return [type]      [description]
+	 */
+	function auto_under_ff( $num ) {
+		if ( $num > 256 ) {
+			$num = 255;
+		}
+		return $num;
+	}
 	/**
 	 * 色を比率で明るくしたり暗くする
 	 * @param  [type]  $color       #あり16進数
@@ -62,15 +74,15 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 		$color = preg_replace( '/#/', '', $color );
 		// 16進数を10進数に変換
-		$array_btn_color_red   = hexdec( substr( $color, 0, 2 ) );
-		$array_btn_color_green = hexdec( substr( $color, 2, 2 ) );
-		$array_btn_color_blue  = hexdec( substr( $color, 4, 2 ) );
+		$btn_color_red   = hexdec( substr( $color, 0, 2 ) );
+		$btn_color_green = hexdec( substr( $color, 2, 2 ) );
+		$btn_color_blue  = hexdec( substr( $color, 4, 2 ) );
 
 		// 10進数の状態で50%暗くして dechex で 16進数に戻す
 		$new_color  = '#';
-		$new_color .= dechex( $array_btn_color_red * $change_rate );
-		$new_color .= dechex( $array_btn_color_green * $change_rate );
-		$new_color .= dechex( $array_btn_color_blue * $change_rate );
+		$new_color .= dechex( self::auto_under_ff( $btn_color_red * $change_rate ) );
+		$new_color .= dechex( self::auto_under_ff( $btn_color_green * $change_rate ) );
+		$new_color .= dechex( self::auto_under_ff( $btn_color_blue * $change_rate ) );
 
 		return $new_color;
 	}
@@ -103,7 +115,6 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		return wp_parse_args( (array) $instance, $defaults );
 	}
 
-
 	/*-------------------------------------------*/
 	/*  表側の Widget を出力する（表示用コード）
 	/*-------------------------------------------*/
@@ -112,20 +123,22 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		// 入力された値とデフォルトで指定した値をマージして$options にいれる
 		$options = self::options( $instance );
 
-		echo '<style type="text/css">';
-		echo '.mainSection #' . $args['widget_id'] . '.widget_vk_widget_pr_content { margin-top:' . $options['margin_top'] . '; margin-bottom:' . $options['margin_bottom'] . ';}';
-		echo '</style>';
-
 		echo $args['before_widget'];
 
-		$pr_content_style = '';
+		$pr_content_style_attr = '';
+		if ( ! empty( $options['margin_top'] ) ) {
+			$pr_content_style_attr .= 'margin-top:' . $options['margin_top'] . ';';
+		}
+		if ( ! empty( $options['margin_bottom'] ) ) {
+			$pr_content_style_attr .= 'margin-bottom:' . $options['margin_bottom'] . ';';
+		}
 
 		if ( ( ! empty( $options['bg_color'] ) ) && ( empty( $options['bg_image'] ) ) ) {
 
 			/*  背景 色指定あり && 背景 画像指定なし
 			/*-------------------------------------------*/
 
-			$pr_content_style = ' style="background-color:' . esc_attr( $options['bg_color'] ) . '"';
+			$pr_content_style_attr .= 'background-color:' . esc_attr( $options['bg_color'] );
 
 		} elseif ( ! empty( $options['bg_image'] ) ) {
 
@@ -159,15 +172,19 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				// →１個めの rgba() と２個目の rgba() の値を別々で設定すればグラデーションもできる
 				$pr_content_style_bg = 'background: linear-gradient( rgba( ' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . '), rgba(' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . ') ), url(\'' . $bg_image . '\') no-repeat center center; ';
 
-				$pr_content_style = ' style="' . $pr_content_style_bg . '"';
+				$pr_content_style_attr .= $pr_content_style_bg;
 
 				// 画像に色を被せない場合
 			} else {
-				$pr_content_style = ' style="background:
-				url( \'' . $bg_image . '\' ) no-repeat center center; background-size: cover;"';
+				$pr_content_style_attr .= 'background:
+				url( \'' . $bg_image . '\' ) no-repeat center center; background-size: cover;';
 			}
 		}
 		// $pr_content_style = '';
+		if ( $pr_content_style_attr ) {
+			$pr_content_style = ' style="' . $pr_content_style_attr . '"';
+		}
+
 		echo '<div class="pr-content vk-prlx"' . $pr_content_style . '>';
 		echo '<div class="container">';
 
@@ -196,7 +213,8 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			?>
 		</div><!-- .col-sm-6 -->
 		<?php } ?>
-		  <div class="col-sm-6 pr-content-col-text">
+		<div class="col-sm-6 pr-content-col-text">
+
 			<?php
 			// title
 			if ( $options['title'] ) {
@@ -207,6 +225,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				}
 				echo '<h3 class="pr-content-title"' . $color . '>' . esc_html( $options['title'] ) . '</h3>';
 			}
+
 			// text
 			if ( $options['text'] ) {
 				if ( $options['text_color'] ) {
@@ -217,88 +236,108 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				echo '<p' . $color . '>' . wp_kses_post( $options['text'] ) . '</p>';
 			}
 
-			/*  ボタンタイプを選択
-			/*-------------------------------------------*/
-			if ( empty( $options['btn_type'] ) ) {
-				$options['btn_type'] = 'full';
-			}
-
-			/*  ボタンテキストカラーの設定
-			/*-------------------------------------------*/
-			// ゴーストボタンの時
-			if ( $options['btn_type'] === 'ghost' ) {
-				// ボタンカラーがあればボタンカラーを適用
-				if ( isset( $options['btn_color'] ) && $options['btn_color'] ) {
-					$btn_text_style = 'color:' . $options['btn_color'] . ';';
-				} else {
-					$btn_text_style = 'color:#fff;';
-				}
-				// 塗りボタンの時
-			} elseif ( $options['btn_type'] === 'full' ) {
-				// ボタンの初期状態の文字色が白なので指定する必要がない
-				$btn_text_style = '';
-			}
-
-			/*  ボタン bg color の設定
-			/*-------------------------------------------*/
-			if ( $options['btn_type'] === 'ghost' ) {
-				// 初期状態だと背景色が指定されているので透過にする
-				$btn_bg_style = 'background: transparent; transition: .3s;';
-
-			} elseif ( $options['btn_type'] === 'full' ) {
-
-				// 色指定がない時
-				if ( empty( $options['btn_color'] ) ) {
-					// デフォルトでテーマなどから出力されるので指定しない
-					$btn_bg_style = '';
-					// 色指定がある時
-				} elseif ( ! empty( $options['btn_color'] ) ) {
-					// ボタンカラーが設定されている時
-					$btn_bg_style = 'background-color:' . $options['btn_color'] . ';';
-				}
-			}
-
-			/*  ボタン border の設定
-			/*-------------------------------------------*/
-
-			if ( $options['btn_type'] === 'ghost' ) {
-
-				if ( empty( $options['btn_color'] ) ) {
-					// 線の色指定がなければ白
-					$btn_border_style = 'border-color:#ffffffcc;';
-				} else {
-					// 色指定があればその色を適用
-					$btn_border_style = 'border-color:' . $options['btn_color'] . '99;';
-				}
-			} elseif ( $options['btn_type'] === 'full' ) {
-				if ( empty( $options['btn_color'] ) ) {
-					// 線の色指定がなければ白
-					$btn_border_style = '';
-				} else {
-					// 色指定があれば濃い色を計算
-					// 塗りボタンの場合は濃い色にしたいので指定色から0.5暗い色
-					$color_dark       = self::auto_color_mod( $options['btn_color'], 0.8 );
-					$btn_border_style = 'border-color:' . $color_dark . ';';
-				}
-			}
-
-			/*  ボタンのCSS
-			/*-------------------------------------------*/
-			$btn_style = $btn_text_style . $btn_bg_style . $btn_border_style;
-			if ( $btn_style ) {
-				$btn_style = ' style="' . esc_attr( $btn_style ) . '"';
-			}
-
-			/*  ボタンのclass
-			/*-------------------------------------------*/
-			$btn_style = $btn_text_style . $btn_bg_style . $btn_border_style;
-			if ( $btn_style ) {
-				$btn_style = ' style="' . esc_attr( $btn_style ) . '"';
-			}
-
 			/*  ボタン出力
 			/*-------------------------------------------*/
 			if ( $options['btn_text'] && $options['btn_url'] ) {
+
+				/*  ボタンタイプを選択
+				/*-------------------------------------------*/
+				if ( empty( $options['btn_type'] ) ) {
+					$options['btn_type'] = 'full';
+				}
+
+				/*  ボタンテキストカラーの設定
+				/*-------------------------------------------*/
+				// ゴーストボタンの時
+				if ( $options['btn_type'] === 'ghost' ) {
+					// ボタンカラーがあればボタンカラーを適用
+					if ( isset( $options['btn_color'] ) && $options['btn_color'] ) {
+						$btn_text_style = 'color:' . $options['btn_color'] . ';';
+					} else {
+						$btn_text_style = 'color:#fff;';
+					}
+					// 塗りボタンの時
+				} elseif ( $options['btn_type'] === 'full' ) {
+					// ボタンの初期状態の文字色が白なので指定する必要がない
+					$btn_text_style = '';
+				}
+
+				/*  ボタン bg color の設定
+				/*-------------------------------------------*/
+				$btn_bg_style       = '';
+				$btn_bg_hover_style = '';
+				if ( $options['btn_type'] === 'ghost' ) {
+					// 初期状態だと背景色が指定されているので透過にする
+					$btn_bg_style = 'background: transparent; transition: .3s;';
+
+				} elseif ( $options['btn_type'] === 'full' ) {
+
+					// 色指定がない時
+					if ( empty( $options['btn_color'] ) ) {
+						// デフォルトでテーマなどから出力されるので指定しない
+						$btn_bg_style = '';
+						// 色指定がある時
+					} elseif ( ! empty( $options['btn_color'] ) ) {
+						// ボタンカラーが設定されている時
+						$btn_bg_style       = 'background-color:' . $options['btn_color'] . ';';
+						$btn_bg_hover_style = 'background-color:' . self::auto_color_mod( $options['btn_color'], 1.2 ) . ';';
+					}
+				}
+
+				/*  ボタン border の設定
+				/*-------------------------------------------*/
+				$btn_border_style       = '';
+				$btn_border_hover_style = '';
+				if ( $options['btn_type'] === 'ghost' ) {
+
+					if ( empty( $options['btn_color'] ) ) {
+						// 線の色指定がなければ白
+						$btn_border_style = 'border-color:#ffffffcc;';
+					} else {
+						// 色指定があればその色を適用
+						$btn_border_style = 'border-color:' . $options['btn_color'] . '99;';
+					}
+				} elseif ( $options['btn_type'] === 'full' ) {
+					if ( empty( $options['btn_color'] ) ) {
+						// 線の色指定がなければ白
+						$btn_border_style = '';
+					} else {
+						// 色指定があれば濃い色を計算
+						// 塗りボタンの場合は濃い色にしたいので指定色から0.5暗い色
+						$color_dark             = self::auto_color_mod( $options['btn_color'], 0.8 );
+						$btn_border_style       = 'border-color:' . $color_dark . ';';
+						$btn_border_hover_style = 'border-color:' . $options['btn_color'] . ';';
+					}
+				}
+
+				/*  ボタンのCSS
+				/*-------------------------------------------*/
+				$btn_style      = '';
+				$btn_style_attr = $btn_text_style . $btn_bg_style . $btn_border_style;
+				if ( $btn_style_attr ) {
+					$btn_style = ' style="' . esc_attr( $btn_style_attr ) . '"';
+				}
+
+				/*  ボタン hoverのCSS
+				/*-------------------------------------------*/
+				$btn_hover_style_attr = '';
+				$btn_hover_style_attr = $btn_border_hover_style . $btn_bg_hover_style;
+				if ( $btn_hover_style_attr ) {
+					$btn_style = ' style="' . esc_attr( $btn_style_attr ) . '"';
+				}
+
+				/*  ボタンのclass
+				/*-------------------------------------------*/
+				$btn_class_add_attr = '';
+				if ( empty( $options['btn_type'] ) ) {
+					$btn_class_add_attr = ' btn-primary';
+				} elseif ( isset( $options['btn_type'] ) && $options['btn_type'] === 'full' ) {
+					$btn_class_add_attr = ' btn-primary';
+				} elseif ( isset( $options['btn_type'] ) && $options['btn_type'] === 'ghost' ) {
+					// ゴーストの時
+					$btn_class_add_attr = ' btn-ghost';
+				}
+
 				$more_link_html = '<div class="pr-content-btn">';
 				// target_blank の指定
 				if ( ! empty( $options['btn_blank'] ) ) {
@@ -307,40 +346,33 @@ class VK_Widget_Pr_Content extends WP_Widget {
 					$blank = '';
 				}
 
-				// ボタンタイプによってクラスをつける
-				if ( empty( $options['btn_type'] ) ) {
-					$btn_class = ' btn-primary';
-				} elseif ( isset( $options['btn_type'] ) && $options['btn_type'] === 'full' ) {
-					$btn_class = ' btn-primary';
-				} elseif ( isset( $options['btn_type'] ) && $options['btn_type'] === 'ghost' ) {
-					// ゴーストの時
-					$btn_class = 'btn-ghost';
-				}
-
 				echo '<style>';
-				echo  '#' . $args['widget_id'] . ' .btn-ghost:hover{ background-color:' . $btn_color . ';border:' . $btn_color . '}';
+				if ( isset( $options['btn_type'] ) && $options['btn_type'] == 'ghost' ) {
+					echo  '#' . $args['widget_id'] . ' .btn-ghost:hover{ background-color:' . $btn_color . ';border:' . $btn_color . '}';
+				} else {
+
+				}
 				echo '</style>';
 
-				$more_link_html .= '<a href="' . esc_url( $options['btn_url'] ) . '" class="btn btn-block btn-lg' . $btn_class . '" ' . $blank . $btn_style . '">' . wp_kses_post( $options['btn_text'] ) . '</a>';
+				$more_link_html .= '<a href="' . esc_url( $options['btn_url'] ) . '" class="btn btn-block btn-lg' . $btn_class_add_attr . '" ' . $blank . $btn_style . '">' . wp_kses_post( $options['btn_text'] ) . '</a>';
 				$more_link_html .= '</div>';
 			} else {
 				$more_link_html = '';
 			}
-			echo $more_link_html;
-			?>
+					echo $more_link_html;
+				?>
 
-		  </div><!-- .col-sm-6 -->
-		  </div><!-- .row -->
-		  </div><!-- .container -->
-			<?php
-			echo '</div>'; // .pr-content
-			echo $args['after_widget'];
+			  </div><!-- .col-sm-6 -->
+			  </div><!-- .row -->
+			  </div><!-- .container -->
+				<?php
+				echo '</div>'; // .pr-content
+				echo $args['after_widget'];
 	}
 
-
-	/*-------------------------------------------*/
-	/*  update
-	/*-------------------------------------------*/
+			/*-------------------------------------------*/
+			/*  update
+			/*-------------------------------------------*/
 
 	function update( $new_instance, $old_instance ) {
 		$instance                       = $old_instance;
@@ -365,10 +397,9 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		return $instance;
 	}
 
-
-	/*-------------------------------------------*/
-	/*  form
-	/*-------------------------------------------*/
+			/*-------------------------------------------*/
+			/*  form
+			/*-------------------------------------------*/
 
 	function form( $instance ) {
 		global $pr_content_textdomain;
@@ -410,14 +441,14 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		?>
 		<div class="pr_content_media_area">
 		<div class="_display" style="height:auto">
-			<?php if ( $image ) : ?>
+	<?php if ( $image ) : ?>
 			  <img src="<?php echo esc_url( $image[0] ); ?>" style="width:100%; height:auto; border: 1px solid #ccc; margin: 0 0 15px; box-sizing: border-box;" />
 			<?php endif; ?>
 		</div>
 		<button class="button button-default button-block" style="display:block;width:100%;text-align: center; margin:0;" onclick="javascript:media_image_addiditional( this );return false;"><?php _e( 'Set image', $pr_content_textdomain ); ?></button>
 		<button class="button button-default button-block" style="display:block;width:100%;text-align: center; margin:4px 0;" onclick="javascript:vk_title_bg_image_delete( this );return false;"><?php _e( 'Delete image', $pr_content_textdomain ); ?></button>
 		<div class="_form" style="line-height: 2em">
-		  <input type="hidden" class="__id" name="<?php echo $this->get_field_name( 'media_image' ); ?>" value="<?php echo esc_attr( $options['media_image'] ); ?>" />
+  <input type="hidden" class="__id" name="<?php echo $this->get_field_name( 'media_image' ); ?>" value="<?php echo esc_attr( $options['media_image'] ); ?>" />
 		</div>
 
 		<p class="color_picker_wrap">
@@ -430,32 +461,32 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		// 画像登録処理
 		if (media_image_addiditional == undefined){
 		var media_image_addiditional = function(e){
-			  // プレビュー画像を表示するdiv
-		  var d=jQuery(e).parent().children("._display");
-			  // 画像IDを保存するinputタグ
-		  var w=jQuery(e).parent().children("._form").children('.__id')[0];
-		  var u=wp.media({library:{type:'image'},multiple:false}).on('select', function(e){
-			  u.state().get('selection').each(function(f){
-						  d.children().remove();
-						  d.append(jQuery('<img style="width:100%;mheight:auto">').attr('src',f.toJSON().url));
-						  jQuery(w).val(f.toJSON().id).change();
-					  });
-		  });
-		  u.open();
+	  // プレビュー画像を表示するdiv
+  var d=jQuery(e).parent().children("._display");
+	  // 画像IDを保存するinputタグ
+  var w=jQuery(e).parent().children("._form").children('.__id')[0];
+  var u=wp.media({library:{type:'image'},multiple:false}).on('select', function(e){
+	  u.state().get('selection').each(function(f){
+				  d.children().remove();
+				  d.append(jQuery('<img style="width:100%;mheight:auto">').attr('src',f.toJSON().url));
+				  jQuery(w).val(f.toJSON().id).change();
+			  });
+  });
+  u.open();
 		};
 		}
 		// 背景画像削除処理
 		if (media_image_delete == undefined){
 		var media_image_delete = function(e){
-			  // プレビュー画像を表示するdiv
-			  var d=jQuery(e).parent().children("._display");
-			  // 画像IDを保存するinputタグ
-			  var w=jQuery(e).parent().children("._form").children('.__id')[0];
+	  // プレビュー画像を表示するdiv
+	  var d=jQuery(e).parent().children("._display");
+	  // 画像IDを保存するinputタグ
+	  var w=jQuery(e).parent().children("._form").children('.__id')[0];
 
-			  // プレビュー画像のimgタグを削除
-			  d.children().remove();
-			  // w.attr("value","");
-			  jQuery(e).parent().children("._form").children('.__id').attr("value","").change();
+	  // プレビュー画像のimgタグを削除
+	  d.children().remove();
+	  // w.attr("value","");
+	  jQuery(e).parent().children("._form").children('.__id').attr("value","").change();
 		};
 		}
 		</script>
@@ -494,24 +525,24 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		<?php
 		$checked = '';
 		if (
-			// $instance[ 'layout_type' ] が定義されていて、値がleftの場合
-			( isset( $options['btn_type'] ) && $options['btn_type'] === 'full' ) ||
-			// $options[ 'btn_type' ] が定義されていない場合
-			empty( $options['btn_type'] )
+		// $instance[ 'layout_type' ] が定義されていて、値がleftの場合
+		( isset( $options['btn_type'] ) && $options['btn_type'] === 'full' ) ||
+		// $options[ 'btn_type' ] が定義されていない場合
+		empty( $options['btn_type'] )
 			 ) {
-				// ' checked'を指定する
-				$checked = ' checked';
+					// ' checked'を指定する
+					$checked = ' checked';
 		}
 		?>
 		<label>
-			<input type="radio" name="<?php echo $this->get_field_name( 'btn_type' ); ?>" value="full" <?php echo $checked; ?> />
-			<?php _e( 'Fill button', $pr_content_textdomain ); ?>
+	<input type="radio" name="<?php echo $this->get_field_name( 'btn_type' ); ?>" value="full" <?php echo $checked; ?> />
+	<?php _e( 'Fill button', $pr_content_textdomain ); ?>
 		</label>
 		<br>
 		<?php $checked = ( isset( $options['btn_type'] ) && $options['btn_type'] === 'ghost' ) ? ' checked' : ''; ?>
 		<label>
-			<input type="radio" name="<?php echo $this->get_field_name( 'btn_type' ); ?>" value="ghost" <?php echo $checked; ?> />
-			<?php _e( 'Ghost button', $pr_content_textdomain ); ?>
+	<input type="radio" name="<?php echo $this->get_field_name( 'btn_type' ); ?>" value="ghost" <?php echo $checked; ?> />
+	<?php _e( 'Ghost button', $pr_content_textdomain ); ?>
 		</label>
 		</p>
 
@@ -544,45 +575,45 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		<label for="<?php echo $this->get_field_id( 'bg_image' ); ?>"><?php _e( 'Background image', $pr_content_textdomain ); ?> : </label>
 		<p><?php _e( 'If both the background color and the background image are set, the background image is reflected.', $pr_content_textdomain ); ?></p>
 		<div class="_display" style="height:auto">
-			<?php if ( $bg_image ) : ?>
+	<?php if ( $bg_image ) : ?>
 			  <img src="<?php echo esc_url( $bg_image[0] ); ?>" style="width:100%; height:auto; border: 1px solid #ccc; box-sizing: border-box;" />
 			<?php endif; ?>
 		</div>
 		<button class="button button-default button-block" style="display:block;width:100%;text-align: center; margin:15px 0 0;" onclick="javascript:bg_image_addiditional(this);return false;"><?php _e( 'Set image', $pr_content_textdomain ); ?></button>
 		<button class="button button-default button-block" style="display:block;width:100%;text-align: center; margin:4px 0;" onclick="javascript:vk_title_bg_image_delete(this);return false;"><?php _e( 'Delete image', $pr_content_textdomain ); ?></button>
 		<div class="_form" style="line-height: 2em">
-		  <input type="hidden" class="__id" name="<?php echo $this->get_field_name( 'bg_image' ); ?>" value="<?php echo esc_attr( $options['bg_image'] ); ?>" />
+  <input type="hidden" class="__id" name="<?php echo $this->get_field_name( 'bg_image' ); ?>" value="<?php echo esc_attr( $options['bg_image'] ); ?>" />
 		</div>
 		<script type="text/javascript">
 		// 画像登録処理
 		if (bg_image_addiditional == undefined){
 		var bg_image_addiditional = function(ef){
-			  // プレビュー画像を表示するdiv
-		  var de=jQuery(ef).parent().children("._display");
-			  // 画像IDを保存するinputタグ
-		  var wx=jQuery(ef).parent().children("._form").children('.__id')[0];
-		  var uv=wp.media({library:{type:'image'},multiple:false}).on('select', function(ef){
-			  uv.state().get('selection').each(function(fg){
-						  de.children().remove();
-						  de.append(jQuery('<img style="width:100%;mheight:auto">').attr('src',fg.toJSON().url));
-						  jQuery(wx).val(fg.toJSON().id).change();
-					  });
-		  });
-		  uv.open();
+	  // プレビュー画像を表示するdiv
+  var de=jQuery(ef).parent().children("._display");
+	  // 画像IDを保存するinputタグ
+  var wx=jQuery(ef).parent().children("._form").children('.__id')[0];
+  var uv=wp.media({library:{type:'image'},multiple:false}).on('select', function(ef){
+	  uv.state().get('selection').each(function(fg){
+				  de.children().remove();
+				  de.append(jQuery('<img style="width:100%;mheight:auto">').attr('src',fg.toJSON().url));
+				  jQuery(wx).val(fg.toJSON().id).change();
+			  });
+  });
+  uv.open();
 		};
 		}
 		// 背景画像削除処理
 		if (bg_image_delete == undefined){
 		var bg_image_delete = function(ef){
-			  // プレビュー画像を表示するdiv
-			  var de=jQuery(ef).parent().children("._display");
-			  // 画像IDを保存するinputタグ
-			  var wx=jQuery(ef).parent().children("._form").children('.__id')[0];
+	  // プレビュー画像を表示するdiv
+	  var de=jQuery(ef).parent().children("._display");
+	  // 画像IDを保存するinputタグ
+	  var wx=jQuery(ef).parent().children("._form").children('.__id')[0];
 
-			  // プレビュー画像のimgタグを削除
-			  de.children().remove();
-			  // w.attr("value","");
-			  jQuery(ef).parent().children("._form").children('.__id').attr("value","").change();
+	  // プレビュー画像のimgタグを削除
+	  de.children().remove();
+	  // w.attr("value","");
+	  jQuery(ef).parent().children("._form").children('.__id').attr("value","").change();
 		};
 		}
 		</script>
@@ -608,27 +639,27 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		<?php
 		$checked = '';
 		if (
-		  // $instance[ 'layout_type' ] が定義されていて、値がleftの場合
-		  ( isset( $instance['layout_type'] ) && $instance['layout_type'] === 'left' ) ||
-		  // $instance[ 'layout_type' ] が定義されていない場合
-		  empty( $instance['layout_type'] )
+		// $instance[ 'layout_type' ] が定義されていて、値がleftの場合
+		( isset( $instance['layout_type'] ) && $instance['layout_type'] === 'left' ) ||
+		// $instance[ 'layout_type' ] が定義されていない場合
+		empty( $instance['layout_type'] )
 		   ) {
-			  // ' checked'を指定する
-			  $checked = ' checked';
+					// ' checked'を指定する
+					$checked = ' checked';
 		}
 		?>
 		<label>
-			<input type="radio" name="<?php echo $this->get_field_name( 'layout_type' ); ?>" value="left" <?php echo $checked; ?> />
-			<?php _e( 'Put the image to the left', $pr_content_textdomain ); ?>
+	<input type="radio" name="<?php echo $this->get_field_name( 'layout_type' ); ?>" value="left" <?php echo $checked; ?> />
+	<?php _e( 'Put the image to the left', $pr_content_textdomain ); ?>
 		</label>
 		<br>
 		<?php $checked = ( isset( $instance['layout_type'] ) && $instance['layout_type'] === 'right' ) ? ' checked' : ''; ?>
 		<label>
-			<input type="radio" name="<?php echo $this->get_field_name( 'layout_type' ); ?>" value="right" <?php echo $checked; ?> />
-			<?php _e( 'Put the image to the right', $pr_content_textdomain ); ?>
+	<input type="radio" name="<?php echo $this->get_field_name( 'layout_type' ); ?>" value="right" <?php echo $checked; ?> />
+	<?php _e( 'Put the image to the right', $pr_content_textdomain ); ?>
 		</label>
 		</p>
-		
+
 		<?php // margin_top . margin_bottom ?>
 		<p>
 		<label for="<?php echo $this->get_field_id( 'margin_top' ); ?>" ><?php _e( 'Margin-top', $pr_content_textdomain ); ?> : </label>
@@ -646,10 +677,9 @@ class VK_Widget_Pr_Content extends WP_Widget {
 	<?php
 	} // function form( $instance )
 
-
-	/*-------------------------------------------*/
-	/*  Position Change
-	/*-------------------------------------------*/
+			/*-------------------------------------------*/
+			/*  Position Change
+			/*-------------------------------------------*/
 
 	function print_css() {
 			$custom_css = '';
