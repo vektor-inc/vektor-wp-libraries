@@ -120,12 +120,17 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 		$pr_content_style = '';
 
-		// 背景色指定があって背景画像指定がない場合
 		if ( ( ! empty( $options['bg_color'] ) ) && ( empty( $options['bg_image'] ) ) ) {
+
+			/*  背景 色指定あり && 背景 画像指定なし
+			/*-------------------------------------------*/
+
 			$pr_content_style = ' style="background-color:' . esc_attr( $options['bg_color'] ) . '"';
 
-			// 背景画像指定がある場合
 		} elseif ( ! empty( $options['bg_image'] ) ) {
+
+			/*  背景 画像指定あり
+			/*-------------------------------------------*/
 
 			// 画像IDから画像のURLを取得
 			$bg_image = wp_get_attachment_image_src( $instance['bg_image'], 'full' );
@@ -139,13 +144,9 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				$bg_cover_color = preg_replace( '/#/', '', $bg_cover_color );
 				//「******」という形になっているはずなので、2つずつ「**」に区切る
 				// そしてhexdec関数で変換して配列に格納する
-				$array_bg_cover_color['red']   = hexdec( substr( $bg_cover_color, 0, 2 ) );
-				$array_bg_cover_color['green'] = hexdec( substr( $bg_cover_color, 2, 2 ) );
-				$array_bg_cover_color['blue']  = hexdec( substr( $bg_cover_color, 4, 2 ) );
-				// 配列の中身を変数に代入
-				$bg_cover_color_red   = $array_bg_cover_color['red'];
-				$bg_cover_color_green = $array_bg_cover_color['green'];
-				$bg_cover_color_blue  = $array_bg_cover_color['blue'];
+				$bg_cover_color_red   = hexdec( substr( $bg_cover_color, 0, 2 ) );
+				$bg_cover_color_green = hexdec( substr( $bg_cover_color, 2, 2 ) );
+				$bg_cover_color_blue  = hexdec( substr( $bg_cover_color, 4, 2 ) );
 
 				// 被せる色の濃さ（0以外）が入力されていたら値を小数に変換して代入
 				if ( ! empty( $options['bg_cover_depth'] ) && $options['bg_cover_depth'] !== 0 ) {
@@ -157,8 +158,6 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				// background: linear-gradient で画像の上に $bg_cover_color を透過（$bg_cover_depth）させて被せる
 				// →１個めの rgba() と２個目の rgba() の値を別々で設定すればグラデーションもできる
 				$pr_content_style_bg = 'background: linear-gradient( rgba( ' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . '), rgba(' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . ') ), url(\'' . $bg_image . '\') no-repeat center center; ';
-
-				// $pr_content_style_bg_color = 'background-color:linear-gradient( rgba( ' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . '), rgba(' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . ') );';
 
 				$pr_content_style = ' style="' . $pr_content_style_bg . '"';
 
@@ -217,9 +216,6 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				}
 				echo '<p' . $color . '>' . wp_kses_post( $options['text'] ) . '</p>';
 			}
-
-			/*  link btnの CSS を出力する関数
-			/*-------------------------------------------*/
 
 			/*  ボタンタイプを選択
 			/*-------------------------------------------*/
