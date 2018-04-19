@@ -87,6 +87,26 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		return $new_color;
 	}
 
+	public static function btn_text_color_style( $options ) {
+		// 塗りボタンの時
+		if ( $options['btn_type'] === 'full' || empty( $options['btn_type'] ) ) {
+			// ボタンの初期状態の文字色が白なので指定する必要がない
+			$btn_text_style = '';
+		} elseif ( $options['btn_type'] === 'ghost' ) {
+			// 文字色指定があればボタンカラーを適用
+			if ( isset( $options['text_color'] ) && $options['text_color'] ) {
+				$btn_text_style       = 'color:' . $options['text_color'] . ';';
+				$btn_text_hover_style = 'color:#fff;';
+				// ボタンカラー指定のない場合
+			} else {
+				$btn_text_style       = 'color:#fff;';
+				$btn_text_hover_style = 'color:#fff;';
+			}
+		}
+		return $btn_text_style;
+		// return '';
+	}
+
 	/*-------------------------------------------*/
 	/*  入力された値とデフォルト値を結合するメソッド
 	/*-------------------------------------------*/
@@ -123,8 +143,9 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		// 入力された値とデフォルトで指定した値をマージして$options にいれる
 		$options = self::options( $instance );
 
-		echo $args['before_widget'];
-
+		/*-------------------------------------------*/
+		/*  .pr-content 用 style 属性の生成
+		/*-------------------------------------------*/
 		$pr_content_style_attr = '';
 		if ( ! empty( $options['margin_top'] ) ) {
 			$pr_content_style_attr .= 'margin-top:' . $options['margin_top'] . ';';
@@ -185,6 +206,13 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			$pr_content_style = ' style="' . $pr_content_style_attr . '"';
 		}
 
+		// ボタンの色指定がない時などに使うが、色指定がない場合はテーマ側で指定した色を使ったりして出力しない時もあるので取り扱い注意
+		$color_default = '#337ab7';
+
+		/*-------------------------------------------*/
+		/*  widget 出力
+		/*-------------------------------------------*/
+		echo $args['before_widget'];
 		echo '<div class="pr-content vk-prlx"' . $pr_content_style . '>';
 		echo '<div class="container">';
 
@@ -199,7 +227,9 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		<?php if ( $options['media_image'] ) { ?>
 		<div class="col-sm-6 pr-content-col-img">
 			<?php
-			// media img
+			/*-------------------------------------------*/
+			/*  画像
+			/*-------------------------------------------*/
 			// 画像IDから画像のURLを取得
 			if ( ! empty( $options['media_image'] ) && is_numeric( $options['media_image'] ) ) {
 				$media_border_color       = $options['media_border_color'];
@@ -216,7 +246,9 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		<div class="col-sm-6 pr-content-col-text">
 
 			<?php
-			// title
+			/*-------------------------------------------*/
+			/*  タイトル
+			/*-------------------------------------------*/
 			if ( $options['title'] ) {
 				if ( $options['title_color'] ) {
 					$color = ' style="color:' . esc_attr( $options['title_color'] ) . '"';
@@ -226,7 +258,9 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				echo '<h3 class="pr-content-title"' . $color . '>' . esc_html( $options['title'] ) . '</h3>';
 			}
 
-			// text
+			/*-------------------------------------------*/
+			/*  テキスト
+			/*-------------------------------------------*/
 			if ( $options['text'] ) {
 				if ( $options['text_color'] ) {
 					$color = ' style="color:' . esc_attr( $options['text_color'] ) . '"';
@@ -236,6 +270,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				echo '<p' . $color . '>' . wp_kses_post( $options['text'] ) . '</p>';
 			}
 
+			/*-------------------------------------------*/
 			/*  ボタン出力
 			/*-------------------------------------------*/
 			if ( $options['btn_text'] && $options['btn_url'] ) {
@@ -249,29 +284,24 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				/*  ボタンテキストカラーの設定
 				/*-------------------------------------------*/
 				// ゴーストボタンの時
-				if ( $options['btn_type'] === 'ghost' ) {
-					// ボタンカラーがあればボタンカラーを適用
-					if ( isset( $options['btn_color'] ) && $options['btn_color'] ) {
-						$btn_text_style = 'color:' . $options['btn_color'] . ';';
-					} else {
-						$btn_text_style = 'color:#fff;';
-					}
-					// 塗りボタンの時
-				} elseif ( $options['btn_type'] === 'full' ) {
-					// ボタンの初期状態の文字色が白なので指定する必要がない
-					$btn_text_style = '';
-				}
+
+				$btn_text_style = self::btn_text_color_style( $options );
 
 				/*  ボタン bg color の設定
 				/*-------------------------------------------*/
 				$btn_bg_style       = '';
 				$btn_bg_hover_style = '';
+
 				if ( $options['btn_type'] === 'ghost' ) {
 					// 初期状態だと背景色が指定されているので透過にする
 					$btn_bg_style = 'background: transparent; transition: .3s;';
 
+					if ( ! empty( $options['btn_color'] ) ) {
+						$btn_bg_hover_style = 'background-color:' . $options['btn_color'] . ';';
+					} else {
+						$btn_bg_hover_style = 'background-color:' . $color_default . ';';
+					}
 				} elseif ( $options['btn_type'] === 'full' ) {
-
 					// 色指定がない時
 					if ( empty( $options['btn_color'] ) ) {
 						// デフォルトでテーマなどから出力されるので指定しない
@@ -288,15 +318,23 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				/*-------------------------------------------*/
 				$btn_border_style       = '';
 				$btn_border_hover_style = '';
-				if ( $options['btn_type'] === 'ghost' ) {
 
-					if ( empty( $options['btn_color'] ) ) {
-						// 線の色指定がなければ白
-						$btn_border_style = 'border-color:#ffffffcc;';
+				if ( empty( $options['btn_color'] ) ) {
+					$btn_color_dark = self::auto_color_mod( $options['btn_color'], 0.8 );
+				}
+
+				// ゴーストボタン
+				if ( $options['btn_type'] === 'ghost' ) {
+					if ( ! empty( $options['text_color'] ) ) {
+						// テキストの色指定がある場合
+						$btn_border_style = 'border-color:' . $options['text_color'] . ';';
+
 					} else {
-						// 色指定があればその色を適用
-						$btn_border_style = 'border-color:' . $options['btn_color'] . '99;';
+						$btn_border_style = 'border-color:#fff;';
 					}
+					$btn_border_hover_style = 'border-color:' . self::auto_color_mod( $color_default, 0.8 ) . ';';
+
+					// 塗りボタン
 				} elseif ( $options['btn_type'] === 'full' ) {
 					if ( empty( $options['btn_color'] ) ) {
 						// 線の色指定がなければ白
@@ -304,8 +342,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 					} else {
 						// 色指定があれば濃い色を計算
 						// 塗りボタンの場合は濃い色にしたいので指定色から0.5暗い色
-						$color_dark             = self::auto_color_mod( $options['btn_color'], 0.8 );
-						$btn_border_style       = 'border-color:' . $color_dark . ';';
+						$btn_border_style       = 'border-color:' . self::auto_color_mod( $options['btn_color'], 0.8 ) . ';';
 						$btn_border_hover_style = 'border-color:' . $options['btn_color'] . ';';
 					}
 				}
