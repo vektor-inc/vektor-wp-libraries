@@ -59,7 +59,6 @@ class VK_Widget_Pr_Content extends WP_Widget
 			'media_image'        => null,
 			'media_border_color' => null,
 			'btn_text'           => '',
-			'btn_text_color'     => null,
 			'btn_url'            => '',
 			'btn_blank'          => false,
 			'btn_color'          => null,
@@ -300,7 +299,6 @@ class VK_Widget_Pr_Content extends WP_Widget
 		$instance['media_image']        = wp_kses_post( $new_instance['media_image'] );
 		$instance['media_border_color'] = wp_kses_post( $new_instance['media_border_color'] );
 		$instance['btn_text']           = wp_kses_post( $new_instance['btn_text'] );
-		$instance['btn_text_color']     = (isset( $new_instance['btn_text_color'] ) ) ? sanitize_hex_color( $new_instance['btn_text_color'] ) : false;
 		$instance['btn_url']            = esc_url( $new_instance['btn_url'] );
 		$instance['btn_blank']          = ( isset( $new_instance['btn_blank'] ) && $new_instance['btn_blank'] ) ? true : false;
 		$instance['btn_color']          = ( isset( $new_instance['btn_color'] ) ) ? sanitize_hex_color( $new_instance['btn_color'] ) : false;
@@ -463,12 +461,6 @@ class VK_Widget_Pr_Content extends WP_Widget
 			<input type="radio" name="<?php echo $this->get_field_name( 'btn_type' ); ?>" value="ghost" <?php echo $checked; ?> />
 			<?php _e( 'Ghost button', $pr_content_textdomain ); ?>
 		</label>
-		</p>
-
-		<?php // btn_text_color ?>
-		<p class="color_picker_wrap">
-		<label for="<?php echo $this->get_field_id( 'btn_text_color' ); ?>"><?php _e( 'Button text color', $pr_content_textdomain ); ?> : </label>
-		<input type="text" id="<?php echo $this->get_field_id( 'btn_text_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'btn_text_color' ); ?>" value="<?php echo esc_attr( $options['btn_text_color'] ); ?>" />
 		</p>
 
 		<?php // Button color ?>
