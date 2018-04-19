@@ -4,8 +4,8 @@
  * MIT License
  */
 /*
-外枠のdivに .prlx を付与する
-外枠のdivのstyle属性に直接画像 url を記載する
+外枠のdivやsectionタグなどに .prlx を付与する
+外枠のdivのstyle属性に直接画像 url を記載する事で動作する
 */
 ;
 (function($) {

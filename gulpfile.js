@@ -61,18 +61,20 @@ gulp.task('sass_vk-widget-pr-content', function() {
 
 
 // js最小化
-gulp.task('jsmin_prlx', function() {
-	gulp.src(['./vk-parallax/vk-prlx.js'])
+gulp.task('jsmin_jslibs', function() {
+	gulp.src(['./js-libraries/vk-prlx.js', './js-libraries/admin-widget-color.js'])
 		.pipe(plumber()) // エラーでも監視を続行
 		.pipe(jsmin())
 		.pipe(rename({
 			suffix: '.min'
 		}))
-		.pipe(gulp.dest('./vk-parallax/package/js/'));
+		.pipe(gulp.dest('./js-libraries/'));
 });
-gulp.task('copy_prlx', function() {
-	gulp.src('./vk-parallax/package/**')
-		.pipe(gulp.dest('./vk-widget-pr-content/js/'));
+gulp.task('copy_jslibs', function() {
+	gulp.src('./js-libraries/vk-prlx.min.js')
+		.pipe(gulp.dest('./vk-widget-pr-content/package/js/'));
+	gulp.src('./js-libraries/admin-widget-color.min.js')
+		.pipe(gulp.dest('./vk-widget-pr-content/package/js/'));
 });
 
 
@@ -216,8 +218,8 @@ gulp.task('watch_page-header', function() {
 });
 gulp.task('watch_pr-content', function() {
 	gulp.watch('./vk-widget-pr-content/package/_scss/**', ['sass_vk-widget-pr-content']);
-	gulp.watch('./vk-widget-pr-content/package/**', ['copy_widget-pr-content']);
-	gulp.watch('./vk-parallax/package/**', ['jsmin_prlx', 'copy_prlx']);
+	gulp.watch('./vk-widget-pr-content/package/**', ['copy_widget-pr-content', 'jsmin_jslibs', 'copy_jslibs']);
+	gulp.watch('./js-libraries/**', ['jsmin_jslibs', 'copy_jslibs']);
 });
 gulp.task('watch_header-top', function() {
 	gulp.watch('./header-top/package/**', ['copy_header-top']);
