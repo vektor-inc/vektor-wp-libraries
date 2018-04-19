@@ -603,7 +603,32 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		<div class="admin_widget_section">
 		<h2 class="admin_widget_h2"><?php _e( 'Layout', $pr_content_textdomain ); ?></h2>
 
-
+		<?php // layout_type ?>
+		<p><?php _e( 'Select layout type:', $pr_content_textdomain ); ?><br>
+		<?php
+		$checked = '';
+		if (
+		  // $instance[ 'layout_type' ] が定義されていて、値がleftの場合
+		  ( isset( $instance['layout_type'] ) && $instance['layout_type'] === 'left' ) ||
+		  // $instance[ 'layout_type' ] が定義されていない場合
+		  empty( $instance['layout_type'] )
+		   ) {
+			  // ' checked'を指定する
+			  $checked = ' checked';
+		}
+		?>
+		<label>
+			<input type="radio" name="<?php echo $this->get_field_name( 'layout_type' ); ?>" value="left" <?php echo $checked; ?> />
+			<?php _e( 'Put the image to the left', $pr_content_textdomain ); ?>
+		</label>
+		<br>
+		<?php $checked = ( isset( $instance['layout_type'] ) && $instance['layout_type'] === 'right' ) ? ' checked' : ''; ?>
+		<label>
+			<input type="radio" name="<?php echo $this->get_field_name( 'layout_type' ); ?>" value="right" <?php echo $checked; ?> />
+			<?php _e( 'Put the image to the right', $pr_content_textdomain ); ?>
+		</label>
+		</p>
+		
 		<?php // margin_top . margin_bottom ?>
 		<p>
 		<label for="<?php echo $this->get_field_id( 'margin_top' ); ?>" ><?php _e( 'Margin-top', $pr_content_textdomain ); ?> : </label>
