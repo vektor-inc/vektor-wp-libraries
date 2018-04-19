@@ -60,6 +60,22 @@ gulp.task('sass_vk-widget-pr-content', function() {
 });
 
 
+// js最小化
+gulp.task('jsmin_prlx', function() {
+	gulp.src(['./vk-parallax/vk-prlx.js'])
+		.pipe(plumber()) // エラーでも監視を続行
+		.pipe(jsmin())
+		.pipe(rename({
+			suffix: '.min'
+		}))
+		.pipe(gulp.dest('./vk-parallax/package/js/'));
+});
+gulp.task('copy_prlx', function() {
+	gulp.src('./vk-parallax/package/**')
+		.pipe(gulp.dest('./vk-widget-pr-content/js/'));
+});
+
+
 gulp.task('copy_vk-admin', function() {
 	gulp.src('./vk-admin/package/**')
 		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins_admin/vk-admin/'))
@@ -94,12 +110,12 @@ gulp.task('copy_media-posts', function() {
 		.pipe(gulp.dest('../plugins/lightning-skin-fort/inc/media-posts/'))
 		.pipe(gulp.dest('../plugins/lightning-skin-pale/inc/media-posts/'))
 		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/media-posts/'));
-		gulp.src('./media-posts/tests/**')
-			.pipe(gulp.dest('../plugins/lightning-skin-variety/tests/'))
-			.pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/tests/'))
-			.pipe(gulp.dest('../plugins/lightning-skin-fort/tests/'))
-			.pipe(gulp.dest('../plugins/lightning-skin-pale/tests/'))
-			.pipe(gulp.dest('../plugins/lightning-origin-pro/tests/'));
+	gulp.src('./media-posts/tests/**')
+		.pipe(gulp.dest('../plugins/lightning-skin-variety/tests/'))
+		.pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/tests/'))
+		.pipe(gulp.dest('../plugins/lightning-skin-fort/tests/'))
+		.pipe(gulp.dest('../plugins/lightning-skin-pale/tests/'))
+		.pipe(gulp.dest('../plugins/lightning-origin-pro/tests/'));
 });
 // gulp.task( 'copy_font-awesome-selector', function() {
 //     gulp.src( './font-awesome-selector/package/**' )
@@ -201,6 +217,7 @@ gulp.task('watch_page-header', function() {
 gulp.task('watch_pr-content', function() {
 	gulp.watch('./vk-widget-pr-content/package/_scss/**', ['sass_vk-widget-pr-content']);
 	gulp.watch('./vk-widget-pr-content/package/**', ['copy_widget-pr-content']);
+	gulp.watch('./vk-parallax/package/**', ['jsmin_prlx', 'copy_prlx']);
 });
 gulp.task('watch_header-top', function() {
 	gulp.watch('./header-top/package/**', ['copy_header-top']);
@@ -210,3 +227,12 @@ gulp.task('watch_cta', function() {
 });
 
 gulp.task('default', ['watch']);
+
+
+// ファイル結合
+// gulp.task('concat', function() {
+// 	// return gulp.src(['./js/lightning-adv-common.js','./inc/navigation/js/navigation.js','./inc/sidebar-fix/js/sidebar-fix.js'])
+// 	return gulp.src(['./js/lightning-adv-common.js', './inc/sidebar-fix/js/sidebar-fix.js'])
+// 		.pipe(concat('lightning-adv.js'))
+// 		.pipe(gulp.dest('./js/'));
+// });

@@ -29,6 +29,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			array( 'description' => __( 'This widget can be used when 1 column display is selected.', $pr_content_textdomain ) ) //Widgetの説明
 		);
 		add_action( 'wp_head', array( $this, 'print_css' ), 2 );
+		add_action( 'admin_print_footer_scripts', array( $this, 'print_admin_js' ), 2 );
 
 		/*
 		 PR Content ウィジェット用のCSSを デザインスキンなどで結合して出力し、
@@ -42,7 +43,14 @@ class VK_Widget_Pr_Content extends WP_Widget {
 	}
 
 	public static function add_script() {
+		wp_register_script( 'vk-parallax-js', plugin_dir_url( __FILE__ ) . 'js/vk-parallax.js', array( 'jquery' ), self::$version );
+		wp_enqueue_script( 'vk-parallax-js' );
 		wp_enqueue_style( 'vk-widget-pr-content-style', plugin_dir_url( __FILE__ ) . 'css/vk-widget-pr-content.css', array(), self::$version, 'all' );
+	}
+
+	public static function print_admin_js() {
+		wp_enqueue_script( 'admin-widget-color-js', plugin_dir_url( __FILE__ ) . 'js/admin-widget-color.js', array( 'jquery' ), date( 'His' ) );
+
 	}
 
 
@@ -105,9 +113,11 @@ class VK_Widget_Pr_Content extends WP_Widget {
 	function widget( $args, $instance ) {
 		// 入力された値とデフォルトで指定した値をマージして$options にいれる
 		$options = self::options( $instance );
+
 		echo '<style type="text/css">';
 		echo '.mainSection #' . $args['widget_id'] . '.widget_vk_widget_pr_content { margin-top:' . $options['margin_top'] . '; margin-bottom:' . $options['margin_bottom'] . ';}';
 		echo '</style>';
+
 		echo $args['before_widget'];
 
 		$pr_content_style = '';
@@ -148,7 +158,11 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 				// background: linear-gradient で画像の上に $bg_cover_color を透過（$bg_cover_depth）させて被せる
 				// →１個めの rgba() と２個目の rgba() の値を別々で設定すればグラデーションもできる
-				$pr_content_style = ' style="background: linear-gradient( rgba( ' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . ' ), rgba( ' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . ' ) ), url( \'' . $bg_image . '\' ) no-repeat center center; background-size: cover;"';
+				$pr_content_style_bg = 'background: linear-gradient( rgba( ' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . '), rgba(' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . ') ), url(\'' . $bg_image . '\') no-repeat center center; ';
+
+				// $pr_content_style_bg_color = 'background-color:linear-gradient( rgba( ' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . '), rgba(' . $bg_cover_color_red . ', ' . $bg_cover_color_green . ', ' . $bg_cover_color_blue . ', ' . $bg_cover_depth . ') );';
+
+				$pr_content_style = ' style="' . $pr_content_style_bg . '"';
 
 				// 画像に色を被せない場合
 			} else {
@@ -156,8 +170,8 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				url( \'' . $bg_image . '\' ) no-repeat center center; background-size: cover;"';
 			}
 		}
-		echo '<div class="pr-content"' . $pr_content_style . '>';
-
+		// $pr_content_style = '';
+		echo '<div class="pr-content vk-prlx"' . $pr_content_style . '>';
 		echo '<div class="container">';
 
 		// レイアウトタイプを選択
@@ -185,148 +199,148 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			?>
 		</div><!-- .col-sm-6 -->
 		<?php } ?>
-	  <div class="col-sm-6 pr-content-col-text">
-		<?php
-		// title
-		if ( $options['title'] ) {
-			if ( $options['title_color'] ) {
-				$color = ' style="color:' . esc_attr( $options['title_color'] ) . '"';
-			} else {
-				$color = '';
+		  <div class="col-sm-6 pr-content-col-text">
+			<?php
+			// title
+			if ( $options['title'] ) {
+				if ( $options['title_color'] ) {
+					$color = ' style="color:' . esc_attr( $options['title_color'] ) . '"';
+				} else {
+					$color = '';
+				}
+				echo '<h3 class="pr-content-title"' . $color . '>' . esc_html( $options['title'] ) . '</h3>';
 			}
-			echo '<h3 class="pr-content-title"' . $color . '>' . esc_html( $options['title'] ) . '</h3>';
-		}
-		// text
-		if ( $options['text'] ) {
-			if ( $options['text_color'] ) {
-				$color = ' style="color:' . esc_attr( $options['text_color'] ) . '"';
-			} else {
-				$color = '';
-			}
-			echo '<p' . $color . '>' . wp_kses_post( $options['text'] ) . '</p>';
-		}
-
-		/*  link btnの CSS を出力する関数
-		/*-------------------------------------------*/
-
-		/*  ボタンタイプを選択
-		/*-------------------------------------------*/
-		if ( empty( $options['btn_type'] ) ) {
-			$options['btn_type'] = 'full';
-		}
-
-		/*  ボタンテキストカラーの設定
-		/*-------------------------------------------*/
-		// ゴーストボタンの時
-		if ( $options['btn_type'] === 'ghost' ) {
-			// ボタンカラーがあればボタンカラーを適用
-			if ( isset( $options['btn_color'] ) && $options['btn_color'] ) {
-				$btn_text_style = 'color:' . $options['btn_color'] . ';';
-			} else {
-				$btn_text_style = 'color:#fff;';
-			}
-			// 塗りボタンの時
-		} elseif ( $options['btn_type'] === 'full' ) {
-			// ボタンの初期状態の文字色が白なので指定する必要がない
-			$btn_text_style = '';
-		}
-
-		/*  ボタン bg color の設定
-		/*-------------------------------------------*/
-		if ( $options['btn_type'] === 'ghost' ) {
-			// 初期状態だと背景色が指定されているので透過にする
-			$btn_bg_style = 'background: transparent; transition: .3s;';
-
-		} elseif ( $options['btn_type'] === 'full' ) {
-
-			// 色指定がない時
-			if ( empty( $options['btn_color'] ) ) {
-				// デフォルトでテーマなどから出力されるので指定しない
-				$btn_bg_style = '';
-				// 色指定がある時
-			} elseif ( ! empty( $options['btn_color'] ) ) {
-				// ボタンカラーが設定されている時
-				$btn_bg_style = 'background-color:' . $options['btn_color'] . ';';
-			}
-		}
-
-		/*  ボタン border の設定
-		/*-------------------------------------------*/
-
-		if ( $options['btn_type'] === 'ghost' ) {
-
-			if ( empty( $options['btn_color'] ) ) {
-				// 線の色指定がなければ白
-				$btn_border_style = 'border-color:#ffffffcc;';
-			} else {
-				// 色指定があればその色を適用
-				$btn_border_style = 'border-color:' . $options['btn_color'] . '99;';
-			}
-		} elseif ( $options['btn_type'] === 'full' ) {
-			if ( empty( $options['btn_color'] ) ) {
-				// 線の色指定がなければ白
-				$btn_border_style = '';
-			} else {
-				// 色指定があれば濃い色を計算
-				// 塗りボタンの場合は濃い色にしたいので指定色から0.5暗い色
-				$color_dark       = self::auto_color_mod( $options['btn_color'], 0.8 );
-				$btn_border_style = 'border-color:' . $color_dark . ';';
-			}
-		}
-
-		/*  ボタンのCSS
-		/*-------------------------------------------*/
-		$btn_style = $btn_text_style . $btn_bg_style . $btn_border_style;
-		if ( $btn_style ) {
-			$btn_style = ' style="' . esc_attr( $btn_style ) . '"';
-		}
-
-		/*  ボタンのclass
-		/*-------------------------------------------*/
-		$btn_style = $btn_text_style . $btn_bg_style . $btn_border_style;
-		if ( $btn_style ) {
-			$btn_style = ' style="' . esc_attr( $btn_style ) . '"';
-		}
-
-		/*  ボタン出力
-		/*-------------------------------------------*/
-		if ( $options['btn_text'] && $options['btn_url'] ) {
-			$more_link_html = '<div class="pr-content-btn">';
-			// target_blank の指定
-			if ( ! empty( $options['btn_blank'] ) ) {
-				$blank = 'target="_blank"';
-			} else {
-				$blank = '';
+			// text
+			if ( $options['text'] ) {
+				if ( $options['text_color'] ) {
+					$color = ' style="color:' . esc_attr( $options['text_color'] ) . '"';
+				} else {
+					$color = '';
+				}
+				echo '<p' . $color . '>' . wp_kses_post( $options['text'] ) . '</p>';
 			}
 
-			// ボタンタイプによってクラスをつける
+			/*  link btnの CSS を出力する関数
+			/*-------------------------------------------*/
+
+			/*  ボタンタイプを選択
+			/*-------------------------------------------*/
 			if ( empty( $options['btn_type'] ) ) {
-				$btn_class = ' btn-primary';
-			} elseif ( isset( $options['btn_type'] ) && $options['btn_type'] === 'full' ) {
-				$btn_class = ' btn-primary';
-			} elseif ( isset( $options['btn_type'] ) && $options['btn_type'] === 'ghost' ) {
-				// ゴーストの時
-				$btn_class = 'btn-ghost';
+				$options['btn_type'] = 'full';
 			}
 
-			echo '<style>';
-			echo  '#' . $args['widget_id'] . ' .btn-ghost:hover{ background-color:' . $btn_color . ';border:' . $btn_color . '}';
-			echo '</style>';
+			/*  ボタンテキストカラーの設定
+			/*-------------------------------------------*/
+			// ゴーストボタンの時
+			if ( $options['btn_type'] === 'ghost' ) {
+				// ボタンカラーがあればボタンカラーを適用
+				if ( isset( $options['btn_color'] ) && $options['btn_color'] ) {
+					$btn_text_style = 'color:' . $options['btn_color'] . ';';
+				} else {
+					$btn_text_style = 'color:#fff;';
+				}
+				// 塗りボタンの時
+			} elseif ( $options['btn_type'] === 'full' ) {
+				// ボタンの初期状態の文字色が白なので指定する必要がない
+				$btn_text_style = '';
+			}
 
-			$more_link_html .= '<a href="' . esc_url( $options['btn_url'] ) . '" class="btn btn-block btn-lg' . $btn_class . '" ' . $blank . $btn_style . '">' . wp_kses_post( $options['btn_text'] ) . '</a>';
-			$more_link_html .= '</div>';
-		} else {
-			$more_link_html = '';
-		}
-		  echo $more_link_html;
-		?>
+			/*  ボタン bg color の設定
+			/*-------------------------------------------*/
+			if ( $options['btn_type'] === 'ghost' ) {
+				// 初期状態だと背景色が指定されているので透過にする
+				$btn_bg_style = 'background: transparent; transition: .3s;';
 
-	  </div><!-- .col-sm-6 -->
-	  </div><!-- .row -->
-	  </div><!-- .container -->
-		<?php
-		echo '</div>'; // .pr-content
-		echo $args['after_widget'];
+			} elseif ( $options['btn_type'] === 'full' ) {
+
+				// 色指定がない時
+				if ( empty( $options['btn_color'] ) ) {
+					// デフォルトでテーマなどから出力されるので指定しない
+					$btn_bg_style = '';
+					// 色指定がある時
+				} elseif ( ! empty( $options['btn_color'] ) ) {
+					// ボタンカラーが設定されている時
+					$btn_bg_style = 'background-color:' . $options['btn_color'] . ';';
+				}
+			}
+
+			/*  ボタン border の設定
+			/*-------------------------------------------*/
+
+			if ( $options['btn_type'] === 'ghost' ) {
+
+				if ( empty( $options['btn_color'] ) ) {
+					// 線の色指定がなければ白
+					$btn_border_style = 'border-color:#ffffffcc;';
+				} else {
+					// 色指定があればその色を適用
+					$btn_border_style = 'border-color:' . $options['btn_color'] . '99;';
+				}
+			} elseif ( $options['btn_type'] === 'full' ) {
+				if ( empty( $options['btn_color'] ) ) {
+					// 線の色指定がなければ白
+					$btn_border_style = '';
+				} else {
+					// 色指定があれば濃い色を計算
+					// 塗りボタンの場合は濃い色にしたいので指定色から0.5暗い色
+					$color_dark       = self::auto_color_mod( $options['btn_color'], 0.8 );
+					$btn_border_style = 'border-color:' . $color_dark . ';';
+				}
+			}
+
+			/*  ボタンのCSS
+			/*-------------------------------------------*/
+			$btn_style = $btn_text_style . $btn_bg_style . $btn_border_style;
+			if ( $btn_style ) {
+				$btn_style = ' style="' . esc_attr( $btn_style ) . '"';
+			}
+
+			/*  ボタンのclass
+			/*-------------------------------------------*/
+			$btn_style = $btn_text_style . $btn_bg_style . $btn_border_style;
+			if ( $btn_style ) {
+				$btn_style = ' style="' . esc_attr( $btn_style ) . '"';
+			}
+
+			/*  ボタン出力
+			/*-------------------------------------------*/
+			if ( $options['btn_text'] && $options['btn_url'] ) {
+				$more_link_html = '<div class="pr-content-btn">';
+				// target_blank の指定
+				if ( ! empty( $options['btn_blank'] ) ) {
+					$blank = 'target="_blank"';
+				} else {
+					$blank = '';
+				}
+
+				// ボタンタイプによってクラスをつける
+				if ( empty( $options['btn_type'] ) ) {
+					$btn_class = ' btn-primary';
+				} elseif ( isset( $options['btn_type'] ) && $options['btn_type'] === 'full' ) {
+					$btn_class = ' btn-primary';
+				} elseif ( isset( $options['btn_type'] ) && $options['btn_type'] === 'ghost' ) {
+					// ゴーストの時
+					$btn_class = 'btn-ghost';
+				}
+
+				echo '<style>';
+				echo  '#' . $args['widget_id'] . ' .btn-ghost:hover{ background-color:' . $btn_color . ';border:' . $btn_color . '}';
+				echo '</style>';
+
+				$more_link_html .= '<a href="' . esc_url( $options['btn_url'] ) . '" class="btn btn-block btn-lg' . $btn_class . '" ' . $blank . $btn_style . '">' . wp_kses_post( $options['btn_text'] ) . '</a>';
+				$more_link_html .= '</div>';
+			} else {
+				$more_link_html = '';
+			}
+			echo $more_link_html;
+			?>
+
+		  </div><!-- .col-sm-6 -->
+		  </div><!-- .row -->
+		  </div><!-- .container -->
+			<?php
+			echo '</div>'; // .pr-content
+			echo $args['after_widget'];
 	}
 
 
