@@ -567,6 +567,66 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		</p>
 		</div>
 
+		<?php // Link button ?>
+		<div class="admin_widget_section">
+		<h2 class="admin_widget_h2"><?php _e( 'Link button', $pr_content_textdomain ); ?></h2>
+		<p>
+		<label for="<?php echo $this->get_field_id( 'btn_url' ); ?>"><?php _e( 'Link URL', $pr_content_textdomain ); ?> : </label>
+		<input type="text" id="<?php echo $this->get_field_id( 'btn_url' ); ?>" name="<?php echo $this->get_field_name( 'btn_url' ); ?>" value="<?php echo esc_attr( $options['btn_url'] ); ?>" class="admin_widget_input" />
+		</p>
+		<p>
+		<label for="<?php echo $this->get_field_id( 'btn_text' ); ?>"><?php _e( 'Notation text', $pr_content_textdomain ); ?> : </label>
+		<input type="text" placeholder="詳細を見る ≫" id="<?php echo $this->get_field_id( 'btn_text' ); ?>" name="<?php echo $this->get_field_name( 'btn_text' ); ?>" value="<?php echo esc_attr( $options['btn_text'] ); ?>" class="admin_widget_input" /><br>
+		<?php _e( 'Ex', $pr_content_textdomain ); ?> ) <?php _e( 'Read more  ≫', $pr_content_textdomain ); ?>
+		</p>
+
+		<?php // target blank ?>
+		<p>
+		<input type="checkbox" id="<?php echo $this->get_field_id( 'btn_blank' ); ?>" name="<?php echo $this->get_field_name( 'btn_blank' ); ?>" value="true"
+		<?php
+		if ( $options['btn_blank'] ) {
+			echo 'checked';
+		}
+		?>
+		/>
+		<label for="<?php echo $this->get_field_id( 'btn_blank' ); ?>" ><?php _e( 'Open with new tab', $pr_content_textdomain ); ?></label>
+		</p>
+
+		<?php // btn_type ?>
+		<p><?php _e( 'Select button type:', $pr_content_textdomain ); ?><br>
+		<?php
+		$checked = '';
+		if (
+		// $instance[ 'layout_type' ] が定義されていて、値がleftの場合
+		( isset( $options['btn_type'] ) && $options['btn_type'] === 'full' ) ||
+		// $options[ 'btn_type' ] が定義されていない場合
+		empty( $options['btn_type'] )
+			 ) {
+					// ' checked'を指定する
+					$checked = ' checked';
+		}
+		?>
+		<label>
+	<input type="radio" name="<?php echo $this->get_field_name( 'btn_type' ); ?>" value="full" <?php echo $checked; ?> />
+	<?php _e( 'Fill button', $pr_content_textdomain ); ?>
+		</label>
+		<br>
+		<?php $checked = ( isset( $options['btn_type'] ) && $options['btn_type'] === 'ghost' ) ? ' checked' : ''; ?>
+		<label>
+	<input type="radio" name="<?php echo $this->get_field_name( 'btn_type' ); ?>" value="ghost" <?php echo $checked; ?> />
+	<?php _e( 'Ghost button', $pr_content_textdomain ); ?>
+		</label>
+		</p>
+
+		<?php // Button color ?>
+		<p class="color_picker_wrap">
+		<label for="<?php echo $this->get_field_id( 'btn_color' ); ?>"><?php _e( 'Button color', $pr_content_textdomain ); ?> : </label>
+		<input type="text" id="<?php echo $this->get_field_id( 'btn_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'btn_color' ); ?>" value="<?php echo esc_attr( $options['btn_color'] ); ?>" />
+		</p>
+
+		</div><!-- [ /.admin_widget_section ] -->
+
+
 		<?php // Image ?>
 		<div class="admin_widget_section">
 		<h2 class="admin_widget_h2"><?php _e( 'Image', $pr_content_textdomain ); ?></h2>
@@ -631,66 +691,34 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		}
 		</script>
 
-		<!-- [ 画像の枠線のカラーピッカーはこのあたりに入る想定 ] -->
-
-		</div><!-- [ /.admin_widget_section ] -->
-
-		<?php // Link button ?>
-		<div class="admin_widget_section">
-		<h2 class="admin_widget_h2"><?php _e( 'Link button', $pr_content_textdomain ); ?></h2>
-		<p>
-		<label for="<?php echo $this->get_field_id( 'btn_url' ); ?>"><?php _e( 'Link URL', $pr_content_textdomain ); ?> : </label>
-		<input type="text" id="<?php echo $this->get_field_id( 'btn_url' ); ?>" name="<?php echo $this->get_field_name( 'btn_url' ); ?>" value="<?php echo esc_attr( $options['btn_url'] ); ?>" class="admin_widget_input" />
-		</p>
-		<p>
-		<label for="<?php echo $this->get_field_id( 'btn_text' ); ?>"><?php _e( 'Notation text', $pr_content_textdomain ); ?> : </label>
-		<input type="text" placeholder="詳細を見る ≫" id="<?php echo $this->get_field_id( 'btn_text' ); ?>" name="<?php echo $this->get_field_name( 'btn_text' ); ?>" value="<?php echo esc_attr( $options['btn_text'] ); ?>" class="admin_widget_input" /><br>
-		<?php _e( 'Ex', $pr_content_textdomain ); ?> ) <?php _e( 'Read more  ≫', $pr_content_textdomain ); ?>
-		</p>
-
-		<?php // target blank ?>
-		<p>
-		<input type="checkbox" id="<?php echo $this->get_field_id( 'btn_blank' ); ?>" name="<?php echo $this->get_field_name( 'btn_blank' ); ?>" value="true"
-		<?php
-		if ( $options['btn_blank'] ) {
-			echo 'checked';
-		}
-		?>
-		/>
-		<label for="<?php echo $this->get_field_id( 'btn_blank' ); ?>" ><?php _e( 'Open with new tab', $pr_content_textdomain ); ?></label>
-		</p>
-
-		<?php // btn_type ?>
-		<p><?php _e( 'Select button type:', $pr_content_textdomain ); ?><br>
+		<?php // layout_type ?>
+		<p><?php _e( 'Select layout type:', $pr_content_textdomain ); ?><br>
 		<?php
 		$checked = '';
 		if (
 		// $instance[ 'layout_type' ] が定義されていて、値がleftの場合
-		( isset( $options['btn_type'] ) && $options['btn_type'] === 'full' ) ||
-		// $options[ 'btn_type' ] が定義されていない場合
-		empty( $options['btn_type'] )
-			 ) {
+		( isset( $instance['layout_type'] ) && $instance['layout_type'] === 'left' ) ||
+		// $instance[ 'layout_type' ] が定義されていない場合
+		empty( $instance['layout_type'] )
+		   ) {
 					// ' checked'を指定する
 					$checked = ' checked';
 		}
 		?>
 		<label>
-	<input type="radio" name="<?php echo $this->get_field_name( 'btn_type' ); ?>" value="full" <?php echo $checked; ?> />
-	<?php _e( 'Fill button', $pr_content_textdomain ); ?>
+	<input type="radio" name="<?php echo $this->get_field_name( 'layout_type' ); ?>" value="left" <?php echo $checked; ?> />
+	<?php _e( 'Put the image to the left', $pr_content_textdomain ); ?>
 		</label>
 		<br>
-		<?php $checked = ( isset( $options['btn_type'] ) && $options['btn_type'] === 'ghost' ) ? ' checked' : ''; ?>
+		<?php $checked = ( isset( $instance['layout_type'] ) && $instance['layout_type'] === 'right' ) ? ' checked' : ''; ?>
 		<label>
-	<input type="radio" name="<?php echo $this->get_field_name( 'btn_type' ); ?>" value="ghost" <?php echo $checked; ?> />
-	<?php _e( 'Ghost button', $pr_content_textdomain ); ?>
+	<input type="radio" name="<?php echo $this->get_field_name( 'layout_type' ); ?>" value="right" <?php echo $checked; ?> />
+	<?php _e( 'Put the image to the right', $pr_content_textdomain ); ?>
 		</label>
 		</p>
 
-		<?php // Button color ?>
-		<p class="color_picker_wrap">
-		<label for="<?php echo $this->get_field_id( 'btn_color' ); ?>"><?php _e( 'Button color', $pr_content_textdomain ); ?> : </label>
-		<input type="text" id="<?php echo $this->get_field_id( 'btn_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'btn_color' ); ?>" value="<?php echo esc_attr( $options['btn_color'] ); ?>" />
-		</p>
+
+		<!-- [ 画像の枠線のカラーピッカーはこのあたりに入る想定 ] -->
 
 		</div><!-- [ /.admin_widget_section ] -->
 
@@ -773,32 +801,6 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 		<div class="admin_widget_section">
 		<h2 class="admin_widget_h2"><?php _e( 'Layout', $pr_content_textdomain ); ?></h2>
-
-		<?php // layout_type ?>
-		<p><?php _e( 'Select layout type:', $pr_content_textdomain ); ?><br>
-		<?php
-		$checked = '';
-		if (
-		// $instance[ 'layout_type' ] が定義されていて、値がleftの場合
-		( isset( $instance['layout_type'] ) && $instance['layout_type'] === 'left' ) ||
-		// $instance[ 'layout_type' ] が定義されていない場合
-		empty( $instance['layout_type'] )
-		   ) {
-					// ' checked'を指定する
-					$checked = ' checked';
-		}
-		?>
-		<label>
-	<input type="radio" name="<?php echo $this->get_field_name( 'layout_type' ); ?>" value="left" <?php echo $checked; ?> />
-	<?php _e( 'Put the image to the left', $pr_content_textdomain ); ?>
-		</label>
-		<br>
-		<?php $checked = ( isset( $instance['layout_type'] ) && $instance['layout_type'] === 'right' ) ? ' checked' : ''; ?>
-		<label>
-	<input type="radio" name="<?php echo $this->get_field_name( 'layout_type' ); ?>" value="right" <?php echo $checked; ?> />
-	<?php _e( 'Put the image to the right', $pr_content_textdomain ); ?>
-		</label>
-		</p>
 
 		<?php // margin_top . margin_bottom ?>
 		<p>
