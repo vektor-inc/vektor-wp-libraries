@@ -161,13 +161,6 @@ class PrContentTest extends WP_UnitTestCase {
 	}
 
 
-
-
-
-
-
-
-
 	function test_btn_text_hover_style() {
 		$test_array = array(
 			// オプション値自体が保存されていない
@@ -256,13 +249,13 @@ class PrContentTest extends WP_UnitTestCase {
 				'btn_type'   => 'ghost',
 				'btn_color'  => null,
 				'text_color' => null,
-				'correct'    => 'background-color:#337ab7',
+				'correct'    => 'background-color:#337ab7;',
 			),
 			array(
 				'btn_type'   => 'ghost',
 				'btn_color'  => '#f00',
 				'text_color' => null,
-				'correct'    => 'background-color:#f00',
+				'correct'    => 'background-color:#f00;',
 			),
 		);
 		//
@@ -310,11 +303,6 @@ class PrContentTest extends WP_UnitTestCase {
 				'btn_color' => '#f00',
 				'correct'   => 'border-color:#f00;',
 			),
-			array(
-				'btn_type'  => 'ghost',
-				'btn_color' => '#00f',
-				'correct'   => 'border-color:#f00;',
-			),
 		);
 		//
 		print PHP_EOL;
@@ -329,6 +317,5 @@ class PrContentTest extends WP_UnitTestCase {
 
 		}
 	}
-
 
 }

@@ -184,6 +184,91 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		return $btn_border_style;
 	}
 
+		/**
+		 * ボタンのホバー時の文字色を出力する
+		 * @param  [type] $options [description]
+		 * @return [type]          [description]
+		 */
+	public static function btn_text_hover_style( $options ) {
+		$btn_text_hover_style = '';
+		// 塗りボタンの時
+		if ( $options['btn_type'] === 'full' || empty( $options['btn_type'] ) ) {
+		} elseif ( $options['btn_type'] === 'ghost' ) {
+			// 文字色指定があればボタンカラーを適用
+			if ( isset( $options['text_color'] ) && $options['text_color'] ) {
+				$btn_text_hover_style = 'color:#fff;';
+				// ボタンカラー指定のない場合
+			} else {
+				$btn_text_hover_style = 'color:#fff;';
+			}
+		}
+		return $btn_text_hover_style;
+	}
+
+		/**
+		 * ボタンのホバー時の背景のスタイルを出力する
+		 * @param  [type] $options [description]
+		 * @return [type]          [description]
+		 */
+	public static function btn_bg_hover_style( $options ) {
+		$btn_bg_hover_style = '';
+
+		if ( $options['btn_type'] === 'ghost' ) {
+
+			if ( ! empty( $options['btn_color'] ) ) {
+				$btn_bg_hover_style = 'background-color:' . $options['btn_color'] . ';';
+			} else {
+				$btn_bg_hover_style = 'background-color:' . self::$color_default . ';';
+			}
+		} elseif ( $options['btn_type'] === 'full' ) {
+			// 色指定がない時
+			if ( empty( $options['btn_color'] ) ) {
+				// 色指定がある時
+			} elseif ( ! empty( $options['btn_color'] ) ) {
+				// ボタンカラーが設定されている時
+				$btn_bg_hover_style = 'background-color:' . self::auto_color_mod( $options['btn_color'], 1.2 ) . ';';
+			}
+		}
+		return $btn_bg_hover_style;
+	}
+
+		/**
+		 * ボタンのホバー時の枠線のスタイルを出力する
+		 * @param  [type] $options [description]
+		 * @return [type]          [description]
+		 */
+	public static function btn_border_hover_style( $options ) {
+		$btn_border_hover_style = '';
+
+		// ゴーストボタン
+		if ( $options['btn_type'] === 'ghost' ) {
+			if ( ! empty( $options['btn_color'] ) ) {
+				$btn_border_hover_style = 'border-color:' . $options['btn_color'] . ';';
+			} else {
+				$btn_border_hover_style = 'border-color:' . self::$color_default . ';';
+			}
+
+			// 塗りボタン
+		} elseif ( $options['btn_type'] === 'full' ) {
+			if ( empty( $options['btn_color'] ) ) {
+			} else {
+				$btn_border_hover_style = 'border-color:' . $options['btn_color'] . ';';
+			}
+		}
+		return $btn_border_hover_style;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
 	/*-------------------------------------------*/
 	/*  入力された値とデフォルト値を結合するメソッド
 	/*-------------------------------------------*/
@@ -368,6 +453,18 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				/*  ボタン border の設定
 				/*-------------------------------------------*/
 				$btn_border_style = self::btn_border_style( $options );
+
+				/*  ボタンテキストカラーの設定
+				/*-------------------------------------------*/
+				$btn_text_hover_style = self::btn_text_hover_style( $options );
+
+				/*  ボタン bg color の設定
+				/*-------------------------------------------*/
+				$btn_bg_hover_style = self::btn_bg_hover_style( $options );
+
+				/*  ボタン border の設定
+				/*-------------------------------------------*/
+				$btn_border_hover_style = self::btn_border_hover_style( $options );
 
 				/*  ボタンのCSS
 				/*-------------------------------------------*/
