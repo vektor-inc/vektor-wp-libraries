@@ -442,28 +442,16 @@ class VK_Widget_Pr_Content extends WP_Widget {
 					$options['btn_type'] = 'full';
 				}
 
-				/*  ボタンテキストカラーの設定
+				/*  ボタンのカラーの設定
 				/*-------------------------------------------*/
-				$btn_text_style = self::btn_text_style( $options );
-
-				/*  ボタン bg color の設定
-				/*-------------------------------------------*/
-				$btn_bg_style = self::btn_bg_style( $options );
-
-				/*  ボタン border の設定
-				/*-------------------------------------------*/
+				$btn_text_style   = self::btn_text_style( $options );
+				$btn_bg_style     = self::btn_bg_style( $options );
 				$btn_border_style = self::btn_border_style( $options );
 
-				/*  ボタンテキストカラーの設定
+				/*  ボタンホバー時のカラーの設定
 				/*-------------------------------------------*/
-				$btn_text_hover_style = self::btn_text_hover_style( $options );
-
-				/*  ボタン bg color の設定
-				/*-------------------------------------------*/
-				$btn_bg_hover_style = self::btn_bg_hover_style( $options );
-
-				/*  ボタン border の設定
-				/*-------------------------------------------*/
+				$btn_text_hover_style   = self::btn_text_hover_style( $options );
+				$btn_bg_hover_style     = self::btn_bg_hover_style( $options );
 				$btn_border_hover_style = self::btn_border_hover_style( $options );
 
 				/*  ボタンのCSS
@@ -477,10 +465,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				/*  ボタン hoverのCSS
 				/*-------------------------------------------*/
 				$btn_hover_style_attr = '';
-				$btn_hover_style_attr = $btn_border_hover_style . $btn_bg_hover_style;
-				if ( $btn_hover_style_attr ) {
-					$btn_style = ' style="' . esc_attr( $btn_style_attr ) . '"';
-				}
+				$btn_hover_style_attr = $btn_text_hover_style . $btn_bg_hover_style . $btn_border_hover_style;
 
 				/*  ボタンのclass
 				/*-------------------------------------------*/
@@ -490,7 +475,6 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				} elseif ( isset( $options['btn_type'] ) && $options['btn_type'] === 'full' ) {
 					$btn_class_add_attr = ' btn-primary';
 				} elseif ( isset( $options['btn_type'] ) && $options['btn_type'] === 'ghost' ) {
-					// ゴーストの時
 					$btn_class_add_attr = ' btn-ghost';
 				}
 
@@ -502,13 +486,11 @@ class VK_Widget_Pr_Content extends WP_Widget {
 					$blank = '';
 				}
 
-				echo '<style>';
-				if ( isset( $options['btn_type'] ) && $options['btn_type'] == 'ghost' ) {
-					echo  '#' . $args['widget_id'] . ' .btn-ghost:hover{ background-color:' . $btn_color . ';border:' . $btn_color . '}';
-				} else {
-
+				if ( $btn_hover_style_attr ) {
+					echo '<style>';
+					echo  '#' . $args['widget_id'] . ' .btn:hover{ ' . $btn_hover_style_attr . '}';
+					echo '</style>';
 				}
-				echo '</style>';
 
 				$more_link_html .= '<a href="' . esc_url( $options['btn_url'] ) . '" class="btn btn-block btn-lg' . $btn_class_add_attr . '" ' . $blank . $btn_style . '">' . wp_kses_post( $options['btn_text'] ) . '</a>';
 				$more_link_html .= '</div>';
@@ -526,9 +508,9 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				echo $args['after_widget'];
 	}
 
-			/*-------------------------------------------*/
-			/*  update
-			/*-------------------------------------------*/
+	/*-------------------------------------------*/
+	/*  update
+	/*-------------------------------------------*/
 
 	function update( $new_instance, $old_instance ) {
 		$instance                       = $old_instance;
@@ -553,9 +535,9 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		return $instance;
 	}
 
-			/*-------------------------------------------*/
-			/*  form
-			/*-------------------------------------------*/
+	/*-------------------------------------------*/
+	/*  form
+	/*-------------------------------------------*/
 
 	function form( $instance ) {
 		global $pr_content_textdomain;
