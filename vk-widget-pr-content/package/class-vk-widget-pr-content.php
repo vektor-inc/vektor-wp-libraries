@@ -458,9 +458,6 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				/*-------------------------------------------*/
 				$btn_style      = '';
 				$btn_style_attr = $btn_text_style . $btn_bg_style . $btn_border_style;
-				if ( $btn_style_attr ) {
-					$btn_style = ' style="' . esc_attr( $btn_style_attr ) . '"';
-				}
 
 				/*  ボタン hoverのCSS
 				/*-------------------------------------------*/
@@ -486,13 +483,18 @@ class VK_Widget_Pr_Content extends WP_Widget {
 					$blank = '';
 				}
 
-				if ( $btn_hover_style_attr ) {
+				if ( $btn_style_attr || $btn_hover_style_attr ) {
 					echo '<style>';
-					echo  '#' . $args['widget_id'] . ' .btn:hover{ ' . $btn_hover_style_attr . '}';
+					if ( $btn_style_attr ) {
+						echo  '#' . $args['widget_id'] . ' .btn {' . $btn_style_attr . '}';
+					}
+					if ( $btn_hover_style_attr ) {
+						echo  '#' . $args['widget_id'] . ' .btn:hover{ ' . $btn_hover_style_attr . '}';
+					}
 					echo '</style>';
 				}
 
-				$more_link_html .= '<a href="' . esc_url( $options['btn_url'] ) . '" class="btn btn-block btn-lg' . $btn_class_add_attr . '" ' . $blank . $btn_style . '">' . wp_kses_post( $options['btn_text'] ) . '</a>';
+				$more_link_html .= '<a href="' . esc_url( $options['btn_url'] ) . '" class="btn btn-block btn-lg' . $btn_class_add_attr . '" ' . $blank . '">' . wp_kses_post( $options['btn_text'] ) . '</a>';
 				$more_link_html .= '</div>';
 			} else {
 				$more_link_html = '';
