@@ -44,8 +44,8 @@ class VK_Widget_Pr_Content extends WP_Widget {
 	}
 
 	public static function add_script() {
-		wp_register_script( 'vk-parallax-js', plugin_dir_url( __FILE__ ) . 'js/vk-prlx.min.js', array( 'jquery' ), self::$version );
-		wp_enqueue_script( 'vk-parallax-js' );
+		// wp_register_script( 'vk-parallax-js', plugin_dir_url( __FILE__ ) . 'js/vk-prlx.min.js', array( 'jquery' ), self::$version );
+		// wp_enqueue_script( 'vk-parallax-js' );
 		wp_enqueue_style( 'vk-widget-pr-content-style', plugin_dir_url( __FILE__ ) . 'css/vk-widget-pr-content.css', array(), self::$version, 'all' );
 	}
 
