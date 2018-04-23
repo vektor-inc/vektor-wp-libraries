@@ -109,6 +109,33 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				$btn_text_hover_style = 'color:#fff;';
 			}
 		}
+
+		// 塗りつぶしボタンでカラー設定がされていたとき
+		if ( $options['btn_type'] === 'full' ) {
+			// カラーコードの16進数を10進数に変換する
+			// RGB数値に変換するカラーコード
+			if ( ! empty( $options['btn_color'] ) ) {
+				$btn_color = $options['btn_color'];
+				//「#******」のような形でカラーコードがわたってきた場合「#」を削除する
+				$btn_color = preg_replace( '/#/', '', $btn_color );
+				//「******」という形になっているはずなので、2つずつ「**」に区切る
+				// そしてhexdec関数で変換して配列に格納する
+				$btn_text_color  = hexdec( substr( $btn_color, 0, 2 ) );
+				$btn_text_color .= hexdec( substr( $btn_color, 2, 2 ) );
+				$btn_text_color .= hexdec( substr( $btn_color, 4, 2 ) );
+
+				// ボタンカラーに設定されたカラーコードと 255*3*0.8 の数値を比較する
+				$color_control = 255 * 3 * 0.8;
+				if ( $btn_text_color > $color_control ) {
+					//ボタンカラーに設定されたカラーコードが $color_control より大きいときは
+					$btn_text_style = 'color: #000;';
+					// テキストカラーを #000 に設定
+				} else {
+					$btn_text_style = '';
+				}
+			}
+
+		}
 		return $btn_text_style;
 	}
 
