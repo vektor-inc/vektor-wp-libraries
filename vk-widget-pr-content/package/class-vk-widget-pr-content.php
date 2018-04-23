@@ -639,7 +639,8 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			$image = wp_get_attachment_image_src( $options['media_image'], 'large' );
 		}
 		?>
-		<div class="pr_content_media_area">
+		<!-- <div class="pr_content_media_area"> -->
+		<div class="admin_widget_section">
 		<div class="_display" style="height:auto">
 	<?php if ( $image ) : ?>
 			  <img src="<?php echo esc_url( $image[0] ); ?>" style="width:100%; height:auto; border: 1px solid #ccc; margin: 0 0 15px; box-sizing: border-box;" />
@@ -650,13 +651,13 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		<div class="_form" style="line-height: 2em">
   <input type="hidden" class="__id" name="<?php echo $this->get_field_name( 'media_image' ); ?>" value="<?php echo esc_attr( $options['media_image'] ); ?>" />
 		</div>
+		</div>
 
 		<p class="color_picker_wrap">
 		<label for="<?php echo $this->get_field_id( 'media_border_color' ); ?>"><?php _e( 'Media border color', $pr_content_textdomain ); ?> : </label>
 		<input type="text" id="<?php echo $this->get_field_id( 'media_border_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'media_border_color' ); ?>" value="<?php echo esc_attr( $options['media_border_color'] ); ?>" />
 		</p>
 
-		</div>
 		<script type="text/javascript">
 		// 画像登録処理
 		if (media_image_addiditional == undefined){
