@@ -110,7 +110,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 			}
 		}
 
-		// 塗りつぶしボタンでカラー設定がされていたとき
+		// 塗りつぶしボタンでカラー設定がされていたときのボタンテキストのカラー分岐
 		if ( $options['btn_type'] === 'full' ) {
 			// カラーコードの16進数を10進数に変換する
 			// RGB数値に変換するカラーコード
@@ -125,18 +125,17 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				$btn_text_color_blue  = hexdec( substr( $btn_color, 4, 2 ) );
 				$btn_text_color = $btn_text_color_red + $btn_text_color_green + $btn_text_color_blue;
 
-				// ボタンカラーに設定されたカラーコードと 255*3*0.8 の数値を比較する
-				$color_control = 255 * 3 * 0.8;
+				// ボタンカラーに設定されたカラーコードと $color_control の数値を比較する
+				$color_control = 255 * 3 * 0.6;
+				//ボタンカラーに設定されたカラーコードが $color_control より大きいときは
 				if ( $btn_text_color > $color_control ) {
-					//ボタンカラーに設定されたカラーコードが $color_control より大きいときは
-					$btn_text_style = 'color: #000;';
 					// テキストカラーを #000 に設定
+					$btn_text_style = 'color: #000;';
 				} else {
 					$btn_text_style = '';
 				}
-			}
-
-		}
+			} // if ( ! empty( $options['btn_color'] ) ) {
+		} // if ( $options['btn_type'] === 'full' ) {
 		return $btn_text_style;
 	}
 
