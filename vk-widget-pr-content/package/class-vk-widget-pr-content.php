@@ -120,9 +120,10 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				$btn_color = preg_replace( '/#/', '', $btn_color );
 				//「******」という形になっているはずなので、2つずつ「**」に区切る
 				// そしてhexdec関数で変換して配列に格納する
-				$btn_text_color  = hexdec( substr( $btn_color, 0, 2 ) );
-				$btn_text_color .= hexdec( substr( $btn_color, 2, 2 ) );
-				$btn_text_color .= hexdec( substr( $btn_color, 4, 2 ) );
+				$btn_text_color_red   = hexdec( substr( $btn_color, 0, 2 ) );
+				$btn_text_color_green = hexdec( substr( $btn_color, 2, 2 ) );
+				$btn_text_color_blue  = hexdec( substr( $btn_color, 4, 2 ) );
+				$btn_text_color = $btn_text_color_red + $btn_text_color_green + $btn_text_color_blue;
 
 				// ボタンカラーに設定されたカラーコードと 255*3*0.8 の数値を比較する
 				$color_control = 255 * 3 * 0.8;
