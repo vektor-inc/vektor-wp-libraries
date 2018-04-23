@@ -620,7 +620,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 		<?php // Button color ?>
 		<p class="color_picker_wrap">
-		<label for="<?php echo $this->get_field_id( 'btn_color' ); ?>"><?php _e( 'Button color', $pr_content_textdomain ); ?> : </label>
+		<label for="<?php echo $this->get_field_id( 'btn_color' ); ?>"><?php _e( 'Button color', $pr_content_textdomain ); ?> : <br><?php _e( 'When you select the ghost button, the color of the text is reflected in the color of the button.', $pr_content_textdomain ); ?></label>
 		<input type="text" id="<?php echo $this->get_field_id( 'btn_color' ); ?>"  class="color_picker" name="<?php echo $this->get_field_name( 'btn_color' ); ?>" value="<?php echo esc_attr( $options['btn_color'] ); ?>" />
 		</p>
 
