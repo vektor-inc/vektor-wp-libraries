@@ -19,6 +19,8 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 	$vk_mobile_fix_nav_textdomain = 'XXXX_plugin_text_domain_XXXX';
 }
 
+
+
 /*-------------------------------------------*/
 /* 初期状態
 /*-------------------------------------------*/

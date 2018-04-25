@@ -5,6 +5,46 @@ https://github.com/vektor-inc/vektor-wp-libraries
 にあります。修正の際は上記リポジトリのデータを修正してください。
 */
 
+// add_action( 'after_setup_theme', 'vkmn_nav_add_customize_panel' );
+//
+// // カスタマイズパネルを出力するかどうかの判別
+// function vkmn_nav_add_customize_panel() {
+// 		// カスタマイザーが利用されるので、独自のコントロールクラスを追加
+//
+// }
+
+add_action( 'customize_register', 'vkmn_customize_register_add_control', 10 );
+
+/*-------------------------------------------*/
+/*	ExUnit Original Controls
+/*-------------------------------------------*/
+if ( ! function_exists( 'vkmn_customize_register_add_control' ) ) {
+function vkmn_customize_register_add_control() {
+
+	/*	Add text control description
+	/*-------------------------------------------*/
+	class MobileNav_Custom_Html extends WP_Customize_Control {
+		public $type             = 'customtext';
+		public $custom_title_sub = ''; // we add this for the extra custom_html
+		public $custom_html      = ''; // we add this for the extra custom_html
+		public function render_content() {
+			if ( $this->label ) {
+				// echo '<h2 class="admin-custom-h2">' . wp_kses_post( $this->label ) . '</h2>';
+				echo '<h2 class="admin-custom-h2">' . wp_kses_post( $this->label ) . '</h2>';
+			}
+			if ( $this->custom_title_sub ) {
+				echo '<h3 class="admin-custom-h3">' . wp_kses_post( $this->custom_title_sub ) . '</h3>';
+			}
+			if ( $this->custom_html ) {
+				echo '<div>' . wp_kses_post( $this->custom_html ) . '</div>';
+			}
+		} // public function render_content() {
+	} // class MobileNav_Custom_Html extends WP_Customize_Control
+
+} // function veu_customize_register_add_control(){
+} // if ( ! function_exists( 'vkmn_customize_register_add_control' ) ) {
+
+
 if (! class_exists('Vk_Mobile_Fix_Nav')) {
 
   class Vk_Mobile_Fix_Nav
@@ -35,6 +75,23 @@ if (! class_exists('Vk_Mobile_Fix_Nav')) {
 
       for ($i = 1; $i <= 4; $i++) {
 
+        // nav_title
+        $wp_customize->add_setting( 'nav_title_'.$i, array(
+          'sanitize_callback' => 'sanitize_text_field'
+          )
+        );
+        $wp_customize->add_control(
+          new MobileNav_Custom_Html(
+            $wp_customize, 'nav_title_'.$i, array(
+              'label'            => __( 'Navi Settings', $vk_mobile_fix_nav_textdomain ).' [ '.$i.' ]',
+              'section'          => 'vk_mobil_fix_nav_related_setting',
+              'type'             => 'text',
+              'custom_title_sub' => '',
+              'custom_html'      => '',
+            )
+          )
+        );
+
         // link_text セッティング
         $wp_customize->add_setting(
             'vk_mobil_fix_nav_related_options[link_text_'.$i.']', array(
@@ -48,7 +105,7 @@ if (! class_exists('Vk_Mobile_Fix_Nav')) {
         // link_text コントロール
         $wp_customize->add_control(
             'link_text_'.$i, array(
-            'label'    => '['.$i.']'.__('Link text:', $vk_mobile_fix_nav_textdomain),
+            'label'    => __('Link text:', $vk_mobile_fix_nav_textdomain),
             'section'  => 'vk_mobil_fix_nav_related_setting',
             'settings' => 'vk_mobil_fix_nav_related_options[link_text_'.$i.']',
             'type'     => 'text',
@@ -68,7 +125,7 @@ if (! class_exists('Vk_Mobile_Fix_Nav')) {
         // link_icon コントロール
         $wp_customize->add_control(
             'link_icon_'.$i, array(
-            'label'       => '['.$i.']'.__('Icon font class name:', $vk_mobile_fix_nav_textdomain),
+            'label'       => __('Icon font class name:', $vk_mobile_fix_nav_textdomain),
             'section'     => 'vk_mobil_fix_nav_related_setting',
             'settings'    => 'vk_mobil_fix_nav_related_options[link_icon_'.$i.']',
             'type'        => 'text',
@@ -89,7 +146,7 @@ if (! class_exists('Vk_Mobile_Fix_Nav')) {
         // link_url コントロール
         $wp_customize->add_control(
             'link_url_'.$i, array(
-            'label'       => '['.$i.']'.__('Link URL:', $vk_mobile_fix_nav_textdomain),
+            'label'       => __('Link URL:', $vk_mobile_fix_nav_textdomain),
             'section'     => 'vk_mobil_fix_nav_related_setting',
             'settings'    => 'vk_mobil_fix_nav_related_options[link_url_'.$i.']',
             'type'        => 'text',
@@ -97,7 +154,7 @@ if (! class_exists('Vk_Mobile_Fix_Nav')) {
         );
 
         // link_blank セッティング
-        $wp_customize->add_setting('vkExUnit_sns_options[link_blank_'.$i.']', array(
+        $wp_customize->add_setting('vk_mobil_fix_nav_related_options[link_blank_'.$i.']', array(
             'default'			      => false,
             'type'				      => 'option', // 保存先 option or theme_mod
             'capability'		    => 'edit_theme_options', // サイト編集者
@@ -106,15 +163,32 @@ if (! class_exists('Vk_Mobile_Fix_Nav')) {
         );
 
         // link_blank コントロール
-        $wp_customize->add_control('vkExUnit_sns_options[link_blank_'.$i.']', array(
-            'label'     => '['.$i.']'.__('Open link new tab.', $vk_mobile_fix_nav_textdomain),
+        $wp_customize->add_control('vk_mobil_fix_nav_related_options[link_blank_'.$i.']', array(
+            'label'     => __('Open link new tab.', $vk_mobile_fix_nav_textdomain),
             'section'   => 'vk_mobil_fix_nav_related_setting',
-            'settings'  => 'vkExUnit_sns_options[link_blank_'.$i.']',
+            'settings'  => 'vk_mobil_fix_nav_related_options[link_blank_'.$i.']',
             'type'		  => 'checkbox',
             )
         );
 
       } // for ($i = 1; $i <= 4; $i++) {
+
+				// nav_common
+				$wp_customize->add_setting( 'nav_common', array(
+					'sanitize_callback' => 'sanitize_text_field'
+					)
+				);
+				$wp_customize->add_control(
+					new MobileNav_Custom_Html(
+						$wp_customize, 'nav_common', array(
+							'label'            => __( 'Navi Common Settings', $vk_mobile_fix_nav_textdomain ),
+							'section'          => 'vk_mobil_fix_nav_related_setting',
+							'type'             => 'text',
+							'custom_title_sub' => '',
+							'custom_html'      => '',
+						)
+					)
+				);
 
       // color セッティング
       $wp_customize->add_setting(
@@ -220,8 +294,14 @@ function vk_mobil_fix_nav() {
             $link_url = '';
           }
 
-          echo '<li class="">';
-            $blank = (isset($options['link_blank_'.$i]) && $options['link_blank_'.$i]) ? 'target="_blank"':'';
+          // link_blank
+          if( ! empty( $options['link_blank_'.$i] ) ) {
+            $blank = ' target="_blank"';
+          } else {
+            $blank = '';
+          }
+
+          echo '<li>';
             echo '<a href="'.esc_url($link_url).'" '.$blank.' style="color: '.sanitize_hex_color($color).';">
             <span class="link-icon"><i class="'.esc_html($link_icon).'"></i></span><br>'.esc_html($link_text).'</a>';
           echo '</li>';
