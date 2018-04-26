@@ -87,7 +87,7 @@ if ( ! class_exists( 'Vk_post_type_manager' ) ) {
 			/*-------------------------------------------*/
 			echo '<h4>' . __( 'Post Type ID(Required)', $vk_post_type_manager_textdomain ) . '</h4>';
 			echo '<p>' . __( '20 characters or less in alphanumeric', $vk_post_type_manager_textdomain ) . '</p>';
-			echo '<input class="form-control" type="text" id="veu_post_type_id" name="veu_post_type_id" value="' . esc_attr( $post->veu_post_type_id ) . '" size="30">';
+			echo '<input class="form-control" type="text" id="veu_post_type_id" name="veu_post_type_id" value="' . esc_attr( mb_strimwidth( mb_convert_kana( mb_strtolower( $post->veu_post_type_id ), 'a' ), 0, 20, '', 'UTF-8' ) ) . '" size="30">';
 			echo '<hr>';
 
 			$post_type_items_array = array(
@@ -304,7 +304,7 @@ if ( ! class_exists( 'Vk_post_type_manager' ) ) {
 					}
 
 					// カスタム投稿タイプのスラッグ
-					$post_type_id = esc_html( get_post_meta( $post->ID, 'veu_post_type_id', true ) );
+					$post_type_id = mb_strimwidth( mb_convert_kana( mb_strtolower( esc_html( get_post_meta( $post->ID, 'veu_post_type_id', true ) ) ), 'a' ), 0, 20, '', 'UTF-8' );
 
 					if ( $post_type_id ) {
 
