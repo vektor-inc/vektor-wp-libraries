@@ -144,6 +144,8 @@ gulp.task('copy_post-type-manager', function() {
 });
 gulp.task('copy_custom-field-builder', function() {
   gulp.src('./custom-field-builder/package/**')
+    .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/custom-field-builder/'))
+    .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/custom-field-builder/'))
     .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/custom-field-builder/'))
     .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/custom-field-builder/'))
     .pipe(gulp.dest('../themes/bill-vektor/inc/custom-field-builder/'));
