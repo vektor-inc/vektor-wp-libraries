@@ -150,6 +150,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
             'section'     => 'vk_mobil_fix_nav_related_setting',
             'settings'    => 'vk_mobil_fix_nav_related_options[link_url_'.$i.']',
             'type'        => 'text',
+            'description' => __( 'ex ) https://vccw.text/', $vk_mobile_fix_nav_textdomain ),
             )
         );
 
@@ -230,6 +231,27 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
         )
       );
 
+      // current_color セッティング
+      $wp_customize->add_setting(
+          'vk_mobil_fix_nav_related_options[current_color]', array(
+          'default'           => '',
+          'type'              => 'option', // 保存先 option or theme_mod
+          'capability'        => 'edit_theme_options', // サイト編集者
+          'sanitize_callback' => 'sanitize_hex_color',
+          )
+      );
+
+      // current_color コントロール
+      $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize,
+          'current_color', array(
+          'label'       => __( 'Current Color:', $vk_mobile_fix_nav_textdomain ),
+          'section'     => 'vk_mobil_fix_nav_related_setting',
+          'settings'    => 'vk_mobil_fix_nav_related_options[current_color]',
+          )
+        )
+      );
+
+
       /*-------------------------------------------*/
       /*	Add Edit Customize Link Btn
       /*-------------------------------------------*/
@@ -255,17 +277,19 @@ function vk_mobil_fix_nav() {
 
     // text color
     if ( isset( $options['color'] ) && $options['color'] ) {
-      $color = $options['color'];
+      $color =  'color: '.$options['color'].';';
+      // $color = $options['color'];
     } else {
-      $color = '#FFFFFF';
+      $color = '';
     }
 
     // bg color
     if ( isset( $options['nav_bg_color'] ) && $options['nav_bg_color'] ) {
       $nav_bg_color = $options['nav_bg_color'];
     } else {
-      $nav_bg_color = '#000000';
+      $nav_bg_color = '#FFF';
     }
+
 
     ?>
     <nav class="footer-mobil-fix-nav">
@@ -301,16 +325,41 @@ function vk_mobil_fix_nav() {
             $blank = '';
           }
 
+          // current color
+          if ( isset( $options['current_color'] ) && $options['current_color'] ) {
+            $current_color = $options['current_color'];
+          } else {
+            $current_color = '';
+          }
+
+          // page-current
+          $get_current_link = get_the_permalink();
+          if ( ! empty( $options['link_url_'.$i] ) && ( $get_current_link == $options['link_url_'.$i] ) ) {
+            $page_current = ' class="page-current"';
+          } else {
+            $page_current = '';
+          }
+
+
+          // 実際に HTML を出力する
           if ( isset( $options['link_text_'.$i] ) && $options['link_text_'.$i] || isset( $options['link_icon_'.$i] ) && $options['link_icon_'.$i] ) {
             echo '<li>';
-              echo '<a href="'.esc_url( $link_url ).'" '.$blank.' style="color: '.sanitize_hex_color( $color ).';">
+              echo '<a href="'.esc_url( $link_url ).'" '.$blank.' style="'.$color.'"'.$page_current.'>
               <span class="link-icon"><i class="'.esc_html( $link_icon ).'"></i></span><br>'.esc_html( $link_text ).'</a>';
             echo '</li>';
           }
 
         } // <?php for ( $i = 1; $i <= 4; $i++ ) { ?>
+
       </ul>
     </nav>
+    
+    <style type="text/css">
+      .page-current {
+       color: <?php echo $current_color; ?>;
+      }
+    </style>
+
   <?php
   } //if ( wp_is_mobile() ) {
 } // function vk_mobil_fix_nav() {
