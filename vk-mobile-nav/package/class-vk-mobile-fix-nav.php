@@ -277,7 +277,7 @@ function vk_mobil_fix_nav() {
 
     // text color
     if ( isset( $options['color'] ) && $options['color'] ) {
-      $color =  'color: '.$options['color'].';';
+      $color =  $options['color'];
       // $color = $options['color'];
     } else {
       $color = '';
@@ -329,22 +329,21 @@ function vk_mobil_fix_nav() {
           if ( isset( $options['current_color'] ) && $options['current_color'] ) {
             $current_color = $options['current_color'];
           } else {
-            $current_color = '#63baff';
+            $current_color = '#16354f';
           }
-
-          // page-current
-          $get_current_link = get_the_permalink();
-          if ( ! empty( $options['link_url_'.$i] ) && ( $get_current_link == $options['link_url_'.$i] ) ) {
-            $page_current = ' class="page-current"';
-          } else {
-            $page_current = '';
-          }
-
 
           // 実際に HTML を出力する
           if ( isset( $options['link_text_'.$i] ) && $options['link_text_'.$i] || isset( $options['link_icon_'.$i] ) && $options['link_icon_'.$i] ) {
             echo '<li>';
-              echo '<a href="'.esc_url( $link_url ).'" '.$blank.' style="'.$color.'"'.$page_current.'>
+            // page-current
+            $get_current_link = get_the_permalink();
+            if ( ! empty( $options['link_url_'.$i] ) && ( $get_current_link == $options['link_url_'.$i] ) ) {
+              // $page_current = ' class="page-current"';
+              $color_style = $current_color;
+            } else {
+              $color_style = $color;
+            }
+              echo '<a href="'.esc_url( $link_url ).'" '.$blank.' style="color: '.$color_style.';">
               <span class="link-icon"><i class="'.esc_html( $link_icon ).'"></i></span><br>'.esc_html( $link_text ).'</a>';
             echo '</li>';
           }
@@ -353,16 +352,6 @@ function vk_mobil_fix_nav() {
 
       </ul>
     </nav>
-
-    <style type="text/css">
-      .footer-mobil-fix-nav .mobil-fix-nav .page-current {
-       color: <?php echo $current_color; ?>;
-      }
-
-      nav i {
-        margin-right: 0;
-      }
-    </style>
 
   <?php
   } //if ( wp_is_mobile() ) {
