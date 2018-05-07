@@ -329,7 +329,7 @@ function vk_mobil_fix_nav() {
           if ( isset( $options['current_color'] ) && $options['current_color'] ) {
             $current_color = $options['current_color'];
           } else {
-            $current_color = '';
+            $current_color = '#63baff';
           }
 
           // page-current
@@ -353,10 +353,14 @@ function vk_mobil_fix_nav() {
 
       </ul>
     </nav>
-    
+
     <style type="text/css">
-      .page-current {
+      .footer-mobil-fix-nav .mobil-fix-nav .page-current {
        color: <?php echo $current_color; ?>;
+      }
+
+      nav i {
+        margin-right: 0;
       }
     </style>
 
