@@ -337,7 +337,12 @@ function vk_mobil_fix_nav() {
             echo '<li>';
             // page-current
             $get_current_link = get_the_permalink();
-            if ( ! empty( $options['link_url_'.$i] ) && ( $get_current_link == $options['link_url_'.$i] ) ) {
+						$postid = url_to_postid( get_permalink() );
+						// $get_current_link_cat = get_category_link( $postid );
+						$get_current_link_cat = get_the_category_list( $postid );
+						// $get_current_link_cat = get_post_type_archive_link( $postid );
+						// $get_current_link_cat = get_post_type_archive_link( get_post_type() );
+            if ( ( ! empty( $options['link_url_'.$i] ) && ( $get_current_link == $options['link_url_'.$i] ) ) || ( ! empty( $options['link_url_'.$i] ) && ( $get_current_link_cat == $options['link_url_'.$i] ) ) ) {
               // $page_current = ' class="page-current"';
               $color_style = $current_color;
             } else {
