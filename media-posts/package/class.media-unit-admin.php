@@ -82,6 +82,16 @@ class Lightning_Media_Admin {
 			$layouts[ $key ] = $value['label'];
 		}
 
+		// Works Unit のカスタム投稿タイプがある場合は除外する
+		include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		if ( is_plugin_active( 'lightning-works-unit/lightning-works-unit.php' ) ) {
+			$works_unit = get_option( 'lightning_works_unit' );
+			if ( ! empty( $works_unit['post_name'] ) ) {
+				$works_unit_slug = $works_unit['post_name'];
+				unset( $post_types[ $works_unit_slug ] );
+			}
+		}
+
 		foreach ( $post_types as $type => $value ) {
 			$wp_customize->add_setting(
 				'ltg_media_unit_archive_loop_layout[' . $type . ']', array(
