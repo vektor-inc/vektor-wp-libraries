@@ -124,6 +124,10 @@ gulp.task('copy_widget-pr-content', function() {
 		// .pipe( gulp.dest( '../plugins/lightning-skin-jpnstyle/inc/vk-wodget-pr-content/' ) )
 		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/vk-widget-pr-content/'));
 });
+gulp.task('copy_font-switching-function', function() {
+	gulp.src('./vk-font-switching-function/package/**')
+		.pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/vk-font-switching-function/'));
+});
 
 // Watch
 gulp.task('watch', function() {
@@ -139,6 +143,7 @@ gulp.task('watch', function() {
 	gulp.watch('./custom-field-builder/package/**', ['copy_custom-field-builder']);
 	gulp.watch('./call-to-action/package/**', ['copy_call-to-action']);
 	gulp.watch('./vk-mobile-nav/package/**', ['copy_vk-mobile-nav']);
+	gulp.watch('./vk-font-switching-function/package/**', ['copy_font-switching-function']);
 
 	gulp.watch('./template-tags/package/**', ['copy_template-tags']);
 	// gulp.watch('./font-awesome-selector/package/**', ['copy_font-awesome-selector']);
@@ -179,6 +184,9 @@ gulp.task('watch_pr-content', function() {
 });
 gulp.task('watch_header-top', function() {
 	gulp.watch('./header-top/package/**', ['copy_header-top']);
+});
+gulp.task('watch_font-switch', function() {
+	gulp.watch('./vk-font-switching-function/package/**', ['copy_font-switching-function']);
 });
 gulp.task('watch_cta', function() {
 	gulp.watch('./call-to-action/package/**', ['copy_call-to-action']);
