@@ -231,8 +231,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 	/*  Archive Loop change
 	/*-------------------------------------------*/
 	/* アーカイブループのレイアウトを改変するかどうかの判定 */
-	function lmu_is_loop_layout_change_flag( $post_type = 'post' ) {
-		$flag                               = false;
+	function lmu_is_loop_layout_change_flag( $post_type = 'post', $flag = false ) {
 		$ltg_media_unit_archive_loop_layout = get_option( 'ltg_media_unit_archive_loop_layout' );
 		// 指定の投稿タイプアーカイブのレイアウトに値が存在する場合
 		if ( ! empty( $ltg_media_unit_archive_loop_layout[ $post_type ] ) ) {
@@ -254,7 +253,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 				$postType = 'author';
 		}
 
-		$flag = lmu_is_loop_layout_change_flag( $post_type );
+		$flag = lmu_is_loop_layout_change_flag( $post_type, $flag );
 		return $flag;
 	}
 
