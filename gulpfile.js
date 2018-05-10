@@ -187,6 +187,10 @@ gulp.task('copy_widget-pr-content', function() {
     .pipe(gulp.dest('../plugins/lightning-skin-pale/tests/'))
     .pipe(gulp.dest('../plugins/lightning-origin-pro/tests/'));
 });
+gulp.task('copy_font-switching-function', function() {
+	gulp.src('./vk-font-switching-function/package/**')
+		.pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/vk-font-switching-function/'));
+});
 
 // Watch
 gulp.task('watch', function() {
@@ -207,6 +211,24 @@ gulp.task('watch', function() {
   // gulp.watch('./font-awesome-selector/package/**', ['copy_font-awesome-selector']);
   // gulp.watch('js/*.js', ['scripts']);
   // gulp.watch('vk-admin', ['scripts','scripts_header_fixed']);
+	gulp.watch('./vk-admin/package/images/**', ['copy_vk-admin']);
+	gulp.watch('./vk-admin/package/css/**', ['copy_vk-admin']);
+	gulp.watch('./vk-admin/package/js/**', ['copy_vk-admin']);
+	gulp.watch('./vk-admin/package/class.vk-admin.php', ['copy_vk-admin']);
+	gulp.watch('./term-color/package/**', ['copy_term-color']);
+	gulp.watch('./header-top/package/**', ['copy_header-top']);
+	gulp.watch('./header-top/package/css/**', ['copy_header-top']);
+	gulp.watch('./media-posts/package/**', ['copy_media-posts']);
+	gulp.watch('./post-type-manager/package/**', ['copy_post-type-manager']);
+	gulp.watch('./custom-field-builder/package/**', ['copy_custom-field-builder']);
+	gulp.watch('./call-to-action/package/**', ['copy_call-to-action']);
+	gulp.watch('./vk-mobile-nav/package/**', ['copy_vk-mobile-nav']);
+	gulp.watch('./vk-font-switching-function/package/**', ['copy_font-switching-function']);
+
+	gulp.watch('./template-tags/package/**', ['copy_template-tags']);
+	// gulp.watch('./font-awesome-selector/package/**', ['copy_font-awesome-selector']);
+	// gulp.watch('js/*.js', ['scripts']);
+	// gulp.watch('vk-admin', ['scripts','scripts_header_fixed']);
 });
 
 // Watch
@@ -247,6 +269,9 @@ gulp.task('watch_pr-content', function() {
 });
 gulp.task('watch_header-top', function() {
   gulp.watch('./header-top/package/**', ['copy_header-top']);
+});
+gulp.task('watch_font-switch', function() {
+	gulp.watch('./vk-font-switching-function/package/**', ['copy_font-switching-function']);
 });
 gulp.task('watch_cta', function() {
   gulp.watch('./call-to-action/package/**', ['copy_call-to-action']);
