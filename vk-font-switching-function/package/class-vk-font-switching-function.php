@@ -47,7 +47,7 @@ if ( ! class_exists( 'Vk_Font_Switching_Function_Customize' ) ) {
 							'selector' => 'h1,h2,h3,h4,h5,h6',
 						),
 						'menu' => array(
-							'label' => __('めぬー', $vk_font_switching_function_textdomain),
+							'label' => __('Global Menu', $vk_font_switching_function_textdomain),
 							'selector' => '.gMenu',
 						),
 					);
