@@ -109,7 +109,56 @@ if ( ! class_exists( 'Vk_post_type_manager' ) ) {
 				$checked = ( isset( $post_type_items_value[ $key ] ) && $post_type_items_value[ $key ] ) ? ' checked' : '';
 				echo '<li><label>' . '<input type="checkbox" id="veu_post_type_items[' . $key . ']" name="veu_post_type_items[' . $key . ']" value="true"' . $checked . '> ' . $label . '</label></li>';
 			}
+
 			echo '</ul>';
+
+			function add_meta_box_action(){
+				global $vk_post_type_manager_textdomain;
+				global $post;
+
+		    //CSRF対策の設定（フォームにhiddenフィールドとして追加するためのnonceを「'noncename__post_type_manager」として設定）
+		    wp_nonce_field( wp_create_nonce(__FILE__), 'noncename__post_type_manager' );
+
+		    ?>
+		    <style type="text/css">
+		    table.table { border-collapse: collapse; border-spacing: 0;width:100%; }
+		    table.table th,
+		    table.table td{ padding:0.5em 0.8em; }
+		    table.table th { background-color: #f5f5f5; }
+		    table.table-border,
+		    table.table-border th,
+		    table.table-border td { border:1px solid #e5e5e5; }
+		    </style>
+		    <?php
+
+				/* Post Type ID
+				/*-------------------------------------------*/
+				echo '<h4>'.__('Post Type ID(Required)', $vk_post_type_manager_textdomain).'</h4>';
+				echo '<p>'.__( '20 characters or less in alphanumeric',$vk_post_type_manager_textdomain).'</p>';
+				echo '<input class="form-control" type="text" id="veu_post_type_id" name="veu_post_type_id" value="'.esc_attr( mb_strimwidth( mb_convert_kana( mb_strtolower( $post->veu_post_type_id ), 'a' ), 0, 20, "", "UTF-8" ) ).'" size="30">';
+				echo '<hr>';
+
+				$post_type_items_array = array(
+					'title'     => __( 'title', $vk_post_type_manager_textdomain ),
+					'editor'    => __( 'editor', $vk_post_type_manager_textdomain ),
+					'author'    => __( 'author', $vk_post_type_manager_textdomain ),
+					'thumbnail' => __( 'thumbnail', $vk_post_type_manager_textdomain ),
+					'excerpt'   => __( 'excerpt', $vk_post_type_manager_textdomain ),
+					'comments'  => __( 'comments', $vk_post_type_manager_textdomain ),
+					'revisions' => __( 'revisions', $vk_post_type_manager_textdomain ),
+				);
+
+				/* Supports(Required)
+				/*-------------------------------------------*/
+				echo '<h4>'.__('Supports(Required)', $vk_post_type_manager_textdomain ).'</h4>';
+				$post_type_items_value = get_post_meta( $post->ID,'veu_post_type_items',true );
+				echo '<ul>';
+				foreach ($post_type_items_array as $key => $label) {
+					$checked = ( isset( $post_type_items_value[$key] ) && $post_type_items_value[$key] ) ? ' checked':'';
+					echo '<li><label>'.'<input type="checkbox" id="veu_post_type_items['.$key.']" name="veu_post_type_items['.$key.']" value="true"'.$checked.'> '.$label.'</label></li>';
+				}
+				echo '</ul>';
+
 
 			echo '<hr>';
 
@@ -304,14 +353,22 @@ if ( ! class_exists( 'Vk_post_type_manager' ) ) {
 					}
 
 					// カスタム投稿タイプのスラッグ
+
 					$post_type_id = mb_strimwidth( mb_convert_kana( mb_strtolower( esc_html( get_post_meta( $post->ID, 'veu_post_type_id', true ) ) ), 'a' ), 0, 20, '', 'UTF-8' );
+
+					$post_type_id = mb_strimwidth( mb_convert_kana( mb_strtolower( esc_html( get_post_meta( $post->ID, 'veu_post_type_id', true ) ) ), 'a' ), 0, 20, "", "UTF-8" );
+
 
 					if ( $post_type_id ) {
 
 						$menu_position = intval( mb_convert_kana( get_post_meta( $post->ID, 'veu_menu_position', true ), 'n' ) );
+
 						if ( ! $menu_position ) {
 							$menu_position = 5;
 						}
+
+						if ( !$menu_position ) $menu_position = 5;
+
 						$args = array(
 							'labels'        => $labels,
 							'public'        => true,
