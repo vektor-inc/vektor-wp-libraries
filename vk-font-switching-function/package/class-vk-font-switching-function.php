@@ -4,7 +4,6 @@
 https://github.com/vektor-inc/vektor-wp-libraries
 にあります。修正の際は上記リポジトリのデータを修正してください。
 */
-
 /*-------------------------------------------*/
 /*	Customizer
 /*-------------------------------------------*/
@@ -117,31 +116,62 @@ if ( ! class_exists( 'Vk_Font_Switching_Function_Customize' ) ) {
 		public function dynamic_header_css() {
 
 			global $vk_font_switching_function_textdomain;
-
+			// どの場所にどのフォント指定をするのかが格納されている
 			$options = get_option( 'vk_font_switching' );
-
+			// $options = array(
+			// 	    [title] => gothic,
+			// 	    [menu] => gothic,
+			// 	    [text] => gothic,
+			// );
 
 			// フォントリストの情報を読み込み
 			$fonts_array = self::fonts_array();
+			// $fonts_array = array(
+			// 	'mincho' => array(
+			// 		'label' => __( 'Mincho',$vk_font_switching_function_textdomain),
+			// 		'font-family' => 'serif',
+			// 	),
+			// 	'gothic' => array(
+			// 		'label' => __( 'Gothic',$vk_font_switching_function_textdomain),
+			// 		'font-family' => 'sans-serif',
+			// 	),
+			// );
 			$target_array = self::target_array();
+			// $target_array = array(
+			// 		'text' => array(
+			// 			'label' => __('Text', $vk_font_switching_function_textdomain),
+			// 			'selector' => 'body',
+			// 		),
+			// 		'title' => array(
+			// 			'label' => __('Title', $vk_font_switching_function_textdomain),
+			// 			'selector' => 'h1,h2,h3,h4,h5,h6',
+			// 		),
+			// 		'menu' => array(
+			// 			'label' => __('Global Menu', $vk_font_switching_function_textdomain),
+			// 			'selector' => '.gMenu',
+			// 		),
+			// 	);
 
 			$dynamic_css ='';
 
-			// フォントを指定する項目をループする
-			foreach ($target_array as $key => $value) {
+			// フォントを指定するターゲット項目をループする
+			foreach ($target_array as $target_key => $target_value) {
 
-				// フォント指定情報が保存されていたら
-				if ( ! empty($options[$key]) ){
+				// そのターゲットに対して、どのフォントが指定されているのかを取得
+				// フォント指定先である $target_key（ title とか body とか） にフォント指定情報が保存されていたら
+				if ( ! empty($options[$target_key]) ){
 					// 指定されているフォントのキーを$font_keyに格納
-					$font_key= $options[$key];
+					$font_key= $options[$target_key];
+
+					// 指定されたフォントキーの実際のフォントファミリーの取得 と CSSの登録
 					// そのフォントキーがフォントの配列に登録されていたら
 					if ( isset( $fonts_array[$font_key] ) ){
 						// 配列の中から実際のフォントファミリーを代入
 						$font_family = $fonts_array[$font_key]['font-family'];
 						// 出力するCSSに登録
-						$dynamic_css .= $value['selector'].'{ font-family:'.$font_family.'}';
+						$dynamic_css .= $target_value['selector'].'{ font-family:'.$font_family.'}';
 					}
-				} // if ( ! empty($options[$key] ){
+				} // if ( ! empty($options[$target_key] ){
 			}
 
 			// 出力するインラインスタイルが存在していたら

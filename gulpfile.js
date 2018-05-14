@@ -264,7 +264,7 @@ gulp.task('watch_pr-content', function() {
   gulp.watch('./vk-widget-pr-content/package/**', ['copy_widget-pr-content']);
   gulp.watch('./js-libraries/**', ['jsmin_jslibs', 'copy_jslibs']);
 });
-gulp.task('watch_font-switching-function', function() {
+gulp.task('watch_font', function() {
   gulp.watch('./vk-font-switching-function/tests/**', ['copy_font-switching-function']);
   gulp.watch('./vk-font-switching-function/package/_scss/**', ['ssass_vk-font-switching-function']);
   gulp.watch('./vk-font-switching-function/package/**', ['copy_font-switching-function']);
