@@ -24,11 +24,11 @@ if ( ! class_exists( 'Vk_Font_Switching_Function_Customize' ) ) {
 				$fonts_array = array(
 					'mincho' => array(
 						'label' => __( 'Mincho',$vk_font_switching_function_textdomain),
-						'font-family' => 'serif',
+						'font-family' => 'Hiragino Mincho ProN', '游明朝', 'serif'
 					),
 					'gothic' => array(
 						'label' => __( 'Gothic',$vk_font_switching_function_textdomain),
-						'font-family' => 'sans-serif',
+						'font-family' => '-apple-system', 'BlinkMacSystemFont', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', '游ゴシック  Medium', 'meiryo', 'sans-serif'
 					),
 				);
 				return $fonts_array;
