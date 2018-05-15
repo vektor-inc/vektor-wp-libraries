@@ -37,17 +37,21 @@ if ( ! class_exists( 'Vk_Font_Switching_Function_Customize' ) ) {
 			public static function target_array(){
 				global $vk_font_switching_function_textdomain;
 				$target_array = array(
-						'text' => array(
-							'label' => __('Text', $vk_font_switching_function_textdomain),
-							'selector' => 'body',
+						'hlogo' => array(
+							'label' => __('Header Logo', $vk_font_switching_function_textdomain),
+							'selector' => '.navbar-brand.siteHeader_logo',
+						),
+						'menu' => array(
+							'label' => __('Global Menu', $vk_font_switching_function_textdomain),
+							'selector' => '.gMenu',
 						),
 						'title' => array(
 							'label' => __('Title', $vk_font_switching_function_textdomain),
 							'selector' => 'h1,h2,h3,h4,h5,h6',
 						),
-						'menu' => array(
-							'label' => __('Global Menu', $vk_font_switching_function_textdomain),
-							'selector' => '.gMenu',
+						'text' => array(
+							'label' => __('Text', $vk_font_switching_function_textdomain),
+							'selector' => 'body',
 						),
 					);
 				return $target_array;
