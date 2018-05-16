@@ -59,9 +59,9 @@ gulp.task('sass_vk-widget-pr-content', function() {
     .pipe(gulp.dest('./vk-widget-pr-content/package/css/'));
 });
 
-gulp.task('sass_vk-font-switching-function', function() {
+gulp.task('sass_vk-font-selector', function() {
   // gulp.src( '**/_scss/**/*.scss' )
-  gulp.src('vk-font-switching-function/package/_scss/**/*.scss')
+  gulp.src('vk-font-selector/package/_scss/**/*.scss')
     .pipe(plumber())
     .pipe(sass())
     .pipe(cmq({
@@ -69,7 +69,7 @@ gulp.task('sass_vk-font-switching-function', function() {
     }))
     .pipe(autoprefixer())
     .pipe(cleanCss())
-    .pipe(gulp.dest('./vk-font-switching-function/package/css/'));
+    .pipe(gulp.dest('./vk-font-selector/package/css/'));
 });
 
 
@@ -201,9 +201,9 @@ gulp.task('copy_widget-pr-content', function() {
     .pipe(gulp.dest('../plugins/lightning-origin-pro/tests/'));
 });
 gulp.task('copy_font-switching-function', function() {
-  gulp.src('./vk-font-switching-function/package/**')
+  gulp.src('./vk-font-selector/package/**')
     // .pipe( gulp.dest( '../plugins/lightning-skin-jpnstyle/inc/vk-wodget-pr-content/' ) )
-    .pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/vk-font-switching-function/'))
+    .pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/vk-font-selector/'))
 });
 
 // Watch
@@ -220,7 +220,7 @@ gulp.task('watch', function() {
   gulp.watch('./custom-field-builder/package/**', ['copy_custom-field-builder']);
   gulp.watch('./call-to-action/package/**', ['copy_call-to-action']);
   gulp.watch('./vk-mobile-nav/package/**', ['copy_vk-mobile-nav']);
-  gulp.watch('./vk-font-switching-function/package/**', ['copy_font-switching-function']);
+  gulp.watch('./vk-font-selector/package/**', ['copy_font-switching-function']);
 
   gulp.watch('./template-tags/package/**', ['copy_template-tags']);
   // gulp.watch('./font-awesome-selector/package/**', ['copy_font-awesome-selector']);
@@ -265,9 +265,9 @@ gulp.task('watch_pr-content', function() {
   gulp.watch('./js-libraries/**', ['jsmin_jslibs', 'copy_jslibs']);
 });
 gulp.task('watch_font', function() {
-  gulp.watch('./vk-font-switching-function/tests/**', ['copy_font-switching-function']);
-  gulp.watch('./vk-font-switching-function/package/_scss/**', ['ssass_vk-font-switching-function']);
-  gulp.watch('./vk-font-switching-function/package/**', ['copy_font-switching-function']);
+  gulp.watch('./vk-font-selector/tests/**', ['copy_font-switching-function']);
+  gulp.watch('./vk-font-selector/package/_scss/**', ['ssass_vk-font-selector']);
+  gulp.watch('./vk-font-selector/package/**', ['copy_font-switching-function']);
 });
 gulp.task('watch_header-top', function() {
   gulp.watch('./header-top/package/**', ['copy_header-top']);

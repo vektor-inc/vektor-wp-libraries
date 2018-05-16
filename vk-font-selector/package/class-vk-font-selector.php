@@ -8,8 +8,8 @@ https://github.com/vektor-inc/vektor-wp-libraries
 /*	Customizer
 /*-------------------------------------------*/
 
-if ( ! class_exists( 'Vk_Font_Switching_Function_Customize' ) ) {
-	class Vk_Font_Switching_Function_Customize
+if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
+	class Vk_Font_Selector_Customize
 	{
 
 		  public static $version = '0.0.0';
@@ -20,14 +20,14 @@ if ( ! class_exists( 'Vk_Font_Switching_Function_Customize' ) ) {
 			}
 
 			public static function fonts_array(){
-				global $vk_font_switching_function_textdomain;
+				global $vk_font_selector_textdomain;
 				$fonts_array = array(
 					'mincho' => array(
-						'label' => __( 'Mincho',$vk_font_switching_function_textdomain),
+						'label' => __( 'Mincho',$vk_font_selector_textdomain),
 						'font-family' => 'Hiragino Mincho ProN', '游明朝', 'serif'
 					),
 					'gothic' => array(
-						'label' => __( 'Gothic',$vk_font_switching_function_textdomain),
+						'label' => __( 'Gothic',$vk_font_selector_textdomain),
 						'font-family' => '-apple-system', 'BlinkMacSystemFont', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', '游ゴシック  Medium', 'meiryo', 'sans-serif'
 					),
 				);
@@ -35,22 +35,22 @@ if ( ! class_exists( 'Vk_Font_Switching_Function_Customize' ) ) {
 			}
 
 			public static function target_array(){
-				global $vk_font_switching_function_textdomain;
+				global $vk_font_selector_textdomain;
 				$target_array = array(
 						'hlogo' => array(
-							'label' => __('Header Logo', $vk_font_switching_function_textdomain),
+							'label' => __('Header Logo', $vk_font_selector_textdomain),
 							'selector' => '.navbar-brand.siteHeader_logo',
 						),
 						'menu' => array(
-							'label' => __('Global Menu', $vk_font_switching_function_textdomain),
+							'label' => __('Global Menu', $vk_font_selector_textdomain),
 							'selector' => '.gMenu',
 						),
 						'title' => array(
-							'label' => __('Title', $vk_font_switching_function_textdomain),
+							'label' => __('Title', $vk_font_selector_textdomain),
 							'selector' => 'h1,h2,h3,h4,h5,h6',
 						),
 						'text' => array(
-							'label' => __('Text', $vk_font_switching_function_textdomain),
+							'label' => __('Text', $vk_font_selector_textdomain),
 							'selector' => 'body',
 						),
 					);
@@ -60,12 +60,12 @@ if ( ! class_exists( 'Vk_Font_Switching_Function_Customize' ) ) {
 			public static function register ( $wp_customize ) {
 
 		    // セクション、テーマ設定、コントロールを追加
-		    global $vk_font_switching_function_textdomain;
+		    global $vk_font_selector_textdomain;
 
 		    // セクション追加
 		    $wp_customize->add_section(
-		        'vk_font_switching_function_related_setting', array(
-		        'title'    => __( 'Font Switching Function', $vk_font_switching_function_textdomain ),
+		        'vk_font_selector_related_setting', array(
+		        'title'    => __( 'Font Switching Function', $vk_font_selector_textdomain ),
 		        'priority' => 900,
 		        )
 		    );
@@ -93,25 +93,25 @@ if ( ! class_exists( 'Vk_Font_Switching_Function_Customize' ) ) {
 				// );
 
 				foreach ( $targets as $key => $label ) {
-					$wp_customize->add_setting( 'vk_font_switching['.$key.']', array(
+					$wp_customize->add_setting( 'vk_font_selector['.$key.']', array(
 						'default'           => 'mincho',
 						'type'				      => 'option',
 						'capability'		    => 'edit_theme_options',
 						'sanitize_callback' => 'sanitize_text_field',
 					) );
-					$wp_customize->add_control( 'vk_font_switching['.$key.']', array(
-						'label'		 =>  __( $label.':', $vk_font_switching_function_textdomain ),
-						'section'	 => 'vk_font_switching_function_related_setting',
-						'settings' => 'vk_font_switching['.$key.']',
+					$wp_customize->add_control( 'vk_font_selector['.$key.']', array(
+						'label'		 =>  __( $label.':', $vk_font_selector_textdomain ),
+						'section'	 => 'vk_font_selector_related_setting',
+						'settings' => 'vk_font_selector['.$key.']',
 						'type'		 => 'select',
 						'choices'  => $choices,
 						// 'choices'  => array(
-						// 	'mincho' => __( 'Mincho', $vk_font_switching_function_textdomain ),
-						// 	'gothic' => __( 'Gothic', $vk_font_switching_function_textdomain ),
+						// 	'mincho' => __( 'Mincho', $vk_font_selector_textdomain ),
+						// 	'gothic' => __( 'Gothic', $vk_font_selector_textdomain ),
 						// ),
 					));
 				}
-		} // public function vk_font_switching_function_customize_register( $wp_customize )
+		} // public function vk_font_selector_function_customize_register( $wp_customize )
 
 		/*-------------------------------------------*/
 		/*  print head style
@@ -119,9 +119,9 @@ if ( ! class_exists( 'Vk_Font_Switching_Function_Customize' ) ) {
 
 		public function dynamic_header_css() {
 
-			global $vk_font_switching_function_textdomain;
+			global $vk_font_selector_textdomain;
 			// どの場所にどのフォント指定をするのかが格納されている
-			$options = get_option( 'vk_font_switching' );
+			$options = get_option( 'vk_font_selector' );
 			// $options = array(
 			// 	    [title] => gothic,
 			// 	    [menu] => gothic,
@@ -132,26 +132,26 @@ if ( ! class_exists( 'Vk_Font_Switching_Function_Customize' ) ) {
 			$fonts_array = self::fonts_array();
 			// $fonts_array = array(
 			// 	'mincho' => array(
-			// 		'label' => __( 'Mincho',$vk_font_switching_function_textdomain),
+			// 		'label' => __( 'Mincho',$vk_font_selector_textdomain),
 			// 		'font-family' => 'serif',
 			// 	),
 			// 	'gothic' => array(
-			// 		'label' => __( 'Gothic',$vk_font_switching_function_textdomain),
+			// 		'label' => __( 'Gothic',$vk_font_selector_textdomain),
 			// 		'font-family' => 'sans-serif',
 			// 	),
 			// );
 			$target_array = self::target_array();
 			// $target_array = array(
 			// 		'text' => array(
-			// 			'label' => __('Text', $vk_font_switching_function_textdomain),
+			// 			'label' => __('Text', $vk_font_selector_textdomain),
 			// 			'selector' => 'body',
 			// 		),
 			// 		'title' => array(
-			// 			'label' => __('Title', $vk_font_switching_function_textdomain),
+			// 			'label' => __('Title', $vk_font_selector_textdomain),
 			// 			'selector' => 'h1,h2,h3,h4,h5,h6',
 			// 		),
 			// 		'menu' => array(
-			// 			'label' => __('Global Menu', $vk_font_switching_function_textdomain),
+			// 			'label' => __('Global Menu', $vk_font_selector_textdomain),
 			// 			'selector' => '.gMenu',
 			// 		),
 			// 	);
@@ -196,8 +196,8 @@ if ( ! class_exists( 'Vk_Font_Switching_Function_Customize' ) ) {
 
 		} // public function skin_dynamic_css(){
 
-	} // class Vk_Font_Switching_Function_Customize
+	} // class Vk_Font_Selector_Customize
 	// テーマ設定やコントロールをセットアップします。
 
-	new Vk_Font_Switching_Function_Customize();
-} // if ( ! class_exists( 'Vk_Font_Switching_Function_Customize' ) ) {
+	new Vk_Font_Selector_Customize();
+} // if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
