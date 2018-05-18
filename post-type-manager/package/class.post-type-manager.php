@@ -109,7 +109,6 @@ if ( ! class_exists( 'Vk_post_type_manager' ) ) {
 				$checked = ( isset( $post_type_items_value[ $key ] ) && $post_type_items_value[ $key ] ) ? ' checked' : '';
 				echo '<li><label>' . '<input type="checkbox" id="veu_post_type_items[' . $key . ']" name="veu_post_type_items[' . $key . ']" value="true"' . $checked . '> ' . $label . '</label></li>';
 			}
-
 			echo '</ul>';
 
 			echo '<hr>';
@@ -305,17 +304,14 @@ if ( ! class_exists( 'Vk_post_type_manager' ) ) {
 					}
 
 					// カスタム投稿タイプのスラッグ
-
 					$post_type_id = mb_strimwidth( mb_convert_kana( mb_strtolower( esc_html( get_post_meta( $post->ID, 'veu_post_type_id', true ) ) ), 'a' ), 0, 20, '', 'UTF-8' );
 
 					if ( $post_type_id ) {
 
 						$menu_position = intval( mb_convert_kana( get_post_meta( $post->ID, 'veu_menu_position', true ), 'n' ) );
-
 						if ( ! $menu_position ) {
 							$menu_position = 5;
 						}
-
 						$args = array(
 							'labels'        => $labels,
 							'public'        => true,
