@@ -3,7 +3,6 @@
 if ( ! class_exists( 'Vk_Font_Awesome_Versions' ) ) {
 
 	class Vk_Font_Awesome_Versions {
-
 		static function init() {
 			add_action( 'customize_register', array( __CLASS__, 'customize_register' ) );
 			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'load_font_awesome' ) );

@@ -165,11 +165,6 @@ gulp.task('copy_template-tags', function() {
     .pipe(gulp.dest('../plugins/vk-call-to-action/inc/template-tags/'))
     .pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/template-tags/'));
 });
-gulp.task('copy_font-awesome', function() {
-  gulp.src('./font-awesome/package/**')
-    .pipe(gulp.dest('../themes/inc/font-awesome/'))
-    .pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/font-awesome/'));
-});
 gulp.task('copy_page-header', function() {
   gulp.src('./vk-page-header/package/**')
     .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/vk-page-header/'))
@@ -195,6 +190,11 @@ gulp.task('copy_widget-pr-content', function() {
 gulp.task('copy_font-switching-function', function() {
 	gulp.src('./vk-font-switching-function/package/**')
 		.pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/vk-font-switching-function/'));
+});
+gulp.task('copy_font-awesome', function() {
+  gulp.src('./font-awesome/package/**')
+    .pipe(gulp.dest('../themes/lightning/inc/font-awesome/'))
+    .pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/font-awesome/'));
 });
 
 // Watch
@@ -237,6 +237,9 @@ gulp.task('watch', function() {
 });
 
 // Watch
+gulp.task('watch_fa', function() {
+  gulp.watch('./font-awesome/**', ['copy_font-awesome']);
+});
 gulp.task('watch_term', function() {
   gulp.watch('./term-color/package/**', ['copy_term-color']);
 });
@@ -272,18 +275,16 @@ gulp.task('watch_pr-content', function() {
   gulp.watch('./vk-widget-pr-content/package/**', ['copy_widget-pr-content']);
   gulp.watch('./js-libraries/**', ['jsmin_jslibs', 'copy_jslibs']);
 });
+gulp.task('watch_cta', function() {
+  gulp.watch('./call-to-action/package/**', ['copy_call-to-action']);
+});
 gulp.task('watch_header-top', function() {
   gulp.watch('./header-top/package/**', ['copy_header-top']);
 });
 gulp.task('watch_font-switch', function() {
 	gulp.watch('./vk-font-switching-function/package/**', ['copy_font-switching-function']);
 });
-gulp.task('watch_cta', function() {
-  gulp.watch('./call-to-action/package/**', ['copy_call-to-action']);
-});
-gulp.task('watch_fa', function() {
-  gulp.watch('./font-awesome/package/**', ['copy_font-awesome']);
-});
+
 
 gulp.task('default', ['watch']);
 
