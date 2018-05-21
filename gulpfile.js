@@ -125,13 +125,15 @@ gulp.task('copy_media-posts', function() {
     .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/media-posts/'))
     .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/media-posts/'))
     .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/media-posts/'))
-    .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/media-posts/'));
+    .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/media-posts/'))
+    .pipe(gulp.dest('../plugins/lightning-pro/inc/media-posts/'));
   gulp.src('./media-posts/tests/**')
     .pipe(gulp.dest('../plugins/lightning-skin-variety/tests/'))
     .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/tests/'))
     .pipe(gulp.dest('../plugins/lightning-skin-fort/tests/'))
     .pipe(gulp.dest('../plugins/lightning-skin-pale/tests/'))
-    .pipe(gulp.dest('../plugins/lightning-origin-pro/tests/'));
+    .pipe(gulp.dest('../plugins/lightning-origin-pro/tests/'))
+    .pipe(gulp.dest('../plugins/lightning-pro/tests/'));
 });
 // gulp.task( 'copy_font-awesome-selector', function() {
 //     gulp.src( './font-awesome-selector/package/**' )
@@ -158,6 +160,7 @@ gulp.task('copy_call-to-action', function() {
 gulp.task('copy_vk-mobile-nav', function() {
   gulp.src('./vk-mobile-nav/package/**')
     .pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/vk-mobile-nav/'))
+    .pipe(gulp.dest('../plugins/lightning-pro/inc/vk-mobile-nav/'))
     .pipe(gulp.dest('../plugins/vk-mobile-nav/inc/vk-mobile-nav/'));
 });
 gulp.task('copy_template-tags', function() {
@@ -170,7 +173,8 @@ gulp.task('copy_page-header', function() {
     .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/vk-page-header/'))
     .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/vk-page-header/'))
     .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/vk-page-header/'))
-    .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/vk-page-header/'));
+    .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/vk-page-header/'))
+    .pipe(gulp.dest('../plugins/lightning-pro/inc/vk-page-header/'));
 });
 gulp.task('copy_widget-pr-content', function() {
   gulp.src('./vk-widget-pr-content/package/**')
@@ -179,13 +183,15 @@ gulp.task('copy_widget-pr-content', function() {
     .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/vk-widget-pr-content/'))
     .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/vk-widget-pr-content/'))
     .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/vk-widget-pr-content/'))
-    .pipe(gulp.dest('../plugins/lightning-skin-variety/inc/vk-widget-pr-content/'));
+    .pipe(gulp.dest('../plugins/lightning-skin-variety/inc/vk-widget-pr-content/'))
+    .pipe(gulp.dest('../plugins/lightning-pro/inc/vk-widget-pr-content/'));
   gulp.src('./vk-widget-pr-content/tests/**')
     .pipe(gulp.dest('../plugins/lightning-skin-variety/tests/'))
     .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/tests/'))
     .pipe(gulp.dest('../plugins/lightning-skin-fort/tests/'))
     .pipe(gulp.dest('../plugins/lightning-skin-pale/tests/'))
-    .pipe(gulp.dest('../plugins/lightning-origin-pro/tests/'));
+    .pipe(gulp.dest('../plugins/lightning-origin-pro/tests/'))
+    .pipe(gulp.dest('../plugins/lightning-pro/tests/'));
 });
 gulp.task('copy_font-switching-function', function() {
 	gulp.src('./vk-font-switching-function/package/**')
@@ -195,6 +201,16 @@ gulp.task('copy_font-awesome', function() {
   gulp.src('./font-awesome/package/**')
     .pipe(gulp.dest('../themes/lightning/inc/font-awesome/'))
     .pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/font-awesome/'));
+});
+gulp.task('copy_full-title', function() {
+  gulp.src('./vk-widget-full-wide-title/**')
+    .pipe(gulp.dest('../plugins/lightning-pro/inc/vk-widget-full-wide-title/'))
+    .pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/widgets/'));
+});
+gulp.task('copy_new-posts', function() {
+  gulp.src('./vk-widget-new-posts/**')
+    .pipe(gulp.dest('../plugins/lightning-pro/inc/vk-widget-new-posts/'))
+    .pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/widgets/'));
 });
 
 // Watch
@@ -228,7 +244,10 @@ gulp.task('watch', function() {
 	gulp.watch('./custom-field-builder/package/**', ['copy_custom-field-builder']);
 	gulp.watch('./call-to-action/package/**', ['copy_call-to-action']);
 	gulp.watch('./vk-mobile-nav/package/**', ['copy_vk-mobile-nav']);
+	gulp.watch('./vk-widget-pr-content/package/**', ['copy_widget-pr-content']);
 	gulp.watch('./vk-font-switching-function/package/**', ['copy_font-switching-function']);
+	gulp.watch('./vk-widget-full-wide-title/**', ['copy_full-title']);
+	gulp.watch('./vk-widget-new-posts/**', ['copy_new-posts']);
 
 	gulp.watch('./template-tags/package/**', ['copy_template-tags']);
 	// gulp.watch('./font-awesome-selector/package/**', ['copy_font-awesome-selector']);
@@ -283,6 +302,12 @@ gulp.task('watch_header-top', function() {
 });
 gulp.task('watch_font-switch', function() {
 	gulp.watch('./vk-font-switching-function/package/**', ['copy_font-switching-function']);
+});
+gulp.task('watch_full-title', function() {
+	gulp.watch('./vk-widget-full-wide-title/**', ['copy_full-title']);
+});
+gulp.task('watch_new-post', function() {
+	gulp.watch('./vk-widget-new-posts/**', ['copy_new-posts']);
 });
 
 
