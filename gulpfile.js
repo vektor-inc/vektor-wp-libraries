@@ -33,19 +33,6 @@ gulp.task('sass_vk-admin', function() {
     .pipe(gulp.dest('./vk-admin/package/css/'));
 });
 
-gulp.task('sass_vk-mobile-nav', function() {
-  // gulp.src( '**/_scss/**/*.scss' )
-  gulp.src('vk-mobile-nav/package/_scss/**/*.scss')
-    .pipe(plumber())
-    .pipe(sass())
-    .pipe(cmq({
-      log: true
-    }))
-    .pipe(autoprefixer())
-    .pipe(cleanCss())
-    .pipe(gulp.dest('./vk-mobile-nav/package/css/'));
-});
-
 gulp.task('sass_vk-widget-pr-content', function() {
   // gulp.src( '**/_scss/**/*.scss' )
   gulp.src('vk-widget-pr-content/package/_scss/**/*.scss')
@@ -262,10 +249,6 @@ gulp.task('watch_fa', function() {
 gulp.task('watch_term', function() {
   gulp.watch('./term-color/package/**', ['copy_term-color']);
 });
-gulp.task('watch_mobile', function() {
-  gulp.watch('./vk-mobile-nav/package/_scss/**', ['sass_vk-mobile-nav']);
-  gulp.watch('./vk-mobile-nav/package/**', ['copy_vk-mobile-nav']);
-});
 gulp.task('watch_cf', function() {
   gulp.watch('./custom-field-builder/package/**', ['copy_custom-field-builder']);
 });
@@ -313,11 +296,33 @@ gulp.task('watch_new-post', function() {
 
 gulp.task('default', ['watch']);
 
-
-// ファイル結合
-// gulp.task('concat', function() {
-// 	// return gulp.src(['./js/lightning-adv-common.js','./inc/navigation/js/navigation.js','./inc/sidebar-fix/js/sidebar-fix.js'])
-// 	return gulp.src(['./js/lightning-adv-common.js', './inc/sidebar-fix/js/sidebar-fix.js'])
-// 		.pipe(concat('lightning-adv.js'))
-// 		.pipe(gulp.dest('./js/'));
-// });
+/*-------------------------------------*/
+/*	vk-mobile-nav
+/*-------------------------------------*/
+gulp.task('sass_vk-mobile-nav', function() {
+  // gulp.src( '**/_scss/**/*.scss' )
+  gulp.src('vk-mobile-nav/package/_scss/**/*.scss')
+    .pipe(plumber())
+    .pipe(sass())
+    .pipe(cmq({
+      log: true
+    }))
+    .pipe(autoprefixer())
+    .pipe(cleanCss())
+    .pipe(gulp.dest('./vk-mobile-nav/package/css/'));
+});
+// js最小化
+gulp.task('jsmin_vk-mobile-nav', function() {
+  gulp.src(['./vk-mobile-nav/package/js/vk-mobile-nav.js'])
+    .pipe(plumber()) // エラーでも監視を続行
+    .pipe(jsmin())
+    .pipe(rename({
+      suffix: '.min'
+    }))
+    .pipe(gulp.dest('./vk-mobile-nav/package/js/'));
+});
+gulp.task('watch_mobile', function() {
+  gulp.watch('./vk-mobile-nav/package/_scss/**', ['sass_vk-mobile-nav']);
+  gulp.watch('./vk-mobile-nav/package/js/**', ['jsmin_vk-mobile-nav']);
+  gulp.watch('./vk-mobile-nav/package/**', ['copy_vk-mobile-nav']);
+});
