@@ -195,9 +195,14 @@ gulp.task('copy_full-title', function() {
     .pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/widgets/'));
 });
 gulp.task('copy_new-posts', function() {
-  gulp.src('./vk-widget-new-posts/**')
+  gulp.src('./vk-widget-new-posts/package/**')
     .pipe(gulp.dest('../plugins/lightning-pro/inc/vk-widget-new-posts/'))
     .pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/widgets/'));
+});
+gulp.task('copy_tag-manager', function() {
+  gulp.src('./vk-google-tag-manager/package/**')
+    .pipe(gulp.dest('../plugins/lightning-pro/inc/vk-google-tag-manager/'))
+    .pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/vk-google-tag-manager/'));
 });
 
 // Watch
@@ -235,6 +240,7 @@ gulp.task('watch', function() {
 	gulp.watch('./vk-font-switching-function/package/**', ['copy_font-switching-function']);
 	gulp.watch('./vk-widget-full-wide-title/**', ['copy_full-title']);
 	gulp.watch('./vk-widget-new-posts/**', ['copy_new-posts']);
+	gulp.watch('./vk-google-tag-manager/package/**', ['copy_tag-manager']);
 
 	gulp.watch('./template-tags/package/**', ['copy_template-tags']);
 	// gulp.watch('./font-awesome-selector/package/**', ['copy_font-awesome-selector']);
@@ -289,8 +295,8 @@ gulp.task('watch_font-switch', function() {
 gulp.task('watch_full-title', function() {
 	gulp.watch('./vk-widget-full-wide-title/**', ['copy_full-title']);
 });
-gulp.task('watch_new-post', function() {
-	gulp.watch('./vk-widget-new-posts/**', ['copy_new-posts']);
+gulp.task('watch_tag-manager', function() {
+	gulp.watch('./vk-google-tag-manager/package/**', ['copy_tag-manager']);
 });
 
 
