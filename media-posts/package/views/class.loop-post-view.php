@@ -48,7 +48,7 @@ if ( ! class_exists( 'Ltg_Media_Post_View' ) ) {
 			echo '</div>';
 		}
 
-		public static function media_post_item( $media_post_class, $instance ) {
+		public static function media_post_item( $media_post_class, $instance = '' ) {
 			global $post;
 			echo '<article class="media_post media_post_base' . $media_post_class . '" id="post-' . get_the_ID() . '">' . "\n";
 			echo '<a href="' . esc_url( get_the_permalink() ) . '">' . "\n";
@@ -56,7 +56,7 @@ if ( ! class_exists( 'Ltg_Media_Post_View' ) ) {
 			$thumbnail = get_the_post_thumbnail( $post->ID, 'media_thumbnail' );
 			echo  ( $thumbnail ) ? $thumbnail : '<img src="' . LTG_MEDIA_POSTS_URL . '/images/no-image.png" alt="NO IMAGE" />';
 			echo '</div>';
-
+			// ※アーカイブページの場合はこのメソッドが呼び出される時点で instance に数字が入っているで、ここの数字を変更しても反映されない
 			$days  = isset( $instance['new_icon_display'] ) ? $instance['new_icon_display'] : 7; //Newを表示させたい期間の日数
 			$today = date_i18n( 'U' );
 			$entry = get_the_time( 'U' );

@@ -275,7 +275,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 		$flag = lmu_is_loop_layout_change_flag( $post_type_slug );
 		if ( $flag ) {
 			$layout                       = $ltg_media_unit_archive_loop_layout[ $post_type_slug ];
-			$instance['new_icon_display'] = 7;
+			$instance['new_icon_display'] = apply_filters( 'lmu_new_icon_display', 7 );
 			echo '<div class="loop_outer">';
 
 			Ltg_Media_Post_View::post_loop( $layout, $instance );
