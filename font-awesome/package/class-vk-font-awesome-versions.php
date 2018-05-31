@@ -14,9 +14,10 @@ if ( ! class_exists( 'Vk_Font_Awesome_Versions' ) ) {
 
 		static function versions() {
 			global $font_awesome_directory_uri;
+			global $vk_font_awesome_version_textdomain;
 			$versions = array(
 				'5.0_SVG_JS'       => array(
-					'label'   => '5.0 SVG with JS',
+					'label'   => '5.0 SVG with JS ( ' . __( 'Not recommended', $vk_font_awesome_version_textdomain ) . ' )',
 					'version' => '5.0',
 					'type'    => 'svg-with-js',
 					'url_css' => $font_awesome_directory_uri . 'versions/5.0.13/web-fonts-with-css/css/fontawesome-all.min.css',
@@ -75,7 +76,8 @@ if ( ! class_exists( 'Vk_Font_Awesome_Versions' ) ) {
 			$current = self::current_info();
 			if ( $current['type'] === 'svg-with-js' ) {
 				wp_enqueue_script( 'font-awesome-js', $current['url_js'], array(), $current['version'] );
-				wp_add_inline_script( 'font-awesome-js', 'FontAwesomeConfig = { searchPseudoElements: true };', 'before' );
+				// [ Danger ] This script now causes important errors
+				// wp_add_inline_script( 'font-awesome-js', 'FontAwesomeConfig = { searchPseudoElements: true };', 'before' );
 			} else {
 				wp_enqueue_style( 'font-awesome', $current['url_css'], array(), $current['version'] );
 			}
@@ -89,7 +91,7 @@ if ( ! class_exists( 'Vk_Font_Awesome_Versions' ) ) {
 		}
 
 		/**
-	 * body class 端末識別クラス追加
+	 * add body class
 	 * @return [type] [description]
 	 */
 		static function add_body_class_fa_version( $class ) {

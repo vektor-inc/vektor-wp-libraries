@@ -147,7 +147,7 @@ if ( ! class_exists( 'Lightning_header_top' ) ) {
 					$icon = 'fa fa-envelope-o';
 				}
 
-				$contact_btn_html = '<div class="headerTop_contactBtn"><a href="' . $link_url . '" class="btn btn-primary"><i class="' . $icon . '"></i> ' . $btn_txt . '</a></div>';
+				$contact_btn_html = '<div class="headerTop_contactBtn"><a href="' . $link_url . '" class="btn btn-primary"><i class="' . $icon . '"></i>' . $btn_txt . '</a></div>';
 				return $contact_btn_html;
 			}
 		}

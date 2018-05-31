@@ -12,10 +12,11 @@ $margin_section_bottom : 30px;
 	font-size:12px;
 	.headerTop_contactBtn {
 		z-index: 100;
-		i { margin-right: 5px; }
+		i,svg { margin-right: 6px; }
 		.btn { white-space: nowrap; }
 	}
-	li.headerTop_tel .headerTop_tel_wrap i {
+	li.headerTop_tel .headerTop_tel_wrap i,
+	li.headerTop_tel .headerTop_tel_wrap svg {
 		margin-right: 6px;
 	}
 }
