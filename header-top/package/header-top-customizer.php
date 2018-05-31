@@ -133,6 +133,12 @@ function lightning_header_top_customize_register( $wp_customize ) {
 				'priority' => 12,
 			)
 		);
+		$wp_customize->selective_refresh->add_partial(
+			'lightning_theme_options[header_top_tel_number]', array(
+				'selector'        => '.headerTop_tel_wrap',
+				'render_callback' => '',
+			)
+		);
 	}
 
 }

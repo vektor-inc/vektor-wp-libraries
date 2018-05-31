@@ -12,17 +12,11 @@ $margin_section_bottom : 30px;
 	font-size:12px;
 	.headerTop_contactBtn {
 		z-index: 100;
-		a:before {
-		margin-right: 7px;
-	    content: "\f003";
-	    font-family: FontAwesome;
-		}
+		i { margin-right: 5px; }
 		.btn { white-space: nowrap; }
 	}
-	li.headerTop_tel .headerTop_tel_wrap:before {
-		margin-right: 7px;
-		content: "\f095";
-		font-family: FontAwesome;
+	li.headerTop_tel .headerTop_tel_wrap i {
+		margin-right: 6px;
 	}
 }
 

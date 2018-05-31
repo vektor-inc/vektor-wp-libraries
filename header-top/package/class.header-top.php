@@ -66,12 +66,26 @@ if ( ! class_exists( 'Lightning_header_top' ) ) {
 
 			if ( isset( $options['header_top_tel_number'] ) && $options['header_top_tel_number'] ) {
 				$tel_number = mb_convert_kana( esc_attr( $options['header_top_tel_number'] ), 'n' );
-				/* ここで追加するHTMLは header-top-customizer.js でも修正する必要があるので注意 */
-				if ( wp_is_mobile() ) {
-					$contact_tel = '<li class="headerTop_tel"><a class="headerTop_tel_wrap" href="tel:' . $tel_number . '">' . $tel_number . '</a></li>';
+
+				if ( class_exists( 'Vk_Font_Awesome_Versions' ) ) {
+					$current_info = Vk_Font_Awesome_Versions::current_info();
+					if ( $current_info['version'] == '5.0' ) {
+						$icon = 'fas fa-phone';
+					} else {
+						$icon = 'fa fa-phone';
+					}
 				} else {
-					$contact_tel = '<li class="headerTop_tel"><span class="headerTop_tel_wrap">' . $tel_number . '</span></li>';
+					$icon = 'fa fa-phone';
 				}
+
+				/* ここで追加するHTMLは header-top-customizer.js でも修正する必要があるので注意 */
+				$contact_tel = '<li class="headerTop_tel">';
+				if ( wp_is_mobile() ) {
+					$contact_tel .= '<a class="headerTop_tel_wrap" href="tel:' . $tel_number . '"><i class="' . $icon . '"></i>' . $tel_number . '</a>';
+				} else {
+					$contact_tel .= '<span class="headerTop_tel_wrap"><i class="' . $icon . '"></i>' . $tel_number . '</span>';
+				}
+				$contact_tel .= '</li>';
 			} else {
 				$contact_tel = '';
 			}
@@ -121,7 +135,19 @@ if ( ! class_exists( 'Lightning_header_top' ) ) {
 			}
 
 			if ( isset( $btn_txt ) && $btn_txt && isset( $link_url ) && $link_url ) {
-				$contact_btn_html = '<div class="headerTop_contactBtn"><a href="' . $link_url . '" class="btn btn-primary">' . $btn_txt . '</a></div>';
+
+				if ( class_exists( 'Vk_Font_Awesome_Versions' ) ) {
+					$current_info = Vk_Font_Awesome_Versions::current_info();
+					if ( $current_info['version'] == '5.0' ) {
+						$icon = 'far fa-envelope';
+					} else {
+						$icon = 'fa fa-envelope-o';
+					}
+				} else {
+					$icon = 'fa fa-envelope-o';
+				}
+
+				$contact_btn_html = '<div class="headerTop_contactBtn"><a href="' . $link_url . '" class="btn btn-primary"><i class="' . $icon . '"></i> ' . $btn_txt . '</a></div>';
 				return $contact_btn_html;
 			}
 		}

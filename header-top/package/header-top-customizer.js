@@ -49,17 +49,22 @@
 	});
 
 	function header_top_contact_btn(contact_txt_new_val, contact_url_new_val) {
+		if ( jQuery('body').hasClass('fa_v5_css') || jQuery('body').hasClass('fa_v5_svg') ){
+			var icon = 'far fa-envelope';
+		} else {
+			var icon = 'fa fa-envelope-o';
+		}
 		if (contact_txt_new_val && contact_url_new_val) {
 
 			// 既にボタンが存在している場合はテキストのみ打ち替える
 			if (jQuery('#headerTop .container div:last-child').hasClass('headerTop_contactBtn')) {
 
-				$('.headerTop_contactBtn a').html(contact_txt_new_val);
+				$('.headerTop_contactBtn a').html('<i class="' + icon + '"></i>' + contact_txt_new_val);
 
 				// ボタンが無い場合は新規追加
 			} else {
 
-				$('#headerTop .container').append('<div class="headerTop_contactBtn"><a href="' + contact_url_new_val + '" class="btn btn-primary">' + contact_txt_new_val + '</a></div>');
+				$('#headerTop .container').append('<div class="headerTop_contactBtn"><a href="' + contact_url_new_val + '" class="btn btn-primary"><i class="' + icon + '"></i>' + contact_txt_new_val + '</a></div>');
 
 			}
 		} else {
@@ -72,7 +77,12 @@
 	// 電話番号
 	wp.customize('lightning_theme_options[header_top_tel_number]', function(value) {
 		value.bind(function(newval) {
-			var tel = '<a class="headerTop_tel_wrap" href="tel:' + newval + '">' + newval + '</a></li>';
+			if ( jQuery('body').hasClass('fa_v5_css') || jQuery('body').hasClass('fa_v5_svg') ){
+				var icon = 'fas fa-phone';
+			} else {
+				var icon = 'fa fa-phone';
+			}
+			var tel = '<a class="headerTop_tel_wrap" href="tel:' + newval + '"><i class="' + icon + '"></i>' + newval + '</a></li>';
 			// var tel
 			if (newval) {
 				// ulのid名はメニューエリアではなくカスタムメニューのidが入る（＝変動する）のでulのidでは指定しないこと
