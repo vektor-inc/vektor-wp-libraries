@@ -295,7 +295,7 @@ gulp.task('watch_font-switch', function() {
 gulp.task('watch_full-title', function() {
 	gulp.watch('./vk-widget-full-wide-title/**', ['copy_full-title']);
 });
-gulp.task('watch_tag-manager', function() {
+gulp.task('watch_gtm', function() {
 	gulp.watch('./vk-google-tag-manager/package/**', ['copy_tag-manager']);
 });
 

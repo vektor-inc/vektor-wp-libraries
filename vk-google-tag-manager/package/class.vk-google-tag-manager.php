@@ -26,7 +26,28 @@ if ( ! class_exists( 'Vk_Goole_Tag_Manager' ) ) {
     /*-------------------------------------------*/
 
     public function __construct() {
-      add_action( 'customize_register', array( $this, 'vk_google_tag_manager_customize_register' ) );
+      /*
+      このカスタマイザーで利用している ExUnit_Custom_Text_Control クラス（ ExUnitの /plugins_admin/customizer.php ）を
+      登録する 関数（ veu_customize_register_add_control() ）を読み込む ための メソッド（ load_veu_customize_register_add_control() ）を読み込む。
+      ※直接 veu_customize_register_add_control() を読み込まないのは、もし ExUnit が有効化されてないときに
+      veu_customize_register_add_control が存在しないので、ここで直接読み込んでいるとエラーになるため。
+      ※ ExUnitでも ExUnit_Custom_Text_Control は登録されているが after_setup_theme のタイミングのあとで登録されているので、
+      もっと早い段階で読み込まれるように、plugins_loaded で読み込んでいる。
+      */
+      add_action( 'plugins_loaded', array( $this, 'load_veu_customize_register_add_control' ));
+
+      add_action( 'customize_register', array( $this, 'vk_google_tag_manager_customize_register' ),11 );
+    }
+
+    public function load_veu_customize_register_add_control(){
+      // veu_customize_register_add_control() が（書いてあるファイルが）読み込まてていたら
+      if ( function_exists('veu_customize_register_add_control') ){
+        /*
+        customize_register のタイミングで veu_customize_register_add_control() を実行し、
+        ExUnit_Custom_Text_Control を使えるようにしている
+        */
+          add_action( 'customize_register', 'veu_customize_register_add_control', 10 );
+      }
     }
 
     public function vk_google_tag_manager_customize_register( $wp_customize ) {
@@ -42,44 +63,63 @@ if ( ! class_exists( 'Vk_Goole_Tag_Manager' ) ) {
           )
       );
 
-			// 	// nav_common
-			// 	$wp_customize->add_setting( 'nav_common', array(
-			// 		'sanitize_callback' => 'sanitize_text_field'
+      // Google Tag Manager ID
+      $wp_customize->add_setting(
+        'vk_google_tag_manager_related_options[gtm_id]',
+        array(
+          'default'           => '',
+          'type'              => 'option', // 保存先 option or theme_mod
+          'capability'        => 'edit_theme_options',
+          'sanitize_callback' => 'sanitize_text_field',
+        )
+      );
+
+      if ( class_exists('ExUnit_Custom_Text_Control') ){
+        $wp_customize->add_control(
+          new ExUnit_Custom_Text_Control(
+            $wp_customize, 'gtm_id', array(
+              'label'        => __( 'Google tag manager ID :', $vk_google_tag_manager_textdomain ),
+              'section'      => 'vk_google_tag_manager_related_setting',
+              'settings'     => 'vk_google_tag_manager_related_options[gtm_id]',
+              'type'         => 'text',
+              'description'  => __( 'Please enter the Google Tag Manager ID to use on this site.', $vk_google_tag_manager_textdomain ),
+              'input_before' => 'GTM-',
+            )
+          )
+        );
+      } else {
+        $wp_customize->add_control(
+  					'gtm_id', array(
+  					'label'    => __( 'Google tag manager ID :', $vk_google_tag_manager_textdomain ),
+  					'section'  => 'vk_google_tag_manager_related_setting',
+  					'settings' => 'vk_google_tag_manager_related_options[gtm_id]',
+  					'type'     => 'text',
+            'description'  => __( 'Please enter the Google Tag Manager ID to use on this site.', $vk_google_tag_manager_textdomain ),
+  					)
+  			);
+      }
+
+
+
+			// gtm_id セッティング
+			// $wp_customize->add_setting(
+			// 		'vk_google_tag_manager_related_options[gtm_id]', array(
+			// 		'default'           => '',
+			// 		'type'              => 'option', // 保存先 option or theme_mod
+			// 		'capability'        => 'edit_theme_options', // サイト編集者
+			// 		'sanitize_callback' => 'sanitize_text_field',
 			// 		)
-			// 	);
-			// 	$wp_customize->add_control(
-			// 		new MobileNav_Custom_Html(
-			// 			$wp_customize, 'nav_common', array(
-			// 				'label'            => __( 'Navi Common Settings', $vk_google_tag_manager_textdomain ),
-			// 				'section'          => 'vk_google_tag_manager_related_setting',
-			// 				'type'             => 'text',
-			// 				'custom_title_sub' => '',
-			// 				'custom_html'      => '',
-			// 			)
+			// );
+
+			// gtm_id コントロール
+			// $wp_customize->add_control(
+			// 		'gtm_id', array(
+			// 		'label'    => __( 'Google tag manager ID :', $vk_google_tag_manager_textdomain ),
+			// 		'section'  => 'vk_google_tag_manager_related_setting',
+			// 		'settings' => 'vk_google_tag_manager_related_options[gtm_id]',
+			// 		'type'     => 'text',
 			// 		)
-			// 	);
-			//
-
-			// link_text セッティング
-			$wp_customize->add_setting(
-					'vk_google_tag_manager_related_options[link_text]', array(
-					'default'           => '',
-					'type'              => 'option', // 保存先 option or theme_mod
-					'capability'        => 'edit_theme_options', // サイト編集者
-					'sanitize_callback' => 'sanitize_text_field',
-					)
-			);
-
-			// link_text コントロール
-			$wp_customize->add_control(
-					'link_text', array(
-					'label'    => __( 'Link text:', $vk_google_tag_manager_textdomain ),
-					'section'  => 'vk_google_tag_manager_related_setting',
-					'settings' => 'vk_google_tag_manager_related_options[link_text]',
-					'type'     => 'text',
-					)
-			);
-
+			// );
 
 
       /*-------------------------------------------*/
@@ -93,14 +133,49 @@ if ( ! class_exists( 'Vk_Goole_Tag_Manager' ) ) {
       // );
 
     } // function vk_google_tag_manager_customize_register( $wp_customize ) {
-
   } // class Vk_Goole_Tag_Manager {
 
   $vk_mobile_fix_nav = new Vk_Goole_Tag_Manager();
 
 } // if ( ! class_exists('Vk_Goole_Tag_Manager') )  {
 
-// add_action( 'wp_footer', 'vk_mobil_fix_nav' );
-// function vk_mobil_fix_nav() {
-// } // function vk_mobil_fix_nav() {
-?>
+// head に読み込むコード
+add_action( 'wp_head', 'vk_gtm_head', 0 );
+function vk_gtm_head() {
+
+	$options = get_option( 'vk_google_tag_manager_related_options' );
+	if ( isset ( $options['gtm_id'] ) && $options['gtm_id'] ) {
+		$gtm_id = $options['gtm_id'];
+
+    // GTM head コード
+    $gtm_head =
+    "<!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-'.$gtm_id);</script>
+    <!-- End Google Tag Manager -->";
+
+    echo $gtm_head;
+	} // if( isset( 'vk_google_tag_manager_related_options'['head_code'] ) ) {
+
+} // function vk_gtm_head() {
+
+// body に読み込むコード
+add_action( 'lightning_header_before', 'vk_gtm_body', 0 );
+function vk_gtm_body() {
+	$options = get_option( 'vk_google_tag_manager_related_options' );
+	if ( isset ( $options['gtm_id'] ) && $options['gtm_id'] ) {
+		$gtm_id = $options['gtm_id'];
+
+    // GTM body コード
+    $gtm_body =
+    '<!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-'.$gtm_id.'"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->';
+
+    echo $gtm_body;
+	} // if( isset( 'vk_google_tag_manager_related_options'['body_code'] ) ) {
+} // function vk_gtm_body() {
