@@ -204,4 +204,10 @@ class WP_Widget_media_post extends WP_Widget {
 		return $instance;
 	}
 }
-add_action( 'widgets_init', create_function( '', 'return register_widget("WP_Widget_media_post");' ) );
+
+add_action( 'widgets_init', 'widget_register_media_posts' );
+if ( ! function_exists( 'widget_register_media_posts' ) ) {
+	function widget_register_media_posts() {
+		return register_widget( 'WP_Widget_media_post' );
+	}
+}
