@@ -79,13 +79,17 @@ if ( ! class_exists( 'Lightning_header_top' ) ) {
 				}
 
 				/* ここで追加するHTMLは header-top-customizer.js でも修正する必要があるので注意 */
-				$contact_tel = '<li class="headerTop_tel">';
-				if ( wp_is_mobile() ) {
-					$contact_tel .= '<a class="headerTop_tel_wrap" href="tel:' . $tel_number . '"><i class="' . $icon . '"></i>' . $tel_number . '</a>';
-				} else {
-					$contact_tel .= '<span class="headerTop_tel_wrap"><i class="' . $icon . '"></i>' . $tel_number . '</span>';
+				$contact_tel = '';
+				/* スキンによって使用しないものがある */
+				if ( apply_filters( 'header-top-tel', true ) ) {
+					$contact_tel .= '<li class="headerTop_tel">';
+					if ( wp_is_mobile() ) {
+						$contact_tel .= '<a class="headerTop_tel_wrap" href="tel:' . $tel_number . '"><i class="' . $icon . '"></i>' . $tel_number . '</a>';
+					} else {
+						$contact_tel .= '<span class="headerTop_tel_wrap"><i class="' . $icon . '"></i>' . $tel_number . '</span>';
+					}
+					$contact_tel .= '</li>';
 				}
-				$contact_tel .= '</li>';
 			} else {
 				$contact_tel = '';
 			}
@@ -104,7 +108,9 @@ if ( ! class_exists( 'Lightning_header_top' ) ) {
 				$header_prepend .= '<nav><ul id="%1$s" class="%2$s nav">' . $contact_tel . '</ul></nav>';
 			}
 
-			$header_prepend .= self::header_top_contact_btn();
+			if ( apply_filters( 'header-top-contact', true ) ) {
+				$header_prepend .= self::header_top_contact_btn();
+			}
 			$header_prepend .= '</div><!-- [ / .container ] -->';
 			$header_prepend .= '</div><!-- [ / #headerTop  ] -->';
 			echo $header_prepend;

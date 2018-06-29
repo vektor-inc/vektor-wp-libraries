@@ -57,7 +57,7 @@ $header_top_offset : 10px;
 	ul { display: flex;line-height: 1.4em; }
 	li {
 		a,
-		span { padding:7px 15px;font-size:12px; white-space: nowrap;display: block; }
+		span { padding:5px 15px 7px;font-size:12px; white-space: nowrap;display: block; }
 		a:hover { background:none; }
 	}
 	.headerTop_contactBtn { position: relative;top:$header_top_offset;
