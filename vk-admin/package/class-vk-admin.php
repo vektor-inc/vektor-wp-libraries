@@ -15,6 +15,9 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 	今後読み込みファイルが増えた時にVk-Adminの中で別のファイルを読み込むために
 	このファイルにも更にclass_exists( 'Vk_Admin' ) がある。
 	*/
+
+	echo '<br />_|＼○_ﾋｬｯ ε=＼＿○ﾉ ﾎｰｳ!!' . '<br />' . "\n";
+
 	class Vk_Admin {
 
 		public static $version = '2.1.0';
