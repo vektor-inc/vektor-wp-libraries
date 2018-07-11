@@ -144,7 +144,11 @@ gulp.task('copy_custom-field-builder', function() {
     .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/custom-field-builder/'))
     .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/custom-field-builder/'))
     .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/custom-field-builder/'))
-    .pipe(gulp.dest('../themes/bill-vektor/inc/custom-field-builder/'));
+    .pipe(gulp.dest('../themes/bill-vektor/inc/custom-field-builder/'))
+    .pipe(gulp.dest('../themes/lightning-pro/inc/custom-field-builder/'));
+
+    gulp.src('./custom-field-builder/custom-field-builder-config.php')
+    .pipe(gulp.dest('../themes/lightning-pro/inc/'));
 });
 gulp.task('copy_call-to-action', function() {
   gulp.src('./call-to-action/package/**')
