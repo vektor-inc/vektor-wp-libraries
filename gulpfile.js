@@ -107,7 +107,7 @@ gulp.task('copy_header-top', function() {
     .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/header-top/'));
 });
 gulp.task('copy_media-posts', function() {
-  gulp.src(['./media-posts/package/**', './media-posts/media-posts-config.php'])
+  gulp.src('./media-posts/package/**')
     .pipe(gulp.dest('../plugins/lightning-skin-variety/inc/media-posts/'))
     .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/media-posts/'))
     .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/media-posts/'))
@@ -115,6 +115,9 @@ gulp.task('copy_media-posts', function() {
     .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/media-posts/'))
     .pipe(gulp.dest('../plugins/lightning-pro/inc/media-posts/'))
     .pipe(gulp.dest('../themes/lightning-pro/inc/media-posts/'));
+
+  gulp.src('./media-posts/media-posts-config.php')
+    .pipe(gulp.dest('../themes/lightning-pro/inc/'));
 
     gulp.src('./media-posts/tests/**')
     .pipe(gulp.dest('../plugins/lightning-skin-variety/tests/'))
@@ -160,7 +163,7 @@ gulp.task('copy_template-tags', function() {
     .pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/template-tags/'));
 });
 gulp.task('copy_page-header', function() {
-  gulp.src(['./vk-page-header/package/**', './vk-page-header/vk-page-header-config.php'])
+  gulp.src('./vk-page-header/package/**')
     .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/vk-page-header/'))
     .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/vk-page-header/'))
     .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/vk-page-header/'))
@@ -168,9 +171,11 @@ gulp.task('copy_page-header', function() {
     .pipe(gulp.dest('../plugins/lightning-pro/inc/vk-page-header/'))
     .pipe(gulp.dest('../themes/lightning-pro/inc/vk-page-header/'));
 
+  gulp.src('./vk-page-header/vk-page-header-config.php')
+    .pipe(gulp.dest('../themes/lightning-pro/inc/'));
 });
 gulp.task('copy_widget-pr-content', function() {
-  gulp.src(['./vk-widget-pr-content/package/**', './vk-widget-pr-content/vk-widget-pr-config.php'])
+  gulp.src('./vk-widget-pr-content/package/**')
     // .pipe( gulp.dest( '../plugins/lightning-skin-jpnstyle/inc/vk-wodget-pr-content/' ) )
     .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/vk-widget-pr-content/'))
     .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/vk-widget-pr-content/'))
@@ -179,6 +184,9 @@ gulp.task('copy_widget-pr-content', function() {
     .pipe(gulp.dest('../plugins/lightning-skin-variety/inc/vk-widget-pr-content/'))
     .pipe(gulp.dest('../plugins/lightning-pro/inc/vk-widget-pr-content/'))
     .pipe(gulp.dest('../themes/lightning-pro/inc/vk-widget-pr-content/'));
+
+    gulp.src('./vk-widget-pr-content/vk-widget-pr-config.php')
+        .pipe(gulp.dest('../themes/lightning-pro/inc/'));
 
     gulp.src('./vk-widget-pr-content/tests/**')
     .pipe(gulp.dest('../plugins/lightning-skin-variety/tests/'))
