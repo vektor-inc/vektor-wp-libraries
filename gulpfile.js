@@ -107,7 +107,7 @@ gulp.task('copy_header-top', function() {
     .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/header-top/'));
 });
 gulp.task('copy_media-posts', function() {
-  gulp.src('./media-posts/package/**')
+  gulp.src(['./media-posts/package/**', './media-posts/media-posts-config.php'])
     .pipe(gulp.dest('../plugins/lightning-skin-variety/inc/media-posts/'))
     .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/media-posts/'))
     .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/media-posts/'))
@@ -160,7 +160,7 @@ gulp.task('copy_template-tags', function() {
     .pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/template-tags/'));
 });
 gulp.task('copy_page-header', function() {
-  gulp.src('./vk-page-header/package/**')
+  gulp.src(['./vk-page-header/package/**', './vk-page-header/vk-page-header-config.php'])
     .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/vk-page-header/'))
     .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/vk-page-header/'))
     .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/vk-page-header/'))
@@ -170,7 +170,7 @@ gulp.task('copy_page-header', function() {
 
 });
 gulp.task('copy_widget-pr-content', function() {
-  gulp.src('./vk-widget-pr-content/package/**')
+  gulp.src(['./vk-widget-pr-content/package/**', './vk-widget-pr-content/vk-widget-pr-config.php'])
     // .pipe( gulp.dest( '../plugins/lightning-skin-jpnstyle/inc/vk-wodget-pr-content/' ) )
     .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/vk-widget-pr-content/'))
     .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/vk-widget-pr-content/'))
