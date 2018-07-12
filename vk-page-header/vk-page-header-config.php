@@ -7,7 +7,13 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 	require_once( 'custom-field-builder-config.php' );
 
 	global $vk_page_header_textdomain;
-	$vk_page_header_textdomain = 'lightning_skin_jpnstyle';
+	$path = __FILE__;
+	preg_match( '/\/themes\//', $path, $m );
+	if ( $m ) {
+		$vk_page_header_textdomain = 'lightning-pro';
+	} else {
+		$vk_page_header_textdomain = 'lightning_skin_jpnstyle';
+	}
 
 	global $customize_setting_prefix;
 	$customize_setting_prefix = 'Lightning';
