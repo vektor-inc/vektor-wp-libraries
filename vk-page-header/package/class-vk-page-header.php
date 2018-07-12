@@ -61,8 +61,6 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		public static function default_option() {
 
 			global $vk_page_header_default;
-			var_dump($vk_page_header_default);
-
 			return $option = apply_filters( 'vk_page_header_default_option', $vk_page_header_default );
 		}
 
