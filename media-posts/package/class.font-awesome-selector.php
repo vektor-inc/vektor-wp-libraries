@@ -753,7 +753,15 @@ class Vk_Font_Awesome_Selector {
 	static function admin_font_awesome( $name ) {
 		// font-awesome
 		$awesome_ver  = '4.7.0';
-		$awesome_path = get_template_directory_uri() . '/library/font-awesome/' . $awesome_ver . '/css/font-awesome.min.css';
+		//biz-vektorとlightning-proで、font-awesomeの読み込み場所が違うため分岐
+		$path = __FILE__;
+		preg_match( '/\/lightning-pro\//', $path, $m );
+		if ( $m ) {
+			$awesome_path = get_template_directory_uri() . '/inc/font-awesome/versions/' . $awesome_ver . '/css/font-awesome.min.css';
+		} else {
+			$awesome_path = get_template_directory_uri() . '/library/font-awesome/' . $awesome_ver . '/css/font-awesome.min.css';
+		}
+
 
 		// サーバーによってエラーになるためテーマディレクトリのfontawesomeのみ使用
 		// $array = get_headers( $awesome_path );
