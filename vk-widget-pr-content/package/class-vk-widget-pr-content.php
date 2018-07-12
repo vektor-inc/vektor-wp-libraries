@@ -75,16 +75,27 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 		$color = preg_replace( '/#/', '', $color );
 		// 16進数を10進数に変換
-		$btn_color_red   = hexdec( substr( $color, 0, 2 ) );
-		$btn_color_green = hexdec( substr( $color, 2, 2 ) );
-		$btn_color_blue  = hexdec( substr( $color, 4, 2 ) );
+		$r = hexdec( substr( $color, 0, 2 ) );
+		$g = hexdec( substr( $color, 2, 2 ) );
+		$b = hexdec( substr( $color, 4, 2 ) );
 
-		// 10進数の状態で50%暗くして dechex で 16進数に戻す
-		$new_color  = '#';
-		$new_color .= dechex( self::auto_under_ff( $btn_color_red * $change_rate ) );
-		$new_color .= dechex( self::auto_under_ff( $btn_color_green * $change_rate ) );
-		$new_color .= dechex( self::auto_under_ff( $btn_color_blue * $change_rate ) );
+		// 10進数の状態で変更レートを掛けて dechex で 16進数に戻す
+		$color_array      = array();
+		$color_array['r'] = dechex( self::auto_under_ff( $r * $change_rate ) );
+		$color_array['g'] = dechex( self::auto_under_ff( $g * $change_rate ) );
+		$color_array['b'] = dechex( self::auto_under_ff( $b * $change_rate ) );
 
+		$new_color = '#';
+
+		foreach ( $color_array as $key => $value ) {
+			/*
+			桁数が１桁の場合2桁にする（ 16進数を sprintf( "%02x",$value ） しても 00 にされるため文字数が1文字のものに対して0を追加している
+			 */
+			if ( mb_strlen( $value ) < 2 ) {
+				$color_array[ $key ] = '0' . $value;
+			}
+			$new_color .= $color_array[ $key ];
+		}
 		return $new_color;
 	}
 
