@@ -753,9 +753,10 @@ class Vk_Font_Awesome_Selector {
 	static function admin_font_awesome( $name ) {
 		// font-awesome
 		$awesome_ver  = '4.7.0';
-		//biz-vektorとlightning-proで、font-awesomeの読み込み場所が違うため分岐
+
+		//lightning系での読み込み用に条件分岐
 		$path = __FILE__;
-		preg_match( '/\/lightning-pro\//', $path, $m );
+		preg_match( '/lightning/', $path, $m );
 		if ( $m ) {
 			$awesome_path = get_template_directory_uri() . '/inc/font-awesome/versions/' . $awesome_ver . '/css/font-awesome.min.css';
 		} else {
