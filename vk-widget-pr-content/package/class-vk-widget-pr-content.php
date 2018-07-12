@@ -46,11 +46,23 @@ class VK_Widget_Pr_Content extends WP_Widget {
 	public static function add_script() {
 		// wp_register_script( 'vk-parallax-js', plugin_dir_url( __FILE__ ) . 'js/vk-prlx.min.js', array( 'jquery' ), self::$version );
 		// wp_enqueue_script( 'vk-parallax-js' );
-		wp_enqueue_style( 'vk-widget-pr-content-style', plugin_dir_url( __FILE__ ) . 'css/vk-widget-pr-content.css', array(), self::$version, 'all' );
+        $path = __FILE__;
+        preg_match( '/\/themes\//', $path, $m );
+        if ( $m ) {
+            wp_enqueue_style( 'vk-widget-pr-content-style', get_template_directory_uri() . '/inc/vk-widget-pr-content/css/vk-widget-pr-content.css', array(), self::$version, 'all' );
+        } else {
+            wp_enqueue_style( 'vk-widget-pr-content-style', plugin_dir_url( __FILE__ ) . 'css/vk-widget-pr-content.css', array(), self::$version, 'all' );
+        }
 	}
 
 	public static function print_admin_js() {
-		wp_enqueue_script( 'admin-widget-color-js', plugin_dir_url( __FILE__ ) . 'js/admin-widget-color.min.js', array( 'jquery' ), date( 'His' ) );
+		$path = __FILE__;
+		preg_match( '/\/themes\//', $path, $m );
+		if ( $m ) {
+			wp_enqueue_script( 'admin-widget-color-js', get_template_directory_uri() . '/inc/vk-widget-pr-content/js/admin-widget-color.min.js', array( 'jquery' ), date( 'His' ) );
+		} else {
+			wp_enqueue_script( 'admin-widget-color-js', plugin_dir_url( __FILE__ ) . 'js/admin-widget-color.min.js', array( 'jquery' ), date( 'His' ) );
+		}
 	}
 
 
