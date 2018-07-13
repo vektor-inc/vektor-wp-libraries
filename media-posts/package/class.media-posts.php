@@ -4,9 +4,9 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 
 
 		static function init() {
-				define( 'LTG_MEDIA_POSTS_URL', plugin_dir_url( __FILE__ ) );
-				define( 'LTG_MEDIA_POSTS_DIR', plugin_dir_path( __FILE__ ) );
-				define( 'LTG_MEDIA_POSTS_VERSION', '1.1' );
+			define( 'LTG_MEDIA_POSTS_URL', plugin_dir_url( __FILE__ ) );
+			define( 'LTG_MEDIA_POSTS_DIR', plugin_dir_path( __FILE__ ) );
+			define( 'LTG_MEDIA_POSTS_VERSION', '1.1' );
 		}
 
 		public static function patterns() {
@@ -170,7 +170,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 			if (
 				is_active_sidebar( 'home-content-top-after-left-widget-area' ) ||
 				is_active_sidebar( 'home-content-top-after-right-widget-area' )
-				) :
+			) :
 				echo '<div class="row">';
 				if ( is_active_sidebar( 'home-content-top-after-left-widget-area' ) ) :
 					echo '<div class="col-sm-6">';
@@ -218,7 +218,6 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 			add_image_size( 'media_thumbnail', 600, 371, true );
 			require_once( 'class.widget.media-posts.php' );
 			require_once( 'views/class.loop-post-view.php' );
-			require_once( 'class.font-awesome-selector.php' );
 			require_once( 'class.media-unit-admin.php' );
 		}
 
@@ -250,7 +249,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 		$post_type      = $post_type_info['slug'];
 
 		if ( is_author() ) {
-				$postType = 'author';
+			$postType = 'author';
 		}
 
 		$flag = lmu_is_loop_layout_change_flag( $post_type, $flag );
