@@ -46,6 +46,19 @@ gulp.task('sass_vk-widget-pr-content', function() {
     .pipe(gulp.dest('./vk-widget-pr-content/package/css/'));
 });
 
+gulp.task('sass_vk-font-selector', function() {
+  // gulp.src( '**/_scss/**/*.scss' )
+  gulp.src('vk-font-selector/package/_scss/**/*.scss')
+    .pipe(plumber())
+    .pipe(sass())
+    .pipe(cmq({
+      log: true
+    }))
+    .pipe(autoprefixer())
+    .pipe(cleanCss())
+    .pipe(gulp.dest('./vk-font-selector/package/css/'));
+});
+
 
 // js最小化
 gulp.task('jsmin_jslibs', function() {
@@ -222,6 +235,11 @@ gulp.task('copy_new-posts', function() {
     .pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/widgets/'));
 });
 
+gulp.task('copy_font-switching-function', function() {
+  gulp.src('./vk-font-selector/package/**')
+    .pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/vk-font-selector/'))
+});
+
 // Watch
 gulp.task('watch', function() {
   gulp.watch('./vk-admin/package/images/**', ['copy_vk-admin']);
@@ -236,6 +254,7 @@ gulp.task('watch', function() {
   gulp.watch('./custom-field-builder/package/**', ['copy_custom-field-builder']);
   gulp.watch('./call-to-action/package/**', ['copy_call-to-action']);
   gulp.watch('./vk-mobile-nav/package/**', ['copy_vk-mobile-nav']);
+  gulp.watch('./vk-font-selector/package/**', ['copy_font-switching-function']);
 
   gulp.watch('./template-tags/package/**', ['copy_template-tags']);
   // gulp.watch('./font-awesome-selector/package/**', ['copy_font-awesome-selector']);
@@ -301,6 +320,11 @@ gulp.task('watch_pr-content', function() {
 });
 gulp.task('watch_cta', function() {
   gulp.watch('./call-to-action/package/**', ['copy_call-to-action']);
+});
+gulp.task('watch_font', function() {
+  gulp.watch('./vk-font-selector/tests/**', ['copy_font-switching-function']);
+  gulp.watch('./vk-font-selector/package/_scss/**', ['ssass_vk-font-selector']);
+  gulp.watch('./vk-font-selector/package/**', ['copy_font-switching-function']);
 });
 gulp.task('watch_header-top', function() {
   gulp.watch('./header-top/package/**', ['copy_header-top']);
