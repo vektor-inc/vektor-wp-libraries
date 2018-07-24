@@ -26,19 +26,24 @@ class WP_Widget_media_post extends WP_Widget {
 		$iconFont_class = ( isset( $instance['iconFont_class'] ) && $instance['iconFont_class'] ) ? $instance['iconFont_class'] : '';
 
 		if ( isset( $instance['label'] ) && $instance['label'] ) {
-			if ( $iconFont_class ) echo '<div class="icon_exist">';
+
+      if ( $iconFont_class ) {
+				echo '<div class="icon_exist">';
+			}
 			echo $args['before_title'];
 			if ( $iconFont_class ) {
-				echo '<i class="fa '.$iconFont_class.'" aria-hidden="true"></i>';
+				echo '<i class="fa ' . $iconFont_class . '" aria-hidden="true"></i>';
 			}
 			echo $instance['label'];
 			echo $args['after_title'];
-			if ( $iconFont_class ) echo '</div><!-- [ /.icon_exist ] -->';
-		} else if ( !isset( $instance['label'] ) ) {
-			echo $args['before_title'];
-			_e( 'Recent Posts', $vk_ltg_media_posts_textdomain );
-			echo $args['after_title'];
-		}
+  			if ( $iconFont_class ) {
+				  echo '</div><!-- [ /.icon_exist ] -->';
+			  }
+		  } elseif ( ! isset( $instance['label'] ) ) {
+			  echo $args['before_title'];
+			  _e( 'Recent Posts', $vk_ltg_media_posts_textdomain );
+			  echo $args['after_title'];
+		  }
 
 		// $count      = ( isset( $instance['count'] ) && $instance['count'] ) ? $instance['count'] : 10;
 		$post_type  = ( isset( $instance['post_type'] ) && $instance['post_type'] ) ? $instance['post_type'] : 'post';
@@ -106,13 +111,13 @@ class WP_Widget_media_post extends WP_Widget {
 	function form( $instance ) {
 		global $vk_ltg_media_posts_textdomain;
 		$defaults = array(
-			'iconFont_class'   => 'fa-file-text-o',
-			'count'      => 6,
-			'offset'     => '',
-			'label'      => __( 'Recent Posts', $vk_ltg_media_posts_textdomain ),
-			'post_type'  => 'post',
-			'terms'      => '',
-			'format'     => '0',
+			'iconFont_class' => 'fa-file-text-o',
+			'count'          => 6,
+			'offset'         => '',
+			'label'          => __( 'Recent Posts', $vk_ltg_media_posts_textdomain ),
+			'post_type'      => 'post',
+			'terms'          => '',
+			'format'         => '0',
 		);
 
 		$instance = wp_parse_args( (array) $instance, $defaults );
@@ -147,9 +152,8 @@ class WP_Widget_media_post extends WP_Widget {
 			$patterns = Lightning_media_posts::patterns();
 
 			foreach ( $patterns as $key => $value ) {
-				$checked = ( $instance['format'] == $key ) ? ' checked' : '' ;
-				echo '<li><label><input type="radio" name="'.$this->get_field_name( 'format' ).'" value="'.$key.'"'.$checked.' />'.$value['label'].'</label></li>';
-
+				$checked = ( $instance['format'] == $key ) ? ' checked' : '';
+				echo '<li><label><input type="radio" name="' . $this->get_field_name( 'format' ) . '" value="' . $key . '"' . $checked . ' />' . $value['label'] . '</label></li>';
 			}
 			?>
 
