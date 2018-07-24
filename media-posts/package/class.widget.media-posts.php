@@ -140,7 +140,7 @@ class WP_Widget_media_post extends WP_Widget {
 		/*  Icon font
 		/*-------------------------------------------*/
 		// icon font class input
-		echo '<p><label for="' . $this->get_field_id( 'iconFont_' ) . '">' . __( 'Class name of the icon font you want to use:', '$vk_ltg_media_posts_textdomain' ) . '</label><br/>';
+		echo '<p><label for="' . $this->get_field_id( 'iconFont_' ) . '">' . __( 'Class name of the icon font you want to use:', $vk_ltg_media_posts_textdomain ) . '</label><br/>';
 		echo '<input type="text" id="' . $this->get_field_id( 'iconFont_class' ) . '-font" class="font_class" name="' . $this->get_field_name( 'iconFont_class' ) . '" value="' . esc_attr( $instance['iconFont_class'] ) . '" /><br>';
 
 		if ( class_exists( 'Vk_Font_Awesome_Versions' ) ) {
