@@ -119,6 +119,7 @@ gulp.task('copy_vk-mobile-nav', function() {
 	gulp.src('./vk-mobile-nav/package/**')
 		.pipe(gulp.dest('../themes/lightning/inc/vk-mobile-nav/'))
 		.pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/vk-mobile-nav/'))
+		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-mobile-fix-nav/'))
 		.pipe(gulp.dest('../plugins/vk-mobile-nav/inc/vk-mobile-nav/'));
 });
 gulp.task('copy_vk-mobile-fix-nav', function() {
