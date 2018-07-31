@@ -89,7 +89,7 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 				}
 			}
 
-			$menu = wp_nav_menu(
+			$menu_vk_mobile = wp_nav_menu(
 				array(
 					'theme_location' => 'vk-mobile-nav',
 					'container'      => '',
@@ -99,8 +99,21 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 					// 'depth'          => 1,
 				)
 			);
-			if ( $menu ) {
-				echo $menu;
+			global $default_nav;
+			$menu_theme_default = wp_nav_menu(
+				array(
+					'theme_location' => $default_nav,
+					'container'      => '',
+					'items_wrap'     => '<nav class="global-nav"><ul id="%1$s" class="vk-menu-acc  %2$s">%3$s</ul></nav>',
+					'fallback_cb'    => '',
+					'echo'           => false,
+					// 'depth'          => 1,
+				)
+			);
+			if ( $menu_vk_mobile ) {
+				echo $menu_vk_mobile;
+			} elseif ( $menu_theme_default ) {
+				echo $menu_theme_default;
 			} else {
 				if ( current_user_can( 'edit_theme_options' ) ) {
 					echo '<div class="veu_adminEdit alert alert-danger">';
