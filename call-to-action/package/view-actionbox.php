@@ -34,7 +34,17 @@ $content .= '<div class="cta_body">';
 if ( $imgid ) {
 	$cta_image = wp_get_attachment_image_src( $imgid, 'large' );
 	$content  .= '<div class="cta_body_image cta_body_image_' . $image_position . '">';
-	$content  .= ( $url ) ? '<a href="' . $url . '" target="_blank">' : '';
+
+	// 別ウィンドウで開くかどうかのカスタムフィールドの値を取得
+	$target_blank = get_post_meta( $id, 'vkExUnit_cta_url_blank', true );
+	if ( $target_blank != 'window_self' ) {
+		$target = ' target="_blank"';
+	} else {
+		$target = '';
+	}
+
+	$content  .= ( $url ) ? '<a href="' . $url.'"' . $target .'>' : '';
+	// $content  .= ( $url ) ? '<a href="' . $url . '" target="_blank">' : '';
 	$content  .= '<img src="' . $cta_image[0] . '" />';
 	$content  .= ( $url ) ? '</a>' : '';
 	$content  .= '</div>';
