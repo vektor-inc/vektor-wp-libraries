@@ -12,6 +12,9 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 	global $default_nav;
 	$default_nav = 'Header';
 
+	global $library_url;
+	$library_url = plugin_dir_url( __FILE__ ) . 'vk-mobile-nav';
+
 }
 
 
