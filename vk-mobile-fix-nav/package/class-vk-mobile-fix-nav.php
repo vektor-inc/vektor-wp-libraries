@@ -52,13 +52,14 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
     public static $version = '0.0.0';
 
+		public function __construct() {
+			add_action( 'wp_enqueue_scripts', array( $this, 'add_script' ) );
+      add_action( 'customize_register', array( $this, 'vk_mobil_fix_nav_customize_register' ) );
+    }
+
     /*-------------------------------------------*/
     /*	Customizer
     /*-------------------------------------------*/
-
-    public function __construct() {
-      add_action( 'customize_register', array( $this, 'vk_mobil_fix_nav_customize_register' ) );
-    }
 
     public function vk_mobil_fix_nav_customize_register( $wp_customize ) {
 
@@ -172,6 +173,27 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
             )
         );
 
+        // Click event セッティング
+        $wp_customize->add_setting(
+            'vk_mobil_fix_nav_related_options[event_'.$i.']', array(
+            'default'           => '',
+            'type'              => 'option', // 保存先 option or theme_mod
+            'capability'        => 'edit_theme_options', // サイト編集者
+            'sanitize_callback' => 'sanitize_text_field',
+            )
+        );
+
+        // Click event コントロール
+        $wp_customize->add_control(
+            'event_'.$i, array(
+            'label'    => __( 'Click event:', $vk_mobile_fix_nav_textdomain ),
+            'section'  => 'vk_mobil_fix_nav_related_setting',
+            'settings' => 'vk_mobil_fix_nav_related_options[event_'.$i.']',
+            'type'     => 'text',
+						'description' => __( "ex ) ga('send', 'event', 'Videos', 'play', 'Fall Campaign');", $vk_mobile_fix_nav_textdomain ),
+            )
+        );
+
       } // for ($i = 1; $i <= 4; $i++) {
 
 				// nav_common
@@ -264,6 +286,14 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
     } // function vk_mobil_fix_nav_customize_register( $wp_customize ) {
 
+			/*-------------------------------------------*/
+			/*  Load js & CSS
+			/*-------------------------------------------*/
+
+			static function add_script() {
+				wp_enqueue_style( 'vk-mobile-fix-nav', get_template_directory_uri( __FILE__ ) . '/inc/vk-mobile-fix-nav/css/fix-nav.css', array(), self::$version, 'all' );
+			}
+
   } // class Vk_Mobile_Fix_Nav {
 
   $vk_mobile_fix_nav = new Vk_Mobile_Fix_Nav();
@@ -348,7 +378,25 @@ function vk_mobil_fix_nav() {
             } else {
               $color_style = $color;
             }
-              echo '<a href="'.esc_url( $link_url ).'" '.$blank.' style="color: '.$color_style.';">
+
+						// click event
+						$event = '';
+						// クリックイベントが入力されていたら
+						 if ( ! empty( $options['event_'.$i] ) && $options['event_'.$i] ){
+							 /*
+					 		onclickはクリックが終わった瞬間に発生するイベント
+					 		クリック終了後にイベントが発生し、Googleにビーコンを送信しますが、
+					 		ビーコンが送られる前に次のページに遷移してしまうとカウントされない場合がある
+					 		*/
+					 		if ( wp_is_mobile() ) {
+					 			$event = ' ontouchstart="';
+					 		} else {
+					 			$event = ' onmousedown="';
+					 		}
+							 $event .= $options['event_'.$i].'"';
+						 }
+
+              echo '<a href="'.esc_url( $link_url ).'" '.$blank.' style="color: '.$color_style.';"'.$event.'>
               <span class="link-icon"><i class="'.esc_html( $link_icon ).'"></i></span><br>'.esc_html( $link_text ).'</a>';
             echo '</li>';
           }
