@@ -31,9 +31,7 @@ $content  = '';
 $content .= '<section class="veu_cta">';
 $content .= '<h1 class="cta_title">' . $post->post_title . '</h1>';
 $content .= '<div class="cta_body">';
-if ( $imgid ) {
-	$cta_image = wp_get_attachment_image_src( $imgid, 'large' );
-	$content  .= '<div class="cta_body_image cta_body_image_' . $image_position . '">';
+
 
 	////// 別ウィンドウで開くかどうかのカスタムフィールドの値を取得 //////
 		$target_blank = get_post_meta( $id, 'vkExUnit_cta_url_blank', true );
@@ -43,7 +41,11 @@ if ( $imgid ) {
 			$target = '';
 		}
 	////////////////////////////////////////////////////////////
-	
+
+
+if ( $imgid ) {
+	$cta_image = wp_get_attachment_image_src( $imgid, 'large' );
+	$content  .= '<div class="cta_body_image cta_body_image_' . $image_position . '">';
 	$content  .= ( $url ) ? '<a href="' . $url.'"' . $target .'>' : '';
 	$content  .= '<img src="' . $cta_image[0] . '" />';
 	$content  .= ( $url ) ? '</a>' : '';
