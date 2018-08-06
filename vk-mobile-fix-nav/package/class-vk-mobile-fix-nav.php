@@ -74,6 +74,48 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
           )
       );
 
+			// first_btn_menu_setting セッティング
+			$wp_customize->add_setting( 'vk_mobil_fix_nav_related_options[first_btn_menu_setting]', array(
+					'default'			      => false,
+					'type'				      => 'option', // 保存先 option or theme_mod
+					'capability'		    => 'edit_theme_options', // サイト編集者
+					'sanitize_callback' => 'veu_sanitize_boolean',
+					)
+			);
+
+			// first_btn_menu_setting コントロール
+			$wp_customize->add_control( 'vk_mobil_fix_nav_related_options[first_btn_menu_setting]', array(
+					'label'     => __( 'Make the leftmost button open and close the menu.', $vk_mobile_fix_nav_textdomain ),
+					'section'   => 'vk_mobil_fix_nav_related_setting',
+					'settings'  => 'vk_mobil_fix_nav_related_options[first_btn_menu_setting]',
+					'type'		  => 'checkbox',
+					)
+			);
+
+			// 「first_btn_menu_setting」にチェックが入っているときの処理
+			$first_btn_menu_setting = ['first_btn_menu_setting'];
+			if ( isset( $first_btn_menu_setting ) && $first_btn_menu_setting == true ) {
+				 // link_text セッティング
+				 $wp_customize->add_setting(
+				 		'vk_mobil_fix_nav_related_options[link_text_0]', array(
+				 		'default'           => '',
+				 		'type'              => 'option', // 保存先 option or theme_mod
+				 		'capability'        => 'edit_theme_options', // サイト編集者
+				 		'sanitize_callback' => 'sanitize_text_field',
+				 		)
+				 );
+
+				 // link_text コントロール
+				 $wp_customize->add_control(
+				 		'link_text_0', array(
+				 		'label'    => __( 'Link text:', $vk_mobile_fix_nav_textdomain ),
+				 		'section'  => 'vk_mobil_fix_nav_related_setting',
+				 		'settings' => 'vk_mobil_fix_nav_related_options[link_text_0]',
+				 		'type'     => 'text',
+				 		)
+				 );
+			} // if ( isset( $first_btn_menu_setting ) && $first_btn_menu_setting == true ) {
+
       for ( $i = 1; $i <= 4; $i++ ) {
 
         // nav_title
@@ -325,7 +367,17 @@ function vk_mobil_fix_nav() {
     <nav class="footer-mobil-fix-nav">
       <ul class="mobil-fix-nav" style="background-color: <?php echo sanitize_hex_color( $nav_bg_color ) ?>;">
 
-        <?php for ( $i = 1; $i <= 4; $i++ ) {
+				<?php
+
+				// first_btn_menu_setting
+				if ( ! empty( $options['first_btn_menu_setting'] ) ) {
+					echo '<li>';
+					echo '<a href="'.esc_url( '#' ).'">
+					<span class="link-icon btn btn-default menuBtn menuBtn_left menuClose"><i class="fas fa-bars"></i></span><br>'.esc_html( $options['link_text_0'] ).'</a>';
+					echo '</li>';
+				}
+
+        for ( $i = 1; $i <= 4; $i++ ) {
 
           // link text
           if ( ! empty( $options['link_text_'.$i] ) ) {
@@ -394,11 +446,11 @@ function vk_mobil_fix_nav() {
 					 			$event = ' onmousedown="';
 					 		}
 							 $event .= $options['event_'.$i].'"';
-						 }
+						 } // if ( ! empty( $options['event_'.$i] ) && $options['event_'.$i] ){
 
-              echo '<a href="'.esc_url( $link_url ).'" '.$blank.' style="color: '.$color_style.';"'.$event.'>
-              <span class="link-icon"><i class="'.esc_html( $link_icon ).'"></i></span><br>'.esc_html( $link_text ).'</a>';
-            echo '</li>';
+            echo '<a href="'.esc_url( $link_url ).'" '.$blank.' style="color: '.$color_style.';"'.$event.'>
+            <span class="link-icon "><i class="'.esc_html( $link_icon ).'"></i></span><br>'.esc_html( $link_text ).'</a>';
+          	echo '</li>';
           }
 
         } // <?php for ( $i = 1; $i <= 4; $i++ ) { ?>
