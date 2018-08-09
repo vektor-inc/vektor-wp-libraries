@@ -372,8 +372,10 @@ function vk_mobil_fix_nav() {
 				// first_btn_menu_setting
 				if ( ! empty( $options['first_btn_menu_setting'] ) ) {
 					echo '<li>';
-					echo '<a href="'.esc_url( '#' ).'">
-					<span class="link-icon btn btn-default menuBtn menuBtn_left menuClose"><i class="fas fa-bars"></i></span><br>'.esc_html( $options['link_text_0'] ).'</a>';
+					// echo '<div class="vk-mobile-nav-menu-btn">';
+					echo '<a class="" href="'.esc_url( '#' ).'">
+					<div class="vk-mobile-nav-menu-btn btn btn-default menuBtn menuBtn_left">MENU</div><br>'.esc_html( $options['link_text_0'] ).'</a>';
+					// echo '</div>';
 					echo '</li>';
 				}
 
