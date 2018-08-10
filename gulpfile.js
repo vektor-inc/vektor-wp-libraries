@@ -202,8 +202,7 @@ gulp.task('copy_new-posts', function() {
 });
 gulp.task('copy_tag-manager', function() {
   gulp.src('./vk-google-tag-manager/package/**')
-    .pipe(gulp.dest('../plugins/lightning-pro/inc/vk-google-tag-manager/'))
-    .pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/vk-google-tag-manager/'));
+    .pipe(gulp.dest('../themes/lightning-pro/inc/vk-google-tag-manager/'))
 });
 
 // Watch
