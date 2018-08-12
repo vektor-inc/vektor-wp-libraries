@@ -125,13 +125,6 @@ gulp.task('copy_term-color', function() {
 		.pipe(gulp.dest('../themes/lightning-child-rerise/inc/term-color/'))
 		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/term-color/'));
 });
-gulp.task('copy_header-top', function() {
-	gulp.src('./header-top/package/**')
-		.pipe(gulp.dest('../plugins/lightning-skin-variety/inc/header-top/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-fort/inc/header-top/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-pale/inc/header-top/'))
-		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/header-top/'));
-});
 gulp.task('copy_media-posts', function () {
     gulp.src('./media-posts/package/**')
         .pipe(gulp.dest('../plugins/lightning-skin-variety/inc/media-posts/'))
@@ -281,9 +274,7 @@ gulp.task('watch_font', function () {
     gulp.watch('./vk-font-selector/package/_scss/**', ['ssass_vk-font-selector']);
     gulp.watch('./vk-font-selector/package/**', ['copy_font-switching-function']);
 });
-gulp.task('watch_header-top', function () {
-    gulp.watch('./header-top/package/**', ['copy_header-top']);
-});
+
 gulp.task('watch_font-switch', function () {
     gulp.watch('./vk-font-switching-function/package/**', ['copy_font-switching-function']);
 });
@@ -295,6 +286,34 @@ gulp.task('watch_new-post', function () {
 });
 
 // gulp.task('default', ['watch']);
+
+
+/*-------------------------------------*/
+/*	header top
+/*-------------------------------------*/
+gulp.task('sass_header-top', function () {
+	gulp.src('header-top/package/_scss/**/*.scss')
+		.pipe(plumber())
+		.pipe(sass())
+		.pipe(cmq({
+		log: true
+		}))
+		.pipe(autoprefixer())
+		.pipe(cleanCss())
+		.pipe(gulp.dest('./header-top/package/css/'));
+});
+gulp.task('copy_header-top', function() {
+	gulp.src('./header-top/package/**')
+		.pipe(gulp.dest('../plugins/lightning-skin-variety/inc/header-top/'))
+		.pipe(gulp.dest('../plugins/lightning-skin-fort/inc/header-top/'))
+		.pipe(gulp.dest('../plugins/lightning-skin-pale/inc/header-top/'))
+		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/header-top/'))
+		.pipe(gulp.dest('../themes/lightning-pro/inc/header-top/'));
+});
+gulp.task('watch_header-top', function () {
+	gulp.watch('./header-top/package/_scss/**', ['sass_header-top']);
+  gulp.watch('./header-top/package/**', ['copy_header-top']);
+});
 
 /*-------------------------------------*/
 /*	vk-mobile-nav
