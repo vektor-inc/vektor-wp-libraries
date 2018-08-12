@@ -4,9 +4,26 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 
 
 		static function init() {
-			define( 'LTG_MEDIA_POSTS_URL', plugin_dir_url( __FILE__ ) );
-			define( 'LTG_MEDIA_POSTS_DIR', plugin_dir_path( __FILE__ ) );
+			if ( self::is_theme() ) {
+				define( 'LTG_MEDIA_POSTS_URL', get_template_directory_uri() . '/inc/media-posts/' );
+				define( 'LTG_MEDIA_POSTS_DIR', dirname( __FILE__ ) );
+			} else {
+				define( 'LTG_MEDIA_POSTS_URL', plugin_dir_url( __FILE__ ) );
+				define( 'LTG_MEDIA_POSTS_DIR', plugin_dir_path( __FILE__ ) );
+			}
 			define( 'LTG_MEDIA_POSTS_VERSION', '1.1' );
+		}
+
+		private static function is_theme() {
+			$media_post_path = __FILE__;
+			$pattern         = '/wp-content\/themes\//';
+			get_template_directory_uri();
+			preg_match( '/wp-content\/themes\//', $media_post_path, $matches );
+			if ( $matches ) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 
 		public static function patterns() {

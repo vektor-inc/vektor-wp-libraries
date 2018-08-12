@@ -170,11 +170,12 @@ gulp.task('copy_call-to-action', function() {
 		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/call-to-action/'));
 });
 gulp.task('copy_vk-mobile-nav', function () {
-    gulp.src('./vk-mobile-nav/package/**')
-        .pipe(gulp.dest('../themes/lightning/inc/vk-mobile-nav/'))
+	gulp.src('./vk-mobile-nav/package/**')
+		.pipe(gulp.dest('../themes/lightning/inc/vk-mobile-nav/'))
+		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-mobile-nav/'))
 		.pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/vk-mobile-nav/'))
-        .pipe(gulp.dest('../plugins/lightning-pro/inc/vk-mobile-nav/'))
-        .pipe(gulp.dest('../plugins/vk-mobile-nav/inc/vk-mobile-nav/'));
+		.pipe(gulp.dest('../plugins/lightning-pro/inc/vk-mobile-nav/'))
+		.pipe(gulp.dest('../plugins/vk-mobile-nav/inc/vk-mobile-nav/'));
 });
 gulp.task('copy_vk-mobile-fix-nav', function() {
 	gulp.src('./vk-mobile-fix-nav/package/**')
@@ -221,7 +222,8 @@ gulp.task('copy_font-switching-function', function () {
 gulp.task('copy_font-awesome', function () {
     gulp.src('./font-awesome/package/**')
         .pipe(gulp.dest('../themes/lightning/inc/font-awesome/'))
-        .pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/font-awesome/'));
+        .pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/font-awesome/'))
+        .pipe(gulp.dest('../plugins/vk-post-author-display/inc/font-awesome/'));
 });
 gulp.task('copy_new-posts', function () {
     gulp.src('./vk-widget-new-posts/**')
