@@ -68,12 +68,15 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 		public static function register( $wp_customize ) {
 
 			// セクション、テーマ設定、コントロールを追加
+
 			global $vk_font_selector_textdomain;
+
+			global $customize_section_prefix;
 
 			// セクション追加
 			$wp_customize->add_section(
 				'vk_font_selector_related_setting', array(
-					'title'    => __( 'Font Switching Function', $vk_font_selector_textdomain ),
+					'title'    => $customize_section_prefix . __( 'Font Setting', $vk_font_selector_textdomain ),
 					'priority' => 900,
 				)
 			);
