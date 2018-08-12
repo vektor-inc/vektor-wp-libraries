@@ -17,7 +17,6 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 		private static function is_theme() {
 			$media_post_path = __FILE__;
 			$pattern         = '/wp-content\/themes\//';
-			get_template_directory_uri();
 			preg_match( '/wp-content\/themes\//', $media_post_path, $matches );
 			if ( $matches ) {
 				return true;
