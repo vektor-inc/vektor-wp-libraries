@@ -21,8 +21,13 @@ if ( ! class_exists( 'Lightning_header_top' ) ) {
 		// }
 
 		public function __construct() {
-			define( 'LTG_HEADER_TOP_URL', plugin_dir_url( __FILE__ ) );
-			define( 'LTG_HEADER_TOP_DIR', plugin_dir_path( __FILE__ ) );
+			if ( self::is_theme() ) {
+				define( 'LTG_HEADER_TOP_URL', get_template_directory_uri() . '/inc/header-top/' );
+				define( 'LTG_HEADER_TOP_DIR', dirname( __FILE__ ) );
+			} else {
+				define( 'LTG_HEADER_TOP_URL', plugin_dir_url( __FILE__ ) );
+				define( 'LTG_HEADER_TOP_DIR', plugin_dir_path( __FILE__ ) );
+			}
 			define( 'LTG_HEADER_TOP_VERSION', '1.1' );
 			add_action( 'after_setup_theme', array( $this, 'header_top_add_menu' ) );
 			add_action( 'lightning_header_prepend', array( $this, 'header_top_prepend_item' ) );
@@ -30,6 +35,18 @@ if ( ! class_exists( 'Lightning_header_top' ) ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'header_top_add_css' ) );
 			require_once( 'header-top-customizer.php' );
 		}
+
+		private static function is_theme() {
+			$media_post_path = __FILE__;
+			$pattern         = '/wp-content\/themes\//';
+			preg_match( '/wp-content\/themes\//', $media_post_path, $matches );
+			if ( $matches ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
 		/*-------------------------------------------*/
 		/*	Header top html
 		/*-------------------------------------------*/
