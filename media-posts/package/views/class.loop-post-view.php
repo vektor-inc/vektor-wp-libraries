@@ -52,7 +52,9 @@ if ( ! class_exists( 'Ltg_Media_Post_View' ) ) {
 			global $post;
 			echo '<article class="media_post media_post_base' . $media_post_class . '" id="post-' . get_the_ID() . '">' . "\n";
 			echo '<a href="' . esc_url( get_the_permalink() ) . '">' . "\n";
-			echo '<div class="media_post_image">' . "\n";
+			$thumbnail_id  = get_post_thumbnail_id( $post->ID );
+			$thumbnail_src = wp_get_attachment_image_src( $thumbnail_id, 'large' );
+			echo '<div class="media_post_image" style="background-image:url(' . $thumbnail_src[0] . ');">' . "\n";
 			$thumbnail = get_the_post_thumbnail( $post->ID, 'media_thumbnail' );
 			echo  ( $thumbnail ) ? $thumbnail : '<img src="' . LTG_MEDIA_POSTS_URL . '/images/no-image.png" alt="NO IMAGE" />';
 			echo '</div>';

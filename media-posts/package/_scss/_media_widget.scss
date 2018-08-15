@@ -3,6 +3,11 @@
 $border_primary : 1px solid #e3e3e3;
 $item_bottom_margin : 25px;
 
+.col-sm-6 {
+	width:100%;
+	@media (min-width: 576px){ width:50%; }
+}
+
 .row.flex_height:before { display: block;content:""; }
 .media_post { display:block; overflow:hidden;position: relative; background-color: #fff;width:100%;
 	.media_post_label_new {
@@ -73,7 +78,7 @@ $item_bottom_margin : 25px;
 /*-------------------------------------------*/
 /*	高さを揃える
 /*-------------------------------------------*/
-@media (min-width: 768px){
+@media (min-width: 576px){
 .flex_height {
 	display: flex;
   flex-wrap: wrap;
@@ -137,9 +142,19 @@ $item_bottom_margin : 25px;
 /*-------------------------------------------*/
 /*	.vertical_card
 /*-------------------------------------------*/
+
 .vertical_card {
 	border:$border_primary ;
 	a { color:#333; }
+	.media_post_image { overflow: hidden;text-indent: -9999px;
+		background-size: cover;
+		background-position: center;
+		height:50vw;
+		@media (min-width: 576px){ height:25vw; }
+		@media (min-width: 768px){ height:120px; }
+		@media (min-width: 992px){ height:100px; }
+		@media (min-width: 1200px){ height:140px; }
+	}
 	.media_post_title { line-height: 20px; }
 	.media_post_text { width:100%; }
 }
