@@ -125,24 +125,7 @@ gulp.task('copy_term-color', function() {
 		.pipe(gulp.dest('../themes/lightning-child-rerise/inc/term-color/'))
 		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/term-color/'));
 });
-gulp.task('copy_media-posts', function () {
-    gulp.src('./media-posts/package/**')
-        .pipe(gulp.dest('../plugins/lightning-skin-variety/inc/media-posts/'))
-        .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/media-posts/'))
-        .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/media-posts/'))
-        .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/media-posts/'))
-        .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/media-posts/'))
-        .pipe(gulp.dest('../plugins/lightning-pro/inc/media-posts/'))
-        .pipe(gulp.dest('../themes/lightning-pro/inc/media-posts/'));
-    gulp.src('./media-posts/tests/**')
-        .pipe(gulp.dest('../plugins/lightning-skin-variety/tests/'))
-        .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/tests/'))
-        .pipe(gulp.dest('../plugins/lightning-skin-fort/tests/'))
-        .pipe(gulp.dest('../plugins/lightning-skin-pale/tests/'))
-        .pipe(gulp.dest('../plugins/lightning-origin-pro/tests/'))
-        .pipe(gulp.dest('../plugins/lightning-pro/tests/'))
-        .pipe(gulp.dest('../themes/lightning-pro/tests/'));
-});
+
 gulp.task('copy_post-type-manager', function() {
 	gulp.src('./post-type-manager/package/**')
 		.pipe(gulp.dest('../themes/biz-vektor/plugins/post-type-manager/'))
@@ -239,11 +222,7 @@ gulp.task('watch_cf', function () {
 gulp.task('watch_ptm', function () {
     gulp.watch('./post-type-manager/package/**', ['copy_post-type-manager']);
 });
-gulp.task('watch_media', function () {
-    gulp.watch('./media-posts/tests/**', ['copy_media-posts']);
-    gulp.watch('./media-posts/package/**', ['copy_media-posts']);
-    gulp.watch('./media-posts/package/**', ['copy_term-color']);
-});
+
 
 gulp.task('watch_admin', function () {
     gulp.watch('./vk-admin/package/_scss/**', ['sass_vk-admin']);
@@ -287,6 +266,44 @@ gulp.task('watch_new-post', function () {
 
 // gulp.task('default', ['watch']);
 
+/*-------------------------------------*/
+/*	media posts
+/*-------------------------------------*/
+gulp.task('sass_media-posts', function () {
+	gulp.src('media-posts/package/_scss/**/*.scss')
+		.pipe(plumber())
+		.pipe(sass())
+		.pipe(cmq({
+		log: true
+		}))
+		.pipe(autoprefixer())
+		.pipe(cleanCss())
+		.pipe(gulp.dest('./media-posts/package/css/'));
+});
+gulp.task('copy_media-posts', function () {
+    gulp.src('./media-posts/package/**')
+        .pipe(gulp.dest('../plugins/lightning-skin-variety/inc/media-posts/'))
+        .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/media-posts/'))
+        .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/media-posts/'))
+        .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/media-posts/'))
+        .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/media-posts/'))
+        .pipe(gulp.dest('../plugins/lightning-pro/inc/media-posts/'))
+        .pipe(gulp.dest('../themes/lightning-pro/inc/media-posts/'));
+    gulp.src('./media-posts/tests/**')
+        .pipe(gulp.dest('../plugins/lightning-skin-variety/tests/'))
+        .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/tests/'))
+        .pipe(gulp.dest('../plugins/lightning-skin-fort/tests/'))
+        .pipe(gulp.dest('../plugins/lightning-skin-pale/tests/'))
+        .pipe(gulp.dest('../plugins/lightning-origin-pro/tests/'))
+        .pipe(gulp.dest('../plugins/lightning-pro/tests/'))
+        .pipe(gulp.dest('../themes/lightning-pro/tests/'));
+});
+gulp.task('watch_media', function () {
+		gulp.watch('./media-posts/package/_scss/**', ['sass_media-posts']);
+    gulp.watch('./media-posts/tests/**', ['copy_media-posts']);
+    gulp.watch('./media-posts/package/**', ['copy_media-posts']);
+    gulp.watch('./media-posts/package/**', ['copy_term-color']);
+});
 
 /*-------------------------------------*/
 /*	header top
