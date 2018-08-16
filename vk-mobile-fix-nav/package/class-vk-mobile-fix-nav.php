@@ -258,7 +258,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
       // color セッティング
       $wp_customize->add_setting(
           'vk_mobil_fix_nav_related_options[color]', array(
-          'default'           => '',
+          'default'           => '#2e6da4',
           'type'              => 'option', // 保存先 option or theme_mod
           'capability'        => 'edit_theme_options', // サイト編集者
           'sanitize_callback' => 'sanitize_hex_color',
@@ -408,6 +408,13 @@ function vk_mobil_fix_nav() {
             $blank = ' target="_blank"';
           } else {
             $blank = '';
+          }
+
+          // color
+          if ( isset( $options['color'] ) && $options['color'] ) {
+            $color = $options['color'];
+          } else {
+            $color = '#2e6da4';
           }
 
           // current color
