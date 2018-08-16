@@ -373,8 +373,9 @@ function vk_mobil_fix_nav() {
 				if ( ! empty( $options['first_btn_menu_setting'] ) ) {
 					echo '<li>';
 					// echo '<div class="vk-mobile-nav-menu-btn">';
-					echo '<a class="" href="'.esc_url( '#' ).'">
-					<div class="vk-mobile-nav-menu-btn btn btn-default menuBtn menuBtn_left">MENU</div><br>'.esc_html( $options['link_text_0'] ).'</a>';
+					// echo '<a class="" href="'.esc_url( '#' ).'">
+					// <div id="menuBtn" class="vk-mobile-nav-menu-btn btn btn-default menuBtn menuBtn_left"><i class="fa fa-bars" aria-hidden="true"></i>MENU</div><br>'.esc_html( $options['link_text_0'] ).'</a>';
+					echo '<a href="#" class="btn btn-default menuBtn menuBtn_left menuClose" id="menuBtn"><i class="fa fa-bars" aria-hidden="true"></i><br>'.esc_html( $options['link_text_0'] ).'</a>';
 					// echo '</div>';
 					echo '</li>';
 				}
@@ -451,7 +452,7 @@ function vk_mobil_fix_nav() {
 						 } // if ( ! empty( $options['event_'.$i] ) && $options['event_'.$i] ){
 
             echo '<a href="'.esc_url( $link_url ).'" '.$blank.' style="color: '.$color_style.';"'.$event.'>
-            <span class="link-icon "><i class="'.esc_html( $link_icon ).'"></i></span><br>'.esc_html( $link_text ).'</a>';
+            <span class="link-icon"><i class="'.esc_html( $link_icon ).'"></i></span><br>'.esc_html( $link_text ).'</a>';
           	echo '</li>';
           }
 
