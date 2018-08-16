@@ -40,6 +40,14 @@
       font-size: 10px;
       line-height: 1.3;
 
+      .menuBtn {
+        position: unset;
+        top: unset;
+        z-index: unset;
+        margin: 0;
+        padding: 0;
+      }
+
       a {
         border: none;
         display: block;
