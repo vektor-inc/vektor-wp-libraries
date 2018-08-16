@@ -278,7 +278,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
       // nav_bg_color セッティング
       $wp_customize->add_setting(
           'vk_mobil_fix_nav_related_options[nav_bg_color]', array(
-          'default'           => '',
+          'default'           => '#FFF',
           'type'              => 'option', // 保存先 option or theme_mod
           'capability'        => 'edit_theme_options', // サイト編集者
           'sanitize_callback' => 'sanitize_hex_color',
@@ -298,7 +298,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
       // current_color セッティング
       $wp_customize->add_setting(
           'vk_mobil_fix_nav_related_options[current_color]', array(
-          'default'           => '',
+          'default'           => '#16354f',
           'type'              => 'option', // 保存先 option or theme_mod
           'capability'        => 'edit_theme_options', // サイト編集者
           'sanitize_callback' => 'sanitize_hex_color',
