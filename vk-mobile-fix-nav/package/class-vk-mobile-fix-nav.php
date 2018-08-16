@@ -74,6 +74,23 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
           )
       );
 
+			// nav_title
+			$wp_customize->add_setting( 'nav_title_0', array(
+				'sanitize_callback' => 'sanitize_text_field'
+				)
+			);
+			$wp_customize->add_control(
+				new MobileNav_Custom_Html(
+					$wp_customize, 'nav_title_0', array(
+						'label'            => __( 'Open and close the menu', $vk_mobile_fix_nav_textdomain ),
+						'section'          => 'vk_mobil_fix_nav_related_setting',
+						'type'             => 'text',
+						'custom_title_sub' => '',
+						'custom_html'      => '',
+					)
+				)
+			);
+
 			// first_btn_menu_setting セッティング
 			$wp_customize->add_setting( 'vk_mobil_fix_nav_related_options[first_btn_menu_setting]', array(
 					'default'			      => false,
@@ -114,6 +131,28 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				 		'type'     => 'text',
 				 		)
 				 );
+
+         // Click event セッティング
+         $wp_customize->add_setting(
+             'vk_mobil_fix_nav_related_options[event_0]', array(
+             'default'           => '',
+             'type'              => 'option', // 保存先 option or theme_mod
+             'capability'        => 'edit_theme_options', // サイト編集者
+             'sanitize_callback' => 'sanitize_text_field',
+             )
+         );
+
+         // Click event コントロール
+         $wp_customize->add_control(
+             'event_0', array(
+             'label'    => __( 'Click event:', $vk_mobile_fix_nav_textdomain ),
+             'section'  => 'vk_mobil_fix_nav_related_setting',
+             'settings' => 'vk_mobil_fix_nav_related_options[event_0]',
+             'type'     => 'text',
+ 						'description' => __( "ex ) ga('send', 'event', 'Videos', 'play', 'Fall Campaign');", $vk_mobile_fix_nav_textdomain ),
+             )
+         );
+
 			} // if ( isset( $first_btn_menu_setting ) && $first_btn_menu_setting == true ) {
 
       for ( $i = 1; $i <= 4; $i++ ) {
@@ -371,12 +410,26 @@ function vk_mobil_fix_nav() {
 
 				// first_btn_menu_setting
 				if ( ! empty( $options['first_btn_menu_setting'] ) ) {
+
+					// click event
+					$event = '';
+					// クリックイベントが入力されていたら
+					 if ( ! empty( $options['event_0'] ) && $options['event_0'] ){
+						 /*
+				 		onclickはクリックが終わった瞬間に発生するイベント
+				 		クリック終了後にイベントが発生し、Googleにビーコンを送信しますが、
+				 		ビーコンが送られる前に次のページに遷移してしまうとカウントされない場合がある
+				 		*/
+				 		if ( wp_is_mobile() ) {
+				 			$event = ' ontouchstart="';
+				 		} else {
+				 			$event = ' onmousedown="';
+				 		}
+						 $event .= $options['event_0'].'"';
+					 } // if ( ! empty( $options['event_'.$i] ) && $options['event_'.$i] ){
+
 					echo '<li>';
-					// echo '<div class="vk-mobile-nav-menu-btn">';
-					// echo '<a class="" href="'.esc_url( '#' ).'">
-					// <div id="menuBtn" class="vk-mobile-nav-menu-btn btn btn-default menuBtn menuBtn_left"><i class="fa fa-bars" aria-hidden="true"></i>MENU</div><br>'.esc_html( $options['link_text_0'] ).'</a>';
-					echo '<a href="#" class="btn btn-default menuBtn menuBtn_left menuClose" id="menuBtn"><i class="fa fa-bars" aria-hidden="true"></i><br>'.esc_html( $options['link_text_0'] ).'</a>';
-					// echo '</div>';
+					echo '<a href="#" class="menuBtn menuClose" id="menuBtn"'.$event.'><span class="link-icon"><i class="fas fa-bars" aria-hidden="true"></i></span><br>'.esc_html( $options['link_text_0'] ).'</a>';
 					echo '</li>';
 				}
 
