@@ -22,13 +22,13 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 		public static function fonts_array() {
 			global $vk_font_selector_textdomain;
 			$fonts_array = array(
-				'mincho' => array(
+				'mincho'    => array(
 					'label'       => __( 'Mincho', $vk_font_selector_textdomain ),
 					'font-family' => 'Hiragino Mincho ProN',
 					'游明朝',
 					'serif',
 				),
-				'gothic' => array(
+				'gothic'    => array(
 					'label'       => __( 'Gothic', $vk_font_selector_textdomain ),
 					'font-family' => '-apple-system',
 					'BlinkMacSystemFont',
@@ -37,6 +37,10 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					'游ゴシック  Medium',
 					'meiryo',
 					'sans-serif',
+				),
+				'yu-gothic' => array(
+					'label'       => __( 'Yu Gothic', $vk_font_selector_textdomain ),
+					'font-family' => '"游ゴシック体","Yu Gothic",YuGothic,"ヒラギノ角ゴ Pro","Hiragino Kaku Gothic Pro","メイリオ",Meiryo,sans-serif',
 				),
 			);
 			return $fonts_array;
