@@ -135,27 +135,6 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					)
 				);
 
-				// Click event セッティング
-				$wp_customize->add_setting(
-					'vk_mobil_fix_nav_related_options[event_0]', array(
-						'default'           => '',
-						'type'              => 'option', // 保存先 option or theme_mod
-						'capability'        => 'edit_theme_options', // サイト編集者
-						'sanitize_callback' => 'sanitize_text_field',
-					)
-				);
-
-				// Click event コントロール
-				$wp_customize->add_control(
-					'event_0', array(
-						'label'       => __( 'Click event:', $vk_mobile_fix_nav_textdomain ),
-						'section'     => 'vk_mobil_fix_nav_related_setting',
-						'settings'    => 'vk_mobil_fix_nav_related_options[event_0]',
-						'type'        => 'text',
-						'description' => __( "ex ) ga('send', 'event', 'Videos', 'play', 'Fall Campaign');", $vk_mobile_fix_nav_textdomain ),
-					)
-				);
-
 			} // if ( isset( $first_btn_menu_setting ) && $first_btn_menu_setting == true ) {
 
 			for ( $i = 1; $i <= 4; $i++ ) {
@@ -437,25 +416,8 @@ function vk_mobil_fix_nav() {
 						$current_color = '#16354f';
 					}
 
-					// click event
-					$event = '';
-					// クリックイベントが入力されていたら
-					if ( ! empty( $options['event_0'] ) && $options['event_0'] ) {
-						/*
-						 onclickはクリックが終わった瞬間に発生するイベント
-						 クリック終了後にイベントが発生し、Googleにビーコンを送信しますが、
-						 ビーコンが送られる前に次のページに遷移してしまうとカウントされない場合がある
-						 */
-						if ( wp_is_mobile() ) {
-							$event = ' ontouchstart="';
-						} else {
-							$event = ' onmousedown="';
-						}
-						$event .= $options['event_0'] . '"';
-					} // if ( ! empty( $options['event_'.$i] ) && $options['event_'.$i] ){
-
 					echo '<li>';
-					echo '<a href="#" class="" id="menuBtn" style="color: ' . $color . ';"' . $event . '><span class="link-icon vk-mobile-nav-menu-btn"><i class="fas fa-bars" aria-hidden="true"></i></span><br>' . esc_html( $options['link_text_0'] ) . '</a>';
+					echo '<a href="#" class="" id="menuBtn" style="color: ' . $color . ';"><span class="link-icon vk-mobile-nav-menu-btn"><i class="fas fa-bars" aria-hidden="true"></i></span><br>' . esc_html( $options['link_text_0'] ) . '</a>';
 					echo '</li>';
 				}
 
