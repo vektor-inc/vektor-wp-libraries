@@ -414,8 +414,8 @@ function vk_mobil_fix_nav() {
 		}
 
 		?>
-	  <nav class="footer-mobil-fix-nav">
-		<ul class="mobil-fix-nav" style="background-color: <?php echo sanitize_hex_color( $nav_bg_color ); ?>;">
+	  <nav class="mobil-fix-nav">
+		<ul class="mobil-fix-nav-menu" style="background-color: <?php echo sanitize_hex_color( $nav_bg_color ); ?>;">
 
 				<?php
 
