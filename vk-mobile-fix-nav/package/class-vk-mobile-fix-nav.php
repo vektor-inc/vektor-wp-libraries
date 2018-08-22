@@ -49,7 +49,6 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 	class Vk_Mobile_Fix_Nav {
 
-
 		public static $version = '0.0.0';
 
 		public function __construct() {
@@ -65,11 +64,12 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 			// セクション、テーマ設定、コントロールを追加
 			global $vk_mobile_fix_nav_textdomain;
+			global $vk_mobile_fix_nav_prefix;
 
 			// セクション追加
 			$wp_customize->add_section(
 				'vk_mobil_fix_nav_related_setting', array(
-					'title'    => __( 'Mobil Fix Nav', $vk_mobile_fix_nav_textdomain ),
+					'title'    => $vk_mobile_fix_nav_prefix . __( 'Mobile Fix Nav', $vk_mobile_fix_nav_textdomain ),
 					'priority' => 900,
 				)
 			);
