@@ -417,7 +417,7 @@ function vk_mobil_fix_nav() {
 					}
 
 					echo '<li>';
-					echo '<a href="#" class="" id="menuBtn" style="color: ' . $color . ';"><span class="link-icon vk-mobile-nav-menu-btn"><i class="fas fa-bars" aria-hidden="true"></i></span><br>' . esc_html( $options['link_text_0'] ) . '</a>';
+					echo '<a href="" class="" id="menuBtn" style="color: ' . $color . ';"><span class="link-icon vk-mobile-nav-menu-btn"><i class="fas fa-bars" aria-hidden="true"></i></span>' . esc_html( $options['link_text_0'] ) . '</a>';
 					echo '</li>';
 				}
 
@@ -486,7 +486,7 @@ function vk_mobil_fix_nav() {
 						} // if ( ! empty( $options['event_'.$i] ) && $options['event_'.$i] ){
 
 						echo '<a href="' . esc_url( $link_url ) . '" ' . $blank . ' style="color: ' . $color_style . ';"' . $event . '>
-            <span class="link-icon"><i class="' . esc_html( $link_icon ) . '"></i></span><br>' . esc_html( $link_text ) . '</a>';
+            <span class="link-icon"><i class="' . esc_html( $link_icon ) . '"></i></span>' . esc_html( $link_text ) . '</a>';
 						echo '</li>';
 					}
 				} // <?php for ( $i = 1; $i <= 4; $i++ ) {
