@@ -5,7 +5,6 @@ https://github.com/vektor-inc/vektor-wp-libraries
 にあります。修正の際は上記リポジトリのデータを修正してください。
 */
 
-
 if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 	class Vk_Mobile_Nav {
 
@@ -16,7 +15,7 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 			add_action( 'widgets_init', array( get_called_class(), 'setup_widget' ) );
 			add_action( 'wp_footer', array( get_called_class(), 'menu_set_html' ) );
 			add_action( 'wp_enqueue_scripts', array( get_called_class(), 'add_script' ) );
-			add_filter( 'body_class', array( get_called_class(), 'add_body_class_mobile_device' ) );
+			add_filter( 'body_class', array( $this, 'add_body_class_mobile_device' ) );
 		}
 		public static function init() {
 
