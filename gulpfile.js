@@ -34,17 +34,7 @@ gulp.task('sass_vk-admin', function() {
 		.pipe(cleanCss())
 		.pipe(gulp.dest('./vk-admin/package/css/'));
 });
-gulp.task('sass_vk-mobile-fix-nav', function() {
-	gulp.src('vk-mobile-fix-nav/package/_scss/**/*.scss')
-		.pipe(plumber())
-		.pipe(sass())
-		.pipe(cmq({
-			log: true
-		}))
-		.pipe(autoprefixer())
-		.pipe(cleanCss())
-		.pipe(gulp.dest('./vk-mobile-fix-nav/package/css/'));
-});
+
 gulp.task('sass_vk-widget-pr-content', function () {
     // gulp.src( '**/_scss/**/*.scss' )
     gulp.src('vk-widget-pr-content/package/_scss/**/*.scss')
@@ -153,10 +143,7 @@ gulp.task('copy_vk-mobile-nav', function () {
 		.pipe(gulp.dest('../plugins/lightning-pro/inc/vk-mobile-nav/'))
 		.pipe(gulp.dest('../plugins/vk-mobile-nav/inc/vk-mobile-nav/'));
 });
-gulp.task('copy_vk-mobile-fix-nav', function() {
-	gulp.src('./vk-mobile-fix-nav/package/**')
-		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-mobile-fix-nav/'))
-});
+
 gulp.task('copy_template-tags', function() {
 	gulp.src('./template-tags/package/**')
 		.pipe(gulp.dest('../plugins/vk-call-to-action/inc/template-tags/'))
@@ -227,10 +214,6 @@ gulp.task('watch_ptm', function () {
 gulp.task('watch_admin', function () {
     gulp.watch('./vk-admin/package/_scss/**', ['sass_vk-admin']);
     gulp.watch('./vk-admin/package/**', ['copy_vk-admin']);
-});
-gulp.task('watch_mobile-fix', function() {
-	gulp.watch('./vk-mobile-fix-nav/package/_scss/**', ['sass_vk-mobile-fix-nav']);
-	gulp.watch('./vk-mobile-fix-nav/package/**', ['copy_vk-mobile-fix-nav']);
 });
 gulp.task('watch_template-tags', function () {
     gulp.watch('./template-tags/package/**', ['copy_template-tags']);
@@ -361,4 +344,27 @@ gulp.task('watch_mobile', function () {
     gulp.watch('./vk-mobile-nav/package/_scss/**', ['sass_vk-mobile-nav']);
     gulp.watch('./vk-mobile-nav/package/js/**', ['jsmin_vk-mobile-nav']);
     gulp.watch('./vk-mobile-nav/package/**', ['copy_vk-mobile-nav']);
+});
+
+/*-------------------------------------*/
+/*	vk-mobile-fix-nav
+/*-------------------------------------*/
+gulp.task('sass_vk-mobile-fix-nav', function() {
+	gulp.src('vk-mobile-fix-nav/package/_scss/**/*.scss')
+		.pipe(plumber())
+		.pipe(sass())
+		.pipe(cmq({
+			log: true
+		}))
+		.pipe(autoprefixer())
+		.pipe(cleanCss())
+		.pipe(gulp.dest('./vk-mobile-fix-nav/package/css/'));
+});
+gulp.task('copy_vk-mobile-fix-nav', function() {
+	gulp.src('./vk-mobile-fix-nav/package/**')
+		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-mobile-fix-nav/'))
+});
+gulp.task('watch_mobile-fix', function() {
+	gulp.watch('./vk-mobile-fix-nav/package/_scss/**', ['sass_vk-mobile-fix-nav']);
+	gulp.watch('./vk-mobile-fix-nav/package/**', ['copy_vk-mobile-fix-nav']);
 });
