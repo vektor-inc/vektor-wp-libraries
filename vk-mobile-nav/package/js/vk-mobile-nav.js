@@ -3,10 +3,9 @@
 	/*-------------------------------------*/
 	/*
 	/*-------------------------------------*/
-	jQuery(document).ready(function() {
-		/* ※ vk-mobile-menu の読み込みが遅いので document).ready(function() しないと動作しない */
+	function vk_mobile_nav_run(target){
 		// クリックされた時
-		jQuery('.vk-mobile-nav-menu-btn').click(function() {
+		jQuery(target).click(function() {
 			// メニューボタンに .menu-open クラスがついていたら
 			if (jQuery(this).hasClass('menu-open')) {
 				// .menu-open を外す
@@ -18,6 +17,10 @@
 				jQuery('.vk-mobile-nav').addClass('vk-mobile-nav-open');
 			}
 		});
+	}
+	jQuery(document).ready(function() {
+		/* ※ vk-mobile-menu の読み込みが遅いので document).ready(function() しないと動作しない */
+		vk_mobile_nav_run('.vk-mobile-nav-menu-btn');
 	});
 
 })(jQuery);

@@ -1,9 +1,20 @@
 @charset "utf-8";
-@import "common";
 
 /*-------------------------------------------*/
 /*	スマホのフッターメニュー
 /*-------------------------------------------*/
+
+.mobil-fix-nav .vk-mobile-nav-menu-btn {
+	// 各種リセット
+	position: relative;
+	top:0;left:0;
+	border:none;
+	box-shadow: none;
+	background: none; // アイコンに色をつける機能があるため、デフォルトのSVG画像背景はクリア
+	text-indent: 0; // アイコンフォントをそのまま表示させたいので-9999で飛ばしてあったインデントを解除
+	height:auto;
+	width:auto;
+}
 
 .copySection {
   display: flex;
@@ -54,8 +65,8 @@
         text-align: center;
         text-decoration: none;
 
+				svg,
         i {
-          font-family: FontAwesome;
           font-size: 24px;
           font-style: normal;
           margin-right: 0;
@@ -63,7 +74,7 @@
 
         .link-icon {
           display: inline-block;
-          margin-bottom: 3px;
+          margin-bottom: 4px;
         }
 
       }

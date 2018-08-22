@@ -393,6 +393,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 } // if ( ! class_exists('Vk_Mobile_Fix_Nav') )  {
 
+
 add_action( 'wp_footer', 'vk_mobil_fix_nav' );
 function vk_mobil_fix_nav() {
 	if ( wp_is_mobile() ) {
@@ -422,6 +423,20 @@ function vk_mobil_fix_nav() {
 				// first_btn_menu_setting
 				if ( ! empty( $options['first_btn_menu_setting'] ) ) {
 
+					// color
+					if ( isset( $options['color'] ) && $options['color'] ) {
+						$color = $options['color'];
+					} else {
+						$color = '#2e6da4';
+					}
+
+					// current color
+					if ( isset( $options['current_color'] ) && $options['current_color'] ) {
+						$current_color = $options['current_color'];
+					} else {
+						$current_color = '#16354f';
+					}
+
 					// click event
 					$event = '';
 					// クリックイベントが入力されていたら
@@ -440,7 +455,7 @@ function vk_mobil_fix_nav() {
 					} // if ( ! empty( $options['event_'.$i] ) && $options['event_'.$i] ){
 
 					echo '<li>';
-					echo '<a href="#" class="menuBtn menuClose" id="menuBtn"' . $event . '><span class="link-icon"><i class="fas fa-bars" aria-hidden="true"></i></span><br>' . esc_html( $options['link_text_0'] ) . '</a>';
+					echo '<a href="#" class="" id="menuBtn" style="color: ' . $color . ';"' . $event . '><span class="link-icon vk-mobile-nav-menu-btn"><i class="fas fa-bars" aria-hidden="true"></i></span><br>' . esc_html( $options['link_text_0'] ) . '</a>';
 					echo '</li>';
 				}
 
@@ -472,20 +487,6 @@ function vk_mobil_fix_nav() {
 						$blank = ' target="_blank"';
 					} else {
 						$blank = '';
-					}
-
-					// color
-					if ( isset( $options['color'] ) && $options['color'] ) {
-						$color = $options['color'];
-					} else {
-						$color = '#2e6da4';
-					}
-
-					// current color
-					if ( isset( $options['current_color'] ) && $options['current_color'] ) {
-						$current_color = $options['current_color'];
-					} else {
-						$current_color = '#16354f';
 					}
 
 					// 実際に HTML を出力する
