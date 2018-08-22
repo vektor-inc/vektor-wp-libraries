@@ -151,5 +151,12 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 
 	} // class Vk_Mobile_Nav
 
+	// Store in global variable so that hook in class can be removed
+	global $vk_mobile_nav;
 	$vk_mobile_nav = new Vk_Mobile_Nav();
+
+	// remove example
+	// global $vk_mobile_nav;
+	// remove_action( 'wp_footer', array( $vk_mobile_nav, 'menu_set_html' ) );
+
 }
