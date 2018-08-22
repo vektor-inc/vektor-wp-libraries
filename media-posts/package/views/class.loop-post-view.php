@@ -52,9 +52,18 @@ if ( ! class_exists( 'Ltg_Media_Post_View' ) ) {
 			global $post;
 			echo '<article class="media_post media_post_base' . $media_post_class . '" id="post-' . get_the_ID() . '">' . "\n";
 			echo '<a href="' . esc_url( get_the_permalink() ) . '">' . "\n";
-			echo '<div class="media_post_image">' . "\n";
+			$thumbnail_id = get_post_thumbnail_id( $post->ID );
+			if ( $thumbnail_id ) {
+				$thumbnail_src  = wp_get_attachment_image_src( $thumbnail_id, 'large' );
+				$thumbnail_src  = $thumbnail_src[0];
+				$class_no_image = '';
+			} else {
+				$thumbnail_src  = LTG_MEDIA_POSTS_URL . '/images/no-image.png';
+				$class_no_image = ' noimage';
+			}
+			echo '<div class="media_post_image' . $class_no_image . '" style="background-image:url(' . $thumbnail_src . ');">' . "\n";
 			$thumbnail = get_the_post_thumbnail( $post->ID, 'media_thumbnail' );
-			echo  ( $thumbnail ) ? $thumbnail : '<img src="' . LTG_MEDIA_POSTS_URL . '/images/no-image.png" alt="NO IMAGE" />';
+			echo  ( $thumbnail ) ? $thumbnail : '<img src="' . $thumbnail_src . '" alt="NO IMAGE" />';
 			echo '</div>';
 			// ※アーカイブページの場合はこのメソッドが呼び出される時点で instance に数字が入っているで、ここの数字を変更しても反映されない
 			$days  = isset( $instance['new_icon_display'] ) ? $instance['new_icon_display'] : 7; //Newを表示させたい期間の日数

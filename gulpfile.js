@@ -125,31 +125,7 @@ gulp.task('copy_term-color', function() {
 		.pipe(gulp.dest('../themes/lightning-child-rerise/inc/term-color/'))
 		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/term-color/'));
 });
-gulp.task('copy_header-top', function() {
-	gulp.src('./header-top/package/**')
-		.pipe(gulp.dest('../plugins/lightning-skin-variety/inc/header-top/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-fort/inc/header-top/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-pale/inc/header-top/'))
-		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/header-top/'));
-});
-gulp.task('copy_media-posts', function () {
-    gulp.src('./media-posts/package/**')
-        .pipe(gulp.dest('../plugins/lightning-skin-variety/inc/media-posts/'))
-        .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/media-posts/'))
-        .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/media-posts/'))
-        .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/media-posts/'))
-        .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/media-posts/'))
-        .pipe(gulp.dest('../plugins/lightning-pro/inc/media-posts/'))
-        .pipe(gulp.dest('../themes/lightning-pro/inc/media-posts/'));
-    gulp.src('./media-posts/tests/**')
-        .pipe(gulp.dest('../plugins/lightning-skin-variety/tests/'))
-        .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/tests/'))
-        .pipe(gulp.dest('../plugins/lightning-skin-fort/tests/'))
-        .pipe(gulp.dest('../plugins/lightning-skin-pale/tests/'))
-        .pipe(gulp.dest('../plugins/lightning-origin-pro/tests/'))
-        .pipe(gulp.dest('../plugins/lightning-pro/tests/'))
-        .pipe(gulp.dest('../themes/lightning-pro/tests/'));
-});
+
 gulp.task('copy_post-type-manager', function() {
 	gulp.src('./post-type-manager/package/**')
 		.pipe(gulp.dest('../themes/biz-vektor/plugins/post-type-manager/'))
@@ -170,11 +146,12 @@ gulp.task('copy_call-to-action', function() {
 		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/call-to-action/'));
 });
 gulp.task('copy_vk-mobile-nav', function () {
-    gulp.src('./vk-mobile-nav/package/**')
-        .pipe(gulp.dest('../themes/lightning/inc/vk-mobile-nav/'))
+	gulp.src('./vk-mobile-nav/package/**')
+		.pipe(gulp.dest('../themes/lightning/inc/vk-mobile-nav/'))
+		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-mobile-nav/'))
 		.pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/vk-mobile-nav/'))
-        .pipe(gulp.dest('../plugins/lightning-pro/inc/vk-mobile-nav/'))
-        .pipe(gulp.dest('../plugins/vk-mobile-nav/inc/vk-mobile-nav/'));
+		.pipe(gulp.dest('../plugins/lightning-pro/inc/vk-mobile-nav/'))
+		.pipe(gulp.dest('../plugins/vk-mobile-nav/inc/vk-mobile-nav/'));
 });
 gulp.task('copy_vk-mobile-fix-nav', function() {
 	gulp.src('./vk-mobile-fix-nav/package/**')
@@ -221,7 +198,8 @@ gulp.task('copy_font-switching-function', function () {
 gulp.task('copy_font-awesome', function () {
     gulp.src('./font-awesome/package/**')
         .pipe(gulp.dest('../themes/lightning/inc/font-awesome/'))
-        .pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/font-awesome/'));
+        .pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/font-awesome/'))
+        .pipe(gulp.dest('../plugins/vk-post-author-display/inc/font-awesome/'));
 });
 gulp.task('copy_new-posts', function () {
     gulp.src('./vk-widget-new-posts/**')
@@ -244,11 +222,7 @@ gulp.task('watch_cf', function () {
 gulp.task('watch_ptm', function () {
     gulp.watch('./post-type-manager/package/**', ['copy_post-type-manager']);
 });
-gulp.task('watch_media', function () {
-    gulp.watch('./media-posts/tests/**', ['copy_media-posts']);
-    gulp.watch('./media-posts/package/**', ['copy_media-posts']);
-    gulp.watch('./media-posts/package/**', ['copy_term-color']);
-});
+
 
 gulp.task('watch_admin', function () {
     gulp.watch('./vk-admin/package/_scss/**', ['sass_vk-admin']);
@@ -279,9 +253,7 @@ gulp.task('watch_font', function () {
     gulp.watch('./vk-font-selector/package/_scss/**', ['ssass_vk-font-selector']);
     gulp.watch('./vk-font-selector/package/**', ['copy_font-switching-function']);
 });
-gulp.task('watch_header-top', function () {
-    gulp.watch('./header-top/package/**', ['copy_header-top']);
-});
+
 gulp.task('watch_font-switch', function () {
     gulp.watch('./vk-font-switching-function/package/**', ['copy_font-switching-function']);
 });
@@ -293,6 +265,72 @@ gulp.task('watch_new-post', function () {
 });
 
 // gulp.task('default', ['watch']);
+
+/*-------------------------------------*/
+/*	media posts
+/*-------------------------------------*/
+gulp.task('sass_media-posts', function () {
+	gulp.src('media-posts/package/_scss/**/*.scss')
+		.pipe(plumber())
+		.pipe(sass())
+		.pipe(cmq({
+		log: true
+		}))
+		.pipe(autoprefixer())
+		.pipe(cleanCss())
+		.pipe(gulp.dest('./media-posts/package/css/'));
+});
+gulp.task('copy_media-posts', function () {
+    gulp.src('./media-posts/package/**')
+        .pipe(gulp.dest('../plugins/lightning-skin-variety/inc/media-posts/'))
+        .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/media-posts/'))
+        .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/media-posts/'))
+        .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/media-posts/'))
+        .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/media-posts/'))
+        .pipe(gulp.dest('../plugins/lightning-pro/inc/media-posts/'))
+        .pipe(gulp.dest('../themes/lightning-pro/inc/media-posts/'));
+    gulp.src('./media-posts/tests/**')
+        .pipe(gulp.dest('../plugins/lightning-skin-variety/tests/'))
+        .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/tests/'))
+        .pipe(gulp.dest('../plugins/lightning-skin-fort/tests/'))
+        .pipe(gulp.dest('../plugins/lightning-skin-pale/tests/'))
+        .pipe(gulp.dest('../plugins/lightning-origin-pro/tests/'))
+        .pipe(gulp.dest('../plugins/lightning-pro/tests/'))
+        .pipe(gulp.dest('../themes/lightning-pro/tests/'));
+});
+gulp.task('watch_media', function () {
+		gulp.watch('./media-posts/package/_scss/**', ['sass_media-posts']);
+    gulp.watch('./media-posts/tests/**', ['copy_media-posts']);
+    gulp.watch('./media-posts/package/**', ['copy_media-posts']);
+    gulp.watch('./media-posts/package/**', ['copy_term-color']);
+});
+
+/*-------------------------------------*/
+/*	header top
+/*-------------------------------------*/
+gulp.task('sass_header-top', function () {
+	gulp.src('header-top/package/_scss/**/*.scss')
+		.pipe(plumber())
+		.pipe(sass())
+		.pipe(cmq({
+		log: true
+		}))
+		.pipe(autoprefixer())
+		.pipe(cleanCss())
+		.pipe(gulp.dest('./header-top/package/css/'));
+});
+gulp.task('copy_header-top', function() {
+	gulp.src('./header-top/package/**')
+		.pipe(gulp.dest('../plugins/lightning-skin-variety/inc/header-top/'))
+		.pipe(gulp.dest('../plugins/lightning-skin-fort/inc/header-top/'))
+		.pipe(gulp.dest('../plugins/lightning-skin-pale/inc/header-top/'))
+		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/header-top/'))
+		.pipe(gulp.dest('../themes/lightning-pro/inc/header-top/'));
+});
+gulp.task('watch_header-top', function () {
+	gulp.watch('./header-top/package/_scss/**', ['sass_header-top']);
+  gulp.watch('./header-top/package/**', ['copy_header-top']);
+});
 
 /*-------------------------------------*/
 /*	vk-mobile-nav

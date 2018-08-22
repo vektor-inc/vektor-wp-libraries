@@ -3,6 +3,10 @@
 $border_primary : 1px solid #e3e3e3;
 $item_bottom_margin : 25px;
 
+.col-sm-6 {
+	@media (min-width: 576px) and (max-width: 991px){ width:50%; }
+}
+
 .row.flex_height:before { display: block;content:""; }
 .media_post { display:block; overflow:hidden;position: relative; background-color: #fff;width:100%;
 	.media_post_label_new {
@@ -22,6 +26,8 @@ $item_bottom_margin : 25px;
 	  -o-transform: rotate(-45deg);
 	}
 	.media_post_image { z-index: 1;display:block; overflow:hidden;
+		background-size: cover;
+		background-position: center;
 		img {
 			width: 100%;
 			height:auto;
@@ -36,12 +42,7 @@ $item_bottom_margin : 25px;
 				border-radius: 1em;
 			}
 			.vcard.author { display: none; }
-
 		}
-	}
-
-	.media_post_text {
-
 		h4.media_post_title {
 			background:none;
 			padding: 0;
@@ -57,11 +58,10 @@ $item_bottom_margin : 25px;
 		}
 	}
 	&:hover {
-		.media_post_image { background-color: #000;
+		.media_post_image {
 			img {
 	    		transform: scale(1.1);
-	    		opacity: 0.5;
-	    		transition: opacity 0.6s, transform 0.6s;
+	    		transition: transform 0.6s;
 			}
 		}
 	}
@@ -73,13 +73,12 @@ $item_bottom_margin : 25px;
 /*-------------------------------------------*/
 /*	高さを揃える
 /*-------------------------------------------*/
-@media (min-width: 768px){
+@media (min-width: 576px){
 .flex_height {
 	display: flex;
   flex-wrap: wrap;
 	align-items: stretch;
 	.flex_height_col {
-		margin-bottom:$item_bottom_margin;
 		display: flex; // ここをflex指定しないとsafariで .media_post の高さが揃わない
 	}
 	.media_post {
@@ -137,32 +136,45 @@ $item_bottom_margin : 25px;
 /*-------------------------------------------*/
 /*	.vertical_card
 /*-------------------------------------------*/
+
 .vertical_card {
+	margin-bottom:$item_bottom_margin;
 	border:$border_primary ;
-	a { color:#333; }
+	&:hover { border-color:#999; }
+	a { color:#333;display:block;  }
+	a:hover {  text-decoration: none;}
+	.media_post_image { overflow: hidden;text-indent: -9999px;
+		height:50vw;
+		@media (min-width: 576px){ height:25vw; }
+		@media (min-width: 768px){ height:120px; }
+		@media (min-width: 992px){ height:100px; }
+		@media (min-width: 1200px){ height:140px; }
+	}
 	.media_post_title { line-height: 20px; }
 	.media_post_text { width:100%; }
 }
 .vertical_card.normal_image {
-	padding: 20px;
+	a { padding: 20px; }
 	.media_post_image { margin-bottom:20px; }
 }
 .vertical_card.large_image {
 	.media_post_text { padding: 20px; }
 }
 
-.vert_1,
-.vert_large_image_1 {
-	.vertical_card { border-bottom:none; }
-	.col-sm-12:last-child .vertical_card { border-bottom:$border_primary; }
-}
-@media (max-width: 767px){
-.vert_3,
-.vert_large_image_3 {
-	.vertical_card { border-bottom:none; }
-	.flex_height_col:last-child .vertical_card { border-bottom:$border_primary; }
-}
-} // @media (max-width: 767px){
+// .vert_1,
+// .vert_large_image_1 {
+// 	.vertical_card { border-bottom:none; }
+// 	.col-sm-12:last-child .vertical_card { border-bottom:$border_primary;
+// 		&:hover {  border-color:#999; }
+// 	}
+// }
+// @media (max-width: 767px){
+// .vert_3,
+// .vert_large_image_3 {
+// 	.vertical_card { border-bottom:none; }
+// 	.flex_height_col:last-child .vertical_card { border-bottom:$border_primary; }
+// }
+// } // @media (max-width: 767px){
 
 
 /*-------------------------------------------*/
