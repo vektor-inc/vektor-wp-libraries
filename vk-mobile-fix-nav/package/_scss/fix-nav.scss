@@ -1,5 +1,10 @@
 @charset "utf-8";
 
+// メニューボタンを fix nav に埋め込みの場合は丈夫の余白を小さくする
+.mobile-fix-nav_add_menu_btn .vk-mobile-nav{
+	padding-top:15px;
+}
+// 編集ショートカットの位置調整
 .mobile-fix-nav .customize-partial-edit-shortcut {
 	position: absolute;
 	bottom:100px;
