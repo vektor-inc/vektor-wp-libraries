@@ -191,7 +191,7 @@ if ( ! class_exists( 'Lightning_header_top' ) ) {
 		}
 
 		static function header_top_add_script() {
-			wp_register_script( 'ltg_header_top_customizer_js', plugin_dir_url( __FILE__ ) . '/header-top-customizer.js', array( 'jquery', 'customize-preview' ), LTG_HEADER_TOP_VERSION, true );
+			wp_register_script( 'ltg_header_top_customizer_js', LTG_HEADER_TOP_URL . 'header-top-customizer.js', array( 'jquery', 'customize-preview' ), LTG_HEADER_TOP_VERSION, true );
 			wp_enqueue_script( 'ltg_header_top_customizer_js' );
 		}
 
