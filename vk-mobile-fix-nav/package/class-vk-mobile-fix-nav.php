@@ -137,6 +137,27 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 			} // if ( isset( $first_btn_menu_setting ) && $first_btn_menu_setting == true ) {
 
+			$default_option = array(
+				'link_text_1'  => 'HOME',
+				'link_icon_1'  => 'fas fa-home',
+				'link_url_1'   => home_url(),
+				'link_blank_1' => false,
+				'link_text_2'  => 'アクセス',
+				'link_icon_2'  => 'fas fa-map-marker-alt',
+				'link_url_2'   => 'https://www.google.co.jp/maps/search/%E5%90%8D%E5%8F%A4%E5%B1%8B%E5%B8%82%E4%B8%AD%E5%8C%BA%E6%A0%84%E4%B8%80%E4%B8%81%E7%9B%AE%EF%BC%92%EF%BC%92%E7%95%AA%EF%BC%91%EF%BC%96%E5%8F%B7+%E3%83%9F%E3%83%8A%E3%83%9F%E6%A0%84%E3%83%93%E3%83%AB+302%E5%8F%B7%E5%AE%A4/@35.1645087,136.8922015,17z/data=!3m1!4b1',
+				'link_blank_2' => true,
+				'link_text_3'  => 'お問い合わせ',
+				'link_icon_3'  => 'fas fa-envelope',
+				'link_url_3'   => home_url( '/contact/' ),
+				'link_blank_3' => false,
+				'link_text_4'  => 'TEL',
+				'link_icon_4'  => 'fas fa-phone-square',
+				'link_url_4'   => 'tel:000-000-0000',
+				'link_blank_4' => true,
+			);
+
+			get_option( 'vk_mobil_fix_nav_options', $default_option );
+
 			for ( $i = 1; $i <= 4; $i++ ) {
 
 				// nav_title
@@ -160,7 +181,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				// link_text セッティング
 				$wp_customize->add_setting(
 					'vk_mobil_fix_nav_options[link_text_' . $i . ']', array(
-						'default'           => '',
+						'default'           => $default_option[ 'link_text_' . $i ],
 						'type'              => 'option', // 保存先 option or theme_mod
 						'capability'        => 'edit_theme_options', // サイト編集者
 						'sanitize_callback' => 'sanitize_text_field',
@@ -180,7 +201,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				// link_icon セッティング
 				$wp_customize->add_setting(
 					'vk_mobil_fix_nav_options[link_icon_' . $i . ']', array(
-						'default'           => '',
+						'default'           => $default_option[ 'link_icon_' . $i ],
 						'type'              => 'option', // 保存先 option or theme_mod
 						'capability'        => 'edit_theme_options', // サイト編集者
 						'sanitize_callback' => 'sanitize_text_field',
@@ -201,7 +222,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				// link_url セッティング
 				$wp_customize->add_setting(
 					'vk_mobil_fix_nav_options[link_url_' . $i . ']', array(
-						'default'           => '',
+						'default'           => $default_option[ 'link_url_' . $i ],
 						'type'              => 'option', // 保存先 option or theme_mod
 						'capability'        => 'edit_theme_options', // サイト編集者
 						'sanitize_callback' => 'sanitize_text_field',
@@ -222,7 +243,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				// link_blank セッティング
 				$wp_customize->add_setting(
 					'vk_mobil_fix_nav_options[link_blank_' . $i . ']', array(
-						'default'           => false,
+						'default'           => $default_option[ 'link_blank_' . $i ],
 						'type'              => 'option', // 保存先 option or theme_mod
 						'capability'        => 'edit_theme_options', // サイト編集者
 						'sanitize_callback' => 'veu_sanitize_boolean',
