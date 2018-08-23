@@ -58,6 +58,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 		public static function default_options() {
 			$default_options = array(
+				'hidden'       => false,
 				'add_menu_btn' => true,
 				'link_text_0'  => 'MENU',
 				'link_text_1'  => 'HOME',
@@ -102,6 +103,26 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				'vk_mobil_fix_nav_setting', array(
 					'title'    => $vk_mobile_fix_nav_prefix . __( 'Mobile Fix Nav', $vk_mobile_fix_nav_textdomain ),
 					'priority' => 900,
+				)
+			);
+
+			// hidden セッティング
+			$wp_customize->add_setting(
+				'vk_mobil_fix_nav_options[hidden]', array(
+					'default'           => false,
+					'type'              => 'option', // 保存先 option or theme_mod
+					'capability'        => 'edit_theme_options', // サイト編集者
+					'sanitize_callback' => 'veu_sanitize_boolean',
+				)
+			);
+
+			// hidden コントロール
+			$wp_customize->add_control(
+				'vk_mobil_fix_nav_options[hidden]', array(
+					'label'    => __( 'Do not display Mobile Fix Nav', $vk_mobile_fix_nav_textdomain ),
+					'section'  => 'vk_mobil_fix_nav_setting',
+					'settings' => 'vk_mobil_fix_nav_options[hidden]',
+					'type'     => 'checkbox',
 				)
 			);
 
@@ -409,8 +430,12 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 add_action( 'wp_footer', 'vk_mobil_fix_nav' );
 function vk_mobil_fix_nav() {
+
 	if ( wp_is_mobile() ) {
 		$options = Vk_Mobile_Fix_Nav::get_options();
+		if ( isset( $options['hidden'] ) && $options['hidden'] ) {
+			return;
+		}
 
 		// text color
 		if ( isset( $options['color'] ) && $options['color'] ) {

@@ -77,7 +77,8 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 
 			if ( class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				$options = Vk_Mobile_Fix_Nav::get_options();
-				if ( ! $options['add_menu_btn'] ) {
+				// fixナビにメニュー展開ボタンを表示しない || fixナビ自体を表示しない
+				if ( ! $options['add_menu_btn'] || $options['hidden'] ) {
 					echo '<div class="vk-mobile-nav-menu-btn">MENU</div>';
 				}
 			} else {
