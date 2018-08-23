@@ -20,16 +20,15 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 		}
 
 		public static function fonts_array() {
-			global $vk_font_selector_textdomain;
 			$fonts_array = array(
 				'mincho'    => array(
-					'label'       => __( 'Mincho', $vk_font_selector_textdomain ),
+					'label'       => __( 'Mincho', 'vk_font_selector_textdomain' ),
 					'font-family' => 'Hiragino Mincho ProN',
 					'游明朝',
 					'serif',
 				),
 				'gothic'    => array(
-					'label'       => __( 'Gothic', $vk_font_selector_textdomain ),
+					'label'       => __( 'Gothic', 'vk_font_selector_textdomain' ),
 					'font-family' => '-apple-system',
 					'BlinkMacSystemFont',
 					'Hiragino Sans',
@@ -39,7 +38,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					'sans-serif',
 				),
 				'yu-gothic' => array(
-					'label'       => __( 'Yu Gothic', $vk_font_selector_textdomain ),
+					'label'       => __( 'Yu Gothic', 'vk_font_selector_textdomain' ),
 					'font-family' => '"游ゴシック体","Yu Gothic",YuGothic,"ヒラギノ角ゴ Pro","Hiragino Kaku Gothic Pro","メイリオ",Meiryo,sans-serif',
 				),
 			);
@@ -47,22 +46,21 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 		}
 
 		public static function target_array() {
-			global $vk_font_selector_textdomain;
 			$target_array = array(
 				'hlogo' => array(
-					'label'    => __( 'Header Logo', $vk_font_selector_textdomain ),
+					'label'    => __( 'Header Logo', 'vk_font_selector_textdomain' ),
 					'selector' => '.navbar-brand.siteHeader_logo',
 				),
 				'menu'  => array(
-					'label'    => __( 'Global Menu', $vk_font_selector_textdomain ),
+					'label'    => __( 'Global Menu', 'vk_font_selector_textdomain' ),
 					'selector' => '.gMenu',
 				),
 				'title' => array(
-					'label'    => __( 'Title', $vk_font_selector_textdomain ),
+					'label'    => __( 'Title', 'vk_font_selector_textdomain' ),
 					'selector' => 'h1,h2,h3,h4,h5,h6',
 				),
 				'text'  => array(
-					'label'    => __( 'Text', $vk_font_selector_textdomain ),
+					'label'    => __( 'Text', 'vk_font_selector_textdomain' ),
 					'selector' => 'body',
 				),
 			);
@@ -73,14 +71,12 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 			// セクション、テーマ設定、コントロールを追加
 
-			global $vk_font_selector_textdomain;
-
 			global $customize_section_prefix;
 
 			// セクション追加
 			$wp_customize->add_section(
 				'vk_font_selector_related_setting', array(
-					'title'    => $customize_section_prefix . __( 'Font Setting', $vk_font_selector_textdomain ),
+					'title'    => $customize_section_prefix . __( 'Font Setting', 'vk_font_selector_textdomain' ),
 					'priority' => 900,
 				)
 			);
@@ -116,14 +112,14 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 				);
 				$wp_customize->add_control(
 					'vk_font_selector[' . $key . ']', array(
-						'label'    => __( $label . ':', $vk_font_selector_textdomain ),
+						'label'    => __( $label . ':', 'vk_font_selector_textdomain' ),
 						'section'  => 'vk_font_selector_related_setting',
 						'settings' => 'vk_font_selector[' . $key . ']',
 						'type'     => 'select',
 						'choices'  => $choices,
 					// 'choices'  => array(
-					// 	'mincho' => __( 'Mincho', $vk_font_selector_textdomain ),
-					// 	'gothic' => __( 'Gothic', $vk_font_selector_textdomain ),
+					// 	'mincho' => __( 'Mincho', 'vk_font_selector_textdomain' ),
+					// 	'gothic' => __( 'Gothic', 'vk_font_selector_textdomain' ),
 					// ),
 					)
 				);
@@ -136,7 +132,6 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 		public function dynamic_header_css() {
 
-			global $vk_font_selector_textdomain;
 			// どの場所にどのフォント指定をするのかが格納されている
 			$options = get_option( 'vk_font_selector' );
 			// $options = array(
@@ -149,26 +144,26 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 			$fonts_array = self::fonts_array();
 			// $fonts_array = array(
 			// 	'mincho' => array(
-			// 		'label' => __( 'Mincho',$vk_font_selector_textdomain),
+			// 		'label' => __( 'Mincho','vk_font_selector_textdomain'),
 			// 		'font-family' => 'serif',
 			// 	),
 			// 	'gothic' => array(
-			// 		'label' => __( 'Gothic',$vk_font_selector_textdomain),
+			// 		'label' => __( 'Gothic','vk_font_selector_textdomain'),
 			// 		'font-family' => 'sans-serif',
 			// 	),
 			// );
 			$target_array = self::target_array();
 			// $target_array = array(
 			// 		'text' => array(
-			// 			'label' => __('Text', $vk_font_selector_textdomain),
+			// 			'label' => __('Text', 'vk_font_selector_textdomain'),
 			// 			'selector' => 'body',
 			// 		),
 			// 		'title' => array(
-			// 			'label' => __('Title', $vk_font_selector_textdomain),
+			// 			'label' => __('Title', 'vk_font_selector_textdomain'),
 			// 			'selector' => 'h1,h2,h3,h4,h5,h6',
 			// 		),
 			// 		'menu' => array(
-			// 			'label' => __('Global Menu', $vk_font_selector_textdomain),
+			// 			'label' => __('Global Menu', 'vk_font_selector_textdomain'),
 			// 			'selector' => '.gMenu',
 			// 		),
 			// 	);

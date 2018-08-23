@@ -96,13 +96,12 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 		public function vk_mobil_fix_nav_customize_register( $wp_customize ) {
 
 			// セクション、テーマ設定、コントロールを追加
-			global $vk_mobile_fix_nav_textdomain;
 			global $vk_mobile_fix_nav_prefix;
 
 			// セクション追加
 			$wp_customize->add_section(
 				'vk_mobil_fix_nav_setting', array(
-					'title'    => $vk_mobile_fix_nav_prefix . __( 'Mobile Fix Nav', $vk_mobile_fix_nav_textdomain ),
+					'title'    => $vk_mobile_fix_nav_prefix . __( 'Mobile Fix Nav', 'vk_mobile_fix_nav_textdomain' ),
 					'priority' => 900,
 				)
 			);
@@ -120,7 +119,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			// hidden コントロール
 			$wp_customize->add_control(
 				'vk_mobil_fix_nav_options[hidden]', array(
-					'label'    => __( 'Do not display Mobile Fix Nav', $vk_mobile_fix_nav_textdomain ),
+					'label'    => __( 'Do not display Mobile Fix Nav', 'vk_mobile_fix_nav_textdomain' ),
 					'section'  => 'vk_mobil_fix_nav_setting',
 					'settings' => 'vk_mobil_fix_nav_options[hidden]',
 					'type'     => 'checkbox',
@@ -136,7 +135,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			$wp_customize->add_control(
 				new MobileNav_Custom_Html(
 					$wp_customize, 'nav_title_0', array(
-						'label'            => __( 'Open and close the menu', $vk_mobile_fix_nav_textdomain ),
+						'label'            => __( 'Open and close the menu', 'vk_mobile_fix_nav_textdomain' ),
 						'section'          => 'vk_mobil_fix_nav_setting',
 						'type'             => 'text',
 						'custom_title_sub' => '',
@@ -160,11 +159,11 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			// add_menu_btn コントロール
 			$wp_customize->add_control(
 				'vk_mobil_fix_nav_options[add_menu_btn]', array(
-					'label'       => __( 'Make the leftmost button open and close the menu.', $vk_mobile_fix_nav_textdomain ),
+					'label'       => __( 'Make the leftmost button open and close the menu.', 'vk_mobile_fix_nav_textdomain' ),
 					'section'     => 'vk_mobil_fix_nav_setting',
 					'settings'    => 'vk_mobil_fix_nav_options[add_menu_btn]',
 					'type'        => 'checkbox',
-					'description' => __( '* When using Font Awesome 5 SVG, the icon does not switch at menu open.', $vk_mobile_fix_nav_textdomain ),
+					'description' => __( '* When using Font Awesome 5 SVG, the icon does not switch at menu open.', 'vk_mobile_fix_nav_textdomain' ),
 				)
 			);
 
@@ -184,7 +183,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				 // link_text コントロール
 				$wp_customize->add_control(
 					'link_text_0', array(
-						'label'    => __( 'Link text:', $vk_mobile_fix_nav_textdomain ),
+						'label'    => __( 'Link text:', 'vk_mobile_fix_nav_textdomain' ),
 						'section'  => 'vk_mobil_fix_nav_setting',
 						'settings' => 'vk_mobil_fix_nav_options[link_text_0]',
 						'type'     => 'text',
@@ -204,7 +203,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				$wp_customize->add_control(
 					new MobileNav_Custom_Html(
 						$wp_customize, 'nav_title_' . $i, array(
-							'label'            => __( 'Navi Settings', $vk_mobile_fix_nav_textdomain ) . ' [ ' . $i . ' ]',
+							'label'            => __( 'Navi Settings', 'vk_mobile_fix_nav_textdomain' ) . ' [ ' . $i . ' ]',
 							'section'          => 'vk_mobil_fix_nav_setting',
 							'type'             => 'text',
 							'custom_title_sub' => '',
@@ -226,7 +225,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				// link_text コントロール
 				$wp_customize->add_control(
 					'link_text_' . $i, array(
-						'label'    => __( 'Link text:', $vk_mobile_fix_nav_textdomain ),
+						'label'    => __( 'Link text:', 'vk_mobile_fix_nav_textdomain' ),
 						'section'  => 'vk_mobil_fix_nav_setting',
 						'settings' => 'vk_mobil_fix_nav_options[link_text_' . $i . ']',
 						'type'     => 'text',
@@ -246,11 +245,11 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				// link_icon コントロール
 				$wp_customize->add_control(
 					'link_icon_' . $i, array(
-						'label'       => __( 'Icon font class name:', $vk_mobile_fix_nav_textdomain ),
+						'label'       => __( 'Icon font class name:', 'vk_mobile_fix_nav_textdomain' ),
 						'section'     => 'vk_mobil_fix_nav_setting',
 						'settings'    => 'vk_mobil_fix_nav_options[link_icon_' . $i . ']',
 						'type'        => 'text',
-						'description' => __( '[ <a href="http://fortawesome.github.io/Font-Awesome/icons/" target="_blank">Font Awesome Icons</a> ]<br>To choose your favorite icon, and enter the class.<br>ex:fas fa-home', $vk_mobile_fix_nav_textdomain ),
+						'description' => __( '[ <a href="http://fortawesome.github.io/Font-Awesome/icons/" target="_blank">Font Awesome Icons</a> ]<br>To choose your favorite icon, and enter the class.<br>ex:fas fa-home', 'vk_mobile_fix_nav_textdomain' ),
 					)
 				);
 
@@ -267,11 +266,11 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				// link_url コントロール
 				$wp_customize->add_control(
 					'link_url_' . $i, array(
-						'label'       => __( 'Link URL:', $vk_mobile_fix_nav_textdomain ),
+						'label'       => __( 'Link URL:', 'vk_mobile_fix_nav_textdomain' ),
 						'section'     => 'vk_mobil_fix_nav_setting',
 						'settings'    => 'vk_mobil_fix_nav_options[link_url_' . $i . ']',
 						'type'        => 'text',
-						'description' => __( 'ex ) https://vccw.text/', $vk_mobile_fix_nav_textdomain ),
+						'description' => __( 'ex ) https://vccw.text/', 'vk_mobile_fix_nav_textdomain' ),
 					)
 				);
 
@@ -288,7 +287,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				// link_blank コントロール
 				$wp_customize->add_control(
 					'vk_mobil_fix_nav_options[link_blank_' . $i . ']', array(
-						'label'    => __( 'Open link new tab.', $vk_mobile_fix_nav_textdomain ),
+						'label'    => __( 'Open link new tab.', 'vk_mobile_fix_nav_textdomain' ),
 						'section'  => 'vk_mobil_fix_nav_setting',
 						'settings' => 'vk_mobil_fix_nav_options[link_blank_' . $i . ']',
 						'type'     => 'checkbox',
@@ -308,11 +307,11 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				// Click event コントロール
 				$wp_customize->add_control(
 					'event_' . $i, array(
-						'label'       => __( 'Click event:', $vk_mobile_fix_nav_textdomain ),
+						'label'       => __( 'Click event:', 'vk_mobile_fix_nav_textdomain' ),
 						'section'     => 'vk_mobil_fix_nav_setting',
 						'settings'    => 'vk_mobil_fix_nav_options[event_' . $i . ']',
 						'type'        => 'text',
-						'description' => __( "ex ) ga('send', 'event', 'Videos', 'play', 'Fall Campaign');", $vk_mobile_fix_nav_textdomain ),
+						'description' => __( "ex ) ga('send', 'event', 'Videos', 'play', 'Fall Campaign');", 'vk_mobile_fix_nav_textdomain' ),
 					)
 				);
 
@@ -327,7 +326,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				$wp_customize->add_control(
 					new MobileNav_Custom_Html(
 						$wp_customize, 'nav_common', array(
-							'label'            => __( 'Navi Common Settings', $vk_mobile_fix_nav_textdomain ),
+							'label'            => __( 'Navi Common Settings', 'vk_mobile_fix_nav_textdomain' ),
 							'section'          => 'vk_mobil_fix_nav_setting',
 							'type'             => 'text',
 							'custom_title_sub' => '',
@@ -351,7 +350,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				new WP_Customize_Color_Control(
 					$wp_customize,
 					'color', array(
-						'label'    => __( 'Text Color:', $vk_mobile_fix_nav_textdomain ),
+						'label'    => __( 'Text Color:', 'vk_mobile_fix_nav_textdomain' ),
 						'section'  => 'vk_mobil_fix_nav_setting',
 						'settings' => 'vk_mobil_fix_nav_options[color]',
 					)
@@ -373,7 +372,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				new WP_Customize_Color_Control(
 					$wp_customize,
 					'nav_bg_color', array(
-						'label'    => __( 'Background Color:', $vk_mobile_fix_nav_textdomain ),
+						'label'    => __( 'Background Color:', 'vk_mobile_fix_nav_textdomain' ),
 						'section'  => 'vk_mobil_fix_nav_setting',
 						'settings' => 'vk_mobil_fix_nav_options[nav_bg_color]',
 					)
@@ -395,7 +394,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				new WP_Customize_Color_Control(
 					$wp_customize,
 					'current_color', array(
-						'label'    => __( 'Current Color:', $vk_mobile_fix_nav_textdomain ),
+						'label'    => __( 'Current Color:', 'vk_mobile_fix_nav_textdomain' ),
 						'section'  => 'vk_mobil_fix_nav_setting',
 						'settings' => 'vk_mobil_fix_nav_options[current_color]',
 					)

@@ -226,13 +226,12 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		/*-------------------------------------------*/
 		public function customize_register( $wp_customize ) {
 
-			global $vk_page_header_textdomain;
 			global $customize_setting_prefix;
 			global $vk_page_header_default;
 
 			$wp_customize->add_section(
 				'vk_page_header_setting', array(
-					'title'    => $customize_setting_prefix . ' ページヘッダー 設定',
+					'title'    => $customize_setting_prefix . __( 'Page Header Setting', 'vk_page_header_textdomain' ),
 					'priority' => 700,
 				)
 			);
@@ -256,7 +255,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			$wp_customize->add_control(
 				new WP_Customize_Color_Control(
 					$wp_customize, 'bg_color', array(
-						'label'    => __( 'Background color', $vk_page_header_textdomain ),
+						'label'    => __( 'Background color', 'vk_page_header_textdomain' ),
 						'section'  => 'vk_page_header_setting',
 						'settings' => 'vk_page_header[bg_color]',
 					// 'priority' => $priority,
@@ -276,7 +275,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			$wp_customize->add_control(
 				new WP_Customize_Color_Control(
 					$wp_customize, 'text_color', array(
-						'label'    => __( 'Text color', $vk_page_header_textdomain ),
+						'label'    => __( 'Text color', 'vk_page_header_textdomain' ),
 						'section'  => 'vk_page_header_setting',
 						'settings' => 'vk_page_header[text_color]',
 					// 'priority' => $priority,
@@ -296,7 +295,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			$wp_customize->add_control(
 				new WP_Customize_Color_Control(
 					$wp_customize, 'text_shadow_color', array(
-						'label'    => __( 'Text shadow color', $vk_page_header_textdomain ),
+						'label'    => __( 'Text shadow color', 'vk_page_header_textdomain' ),
 						'section'  => 'vk_page_header_setting',
 						'settings' => 'vk_page_header[text_shadow_color]',
 					// 'priority' => $priority,
@@ -315,15 +314,15 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			);
 			$wp_customize->add_control(
 				'text_align', array(
-					'label'    => __( 'Text align', $vk_page_header_textdomain ),
+					'label'    => __( 'Text align', 'vk_page_header_textdomain' ),
 					'section'  => 'vk_page_header_setting',
 					'settings' => 'vk_page_header[text_align]',
 					'type'     => 'radio',
 					// 'priority' => $priority,
 					'choices'  => array(
-						'left'   => __( 'Left', $vk_page_header_textdomain ),
-						'center' => __( 'Center', $vk_page_header_textdomain ),
-						'right'  => __( 'Right', $vk_page_header_textdomain ),
+						'left'   => __( 'Left', 'vk_page_header_textdomain' ),
+						'center' => __( 'Center', 'vk_page_header_textdomain' ),
+						'right'  => __( 'Right', 'vk_page_header_textdomain' ),
 					),
 				)
 			);
@@ -341,10 +340,10 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			$wp_customize->add_control(
 				new WP_Customize_Image_Control(
 					$wp_customize, 'page_header_image_basic', array(
-						'label'       => __( 'Page header bg image', $vk_page_header_textdomain ) . ' [ ' . __( 'Basic', $vk_page_header_textdomain ) . ' ]',
+						'label'       => __( 'Page header bg image', 'vk_page_header_textdomain' ) . ' [ ' . __( 'Basic', 'vk_page_header_textdomain' ) . ' ]',
 						'section'     => 'vk_page_header_setting',
 						'settings'    => 'vk_page_header[image_basic]',
-						'description' => __( 'You can set the original image in the background of the page header part.', $vk_page_header_textdomain ),
+						'description' => __( 'You can set the original image in the background of the page header part.', 'vk_page_header_textdomain' ),
 					)
 				)
 			);
@@ -364,16 +363,16 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				);
 
 				if ( $name == 'page' ) {
-					$description = __( 'If you want to change the image of a specific page, you can set it from the editing screen of each fixed page.', $vk_page_header_textdomain ) . '<br>';
+					$description = __( 'If you want to change the image of a specific page, you can set it from the editing screen of each fixed page.', 'vk_page_header_textdomain' ) . '<br>';
 				} else {
 					$description = '';
 				}
-				$description .= '未設定の場合は [ 基本 ] の画像が適用されます。';
+				$description .= __( 'When not set, the image of [ Basic ] is applied.', 'vk_page_header_textdomain' );
 
 				$wp_customize->add_control(
 					new WP_Customize_Image_Control(
 						$wp_customize, 'page_header_image_' . $name, array(
-							'label'       => __( 'Page header bg image', $vk_page_header_textdomain ) . ' [ ' . $label . ' ]',
+							'label'       => __( 'Page header bg image', 'vk_page_header_textdomain' ) . ' [ ' . $label . ' ]',
 							'section'     => 'vk_page_header_setting',
 							'settings'    => 'vk_page_header[image_' . $name . ']',
 							'description' => $description,
@@ -390,8 +389,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		/*-------------------------------------------*/
 		/* static にすると環境によってmetabox内のコールバック関数が反応しない */
 		public function add_pagehead_setting_meta_box() {
-			global $vk_page_header_textdomain;
-			add_meta_box( 'vk_page_header_meta_box', __( 'Page Header Image', $vk_page_header_textdomain ), array( $this, 'vk_page_header_meta_box_content' ), 'page', 'normal', 'high' );
+
+			add_meta_box( 'vk_page_header_meta_box', __( 'Page Header Image', 'vk_page_header_textdomain' ), array( $this, 'vk_page_header_meta_box_content' ), 'page', 'normal', 'high' );
 		}
 
 		public function vk_page_header_meta_box_content() {
@@ -410,10 +409,10 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		}
 
 		public static function custom_fields_array() {
-			global $vk_page_header_textdomain;
+
 			$custom_fields_array = array(
 				'vk_page_header_image' => array(
-					'label'       => __( 'Page header bg image', $vk_page_header_textdomain ),
+					'label'       => __( 'Page header bg image', 'vk_page_header_textdomain' ),
 					'type'        => 'image',
 					'description' => '',
 					'required'    => false,

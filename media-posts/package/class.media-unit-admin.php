@@ -34,7 +34,6 @@ class Lightning_Media_Admin {
 
 	//valid admin form and save post types selected by user in DB
 	private static function validSettings() {
-		global $vk_ltg_media_posts_textdomain;
 
 		$mess = '';
 
@@ -54,17 +53,16 @@ class Lightning_Media_Admin {
 			//save in DB
 			update_option( 'ltg_media_unit_archive_loop_layout', $ltg_media_unit_archive_loop_layout );
 
-			$mess = '<div id="message" class="updated"><p>' . __( 'Your settings were saved.', $vk_ltg_media_posts_textdomain ) . '</p></div>';
+			$mess = '<div id="message" class="updated"><p>' . __( 'Your settings were saved.', 'vk_media_posts_textdomain' ) . '</p></div>';
 		}
 		return $mess;
 	}
 
 	public static function archive_layout_customize_register( $wp_customize ) {
 
-		global $vk_ltg_media_posts_textdomain;
 		$wp_customize->add_section(
 			'lightning_archive_layout', array(
-				'title'    => __( 'Lightning Archive Layouts', $vk_ltg_media_posts_textdomain ),
+				'title'    => __( 'Lightning Archive Layouts', 'vk_media_posts_textdomain' ),
 				'priority' => 800,
 			)
 		);
@@ -74,9 +72,9 @@ class Lightning_Media_Admin {
 		$post_types['author'] = 'author';
 
 		$post_types_labels           = Lightning_media_posts::labelNames() + Lightning_media_posts::get_custom_types_labels();
-		$post_types_labels['author'] = __( 'Author', $vk_ltg_media_posts_textdomain );
+		$post_types_labels['author'] = __( 'Author', 'vk_media_posts_textdomain' );
 
-		$patterns['default']['label'] = __( 'Lightning default', $vk_ltg_media_posts_textdomain );
+		$patterns['default']['label'] = __( 'Lightning default', 'vk_media_posts_textdomain' );
 		$patterns                     = $patterns + Lightning_media_posts::patterns();
 		foreach ( $patterns as $key => $value ) {
 			$layouts[ $key ] = $value['label'];
@@ -103,7 +101,7 @@ class Lightning_Media_Admin {
 			);
 			$wp_customize->add_control(
 				'ltg_media_unit_archive_loop_layout[' . $type . ']', array(
-					'label'    => sprintf( __( 'Archive Page Layout [ %s ]', $vk_ltg_media_posts_textdomain ), $post_types_labels[ $type ] ),
+					'label'    => sprintf( __( 'Archive Page Layout [ %s ]', 'vk_media_posts_textdomain' ), $post_types_labels[ $type ] ),
 					'section'  => 'lightning_archive_layout',
 					'settings' => 'ltg_media_unit_archive_loop_layout[' . $type . ']',
 					'type'     => 'select',

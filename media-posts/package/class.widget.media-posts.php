@@ -8,17 +8,17 @@ class WP_Widget_media_post extends WP_Widget {
 	public $taxonomies = array( 'category' );
 
 	function __construct() {
-		global $vk_ltg_media_posts_textdomain;
-		$widget_name = 'LTG ' . __( 'Media Posts', $vk_ltg_media_posts_textdomain );
+
+		$widget_name = 'LTG ' . __( 'Media Posts', 'vk_media_posts_textdomain' );
 		parent::__construct(
 			'ltg_media_posts_media_post',
 			$widget_name,
-			array( 'description' => __( 'It is a widget that displays the post list. Various shapes can be selected.', $vk_ltg_media_posts_textdomain ) )
+			array( 'description' => __( 'It is a widget that displays the post list. Various shapes can be selected.', 'vk_media_posts_textdomain' ) )
 		);
 	}
 
 	function widget( $args, $instance ) {
-		global $vk_ltg_media_posts_textdomain;
+
 		if ( ! isset( $instance['format'] ) || ! $instance['format'] ) {
 			$instance['format'] = 'image_1st'; }
 
@@ -42,7 +42,7 @@ class WP_Widget_media_post extends WP_Widget {
 			}
 		} elseif ( ! isset( $instance['label'] ) ) {
 			echo $args['before_title'];
-			_e( 'Recent Posts', $vk_ltg_media_posts_textdomain );
+			_e( 'Recent Posts', 'vk_media_posts_textdomain' );
 			echo $args['after_title'];
 		}
 
@@ -115,12 +115,12 @@ class WP_Widget_media_post extends WP_Widget {
 	}
 
 	function form( $instance ) {
-		global $vk_ltg_media_posts_textdomain;
+
 		$defaults = array(
 			'iconFont_class' => 'fa-file-text-o',
 			'count'          => 6,
 			'offset'         => '',
-			'label'          => __( 'Recent Posts', $vk_ltg_media_posts_textdomain ),
+			'label'          => __( 'Recent Posts', 'vk_media_posts_textdomain' ),
 			'post_type'      => 'post',
 			'terms'          => '',
 			'format'         => '0',
@@ -134,13 +134,13 @@ class WP_Widget_media_post extends WP_Widget {
 		<input type="text" id="<?php echo $this->get_field_id( 'label' ); ?>-title" name="<?php echo $this->get_field_name( 'label' ); ?>" value="<?php echo $instance['label']; ?>" />
 		<br/><br />
 
-		<?php echo _e( 'Title icon:', $vk_ltg_media_posts_textdomain ); ?>
+		<?php echo _e( 'Title icon:', 'vk_media_posts_textdomain' ); ?>
 		<?php
 
 		/*  Icon font
 		/*-------------------------------------------*/
 		// icon font class input
-		echo '<p><label for="' . $this->get_field_id( 'iconFont_' ) . '">' . __( 'Class name of the icon font you want to use:', $vk_ltg_media_posts_textdomain ) . '</label><br/>';
+		echo '<p><label for="' . $this->get_field_id( 'iconFont_' ) . '">' . __( 'Class name of the icon font you want to use:', 'vk_media_posts_textdomain' ) . '</label><br/>';
 		echo '<input type="text" id="' . $this->get_field_id( 'iconFont_class' ) . '-font" class="font_class" name="' . $this->get_field_name( 'iconFont_class' ) . '" value="' . esc_attr( $instance['iconFont_class'] ) . '" /><br>';
 
 		if ( class_exists( 'Vk_Font_Awesome_Versions' ) ) {
@@ -151,7 +151,7 @@ class WP_Widget_media_post extends WP_Widget {
 
 		?>
 
-		<?php echo _e( 'Display Format', $vk_ltg_media_posts_textdomain ); ?>:<br/>
+		<?php echo _e( 'Display Format', 'vk_media_posts_textdomain' ); ?>:<br/>
 		<ul>
 
 			<?php
@@ -167,37 +167,37 @@ class WP_Widget_media_post extends WP_Widget {
 		<br/>
 
 		<?php //表示件数 ?>
-		<label for="<?php echo $this->get_field_id( 'count' ); ?>"><?php _e( 'Display count', $vk_ltg_media_posts_textdomain ); ?>:</label><br/>
+		<label for="<?php echo $this->get_field_id( 'count' ); ?>"><?php _e( 'Display count', 'vk_media_posts_textdomain' ); ?>:</label><br/>
 		<input type="text" id="<?php echo $this->get_field_id( 'count' ); ?>" name="<?php echo $this->get_field_name( 'count' ); ?>" value="<?php echo $instance['count']; ?>" />
 		<br /><br />
 
 		<?php //オフセット件数 ?>
-		<label for="<?php echo $this->get_field_id( 'offset' ); ?>"><?php _e( 'Offset count', $vk_ltg_media_posts_textdomain ); ?>:</label><br/>
+		<label for="<?php echo $this->get_field_id( 'offset' ); ?>"><?php _e( 'Offset count', 'vk_media_posts_textdomain' ); ?>:</label><br/>
 		<input type="text" id="<?php echo $this->get_field_id( 'offset' ); ?>" name="<?php echo $this->get_field_name( 'offset' ); ?>" value="<?php echo $instance['offset']; ?>" />
 		<br />
-		<?php _e( 'If you skip 2 posts and you want to display from 3rd post, please enter a 2.', $vk_ltg_media_posts_textdomain ); ?>
+		<?php _e( 'If you skip 2 posts and you want to display from 3rd post, please enter a 2.', 'vk_media_posts_textdomain' ); ?>
 		<br /> <br />
 
 		<?php
 		//NEWアイコン表示期間
 		$new_icon_display = ( isset( $instance['new_icon_display'] ) ) ? $instance['new_icon_display'] : 7;
 		?>
-		<label for="<?php echo $this->get_field_id( 'new_icon_display' ); ?>"><?php _e( 'Number of days to display the New icon', $vk_ltg_media_posts_textdomain ); ?>:</label><br/>
+		<label for="<?php echo $this->get_field_id( 'new_icon_display' ); ?>"><?php _e( 'Number of days to display the New icon', 'vk_media_posts_textdomain' ); ?>:</label><br/>
 		<input type="text" id="<?php echo $this->get_field_id( 'new_icon_display' ); ?>" name="<?php echo $this->get_field_name( 'new_icon_display' ); ?>" value="<?php echo $new_icon_display; ?>" />
 		<br /><br />
 
 		<?php //投稿タイプ ?>
-		<label for="<?php echo $this->get_field_id( 'post_type' ); ?>"><?php _e( 'Slug for the post type you want to display', $vk_ltg_media_posts_textdomain ); ?>:</label><br />
+		<label for="<?php echo $this->get_field_id( 'post_type' ); ?>"><?php _e( 'Slug for the post type you want to display', 'vk_media_posts_textdomain' ); ?>:</label><br />
 		<input type="text" id="<?php echo $this->get_field_id( 'post_type' ); ?>" name="<?php echo $this->get_field_name( 'post_type' ); ?>" value="<?php echo esc_attr( $instance['post_type'] ); ?>" />
 		<br/><br/>
 
 		<?php // Terms ?>
-		<label for="<?php echo $this->get_field_id( 'terms' ); ?>"><?php _e( 'Category(Term) ID', $vk_ltg_media_posts_textdomain ); ?>:</label><br />
+		<label for="<?php echo $this->get_field_id( 'terms' ); ?>"><?php _e( 'Category(Term) ID', 'vk_media_posts_textdomain' ); ?>:</label><br />
 		<input type="text" id="<?php echo $this->get_field_id( 'terms' ); ?>" name="<?php echo $this->get_field_name( 'terms' ); ?>" value="<?php echo esc_attr( $instance['terms'] ); ?>" /><br />
 		<?php
-		_e( 'If you need filtering by category(term), add the category ID separate by ",".', $vk_ltg_media_posts_textdomain );
+		_e( 'If you need filtering by category(term), add the category ID separate by ",".', 'vk_media_posts_textdomain' );
 		echo '<br/>';
-		_e( 'If empty this area, I will do not filtering.', $vk_ltg_media_posts_textdomain );
+		_e( 'If empty this area, I will do not filtering.', 'vk_media_posts_textdomain' );
 		echo '<br/><br/>';
 	}
 

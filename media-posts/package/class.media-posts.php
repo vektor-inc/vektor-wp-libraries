@@ -26,7 +26,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 		}
 
 		public static function patterns() {
-			global $vk_ltg_media_posts_textdomain;
+
 			$patterns = array(
 				'image_1st'            => array(
 					'label'       => __( 'Image card 1st feature', 'lightning-media-unit' ),
@@ -86,11 +86,11 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 		}
 
 		public static function patterns_select_options( $selected ) {
-			global $vk_ltg_media_posts_textdomain;
+
 			$patterns = Lightning_media_posts::patterns();
 
 			$selected_html = ( isset( $selected ) && ( $selected == 'default' ) ) ? ' selected' : '';
-			$select_html   = '<option value="default">' . __( 'Lightning default', $vk_ltg_media_posts_textdomain ) . '</option>';
+			$select_html   = '<option value="default">' . __( 'Lightning default', 'vk_media_posts_textdomain' ) . '</option>';
 
 			foreach ( $patterns as $key => $value ) {
 				$selected_html = ( isset( $selected ) && ( $selected == $key ) ) ? ' selected' : '';
@@ -149,10 +149,10 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 		/*  Widgets init
 		/*-------------------------------------------*/
 		static function widgets_init() {
-			global $vk_ltg_media_posts_textdomain;
+
 			register_sidebar(
 				array(
-					'name'          => __( 'Home content top after left', $vk_ltg_media_posts_textdomain ),
+					'name'          => __( 'Home content top after left', 'vk_media_posts_textdomain' ),
 					'id'            => 'home-content-top-after-left-widget-area',
 					'before_widget' => '<div class="widget %2$s" id="%1$s">',
 					'after_widget'  => '</div>',
@@ -162,7 +162,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 			);
 			register_sidebar(
 				array(
-					'name'          => __( 'Home content top after right', $vk_ltg_media_posts_textdomain ),
+					'name'          => __( 'Home content top after right', 'vk_media_posts_textdomain' ),
 					'id'            => 'home-content-top-after-right-widget-area',
 					'before_widget' => '<div class="widget %2$s" id="%1$s">',
 					'after_widget'  => '</div>',
@@ -172,7 +172,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 			);
 			register_sidebar(
 				array(
-					'name'          => __( 'Home content top bottom widget', $vk_ltg_media_posts_textdomain ),
+					'name'          => __( 'Home content top bottom widget', 'vk_media_posts_textdomain' ),
 					'id'            => 'home-content-top-bottom-widget-area',
 					'before_widget' => '<div class="widget %2$s" id="%1$s">',
 					'after_widget'  => '</div>',

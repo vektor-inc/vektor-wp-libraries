@@ -7,9 +7,6 @@
 if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 	require_once( 'vk-mobile-fix-nav/class-vk-mobile-fix-nav.php' );
 
-	global $vk_mobile_fix_nav_textdomain;
-	$vk_mobile_fix_nav_textdomain = 'XXXX_plugin_text_domain_XXXX';
-
 	// add_filter( 'lightning_theme_name', 'theme_name_change' );
 	// function theme_name_change() {
 	// 	return 'うおーい';
