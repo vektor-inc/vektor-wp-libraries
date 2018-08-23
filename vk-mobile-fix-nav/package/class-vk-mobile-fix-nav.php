@@ -138,10 +138,11 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			// add_menu_btn コントロール
 			$wp_customize->add_control(
 				'vk_mobil_fix_nav_options[add_menu_btn]', array(
-					'label'    => __( 'Make the leftmost button open and close the menu.<br>* When using Font Awesome 5 SVG, the icon does not switch at menu open.', $vk_mobile_fix_nav_textdomain ),
-					'section'  => 'vk_mobil_fix_nav_setting',
-					'settings' => 'vk_mobil_fix_nav_options[add_menu_btn]',
-					'type'     => 'checkbox',
+					'label'       => __( 'Make the leftmost button open and close the menu.', $vk_mobile_fix_nav_textdomain ),
+					'section'     => 'vk_mobil_fix_nav_setting',
+					'settings'    => 'vk_mobil_fix_nav_options[add_menu_btn]',
+					'type'        => 'checkbox',
+					'description' => __( '* When using Font Awesome 5 SVG, the icon does not switch at menu open.', $vk_mobile_fix_nav_textdomain ),
 				)
 			);
 
@@ -383,7 +384,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			/*	Add Edit Customize Link Btn
 			/*-------------------------------------------*/
 			$wp_customize->selective_refresh->add_partial(
-				'vk_mobil_fix_nav_options[nav_bg_color]', array(
+				'vk_mobil_fix_nav_options[add_menu_btn]', array(
 					'selector'        => '.mobile-fix-nav',
 					'render_callback' => '',
 				)
