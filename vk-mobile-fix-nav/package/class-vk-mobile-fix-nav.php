@@ -68,7 +68,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 			// セクション追加
 			$wp_customize->add_section(
-				'vk_mobil_fix_nav_related_setting', array(
+				'vk_mobil_fix_nav_setting', array(
 					'title'    => $vk_mobile_fix_nav_prefix . __( 'Mobile Fix Nav', $vk_mobile_fix_nav_textdomain ),
 					'priority' => 900,
 				)
@@ -84,7 +84,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				new MobileNav_Custom_Html(
 					$wp_customize, 'nav_title_0', array(
 						'label'            => __( 'Open and close the menu', $vk_mobile_fix_nav_textdomain ),
-						'section'          => 'vk_mobil_fix_nav_related_setting',
+						'section'          => 'vk_mobil_fix_nav_setting',
 						'type'             => 'text',
 						'custom_title_sub' => '',
 						'custom_html'      => '',
@@ -94,7 +94,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 			// first_btn_menu_setting セッティング
 			$wp_customize->add_setting(
-				'vk_mobil_fix_nav_related_options[first_btn_menu_setting]', array(
+				'vk_mobil_fix_nav_options[first_btn_menu_setting]', array(
 					'default'           => false,
 					'type'              => 'option', // 保存先 option or theme_mod
 					'capability'        => 'edit_theme_options', // サイト編集者
@@ -104,10 +104,10 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 			// first_btn_menu_setting コントロール
 			$wp_customize->add_control(
-				'vk_mobil_fix_nav_related_options[first_btn_menu_setting]', array(
+				'vk_mobil_fix_nav_options[first_btn_menu_setting]', array(
 					'label'    => __( 'Make the leftmost button open and close the menu.', $vk_mobile_fix_nav_textdomain ),
-					'section'  => 'vk_mobil_fix_nav_related_setting',
-					'settings' => 'vk_mobil_fix_nav_related_options[first_btn_menu_setting]',
+					'section'  => 'vk_mobil_fix_nav_setting',
+					'settings' => 'vk_mobil_fix_nav_options[first_btn_menu_setting]',
 					'type'     => 'checkbox',
 				)
 			);
@@ -117,7 +117,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			if ( isset( $first_btn_menu_setting ) && $first_btn_menu_setting == true ) {
 				 // link_text セッティング
 				$wp_customize->add_setting(
-					'vk_mobil_fix_nav_related_options[link_text_0]', array(
+					'vk_mobil_fix_nav_options[link_text_0]', array(
 						'default'           => '',
 						'type'              => 'option', // 保存先 option or theme_mod
 						'capability'        => 'edit_theme_options', // サイト編集者
@@ -129,8 +129,8 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				$wp_customize->add_control(
 					'link_text_0', array(
 						'label'    => __( 'Link text:', $vk_mobile_fix_nav_textdomain ),
-						'section'  => 'vk_mobil_fix_nav_related_setting',
-						'settings' => 'vk_mobil_fix_nav_related_options[link_text_0]',
+						'section'  => 'vk_mobil_fix_nav_setting',
+						'settings' => 'vk_mobil_fix_nav_options[link_text_0]',
 						'type'     => 'text',
 					)
 				);
@@ -149,7 +149,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					new MobileNav_Custom_Html(
 						$wp_customize, 'nav_title_' . $i, array(
 							'label'            => __( 'Navi Settings', $vk_mobile_fix_nav_textdomain ) . ' [ ' . $i . ' ]',
-							'section'          => 'vk_mobil_fix_nav_related_setting',
+							'section'          => 'vk_mobil_fix_nav_setting',
 							'type'             => 'text',
 							'custom_title_sub' => '',
 							'custom_html'      => '',
@@ -159,7 +159,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 				// link_text セッティング
 				$wp_customize->add_setting(
-					'vk_mobil_fix_nav_related_options[link_text_' . $i . ']', array(
+					'vk_mobil_fix_nav_options[link_text_' . $i . ']', array(
 						'default'           => '',
 						'type'              => 'option', // 保存先 option or theme_mod
 						'capability'        => 'edit_theme_options', // サイト編集者
@@ -171,15 +171,15 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				$wp_customize->add_control(
 					'link_text_' . $i, array(
 						'label'    => __( 'Link text:', $vk_mobile_fix_nav_textdomain ),
-						'section'  => 'vk_mobil_fix_nav_related_setting',
-						'settings' => 'vk_mobil_fix_nav_related_options[link_text_' . $i . ']',
+						'section'  => 'vk_mobil_fix_nav_setting',
+						'settings' => 'vk_mobil_fix_nav_options[link_text_' . $i . ']',
 						'type'     => 'text',
 					)
 				);
 
 				// link_icon セッティング
 				$wp_customize->add_setting(
-					'vk_mobil_fix_nav_related_options[link_icon_' . $i . ']', array(
+					'vk_mobil_fix_nav_options[link_icon_' . $i . ']', array(
 						'default'           => '',
 						'type'              => 'option', // 保存先 option or theme_mod
 						'capability'        => 'edit_theme_options', // サイト編集者
@@ -191,8 +191,8 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				$wp_customize->add_control(
 					'link_icon_' . $i, array(
 						'label'       => __( 'Icon font class name:', $vk_mobile_fix_nav_textdomain ),
-						'section'     => 'vk_mobil_fix_nav_related_setting',
-						'settings'    => 'vk_mobil_fix_nav_related_options[link_icon_' . $i . ']',
+						'section'     => 'vk_mobil_fix_nav_setting',
+						'settings'    => 'vk_mobil_fix_nav_options[link_icon_' . $i . ']',
 						'type'        => 'text',
 						'description' => __( '[ <a href="http://fortawesome.github.io/Font-Awesome/icons/" target="_blank">Font Awesome Icons</a> ]<br>To choose your favorite icon, and enter the class.<br>ex:fas fa-home', $vk_mobile_fix_nav_textdomain ),
 					)
@@ -200,7 +200,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 				// link_url セッティング
 				$wp_customize->add_setting(
-					'vk_mobil_fix_nav_related_options[link_url_' . $i . ']', array(
+					'vk_mobil_fix_nav_options[link_url_' . $i . ']', array(
 						'default'           => '',
 						'type'              => 'option', // 保存先 option or theme_mod
 						'capability'        => 'edit_theme_options', // サイト編集者
@@ -212,8 +212,8 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				$wp_customize->add_control(
 					'link_url_' . $i, array(
 						'label'       => __( 'Link URL:', $vk_mobile_fix_nav_textdomain ),
-						'section'     => 'vk_mobil_fix_nav_related_setting',
-						'settings'    => 'vk_mobil_fix_nav_related_options[link_url_' . $i . ']',
+						'section'     => 'vk_mobil_fix_nav_setting',
+						'settings'    => 'vk_mobil_fix_nav_options[link_url_' . $i . ']',
 						'type'        => 'text',
 						'description' => __( 'ex ) https://vccw.text/', $vk_mobile_fix_nav_textdomain ),
 					)
@@ -221,7 +221,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 				// link_blank セッティング
 				$wp_customize->add_setting(
-					'vk_mobil_fix_nav_related_options[link_blank_' . $i . ']', array(
+					'vk_mobil_fix_nav_options[link_blank_' . $i . ']', array(
 						'default'           => false,
 						'type'              => 'option', // 保存先 option or theme_mod
 						'capability'        => 'edit_theme_options', // サイト編集者
@@ -231,17 +231,17 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 				// link_blank コントロール
 				$wp_customize->add_control(
-					'vk_mobil_fix_nav_related_options[link_blank_' . $i . ']', array(
+					'vk_mobil_fix_nav_options[link_blank_' . $i . ']', array(
 						'label'    => __( 'Open link new tab.', $vk_mobile_fix_nav_textdomain ),
-						'section'  => 'vk_mobil_fix_nav_related_setting',
-						'settings' => 'vk_mobil_fix_nav_related_options[link_blank_' . $i . ']',
+						'section'  => 'vk_mobil_fix_nav_setting',
+						'settings' => 'vk_mobil_fix_nav_options[link_blank_' . $i . ']',
 						'type'     => 'checkbox',
 					)
 				);
 
 				// Click event セッティング
 				$wp_customize->add_setting(
-					'vk_mobil_fix_nav_related_options[event_' . $i . ']', array(
+					'vk_mobil_fix_nav_options[event_' . $i . ']', array(
 						'default'           => '',
 						'type'              => 'option', // 保存先 option or theme_mod
 						'capability'        => 'edit_theme_options', // サイト編集者
@@ -253,8 +253,8 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				$wp_customize->add_control(
 					'event_' . $i, array(
 						'label'       => __( 'Click event:', $vk_mobile_fix_nav_textdomain ),
-						'section'     => 'vk_mobil_fix_nav_related_setting',
-						'settings'    => 'vk_mobil_fix_nav_related_options[event_' . $i . ']',
+						'section'     => 'vk_mobil_fix_nav_setting',
+						'settings'    => 'vk_mobil_fix_nav_options[event_' . $i . ']',
 						'type'        => 'text',
 						'description' => __( "ex ) ga('send', 'event', 'Videos', 'play', 'Fall Campaign');", $vk_mobile_fix_nav_textdomain ),
 					)
@@ -272,7 +272,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					new MobileNav_Custom_Html(
 						$wp_customize, 'nav_common', array(
 							'label'            => __( 'Navi Common Settings', $vk_mobile_fix_nav_textdomain ),
-							'section'          => 'vk_mobil_fix_nav_related_setting',
+							'section'          => 'vk_mobil_fix_nav_setting',
 							'type'             => 'text',
 							'custom_title_sub' => '',
 							'custom_html'      => '',
@@ -282,7 +282,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 			// color セッティング
 			$wp_customize->add_setting(
-				'vk_mobil_fix_nav_related_options[color]', array(
+				'vk_mobil_fix_nav_options[color]', array(
 					'default'           => '#2e6da4',
 					'type'              => 'option', // 保存先 option or theme_mod
 					'capability'        => 'edit_theme_options', // サイト編集者
@@ -296,15 +296,15 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					$wp_customize,
 					'color', array(
 						'label'    => __( 'Text Color:', $vk_mobile_fix_nav_textdomain ),
-						'section'  => 'vk_mobil_fix_nav_related_setting',
-						'settings' => 'vk_mobil_fix_nav_related_options[color]',
+						'section'  => 'vk_mobil_fix_nav_setting',
+						'settings' => 'vk_mobil_fix_nav_options[color]',
 					)
 				)
 			);
 
 			// nav_bg_color セッティング
 			$wp_customize->add_setting(
-				'vk_mobil_fix_nav_related_options[nav_bg_color]', array(
+				'vk_mobil_fix_nav_options[nav_bg_color]', array(
 					'default'           => '#FFF',
 					'type'              => 'option', // 保存先 option or theme_mod
 					'capability'        => 'edit_theme_options', // サイト編集者
@@ -318,15 +318,15 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					$wp_customize,
 					'nav_bg_color', array(
 						'label'    => __( 'Background Color:', $vk_mobile_fix_nav_textdomain ),
-						'section'  => 'vk_mobil_fix_nav_related_setting',
-						'settings' => 'vk_mobil_fix_nav_related_options[nav_bg_color]',
+						'section'  => 'vk_mobil_fix_nav_setting',
+						'settings' => 'vk_mobil_fix_nav_options[nav_bg_color]',
 					)
 				)
 			);
 
 			// current_color セッティング
 			$wp_customize->add_setting(
-				'vk_mobil_fix_nav_related_options[current_color]', array(
+				'vk_mobil_fix_nav_options[current_color]', array(
 					'default'           => '#16354f',
 					'type'              => 'option', // 保存先 option or theme_mod
 					'capability'        => 'edit_theme_options', // サイト編集者
@@ -340,8 +340,8 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					$wp_customize,
 					'current_color', array(
 						'label'    => __( 'Current Color:', $vk_mobile_fix_nav_textdomain ),
-						'section'  => 'vk_mobil_fix_nav_related_setting',
-						'settings' => 'vk_mobil_fix_nav_related_options[current_color]',
+						'section'  => 'vk_mobil_fix_nav_setting',
+						'settings' => 'vk_mobil_fix_nav_options[current_color]',
 					)
 				)
 			);
@@ -350,7 +350,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			/*	Add Edit Customize Link Btn
 			/*-------------------------------------------*/
 			$wp_customize->selective_refresh->add_partial(
-				'vk_mobil_fix_nav_related_options[nav_bg_color]', array(
+				'vk_mobil_fix_nav_options[nav_bg_color]', array(
 					'selector'        => '.mobil-fix-nav',
 					'render_callback' => '',
 				)
@@ -376,7 +376,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 add_action( 'wp_footer', 'vk_mobil_fix_nav' );
 function vk_mobil_fix_nav() {
 	if ( wp_is_mobile() ) {
-		$options = get_option( 'vk_mobil_fix_nav_related_options' );
+		$options = get_option( 'vk_mobil_fix_nav_options' );
 
 		// text color
 		if ( isset( $options['color'] ) && $options['color'] ) {
