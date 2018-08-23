@@ -75,7 +75,14 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 
 			global $vk_mobile_nav_textdomain;
 
-			echo '<div class="vk-mobile-nav-menu-btn">MENU</div>';
+			if ( class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
+				$options = Vk_Mobile_Fix_Nav::get_options();
+				if ( ! $options['add_menu_btn'] ) {
+					echo '<div class="vk-mobile-nav-menu-btn">MENU</div>';
+				}
+			} else {
+				echo '<div class="vk-mobile-nav-menu-btn">MENU</div>';
+			}
 
 			echo '<div class="vk-mobile-nav">';
 			if ( is_active_sidebar( 'vk-mobile-nav-upper' ) ) {
