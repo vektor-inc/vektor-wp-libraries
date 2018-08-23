@@ -4,10 +4,10 @@
 /*	スマホのフッターメニュー
 /*-------------------------------------------*/
 
-.mobil-fix-nav .vk-mobile-nav-menu-btn {
+.mobile-fix-nav .vk-mobile-nav-menu-btn {
 	// 各種リセット
 	position: relative;
-	top:0;left:0;
+	top:unset;left:unset;
 	border:none;
 	box-shadow: none;
 	background: none; // アイコンに色をつける機能があるため、デフォルトのSVG画像背景はクリア
@@ -23,25 +23,30 @@
   flex-direction: column;
 }
 
-.mobil-fix-nav {
+.vk-mobile-nav{
+	height:calc( 100% - 62px);
+}
+.admin-bar .vk-mobile-nav{
+	height:calc( 100% - 62px - 46px);
+}
+.mobile-fix-nav {
   // display: flex;
 
-  .mobil-fix-nav-menu {
+  .mobile-fix-nav-menu {
     margin: 0 auto;
-    padding: 15px 0;
+		box-sizing: border-box;
+		height:62px;
+    padding: 12px 0 10px;
     overflow: hidden;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    // text-align: center;
     width: 100%;
     position: fixed;
     bottom: 0;
     left:0;
     z-index: 9999999999;
-    -moz-opacity: 0.9;
     opacity: 0.9;
-
     li {
       margin: 0;
       padding: 0;
@@ -59,15 +64,16 @@
         padding: 0;
       }
 
-      a {
+      a,
+			.vk-mobile-nav-menu-btn {
         border: none;
         display: block;
         text-align: center;
         text-decoration: none;
-
+				cursor: pointer;
 				svg,
         i {
-          font-size: 24px;
+          font-size: 22px;
           font-style: normal;
           margin-right: 0;
         }

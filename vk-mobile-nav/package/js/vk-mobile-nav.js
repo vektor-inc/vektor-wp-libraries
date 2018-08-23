@@ -9,12 +9,21 @@
 			// メニューボタンに .menu-open クラスがついていたら
 			if (jQuery(this).hasClass('menu-open')) {
 				// .menu-open を外す
-				jQuery(this).removeClass('menu-open');
+				// ※ fix nav の方を押される事もあるので each 処理している
+				jQuery(target).each(function(){
+					jQuery(this).removeClass('menu-open');
+				});
 				// メニュー本体から .vk-mobile-nav-open を削除
 				jQuery('.vk-mobile-nav').removeClass('vk-mobile-nav-open');
+				jQuery('.mobile-fix-nav .vk-mobile-nav-menu-btn i').removeClass('fa-times');
+				jQuery('.mobile-fix-nav .vk-mobile-nav-menu-btn i').addClass('fa-bars');
 			} else {
-				jQuery(this).addClass('menu-open');
+				jQuery(target).each(function(){
+					jQuery(this).addClass('menu-open');
+				});
 				jQuery('.vk-mobile-nav').addClass('vk-mobile-nav-open');
+				jQuery('.mobile-fix-nav .vk-mobile-nav-menu-btn i').removeClass('fa-bars');
+				jQuery('.mobile-fix-nav .vk-mobile-nav-menu-btn i').addClass('fa-times');
 			}
 		});
 	}

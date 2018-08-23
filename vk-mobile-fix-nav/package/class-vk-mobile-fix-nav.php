@@ -138,7 +138,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			// add_menu_btn コントロール
 			$wp_customize->add_control(
 				'vk_mobil_fix_nav_options[add_menu_btn]', array(
-					'label'    => __( 'Make the leftmost button open and close the menu.', $vk_mobile_fix_nav_textdomain ),
+					'label'    => __( 'Make the leftmost button open and close the menu.<br>* When using Font Awesome 5 SVG, the icon does not switch at menu open.', $vk_mobile_fix_nav_textdomain ),
 					'section'  => 'vk_mobil_fix_nav_setting',
 					'settings' => 'vk_mobil_fix_nav_options[add_menu_btn]',
 					'type'     => 'checkbox',
@@ -384,7 +384,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			/*-------------------------------------------*/
 			$wp_customize->selective_refresh->add_partial(
 				'vk_mobil_fix_nav_options[nav_bg_color]', array(
-					'selector'        => '.mobil-fix-nav',
+					'selector'        => '.mobile-fix-nav',
 					'render_callback' => '',
 				)
 			);
@@ -427,8 +427,8 @@ function vk_mobil_fix_nav() {
 		}
 
 		?>
-	  <nav class="mobil-fix-nav">
-		<ul class="mobil-fix-nav-menu" style="background-color: <?php echo sanitize_hex_color( $nav_bg_color ); ?>;">
+	  <nav class="mobile-fix-nav">
+		<ul class="mobile-fix-nav-menu" style="background-color: <?php echo sanitize_hex_color( $nav_bg_color ); ?>;">
 
 				<?php
 
@@ -450,7 +450,7 @@ function vk_mobil_fix_nav() {
 					}
 
 					echo '<li>';
-					echo '<a href="" class="" id="menuBtn" style="color: ' . $color . ';"><span class="link-icon vk-mobile-nav-menu-btn"><i class="fas fa-bars" aria-hidden="true"></i></span>' . esc_html( $options['link_text_0'] ) . '</a>';
+					echo '<span class="vk-mobile-nav-menu-btn" style="color: ' . $color . ';"><span class="link-icon"><i class="fas fa fa-bars" aria-hidden="true"></i></span>' . esc_html( $options['link_text_0'] ) . '</span>';
 					echo '</li>';
 				}
 
