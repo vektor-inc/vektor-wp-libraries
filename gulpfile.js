@@ -172,6 +172,17 @@ gulp.task('watch_new-post', function () {
 
 
 /*-------------------------------------*/
+/*	Copyright
+/*-------------------------------------*/
+gulp.task('copy_copyright-custom', function () {
+	gulp.src('./copyright-customizer/package/**')
+		.pipe(gulp.dest('../plugins/lightning_copyright_customizer/inc/copyright-customizer/'))
+		.pipe(gulp.dest('../themes/lightning-pro/inc/copyright-customizer/'));
+});
+gulp.task('watch_copyright', function () {
+    gulp.watch('./copyright-customizer/package/**', ['copy_copyright-custom']);
+});
+/*-------------------------------------*/
 /*	Font
 /*-------------------------------------*/
 gulp.task('copy_font-selector', function () {
@@ -274,6 +285,7 @@ gulp.task('watch_header-top', function () {
 gulp.task('copy_font-awesome', function () {
     gulp.src('./font-awesome/package/**')
         .pipe(gulp.dest('../themes/lightning/inc/font-awesome/'))
+        .pipe(gulp.dest('../themes/lightning-pro/inc/font-awesome/'))
         .pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/font-awesome/'))
         .pipe(gulp.dest('../plugins/vk-post-author-display/inc/font-awesome/'));
 });
