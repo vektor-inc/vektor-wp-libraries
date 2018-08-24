@@ -44,7 +44,7 @@ class Lightning_Copyright_Custom {
 		global $vk_copyright_customizer_prefix;
 		$wp_customize->add_section(
 			'lightning_copyright_section', array(
-				'title'    => $vk_copyright_customizer_prefix . __( 'Copyright Custom', 'lightning_footerPowerCustom' ),
+				'title'    => $vk_copyright_customizer_prefix . __( 'Copyright Setting', 'lightning_footerPowerCustom' ),
 				'priority' => 700,
 			)
 		);
@@ -61,12 +61,12 @@ class Lightning_Copyright_Custom {
 		$wp_customize->add_control(
 			'lightning_copyright',
 			array(
-				'label'       => $vk_copyright_customizer_prefix . __( 'Copyright Custom', 'lightning_footerPowerCustom' ),
+				'label'       => $vk_copyright_customizer_prefix . __( 'Copyright Setting', 'lightning_footerPowerCustom' ),
 				'section'     => 'lightning_copyright_section',
 				'settings'    => 'lightning_copyright',
 				'type'        => 'textarea',
 				'priority'    => 21,
-				'description' => __( 'please fill box to footer html text you want.', 'lightning_footerPowerCustom' )
+				'description' => __( 'Please fill box to footer html text you want.', 'lightning_footerPowerCustom' )
 								 . '<br/>'
 								 . __( 'If you fill noting, Footer will display noting.', 'lightning_footerPowerCustom' ),
 			)
