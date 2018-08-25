@@ -3,7 +3,7 @@
 echo $mess;
 global $vk_ltg_media_posts_textdomain; ?>
 <div id="welcome-panel" class="message_intro">
-	<p><?php _e( '各投稿タイプのアーカイブページもレイアウトを変更する事ができます。', $vk_ltg_media_posts_textdomain ); ?></p>
+	<p><?php _e( 'You can change layout of post type archive pages.', $vk_ltg_media_posts_textdomain ); ?></p>
 </div>
 
 <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">

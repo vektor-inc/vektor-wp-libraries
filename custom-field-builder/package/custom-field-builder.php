@@ -69,7 +69,6 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 			global $post;
 			global $custom_field_builder_url;
-			global $custom_field_builder_textdomain;
 
 			$form_html = '';
 
@@ -152,14 +151,14 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					}
 					$form_html .= '<img src="' . $thumb_image_url . '" id="thumb_' . $key . '" alt="" class="input_thumb" style="width:200px;height:auto;">';
 					$form_html .= '<input type="hidden" name="' . $key . '" id="' . $key . '" value="' . VK_Custom_Field_Builder::form_post_value( $key ) . '" style="width:60%;" />
-<button id="media_' . $key . '" class="media_btn btn btn-default button button-default">' . __( 'Choose Image', $custom_field_builder_textdomain ) . '</button> ';
-					$form_html .= '<button id="media_reset_' . $key . '" class="media_reset_btn btn btn-default button button-default">' . __( 'Delete Image', $custom_field_builder_textdomain ) . '</button>';
+<button id="media_' . $key . '" class="media_btn btn btn-default button button-default">' . __( 'Choose Image', 'custom_field_builder_textdomain' ) . '</button> ';
+					$form_html .= '<button id="media_reset_' . $key . '" class="media_reset_btn btn btn-default button button-default">' . __( 'Delete Image', 'custom_field_builder_textdomain' ) . '</button>';
 
 				} elseif ( $value['type'] == 'file' ) {
 					$form_html .= '<input name="' . $key . '" id="' . $key . '" value="' . VK_Custom_Field_Builder::form_post_value( $key ) . '" style="width:60%;" />
-<button id="media_src_' . $key . '" class="media_btn btn btn-default button button-default">' . __( 'ファイルを選択', $custom_field_builder_textdomain ) . '</button> ';
+<button id="media_src_' . $key . '" class="media_btn btn btn-default button button-default">' . __( 'Select file', 'custom_field_builder_textdomain' ) . '</button> ';
 					if ( $post->$key ) {
-						$form_html .= '<a href="' . esc_url( $post->$key ) . '" target="_blank" class="btn btn-default button button-default">ファイルを確認</a>';
+						$form_html .= '<a href="' . esc_url( $post->$key ) . '" target="_blank" class="btn btn-default button button-default">' . __( 'View file', 'custom_field_builder_textdomain' ) . '</a>';
 					}
 				}
 				if ( $value['description'] ) {

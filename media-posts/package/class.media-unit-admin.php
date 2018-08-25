@@ -60,9 +60,11 @@ class Lightning_Media_Admin {
 
 	public static function archive_layout_customize_register( $wp_customize ) {
 
+		global $vk_media_post_prefix;
+
 		$wp_customize->add_section(
 			'lightning_archive_layout', array(
-				'title'    => __( 'Lightning Archive Layouts', 'vk_media_posts_textdomain' ),
+				'title'    => $vk_media_post_prefix . __( 'Archive Layouts', 'vk_media_posts_textdomain' ),
 				'priority' => 800,
 			)
 		);
@@ -74,7 +76,7 @@ class Lightning_Media_Admin {
 		$post_types_labels           = Lightning_media_posts::labelNames() + Lightning_media_posts::get_custom_types_labels();
 		$post_types_labels['author'] = __( 'Author', 'vk_media_posts_textdomain' );
 
-		$patterns['default']['label'] = __( 'Lightning default', 'vk_media_posts_textdomain' );
+		$patterns['default']['label'] = $vk_media_post_prefix . __( 'default', 'vk_media_posts_textdomain' );
 		$patterns                     = $patterns + Lightning_media_posts::patterns();
 		foreach ( $patterns as $key => $value ) {
 			$layouts[ $key ] = $value['label'];

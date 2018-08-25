@@ -88,9 +88,10 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 		public static function patterns_select_options( $selected ) {
 
 			$patterns = Lightning_media_posts::patterns();
+			global $vk_media_post_prefix;
 
 			$selected_html = ( isset( $selected ) && ( $selected == 'default' ) ) ? ' selected' : '';
-			$select_html   = '<option value="default">' . __( 'Lightning default', 'vk_media_posts_textdomain' ) . '</option>';
+			$select_html   = '<option value="default">' . $vk_media_post_prefix . __( 'default', 'vk_media_posts_textdomain' ) . '</option>';
 
 			foreach ( $patterns as $key => $value ) {
 				$selected_html = ( isset( $selected ) && ( $selected == $key ) ) ? ' selected' : '';

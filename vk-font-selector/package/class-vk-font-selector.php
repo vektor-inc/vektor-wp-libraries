@@ -71,12 +71,12 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 			// セクション、テーマ設定、コントロールを追加
 
-			global $customize_section_prefix;
+			global $vk_font_selector_prefix;
 
 			// セクション追加
 			$wp_customize->add_section(
 				'vk_font_selector_related_setting', array(
-					'title'    => $customize_section_prefix . __( 'Font Setting', 'vk_font_selector_textdomain' ),
+					'title'    => $vk_font_selector_prefix . __( 'Font Setting', 'vk_font_selector_textdomain' ),
 					'priority' => 900,
 				)
 			);

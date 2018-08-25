@@ -135,7 +135,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			$wp_customize->add_control(
 				new MobileNav_Custom_Html(
 					$wp_customize, 'nav_title_0', array(
-						'label'            => __( 'Open and close the menu', 'vk_mobile_fix_nav_textdomain' ),
+						'label'            => __( 'Add menu open and close button', 'vk_mobile_fix_nav_textdomain' ),
 						'section'          => 'vk_mobil_fix_nav_setting',
 						'type'             => 'text',
 						'custom_title_sub' => '',
@@ -159,7 +159,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			// add_menu_btn コントロール
 			$wp_customize->add_control(
 				'vk_mobil_fix_nav_options[add_menu_btn]', array(
-					'label'       => __( 'Make the leftmost button open and close the menu.', 'vk_mobile_fix_nav_textdomain' ),
+					'label'       => __( 'Add menu open and close button to first.', 'vk_mobile_fix_nav_textdomain' ),
 					'section'     => 'vk_mobil_fix_nav_setting',
 					'settings'    => 'vk_mobil_fix_nav_options[add_menu_btn]',
 					'type'        => 'checkbox',
@@ -203,7 +203,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				$wp_customize->add_control(
 					new MobileNav_Custom_Html(
 						$wp_customize, 'nav_title_' . $i, array(
-							'label'            => __( 'Navi Settings', 'vk_mobile_fix_nav_textdomain' ) . ' [ ' . $i . ' ]',
+							'label'            => __( 'Fix Navi button', 'vk_mobile_fix_nav_textdomain' ) . ' [ ' . $i . ' ]',
 							'section'          => 'vk_mobil_fix_nav_setting',
 							'type'             => 'text',
 							'custom_title_sub' => '',
@@ -242,6 +242,11 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					)
 				);
 
+				$description = '';
+				if ( class_exists( 'Vk_Font_Awesome_Versions' ) ) {
+					$description = Vk_Font_Awesome_Versions::ex_and_link();
+				}
+
 				// link_icon コントロール
 				$wp_customize->add_control(
 					'link_icon_' . $i, array(
@@ -249,7 +254,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 						'section'     => 'vk_mobil_fix_nav_setting',
 						'settings'    => 'vk_mobil_fix_nav_options[link_icon_' . $i . ']',
 						'type'        => 'text',
-						'description' => __( '[ <a href="http://fortawesome.github.io/Font-Awesome/icons/" target="_blank">Font Awesome Icons</a> ]<br>To choose your favorite icon, and enter the class.<br>ex:fas fa-home', 'vk_mobile_fix_nav_textdomain' ),
+						'description' => __( 'To choose your favorite icon, and enter the class.', 'vk_mobile_fix_nav_textdomain' ) . '<br>' . $description,
 					)
 				);
 
@@ -270,7 +275,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 						'section'     => 'vk_mobil_fix_nav_setting',
 						'settings'    => 'vk_mobil_fix_nav_options[link_url_' . $i . ']',
 						'type'        => 'text',
-						'description' => __( 'ex ) https://vccw.text/', 'vk_mobile_fix_nav_textdomain' ),
+						'description' => __( 'Ex', 'vk_mobile_fix_nav_textdomain' ) . ') https://vccw.text/',
 					)
 				);
 
@@ -311,7 +316,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 						'section'     => 'vk_mobil_fix_nav_setting',
 						'settings'    => 'vk_mobil_fix_nav_options[event_' . $i . ']',
 						'type'        => 'text',
-						'description' => __( "ex ) ga('send', 'event', 'Videos', 'play', 'Fall Campaign');", 'vk_mobile_fix_nav_textdomain' ),
+						'description' => __( 'Ex', 'vk_mobile_fix_nav_textdomain' ) . ") ga('send', 'event', 'Videos', 'play', 'Fall Campaign');",
 					)
 				);
 
@@ -557,7 +562,7 @@ function vk_mobil_fix_nav() {
 						} // if ( ! empty( $options['event_'.$i] ) && $options['event_'.$i] ){
 
 						echo '<a href="' . esc_url( $link_url ) . '" ' . $blank . ' style="color: ' . $color_style . ';"' . $event . '>
-            <span class="link-icon"><i class="' . esc_html( $link_icon ) . '"></i></span>' . esc_html( $link_text ) . '</a>';
+            <span class="link-icon"><i class="fa ' . esc_html( $link_icon ) . '"></i></span>' . esc_html( $link_text ) . '</a>';
 						echo '</li>';
 					}
 				} // <?php for ( $i = 1; $i <= 4; $i++ ) {

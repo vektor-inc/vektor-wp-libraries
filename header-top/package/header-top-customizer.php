@@ -30,9 +30,11 @@ function lightning_header_top_customize_register( $wp_customize ) {
 	/*-------------------------------------------*/
 	/*	Design setting
 	/*-------------------------------------------*/
+	global $vk_header_top_prefix;
+
 	$wp_customize->add_section(
 		'lightning_header_top', array(
-			'title'    => __( 'Lightning Header top settings', 'vk_header_top_textdomain' ),
+			'title'    => $vk_header_top_prefix . __( 'Header top settings', 'vk_header_top_textdomain' ),
 			'priority' => 450,
 		)
 	);

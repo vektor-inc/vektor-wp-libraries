@@ -8,8 +8,9 @@ class WP_Widget_media_post extends WP_Widget {
 	public $taxonomies = array( 'category' );
 
 	function __construct() {
+		global $vk_media_post_prefix;
 
-		$widget_name = 'LTG ' . __( 'Media Posts', 'vk_media_posts_textdomain' );
+		$widget_name = $vk_media_post_prefix . __( 'Media Posts', 'vk_media_posts_textdomain' );
 		parent::__construct(
 			'ltg_media_posts_media_post',
 			$widget_name,

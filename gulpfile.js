@@ -1,3 +1,27 @@
+
+/*-------------------------------------*/
+/*	Copyright
+/*-------------------------------------*/
+/*	Font
+/*-------------------------------------*/
+/*	media posts
+/*-------------------------------------*/
+/*	term color
+/*-------------------------------------*/
+/*	header top
+/*-------------------------------------*/
+/*	Font Awesome
+/*-------------------------------------*/
+/*	vk-mobile-nav
+/*-------------------------------------*/
+/*	vk-mobile-fix-nav
+/*-------------------------------------*/
+/*	page-header
+/*-------------------------------------*/
+/*	widget pr content
+/*-------------------------------------*/
+
+
 var gulp = require('gulp');
 
 // sass compiler
@@ -19,6 +43,13 @@ var jsmin = require('gulp-jsmin');
 // エラーでも監視を続行させる
 var plumber = require('gulp-plumber');
 
+
+
+
+
+
+
+
 /*-------------------------------------*/
 /*	sass
 /*-------------------------------------*/
@@ -37,18 +68,7 @@ gulp.task('sass_vk-admin', function() {
 
 
 
-gulp.task('sass_vk-font-selector', function () {
-    // gulp.src( '**/_scss/**/*.scss' )
-    gulp.src('vk-font-selector/package/_scss/**/*.scss')
-        .pipe(plumber())
-        .pipe(sass())
-        .pipe(cmq({
-            log: true
-        }))
-        .pipe(autoprefixer())
-        .pipe(cleanCss())
-        .pipe(gulp.dest('./vk-font-selector/package/css/'));
-});
+
 
 // js最小化
 gulp.task('jsmin_jslibs', function () {
@@ -185,6 +205,18 @@ gulp.task('watch_copyright', function () {
 /*-------------------------------------*/
 /*	Font
 /*-------------------------------------*/
+gulp.task('sass_vk-font-selector', function () {
+    // gulp.src( '**/_scss/**/*.scss' )
+    gulp.src('vk-font-selector/package/_scss/**/*.scss')
+        .pipe(plumber())
+        .pipe(sass())
+        .pipe(cmq({
+            log: true
+        }))
+        .pipe(autoprefixer())
+        .pipe(cleanCss())
+        .pipe(gulp.dest('./vk-font-selector/package/css/'));
+});
 gulp.task('copy_font-selector', function () {
 	gulp.src('./vk-font-selector/package/**')
 		// .pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/vk-font-selector/'))
@@ -290,7 +322,7 @@ gulp.task('copy_font-awesome', function () {
         .pipe(gulp.dest('../plugins/vk-post-author-display/inc/font-awesome/'));
 });
 gulp.task('watch_fa', function () {
-    gulp.watch('./font-awesome/**', ['copy_font-awesome']);
+    gulp.watch('./font-awesome/package/**', ['copy_font-awesome']);
 });
 
 /*-------------------------------------*/

@@ -413,7 +413,7 @@ class VK_Widget_Pr_Content extends WP_Widget {
 				url( \'' . $bg_image . '\' ) no-repeat center center; background-size: cover;';
 			}
 		}
-		// $pr_content_style = '';
+		$pr_content_style = '';
 		if ( $pr_content_style_attr ) {
 			$pr_content_style = ' style="' . $pr_content_style_attr . '"';
 		}
