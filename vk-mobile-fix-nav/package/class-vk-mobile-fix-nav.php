@@ -55,6 +55,9 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'add_script' ) );
 			add_action( 'customize_register', array( $this, 'vk_mobil_fix_nav_customize_register' ) );
 			add_filter( 'body_class', array( __CLASS__, 'add_body_class' ) );
+			if ( wp_is_mobile() ) {
+				remove_action( 'wp_footer', 'veu_add_pagetop' );
+			}
 		}
 
 		public static function default_options() {
