@@ -38,7 +38,10 @@
 	height:calc( 100% - 62px);
 }
 .admin-bar .vk-mobile-nav{
-	height:calc( 100% - 62px - 46px);
+	height:calc( 100% - 62px - 32px );
+	@media screen and (max-width: 782px ){
+		height:calc( 100% - 62px - 46px );
+	}
 }
 .mobile-fix-nav {
   // display: flex;
