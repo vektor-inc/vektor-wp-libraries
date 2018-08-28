@@ -426,7 +426,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			/*-------------------------------------------*/
 
 		static function add_script() {
-			wp_enqueue_style( 'vk-mobile-fix-nav', get_template_directory_uri( __FILE__ ) . '/inc/vk-mobile-fix-nav/css/fix-nav.css', array(), self::$version, 'all' );
+			wp_enqueue_style( 'vk-mobile-fix-nav', get_template_directory_uri( __FILE__ ) . '/inc/vk-mobile-fix-nav/css/vk-mobile-fix-nav.css', array(), self::$version, 'all' );
 		}
 
 		/**
