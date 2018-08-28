@@ -30,8 +30,11 @@
 .copySection {
   display: flex;
   align-items: center;
-  min-height: 40vh;
   flex-direction: column;
+}
+/* fxnav利用時にfixナビで下部が隠れてしまわないように余白を追加 */
+.device-mobile{
+	.copySection { padding-bottom:70px; }
 }
 
 .vk-mobile-nav{

@@ -52,8 +52,8 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 		public static $version = '0.0.0';
 
 		public function __construct() {
-			add_action( 'wp_enqueue_scripts', array( $this, 'add_script' ) );
-			add_action( 'customize_register', array( $this, 'vk_mobil_fix_nav_customize_register' ) );
+			add_action( 'wp_enqueue_scripts', array( get_called_class(), 'add_style' ) );
+			add_action( 'customize_register', array( get_called_class(), 'vk_mobil_fix_nav_customize_register' ) );
 			add_filter( 'body_class', array( __CLASS__, 'add_body_class' ) );
 			if ( wp_is_mobile() ) {
 				remove_action( 'wp_footer', 'veu_add_pagetop' );
@@ -425,7 +425,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			/*  Load js & CSS
 			/*-------------------------------------------*/
 
-		static function add_script() {
+		static function add_style() {
 			wp_enqueue_style( 'vk-mobile-fix-nav', get_template_directory_uri( __FILE__ ) . '/inc/vk-mobile-fix-nav/css/vk-mobile-fix-nav.css', array(), self::$version, 'all' );
 		}
 

@@ -39,13 +39,11 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		 */
 		global $pr_content_dont_load_css;
 		if ( ! $pr_content_dont_load_css ) {
-			add_action( 'wp_enqueue_scripts', array( $this, 'add_script' ) );
+			add_action( 'wp_enqueue_scripts', array( get_called_class(), 'add_style' ) );
 		}
 	}
 
-	public static function add_script() {
-		// wp_register_script( 'vk-parallax-js', plugin_dir_url( __FILE__ ) . 'js/vk-prlx.min.js', array( 'jquery' ), self::$version );
-		// wp_enqueue_script( 'vk-parallax-js' );
+	public static function add_style() {
 		$path = __FILE__;
 		preg_match( '/\/themes\//', $path, $m );
 		if ( $m ) {
