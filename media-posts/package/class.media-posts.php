@@ -218,7 +218,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 			// デフォルトでは出力しない
 			$print_css_default = false;
 			if ( apply_filters( 'lightning_print_media_posts_css_custom', $print_css_default ) ) {
-				wp_enqueue_style( 'lightning_media_posts_style', LTG_MEDIA_POSTS_URL . 'css/media_posts.css', array(), LTG_MEDIA_POSTS_VERSION, 'all' );
+				wp_enqueue_style( 'vk-media-posts-style', LTG_MEDIA_POSTS_URL . 'css/media-posts.css', array(), LTG_MEDIA_POSTS_VERSION, 'all' );
 			}
 		}
 
