@@ -142,14 +142,6 @@ gulp.task('copy_template-tags', function() {
 		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/template-tags/'));
 });
 
-
-
-gulp.task('copy_new-posts', function () {
-    gulp.src('./vk-widget-new-posts/**')
-        .pipe(gulp.dest('../plugins/lightning-pro/inc/vk-widget-new-posts/'))
-        .pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/widgets/'));
-});
-
 /*-------------------------------------*/
 /*	Watch
 /*-------------------------------------*/
@@ -184,9 +176,7 @@ gulp.task('watch_font', function () {
 gulp.task('watch_full-title', function () {
     gulp.watch('./vk-widget-full-wide-title/**', ['copy_full-title']);
 });
-gulp.task('watch_new-post', function () {
-    gulp.watch('./vk-widget-new-posts/**', ['copy_new-posts']);
-});
+
 
 // gulp.task('default', ['watch']);
 
@@ -242,19 +232,19 @@ gulp.task('sass_media-posts', function () {
 });
 gulp.task('copy_media-posts', function () {
     gulp.src('./media-posts/package/**')
-        .pipe(gulp.dest('../plugins/lightning-skin-variety/inc/media-posts/'))
-        .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/media-posts/'))
-        .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/media-posts/'))
-        .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/media-posts/'))
-        .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/media-posts/'))
+        // .pipe(gulp.dest('../plugins/lightning-skin-variety/inc/media-posts/'))
+        // .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/media-posts/'))
+        // .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/media-posts/'))
+        // .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/media-posts/'))
+        // .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/media-posts/'))
         .pipe(gulp.dest('../plugins/lightning-pro/inc/media-posts/'))
         .pipe(gulp.dest('../themes/lightning-pro/inc/media-posts/'));
     gulp.src('./media-posts/tests/**')
-        .pipe(gulp.dest('../plugins/lightning-skin-variety/tests/'))
-        .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/tests/'))
-        .pipe(gulp.dest('../plugins/lightning-skin-fort/tests/'))
-        .pipe(gulp.dest('../plugins/lightning-skin-pale/tests/'))
-        .pipe(gulp.dest('../plugins/lightning-origin-pro/tests/'))
+        // .pipe(gulp.dest('../plugins/lightning-skin-variety/tests/'))
+        // .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/tests/'))
+        // .pipe(gulp.dest('../plugins/lightning-skin-fort/tests/'))
+        // .pipe(gulp.dest('../plugins/lightning-skin-pale/tests/'))
+        // .pipe(gulp.dest('../plugins/lightning-origin-pro/tests/'))
         .pipe(gulp.dest('../plugins/lightning-pro/tests/'))
         .pipe(gulp.dest('../themes/lightning-pro/tests/'));
 });
@@ -271,10 +261,10 @@ gulp.task('watch_media', function () {
 gulp.task('copy_term-color', function() {
 	gulp.src('./term-color/package/**')
 		.pipe(gulp.dest('../plugins/vk-post-author-display/inc/term-color/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-variety/inc/term-color/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-fort/inc/term-color/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-pale/inc/term-color/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/term-color/'))
+		// .pipe(gulp.dest('../plugins/lightning-skin-variety/inc/term-color/'))
+		// .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/term-color/'))
+		// .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/term-color/'))
+		// .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/term-color/'))
 		.pipe(gulp.dest('../themes/lightning-child-rerise/inc/term-color/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/term-color/'))
 		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/term-color/'));
@@ -299,10 +289,10 @@ gulp.task('sass_header-top', function () {
 });
 gulp.task('copy_header-top', function() {
 	gulp.src('./header-top/package/**')
-		.pipe(gulp.dest('../plugins/lightning-skin-variety/inc/header-top/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-fort/inc/header-top/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-pale/inc/header-top/'))
-		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/header-top/'))
+		// .pipe(gulp.dest('../plugins/lightning-skin-variety/inc/header-top/'))
+		// .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/header-top/'))
+		// .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/header-top/'))
+		// .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/header-top/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/header-top/'));
 });
 gulp.task('watch_header-top', function () {
@@ -354,7 +344,7 @@ gulp.task('copy_vk-mobile-nav', function () {
 	gulp.src('./vk-mobile-nav/package/**')
 		.pipe(gulp.dest('../themes/lightning/inc/vk-mobile-nav/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-mobile-nav/'))
-		.pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/vk-mobile-nav/'))
+		// .pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/vk-mobile-nav/'))
 		.pipe(gulp.dest('../plugins/lightning-pro/inc/vk-mobile-nav/'))
 		.pipe(gulp.dest('../plugins/vk-mobile-nav/inc/vk-mobile-nav/'));
 });
@@ -392,10 +382,10 @@ gulp.task('watch_mobile-fix', function() {
 /*-------------------------------------*/
 gulp.task('copy_page-header', function () {
 	gulp.src('./vk-page-header/package/**')
-		.pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/vk-page-header/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-fort/inc/vk-page-header/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-pale/inc/vk-page-header/'))
-		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/vk-page-header/'))
+		// .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/vk-page-header/'))
+		// .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/vk-page-header/'))
+		// .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/vk-page-header/'))
+		// .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/vk-page-header/'))
 		.pipe(gulp.dest('../plugins/lightning-pro/inc/vk-page-header/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-page-header/'));
 });
@@ -420,19 +410,19 @@ gulp.task('sass_vk-widget-pr-content', function () {
 });
 gulp.task('copy_widget-pr-content', function () {
 	gulp.src('./vk-widget-pr-content/package/**')
-		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/vk-widget-pr-content/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/vk-widget-pr-content/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-fort/inc/vk-widget-pr-content/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-pale/inc/vk-widget-pr-content/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-variety/inc/vk-widget-pr-content/'))
+		// .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/vk-widget-pr-content/'))
+		// .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/vk-widget-pr-content/'))
+		// .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/vk-widget-pr-content/'))
+		// .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/vk-widget-pr-content/'))
+		// .pipe(gulp.dest('../plugins/lightning-skin-variety/inc/vk-widget-pr-content/'))
 		.pipe(gulp.dest('../plugins/lightning-pro/inc/vk-widget-pr-content/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-widget-pr-content/'));
 	gulp.src('./vk-widget-pr-content/tests/**')
-		.pipe(gulp.dest('../plugins/lightning-skin-variety/tests/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/tests/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-fort/tests/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-pale/tests/'))
-		.pipe(gulp.dest('../plugins/lightning-origin-pro/tests/'))
+		// .pipe(gulp.dest('../plugins/lightning-skin-variety/tests/'))
+		// .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/tests/'))
+		// .pipe(gulp.dest('../plugins/lightning-skin-fort/tests/'))
+		// .pipe(gulp.dest('../plugins/lightning-skin-pale/tests/'))
+		// .pipe(gulp.dest('../plugins/lightning-origin-pro/tests/'))
 		.pipe(gulp.dest('../plugins/lightning-pro/tests/'))
 		.pipe(gulp.dest('../themes/lightning-pro/tests/'));
 });
