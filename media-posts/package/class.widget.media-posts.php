@@ -27,7 +27,7 @@ class WP_Widget_media_post extends WP_Widget {
 		// echo '<div class="'.$instance['format'].'">';
 		$iconFont_class = ( isset( $instance['iconFont_class'] ) && $instance['iconFont_class'] ) ? $instance['iconFont_class'] : '';
 
-		if ( isset( $instance['label'] ) && $instance['label'] ) {
+		if ( ! empty( $instance['title'] ) || ! empty( $instance['label'] ) ) {
 
 			if ( $iconFont_class ) {
 				echo '<div class="icon_exist">';
@@ -36,12 +36,18 @@ class WP_Widget_media_post extends WP_Widget {
 			if ( $iconFont_class ) {
 				echo '<i class="fa ' . $iconFont_class . '" aria-hidden="true"></i>';
 			}
-			echo $instance['label'];
+			// 以前は label に格納していたが後から titile に変更した
+			if ( ! empty( $instance['title'] ) ) {
+				echo $instance['title'];
+			} else {
+				echo $instance['label'];
+			}
+
 			echo $args['after_title'];
 			if ( $iconFont_class ) {
 				  echo '</div><!-- [ /.icon_exist ] -->';
 			}
-		} elseif ( ! isset( $instance['label'] ) ) {
+		} elseif ( ! isset( $instance['title'] ) ) {
 			echo $args['before_title'];
 			_e( 'Recent Posts', 'vk_media_posts_textdomain' );
 			echo $args['after_title'];
@@ -121,18 +127,21 @@ class WP_Widget_media_post extends WP_Widget {
 			'iconFont_class' => 'fa-file-text-o',
 			'count'          => 6,
 			'offset'         => '',
-			'label'          => __( 'Recent Posts', 'vk_media_posts_textdomain' ),
+			'title'          => __( 'Recent Posts', 'vk_media_posts_textdomain' ),
 			'post_type'      => 'post',
 			'terms'          => '',
 			'format'         => '0',
 		);
+		if ( ! empty( $instance['label'] ) ) {
+			$defaults['title'] = $instance['label'];
+		}
 
 		$instance = wp_parse_args( (array) $instance, $defaults );
 
 		//タイトル ?>
 		<br />
-		<label for="<?php echo $this->get_field_id( 'label' ); ?>"><?php _e( 'Title:' ); ?></label><br/>
-		<input type="text" id="<?php echo $this->get_field_id( 'label' ); ?>-title" name="<?php echo $this->get_field_name( 'label' ); ?>" value="<?php echo $instance['label']; ?>" />
+		<label><?php _e( 'Title:' ); ?><br/>
+		<input type="text" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $instance['title']; ?>" /></label>
 		<br/><br />
 
 		<?php echo _e( 'Title icon:', 'vk_media_posts_textdomain' ); ?>
@@ -160,6 +169,7 @@ class WP_Widget_media_post extends WP_Widget {
 
 			foreach ( $patterns as $key => $value ) {
 				$checked = ( $instance['format'] == $key ) ? ' checked' : '';
+
 				echo '<li><label><input type="radio" name="' . $this->get_field_name( 'format' ) . '" value="' . $key . '"' . $checked . ' />' . $value['label'] . '</label></li>';
 			}
 			?>
@@ -209,7 +219,7 @@ class WP_Widget_media_post extends WP_Widget {
 		$instance['new_icon_display'] = ! empty( $new_instance['new_icon_display'] ) ? mb_convert_kana( $new_instance['new_icon_display'], 'n' ) : 7;
 		$instance['count']            = $new_instance['count'];
 		$instance['offset']           = $new_instance['offset'];
-		$instance['label']            = $new_instance['label'];
+		$instance['title']            = esc_attr( $new_instance['title'] );
 		$instance['post_type']        = ! empty( $new_instance['post_type'] ) ? strip_tags( $new_instance['post_type'] ) : 'post';
 		$instance['terms']            = preg_replace( '/([^0-9,]+)/', '', $new_instance['terms'] );
 		return $instance;
