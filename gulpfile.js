@@ -177,9 +177,7 @@ gulp.task('watch_full-title', function () {
     gulp.watch('./vk-widget-full-wide-title/**', ['copy_full-title']);
 });
 
-
 // gulp.task('default', ['watch']);
-
 
 /*-------------------------------------*/
 /*	Copyright

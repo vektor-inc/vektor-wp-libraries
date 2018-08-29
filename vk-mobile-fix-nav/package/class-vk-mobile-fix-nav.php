@@ -52,9 +52,10 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 		public static $version = '0.0.0';
 
 		public function __construct() {
-			add_action( 'wp_enqueue_scripts', array( get_called_class(), 'add_style' ) );
-			add_action( 'customize_register', array( get_called_class(), 'vk_mobil_fix_nav_customize_register' ) );
+			add_action( 'wp_enqueue_scripts', array( get_called_class(), 'add_style' ) ); // get_called_class()じゃないと外しにくい
+			add_action( 'customize_register', array( $this, 'vk_mobil_fix_nav_customize_register' ) ); // $thisじゃないとエラーになる
 			add_filter( 'body_class', array( __CLASS__, 'add_body_class' ) );
+			add_action( 'wp_footer', array( __CLASS__, 'vk_mobil_fix_nav_html' ) );
 			if ( wp_is_mobile() ) {
 				remove_action( 'wp_footer', 'veu_add_pagetop' );
 			}
@@ -90,6 +91,15 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			$default_options = self::default_options();
 			$options         = wp_parse_args( $options, $default_options );
 			return $options;
+		}
+
+		public static function is_fix_nav_enable() {
+			$options = Vk_Mobile_Fix_Nav::get_options();
+			if ( isset( $options['hidden'] ) && $options['hidden'] ) {
+				return false;
+			} else {
+				return true;
+			}
 		}
 
 		/*-------------------------------------------*/
@@ -421,9 +431,9 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 		} // function vk_mobil_fix_nav_customize_register( $wp_customize ) {
 
-			/*-------------------------------------------*/
-			/*  Load js & CSS
-			/*-------------------------------------------*/
+		/*-------------------------------------------*/
+		/*  Load js & CSS
+		/*-------------------------------------------*/
 
 		static function add_style() {
 			wp_enqueue_style( 'vk-mobile-fix-nav', get_template_directory_uri( __FILE__ ) . '/inc/vk-mobile-fix-nav/css/vk-mobile-fix-nav.css', array(), self::$version, 'all' );
@@ -438,143 +448,144 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			if ( $current['add_menu_btn'] && ! $current['hidden'] ) {
 				$class[] = 'mobile-fix-nav_add_menu_btn';
 			}
+			if ( self::is_fix_nav_enable() ) {
+				$class[] = 'mobile-fix-nav_enable';
+			}
 			return $class;
 		}
+
+		/*-------------------------------------------*/
+		/*  vk_mobil_fix_nav_html
+		/*-------------------------------------------*/
+		public static function vk_mobil_fix_nav_html() {
+
+			$options = Vk_Mobile_Fix_Nav::get_options();
+			if ( isset( $options['hidden'] ) && $options['hidden'] ) {
+				return;
+			}
+
+				// text color
+			if ( isset( $options['color'] ) && $options['color'] ) {
+				$color = $options['color'];
+				// $color = $options['color'];
+			} else {
+				$color = '';
+			}
+
+				// bg color
+			if ( isset( $options['nav_bg_color'] ) && $options['nav_bg_color'] ) {
+				$nav_bg_color = $options['nav_bg_color'];
+			} else {
+				$nav_bg_color = '#FFF';
+			}
+
+				?>
+			  <nav class="mobile-fix-nav">
+				<ul class="mobile-fix-nav-menu" style="background-color: <?php echo sanitize_hex_color( $nav_bg_color ); ?>;">
+
+						<?php
+
+						// add_menu_btn
+						if ( ! empty( $options['add_menu_btn'] ) ) {
+
+							// color
+							if ( isset( $options['color'] ) && $options['color'] ) {
+								$color = $options['color'];
+							} else {
+								$color = '#2e6da4';
+							}
+
+							// current color
+							if ( isset( $options['current_color'] ) && $options['current_color'] ) {
+								$current_color = $options['current_color'];
+							} else {
+								$current_color = '#16354f';
+							}
+
+							echo '<li>';
+							echo '<span class="vk-mobile-nav-menu-btn" style="color: ' . $color . ';"><span class="link-icon"><i class="fas fa fa-bars" aria-hidden="true"></i></span>' . esc_html( $options['link_text_0'] ) . '</span>';
+							echo '</li>';
+						}
+
+						for ( $i = 1; $i <= 4; $i++ ) {
+
+							// link text
+							if ( ! empty( $options[ 'link_text_' . $i ] ) ) {
+								$link_text = $options[ 'link_text_' . $i ];
+							} else {
+								$link_text = '';
+							}
+
+							// fontawesome icon
+							if ( ! empty( $options[ 'link_icon_' . $i ] ) ) {
+								$link_icon = $options[ 'link_icon_' . $i ];
+							} else {
+								$link_icon = '';
+							}
+
+							// link URL
+							if ( ! empty( $options[ 'link_url_' . $i ] ) ) {
+								$link_url = $options[ 'link_url_' . $i ];
+							} else {
+								$link_url = '';
+							}
+
+							// link_blank
+							if ( ! empty( $options[ 'link_blank_' . $i ] ) ) {
+								$blank = ' target="_blank"';
+							} else {
+								$blank = '';
+							}
+
+							// 実際に HTML を出力する
+							if ( isset( $options[ 'link_text_' . $i ] ) && $options[ 'link_text_' . $i ] || isset( $options[ 'link_icon_' . $i ] ) && $options[ 'link_icon_' . $i ] ) {
+								echo '<li>';
+								// page-current
+								$get_current_link = get_the_permalink();
+								$postid           = url_to_postid( get_permalink() );
+								// $get_current_link_cat = get_category_link( $postid );
+								$get_current_link_cat = get_the_category_list( $postid );
+								// $get_current_link_cat = get_post_type_archive_link( $postid );
+								// $get_current_link_cat = get_post_type_archive_link( get_post_type() );
+								if ( ( ! empty( $options[ 'link_url_' . $i ] ) && ( $get_current_link == $options[ 'link_url_' . $i ] ) ) || ( ! empty( $options[ 'link_url_' . $i ] ) && ( $get_current_link_cat == $options[ 'link_url_' . $i ] ) ) ) {
+									// $page_current = ' class="page-current"';
+									$color_style = $current_color;
+								} else {
+									$color_style = $color;
+								}
+
+								// click event
+								$event = '';
+								// クリックイベントが入力されていたら
+								if ( ! empty( $options[ 'event_' . $i ] ) && $options[ 'event_' . $i ] ) {
+									/*
+									onclickはクリックが終わった瞬間に発生するイベント
+									クリック終了後にイベントが発生し、Googleにビーコンを送信しますが、
+									ビーコンが送られる前に次のページに遷移してしまうとカウントされない場合がある
+									*/
+									if ( wp_is_mobile() ) {
+										$event = ' ontouchstart="';
+									} else {
+										$event = ' onmousedown="';
+									}
+									$event .= $options[ 'event_' . $i ] . '"';
+								} // if ( ! empty( $options['event_'.$i] ) && $options['event_'.$i] ){
+
+								echo '<a href="' . esc_url( $link_url ) . '" ' . $blank . ' style="color: ' . $color_style . ';"' . $event . '>
+		            <span class="link-icon"><i class="fa ' . esc_html( $link_icon ) . '"></i></span>' . esc_html( $link_text ) . '</a>';
+								echo '</li>';
+							}
+						} // <?php for ( $i = 1; $i <= 4; $i++ ) {
+				?>
+
+				</ul>
+			  </nav>
+
+			<?php
+		} // function vk_mobil_fix_nav() {
 
 	} // class Vk_Mobile_Fix_Nav {
 
 	$vk_mobile_fix_nav = new Vk_Mobile_Fix_Nav();
 
 } // if ( ! class_exists('Vk_Mobile_Fix_Nav') )  {
-
-
-add_action( 'wp_footer', 'vk_mobil_fix_nav' );
-function vk_mobil_fix_nav() {
-
-	if ( wp_is_mobile() ) {
-		$options = Vk_Mobile_Fix_Nav::get_options();
-		if ( isset( $options['hidden'] ) && $options['hidden'] ) {
-			return;
-		}
-
-		// text color
-		if ( isset( $options['color'] ) && $options['color'] ) {
-			$color = $options['color'];
-			// $color = $options['color'];
-		} else {
-			$color = '';
-		}
-
-		// bg color
-		if ( isset( $options['nav_bg_color'] ) && $options['nav_bg_color'] ) {
-			$nav_bg_color = $options['nav_bg_color'];
-		} else {
-			$nav_bg_color = '#FFF';
-		}
-
-		?>
-	  <nav class="mobile-fix-nav">
-		<ul class="mobile-fix-nav-menu" style="background-color: <?php echo sanitize_hex_color( $nav_bg_color ); ?>;">
-
-				<?php
-
-				// add_menu_btn
-				if ( ! empty( $options['add_menu_btn'] ) ) {
-
-					// color
-					if ( isset( $options['color'] ) && $options['color'] ) {
-						$color = $options['color'];
-					} else {
-						$color = '#2e6da4';
-					}
-
-					// current color
-					if ( isset( $options['current_color'] ) && $options['current_color'] ) {
-						$current_color = $options['current_color'];
-					} else {
-						$current_color = '#16354f';
-					}
-
-					echo '<li>';
-					echo '<span class="vk-mobile-nav-menu-btn" style="color: ' . $color . ';"><span class="link-icon"><i class="fas fa fa-bars" aria-hidden="true"></i></span>' . esc_html( $options['link_text_0'] ) . '</span>';
-					echo '</li>';
-				}
-
-				for ( $i = 1; $i <= 4; $i++ ) {
-
-					// link text
-					if ( ! empty( $options[ 'link_text_' . $i ] ) ) {
-						$link_text = $options[ 'link_text_' . $i ];
-					} else {
-						$link_text = '';
-					}
-
-					// fontawesome icon
-					if ( ! empty( $options[ 'link_icon_' . $i ] ) ) {
-						$link_icon = $options[ 'link_icon_' . $i ];
-					} else {
-						$link_icon = '';
-					}
-
-					// link URL
-					if ( ! empty( $options[ 'link_url_' . $i ] ) ) {
-						$link_url = $options[ 'link_url_' . $i ];
-					} else {
-						$link_url = '';
-					}
-
-					// link_blank
-					if ( ! empty( $options[ 'link_blank_' . $i ] ) ) {
-						$blank = ' target="_blank"';
-					} else {
-						$blank = '';
-					}
-
-					// 実際に HTML を出力する
-					if ( isset( $options[ 'link_text_' . $i ] ) && $options[ 'link_text_' . $i ] || isset( $options[ 'link_icon_' . $i ] ) && $options[ 'link_icon_' . $i ] ) {
-						echo '<li>';
-						// page-current
-						$get_current_link = get_the_permalink();
-						$postid           = url_to_postid( get_permalink() );
-						// $get_current_link_cat = get_category_link( $postid );
-						$get_current_link_cat = get_the_category_list( $postid );
-						// $get_current_link_cat = get_post_type_archive_link( $postid );
-						// $get_current_link_cat = get_post_type_archive_link( get_post_type() );
-						if ( ( ! empty( $options[ 'link_url_' . $i ] ) && ( $get_current_link == $options[ 'link_url_' . $i ] ) ) || ( ! empty( $options[ 'link_url_' . $i ] ) && ( $get_current_link_cat == $options[ 'link_url_' . $i ] ) ) ) {
-							// $page_current = ' class="page-current"';
-							$color_style = $current_color;
-						} else {
-							$color_style = $color;
-						}
-
-						// click event
-						$event = '';
-						// クリックイベントが入力されていたら
-						if ( ! empty( $options[ 'event_' . $i ] ) && $options[ 'event_' . $i ] ) {
-							/*
-							onclickはクリックが終わった瞬間に発生するイベント
-							クリック終了後にイベントが発生し、Googleにビーコンを送信しますが、
-							ビーコンが送られる前に次のページに遷移してしまうとカウントされない場合がある
-							*/
-							if ( wp_is_mobile() ) {
-								$event = ' ontouchstart="';
-							} else {
-								$event = ' onmousedown="';
-							}
-							$event .= $options[ 'event_' . $i ] . '"';
-						} // if ( ! empty( $options['event_'.$i] ) && $options['event_'.$i] ){
-
-						echo '<a href="' . esc_url( $link_url ) . '" ' . $blank . ' style="color: ' . $color_style . ';"' . $event . '>
-            <span class="link-icon"><i class="fa ' . esc_html( $link_icon ) . '"></i></span>' . esc_html( $link_text ) . '</a>';
-						echo '</li>';
-					}
-				} // <?php for ( $i = 1; $i <= 4; $i++ ) {
-		?>
-
-		</ul>
-	  </nav>
-
-	<?php
-	} //if ( wp_is_mobile() ) {
-} // function vk_mobil_fix_nav() {
-?>
