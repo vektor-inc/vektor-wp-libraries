@@ -29,54 +29,54 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 
 			$patterns = array(
 				'image_1st'            => array(
-					'label'       => __( 'Image card 1st feature', 'lightning-media-unit' ),
+					'label'       => __( 'Image card 1st feature', 'vk_media_posts_textdomain' ),
 					'class_outer' => 'image_1st',
 					// 1stは２件目以降とpostのクラスが異なるためここに値が無い
 				),
 				'image_3'              => array(
-					'label'            => __( 'Image card 3 colmun', 'lightning-media-unit' ),
+					'label'            => __( 'Image card 3 colmun', 'vk_media_posts_textdomain' ),
 					'class_outer'      => 'row image_3',
 					'class_post_outer' => 'col-sm-6 col-lg-4 col-md-4',
 					'class_post_item'  => ' image_card',
 				),
 				'image_1'              => array(
-					'label'            => __( 'Image card 1 colmun', 'lightning-media-unit' ),
+					'label'            => __( 'Image card 1 colmun', 'vk_media_posts_textdomain' ),
 					'class_outer'      => 'row image_1',
 					'class_post_outer' => 'col-sm-12',
 					'class_post_item'  => ' image_card',
 				),
 				'vert_3'               => array(
-					'label'            => __( 'Vertical card 3 column', 'lightning-media-unit' ),
+					'label'            => __( 'Vertical card 3 column', 'vk_media_posts_textdomain' ),
 					'class_outer'      => 'row vert_3 flex_height',
 					'class_post_outer' => 'col-sm-6 col-lg-4 col-md-4 flex_height_col',
 					'class_post_item'  => ' vertical_card normal_image',
 				),
 				'vert_1'               => array(
-					'label'            => __( 'Vertical card 1 column', 'lightning-media-unit' ),
+					'label'            => __( 'Vertical card 1 column', 'vk_media_posts_textdomain' ),
 					'class_outer'      => 'row vert_1',
 					'class_post_outer' => 'col-sm-12',
 					'class_post_item'  => ' vertical_card normal_image',
 				),
 				'vert_large_image_3'   => array(
-					'label'            => __( 'Vertical card large image 3 column', 'lightning-media-unit' ),
+					'label'            => __( 'Vertical card large image 3 column', 'vk_media_posts_textdomain' ),
 					'class_outer'      => 'row vert_large_image_3 flex_height',
 					'class_post_outer' => 'col-sm-6 col-lg-4 col-md-4 flex_height_col',
 					'class_post_item'  => ' vertical_card large_image',
 				),
 				'vert_large_image_1'   => array(
-					'label'            => __( 'Vertical card large image 1 column', 'lightning-media-unit' ),
+					'label'            => __( 'Vertical card large image 1 column', 'vk_media_posts_textdomain' ),
 					'class_outer'      => 'row vert_large_image_1',
 					'class_post_outer' => 'col-sm-12',
 					'class_post_item'  => ' vertical_card large_image',
 				),
 				'oblong_1'             => array(
-					'label'            => __( 'Oblong card 1 column', 'lightning-media-unit' ),
+					'label'            => __( 'Oblong card 1 column', 'vk_media_posts_textdomain' ),
 					'class_outer'      => 'row oblong_1',
 					'class_post_outer' => 'col-sm-12',
 					'class_post_item'  => ' oblong_card normal_image',
 				),
 				'oblong_large_image_1' => array(
-					'label'            => __( 'Oblong card large image 1 column', 'lightning-media-unit' ),
+					'label'            => __( 'Oblong card large image 1 column', 'vk_media_posts_textdomain' ),
 					'class_outer'      => 'row oblong_large_image_1',
 					'class_post_outer' => 'col-sm-12',
 					'class_post_item'  => ' oblong_card large_image',
@@ -105,7 +105,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 
 			$post_types_labels = array(
 				'post' => __( 'Posts' ),
-				'page' => __( 'Pages', 'lightning-media-unit' ),
+				'page' => __( 'Pages', 'vk_media_posts_textdomain' ),
 			);
 
 			return $post_types_labels;
