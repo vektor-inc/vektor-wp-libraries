@@ -48,8 +48,9 @@ $margin_section_bottom : 30px;
 $header_top_offset : 10px;
 
 @media (min-width: 992px){
-.siteHeader .headerTop { color:#666;background-color: #f9f9f9;margin-top:-$header_top_offset;border-bottom:1px solid #f3f3f3;
-	.container { padding: 0px 15px;display: flex;overflow: visible; }
+.siteHeader .headerTop .container { padding: 0px 15px; }
+.headerTop { color:#666;background-color: #f9f9f9;margin-top:-$header_top_offset;border-bottom:1px solid #f3f3f3;
+	.container { display: flex;overflow: visible; }
 	.headerTop_description { position:relative;top:$header_top_offset;display:block;
 		margin:0;padding: 7px 20px 18px 0;width:1000px; line-height: 1.4em;
 	}
