@@ -7,3 +7,9 @@
 
 @import "media_widget";
 @import "authors";
+
+.loop_outer:after{
+	content: "";
+  display: block;
+  clear: both;
+}
