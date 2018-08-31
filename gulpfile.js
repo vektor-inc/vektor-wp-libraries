@@ -53,22 +53,6 @@ var plumber = require('gulp-plumber');
 /*-------------------------------------*/
 /*	sass
 /*-------------------------------------*/
-gulp.task('sass_vk-admin', function() {
-	// gulp.src( '**/_scss/**/*.scss' )
-	gulp.src('vk-admin/package/_scss/**/*.scss')
-		.pipe(plumber())
-		.pipe(sass())
-		.pipe(cmq({
-			log: true
-		}))
-		.pipe(autoprefixer())
-		.pipe(cleanCss())
-		.pipe(gulp.dest('./vk-admin/package/css/'));
-});
-
-
-
-
 
 // js最小化
 gulp.task('jsmin_jslibs', function () {
@@ -104,17 +88,6 @@ gulp.task('parallax', function () {
 /*-------------------------------------*/
 /*	copy
 /*-------------------------------------*/
-gulp.task('copy_vk-admin', function() {
-	gulp.src('./vk-admin/package/**')
-		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins_admin/vk-admin/'))
-		.pipe(gulp.dest('../plugins/vk-post-author-display/inc/vk-admin/'))
-		.pipe(gulp.dest('../plugins/vk-call-to-action/inc/vk-admin/'))
-		.pipe(gulp.dest('../plugins/vk-link-target-controller/inc/vk-admin/'))
-		.pipe(gulp.dest('../plugins/lightning-skin-variety/inc/vk-admin/'))
-		.pipe(gulp.dest('../plugins/lightning-origin-pro/inc/vk-admin/'))
-		.pipe(gulp.dest('../plugins/wp-easy-responsive-tabs-to-accordion/vk-admin/'));
-});
-
 
 gulp.task('copy_post-type-manager', function() {
 	gulp.src('./post-type-manager/package/**')
@@ -154,10 +127,7 @@ gulp.task('watch_ptm', function () {
 });
 
 
-gulp.task('watch_admin', function () {
-    gulp.watch('./vk-admin/package/_scss/**', ['sass_vk-admin']);
-    gulp.watch('./vk-admin/package/**', ['copy_vk-admin']);
-});
+
 gulp.task('watch_template-tags', function () {
     gulp.watch('./template-tags/package/**', ['copy_template-tags']);
 });
@@ -178,6 +148,34 @@ gulp.task('watch_full-title', function () {
 });
 
 // gulp.task('default', ['watch']);
+
+/*-------------------------------------*/
+/*	vk admin
+/*-------------------------------------*/
+gulp.task('sass_vk-admin', function() {
+	// gulp.src( '**/_scss/**/*.scss' )
+	gulp.src('vk-admin/package/_scss/**/*.scss')
+		.pipe(plumber())
+		.pipe(sass())
+		.pipe(cmq({
+			log: true
+		}))
+		.pipe(autoprefixer())
+		.pipe(cleanCss())
+		.pipe(gulp.dest('./vk-admin/package/css/'));
+});
+gulp.task('copy_vk-admin', function() {
+	gulp.src('./vk-admin/package/**')
+		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins_admin/vk-admin/'))
+		.pipe(gulp.dest('../plugins/vk-post-author-display/inc/vk-admin/'))
+		.pipe(gulp.dest('../plugins/vk-call-to-action/inc/vk-admin/'))
+		.pipe(gulp.dest('../plugins/vk-link-target-controller/inc/vk-admin/'))
+		.pipe(gulp.dest('../plugins/wp-easy-responsive-tabs-to-accordion/vk-admin/'));
+});
+gulp.task('watch_admin', function () {
+    gulp.watch('./vk-admin/package/_scss/**', ['sass_vk-admin']);
+    gulp.watch('./vk-admin/package/**', ['copy_vk-admin']);
+});
 
 /*-------------------------------------*/
 /*	Copyright
