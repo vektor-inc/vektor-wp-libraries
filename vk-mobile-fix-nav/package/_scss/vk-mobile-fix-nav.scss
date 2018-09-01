@@ -6,9 +6,9 @@
 }
 // 編集ショートカットの位置調整
 .mobile-fix-nav .customize-partial-edit-shortcut {
-	position: absolute;
-	bottom:100px;
-	left:40px;
+	position: relative;
+	top:-35px;
+	left:35px;
 }
 
 /*-------------------------------------------*/
@@ -47,8 +47,10 @@
 	}
 }
 .mobile-fix-nav {
-  // display: flex;
-
+	position: fixed;
+	bottom: 0;
+	left:0;
+	width:100%;
   .mobile-fix-nav-menu {
     margin: 0 auto;
 		box-sizing: border-box;
@@ -59,9 +61,6 @@
     justify-content: space-around;
     align-items: center;
     width: 100%;
-    position: fixed;
-    bottom: 0;
-    left:0;
     z-index: 9999999999;
     opacity: 0.9;
     li {
