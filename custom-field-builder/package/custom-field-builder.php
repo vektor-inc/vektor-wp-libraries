@@ -147,7 +147,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 						// $thumb_image     = wp_get_attachment_image_src( $image_key, 'medium', false );
 						// $thumb_image_url = $thumb_image[0];
 					} else {
-								$thumb_image_url = $custom_field_builder_url . '/images/no_image.png';
+								$thumb_image_url = $custom_field_builder_url . 'images/no_image.png';
 					}
 					$form_html .= '<img src="' . $thumb_image_url . '" id="thumb_' . $key . '" alt="" class="input_thumb" style="width:200px;height:auto;">';
 					$form_html .= '<input type="hidden" name="' . $key . '" id="' . $key . '" value="' . VK_Custom_Field_Builder::form_post_value( $key ) . '" style="width:60%;" />
