@@ -88,21 +88,12 @@ gulp.task('parallax', function () {
 /*-------------------------------------*/
 /*	copy
 /*-------------------------------------*/
-
 gulp.task('copy_post-type-manager', function() {
 	gulp.src('./post-type-manager/package/**')
 		.pipe(gulp.dest('../themes/biz-vektor/plugins/post-type-manager/'))
 		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/post-type-manager/'));
 });
-gulp.task('copy_custom-field-builder', function () {
-  gulp.src('./custom-field-builder/package/**')
-    .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/custom-field-builder/'))
-    .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/custom-field-builder/'))
-    .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/custom-field-builder/'))
-    .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/custom-field-builder/'))
-    .pipe(gulp.dest('../themes/bill-vektor/inc/custom-field-builder/'))
-    .pipe(gulp.dest('../themes/lightning-pro/inc/custom-field-builder/'));
-});
+
 gulp.task('copy_call-to-action', function() {
 	gulp.src('./call-to-action/package/**')
 		.pipe(gulp.dest('../plugins/vk-call-to-action/inc/vk-call-to-action-package/'))
@@ -118,14 +109,17 @@ gulp.task('copy_template-tags', function() {
 /*-------------------------------------*/
 /*	Watch
 /*-------------------------------------*/
-
+gulp.task('copy_custom-field-builder', function () {
+  gulp.src('./custom-field-builder/package/**')
+    .pipe(gulp.dest('../themes/bill-vektor/inc/custom-field-builder/'))
+    .pipe(gulp.dest('../themes/lightning-pro/inc/custom-field-builder/'));
+});
 gulp.task('watch_cf', function () {
     gulp.watch('./custom-field-builder/package/**', ['copy_custom-field-builder']);
 });
 gulp.task('watch_ptm', function () {
     gulp.watch('./post-type-manager/package/**', ['copy_post-type-manager']);
 });
-
 
 
 gulp.task('watch_template-tags', function () {
