@@ -18,12 +18,12 @@ class VK_Widget_Pr_Content extends WP_Widget {
 
 	function __construct() {
 
-		if ( function_exists( 'veu_get_short_name' ) ) {
-			$prefix = veu_get_short_name();
+		if ( function_exists( 'lightning_get_theme_name_short' ) ) {
+			$prefix = lightning_get_theme_name_short();
 		} else {
 			$prefix = 'VK';
 		}
-		$widget_name = $prefix . '_' . __( 'PR Content', 'vk_pr_content_textdomain' );
+		$widget_name = $prefix . ' ' . __( 'PR Content', 'vk_pr_content_textdomain' );
 		parent::__construct(
 			'VK_Widget_Pr_Content', //ID
 			$widget_name, //widget_name
