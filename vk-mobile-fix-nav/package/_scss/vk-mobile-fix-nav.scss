@@ -37,9 +37,10 @@
 	.copySection { padding-bottom:70px; }
 }
 
-.vk-mobile-nav{
+.mobile-fix-nav_enable .vk-mobile-nav{
 	height:calc( 100% - 62px);
 }
+
 .admin-bar .vk-mobile-nav{
 	height:calc( 100% - 62px - 32px );
 	@media screen and (max-width: 782px ){
