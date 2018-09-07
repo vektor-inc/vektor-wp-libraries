@@ -21,28 +21,28 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 		public static function fonts_array() {
 			$fonts_array = array(
-				'mincho'    => array(
+				'mincho'        => array(
 					'label'       => __( 'Mincho', 'vk_font_selector_textdomain' ),
-					'font-family' => 'Hiragino Mincho ProN',
-					'游明朝',
-					'serif',
+					'font-family' => 'Hiragino Mincho ProN,"游明朝",serif',
 				),
-				'gothic'    => array(
-					'label'       => __( 'Gothic', 'vk_font_selector_textdomain' ),
-					'font-family' => '-apple-system',
-					'BlinkMacSystemFont',
-					'Hiragino Sans',
-					'Hiragino Kaku Gothic ProN',
-					'游ゴシック  Medium',
-					'meiryo',
-					'sans-serif',
+				'hira-kaku'     => array(
+					'label'       => __( 'Hiragino Kaku Gothic', 'vk_font_selector_textdomain' ),
+					'font-family' => '"ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN,"游ゴシック Medium","Yu Gothic Medium","游ゴシック体",YuGothic, "Helvetica Neue", sans-serif',
 				),
-				'yu-gothic' => array(
+				'yu-gothic'     => array(
 					'label'       => __( 'Yu Gothic', 'vk_font_selector_textdomain' ),
-					'font-family' => '"游ゴシック体","Yu Gothic",YuGothic,"ヒラギノ角ゴ Pro","Hiragino Kaku Gothic Pro","メイリオ",Meiryo,sans-serif',
+					'font-family' => '"游ゴシック Medium","Yu Gothic Medium","游ゴシック体",YuGothic,"ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN,sans-serif',
+				),
+				'meiryo'        => array(
+					'label'       => __( 'Meiryo', 'vk_font_selector_textdomain' ),
+					'font-family' => '"メイリオ",Meiryo,"ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN,sans-serif',
+				),
+				'san-francisco' => array(
+					'label'       => __( 'San Francisco', 'vk_font_selector_textdomain' ),
+					'font-family' => '-apple-system,BlinkMacSystemFont,"メイリオ",Meiryo,"ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN,sans-serif',
 				),
 			);
-			return $fonts_array;
+			return apply_filters( 'vk_fonts_array', $fonts_array );
 		}
 
 		public static function target_array() {
@@ -64,7 +64,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					'selector' => 'body',
 				),
 			);
-			return $target_array;
+			return apply_filters( 'vk_target_array', $target_array );
 		}
 
 		public static function register( $wp_customize ) {
