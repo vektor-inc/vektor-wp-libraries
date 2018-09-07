@@ -485,23 +485,22 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 						<?php
 
+						// color
+						if ( isset( $options['color'] ) && $options['color'] ) {
+							$color = $options['color'];
+						} else {
+							$color = '#2e6da4';
+						}
+
+						// current color
+						if ( isset( $options['current_color'] ) && $options['current_color'] ) {
+							$current_color = $options['current_color'];
+						} else {
+							$current_color = '#16354f';
+						}
+
 						// add_menu_btn
 						if ( ! empty( $options['add_menu_btn'] ) ) {
-
-							// color
-							if ( isset( $options['color'] ) && $options['color'] ) {
-								$color = $options['color'];
-							} else {
-								$color = '#2e6da4';
-							}
-
-							// current color
-							if ( isset( $options['current_color'] ) && $options['current_color'] ) {
-								$current_color = $options['current_color'];
-							} else {
-								$current_color = '#16354f';
-							}
-
 							echo '<li>';
 							echo '<span class="vk-mobile-nav-menu-btn" style="color: ' . $color . ';"><span class="link-icon"><i class="fas fa fa-bars" aria-hidden="true"></i></span>' . esc_html( $options['link_text_0'] ) . '</span>';
 							echo '</li>';
