@@ -144,37 +144,96 @@ $item_bottom_margin : 25px;
 	a { color:#333;display:block;  }
 	a:hover {  text-decoration: none;}
 	.media_post_image { overflow: hidden;text-indent: -9999px;
-		height:50vw;
-		@media (min-width: 576px){ height:25vw; }
-		@media (min-width: 768px){ height:120px; }
-		@media (min-width: 992px){ height:100px; }
-		@media (min-width: 1200px){ height:140px; }
 	}
 	.media_post_title { line-height: 20px; }
 	.media_post_text { width:100%; }
 }
 .vertical_card.normal_image {
 	a { padding: 20px; }
-	.media_post_image { margin-bottom:20px; }
-}
-.vertical_card.large_image {
-	.media_post_text { padding: 20px; }
+	.media_post_image { margin-bottom:20px;
+		height:48vw;
+		@media (min-width: 576px){ height:23vw; }
+		@media (min-width: 768px){ height:170px; }
+		@media (min-width: 992px){ height:85px; }
+		@media (min-width: 1200px){ height:120px; }
+	}
 }
 
-// .vert_1,
-// .vert_large_image_1 {
-// 	.vertical_card { border-bottom:none; }
-// 	.col-sm-12:last-child .vertical_card { border-bottom:$border_primary;
-// 		&:hover {  border-color:#999; }
-// 	}
-// }
-// @media (max-width: 767px){
-// .vert_3,
-// .vert_large_image_3 {
-// 	.vertical_card { border-bottom:none; }
-// 	.flex_height_col:last-child .vertical_card { border-bottom:$border_primary; }
-// }
-// } // @media (max-width: 767px){
+.vertical_card.large_image {
+	.media_post_text { padding: 20px; }
+	.media_post_image {
+		height:50vw;
+		@media (min-width: 576px){ height:25vw; }
+		@media (min-width: 768px){ height:190px; }
+		@media (min-width: 992px){ height:100px; }
+		@media (min-width: 1200px){ height:140px; }
+	}
+}
+
+.col-md-12 {
+	.col-md-4 {
+		.vertical_card.normal_image {
+			.media_post_image {
+				@media (min-width: 768px){ height:170px; }
+				@media (min-width: 992px){ height:150px; }
+				@media (min-width: 1200px){ height:180px; }
+			}
+		}
+		.vertical_card.large_image {
+			.media_post_image {
+				@media (min-width: 768px){ height:190px; }
+				@media (min-width: 992px){ height:170px; }
+				@media (min-width: 1200px){ height:200px; }
+			}
+		}
+	}
+}
+
+// vert_1 はもともとサイドバー用なので重要ではない
+.mainSection {
+	.vert_1 {
+		.vertical_card.normal_image {
+			.media_post_image {
+				@media (min-width: 576px){ height:50vw; }
+				@media (min-width: 768px){ height:400px; }
+				@media (min-width: 992px){ height:340px; }
+				@media (min-width: 1200px){ height:400px; }
+			}
+		}
+	}
+	.vert_large_image_1 {
+		.vertical_card.large_image{
+			.media_post_image {
+				@media (min-width: 576px){ height:50vw; }
+				@media (min-width: 768px){ height:400px; }
+				@media (min-width: 992px){ height:340px; }
+				@media (min-width: 1200px){ height:400px; }
+			}
+		}
+	}
+}
+.subSection {
+	.vert_1 {
+		.vertical_card.normal_image {
+			.media_post_image {
+				@media (min-width: 576px){ height:50vw; }
+				@media (min-width: 768px){ height:400px; }
+				@media (min-width: 992px){ height:105px; }
+				@media (min-width: 1200px){ height:125px; }
+			}
+		}
+	}
+	.vert_large_image_1 {
+		.vertical_card.large_image{
+			.media_post_image {
+				@media (min-width: 576px){ height:50vw; }
+				@media (min-width: 768px){ height:400px; }
+				@media (min-width: 992px){ height:130px; }
+				@media (min-width: 1200px){ height:150px; }
+			}
+		}
+	}
+}
 
 
 /*-------------------------------------------*/
