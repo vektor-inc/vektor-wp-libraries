@@ -55,7 +55,7 @@ $header_top_offset : 10px;
 		margin:0;padding: 7px 20px 18px 0;width:1000px; line-height: 1.4em;
 	}
 	nav { position:relative;top:$header_top_offset; }
-	ul { display: flex;line-height: 1.4em; }
+	ul { display: flex;line-height: 1.4em;margin-top:0; }
 	li {
 		a,
 		span { padding:5px 15px 7px;font-size:12px; white-space: nowrap;display: block; }
