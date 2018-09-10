@@ -5,13 +5,13 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 
 		static function init() {
 			if ( self::is_theme() ) {
-				define( 'LTG_MEDIA_POSTS_URL', get_template_directory_uri() . '/inc/media-posts/' );
-				define( 'LTG_MEDIA_POSTS_DIR', dirname( __FILE__ ) );
+				define( 'VK_MEDIA_POSTS_URL', get_template_directory_uri() . '/inc/media-posts/' );
+				define( 'VK_MEDIA_POSTS_DIR', dirname( __FILE__ ) );
 			} else {
-				define( 'LTG_MEDIA_POSTS_URL', plugin_dir_url( __FILE__ ) );
-				define( 'LTG_MEDIA_POSTS_DIR', plugin_dir_path( __FILE__ ) );
+				define( 'VK_MEDIA_POSTS_URL', plugin_dir_url( __FILE__ ) );
+				define( 'VK_MEDIA_POSTS_DIR', plugin_dir_path( __FILE__ ) );
 			}
-			define( 'LTG_MEDIA_POSTS_VERSION', '1.1' );
+			define( 'VK_MEDIA_POSTS_VERSION', '1.2' );
 		}
 
 		private static function is_theme() {
@@ -218,7 +218,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 			// デフォルトでは出力しない
 			$print_css_default = false;
 			if ( apply_filters( 'lightning_print_media_posts_css_custom', $print_css_default ) ) {
-				wp_enqueue_style( 'vk-media-posts-style', LTG_MEDIA_POSTS_URL . 'css/media-posts.css', array(), LTG_MEDIA_POSTS_VERSION, 'all' );
+				wp_enqueue_style( 'vk-media-posts-style', VK_MEDIA_POSTS_URL . 'css/media-posts.css', array(), VK_MEDIA_POSTS_VERSION, 'all' );
 			}
 		}
 
