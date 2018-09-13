@@ -66,6 +66,60 @@ class MediaPostsTest extends WP_UnitTestCase {
 		}
 		// テスト前のオプション値に戻す
 		update_option( 'ltg_media_unit_archive_loop_layout', $saved_option );
+
+	}
+
+	function test_widget_title() {
+		$tests = array(
+			array(
+				'label'   => '旧label',
+				'title'   => null,
+				'correct' => '旧label',
+			),
+			array(
+				'label'   => '',
+				'title'   => null,
+				'correct' => '',
+			),
+			array(
+				'label'   => null,
+				'title'   => null,
+				'correct' => __( 'Recent Posts', 'lightning-pro' ),
+			),
+			array(
+				'label'   => '旧label',
+				'title'   => '',
+				'correct' => '',
+			),
+			array(
+				'label'   => '旧label',
+				'title'   => 'タイトル',
+				'correct' => 'タイトル',
+			),
+			array(
+				'label'   => null,
+				'title'   => 'タイトル',
+				'correct' => 'タイトル',
+			),
+			array(
+				'label'   => '',
+				'title'   => 'タイトル',
+				'correct' => 'タイトル',
+			),
+		);
+
+		print PHP_EOL;
+		print '------------------------------------' . PHP_EOL;
+		print 'WP_Widget_Title' . PHP_EOL;
+		print '------------------------------------' . PHP_EOL;
+		foreach ( $tests as $key => $test_value ) {
+			$return = WP_Widget_media_post::widget_title( $test_value );
+			$this->assertEquals( $test_value['correct'], $return );
+
+			print PHP_EOL;
+			print 'return    :' . $return . PHP_EOL;
+			print 'correct   :' . $test_value['correct'] . PHP_EOL;
+		} // foreach ( $tests as $key => $test_value ) {
 	}
 
 }

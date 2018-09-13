@@ -58,7 +58,7 @@ if ( ! class_exists( 'Ltg_Media_Post_View' ) ) {
 				$thumbnail_src  = $thumbnail_src[0];
 				$class_no_image = '';
 			} else {
-				$thumbnail_src  = VK_MEDIA_POSTS_URL . '/images/no-image.png';
+				$thumbnail_src  = VK_MEDIA_POSTS_URL . 'images/no-image.png';
 				$class_no_image = ' noimage';
 			}
 			echo '<div class="media_post_image' . $class_no_image . '" style="background-image:url(' . $thumbnail_src . ');">' . "\n";

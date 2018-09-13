@@ -18,7 +18,20 @@ class WP_Widget_media_post extends WP_Widget {
 		);
 	}
 
+	public static function widget_title( $instance ) {
+		if ( isset( $instance['title'] ) ) {
+			$title = $instance['title'];
+		} elseif ( isset( $instance['label'] ) ) {
+			$title = $instance['label'];
+		} else {
+			$title = __( 'Recent Posts', 'vk_media_posts_textdomain' );
+		}
+		return $title;
+	}
+
 	function widget( $args, $instance ) {
+
+		$title = self::widget_title( $instance );
 
 		if ( ! isset( $instance['format'] ) || ! $instance['format'] ) {
 			$instance['format'] = 'image_1st'; }
@@ -27,29 +40,12 @@ class WP_Widget_media_post extends WP_Widget {
 		// echo '<div class="'.$instance['format'].'">';
 		$iconFont_class = ( isset( $instance['iconFont_class'] ) && $instance['iconFont_class'] ) ? $instance['iconFont_class'] : '';
 
-		if ( ! empty( $instance['title'] ) || ! empty( $instance['label'] ) ) {
-
-			if ( $iconFont_class ) {
-				echo '<div class="icon_exist">';
-			}
+		if ( $title ) {
 			echo $args['before_title'];
 			if ( $iconFont_class ) {
 				echo '<i class="fa ' . $iconFont_class . '" aria-hidden="true"></i>';
 			}
-			// 以前は label に格納していたが後から titile に変更した
-			if ( ! empty( $instance['title'] ) ) {
-				echo $instance['title'];
-			} else {
-				echo $instance['label'];
-			}
-
-			echo $args['after_title'];
-			if ( $iconFont_class ) {
-				  echo '</div><!-- [ /.icon_exist ] -->';
-			}
-		} elseif ( ! isset( $instance['title'] ) ) {
-			echo $args['before_title'];
-			_e( 'Recent Posts', 'vk_media_posts_textdomain' );
+			echo $title;
 			echo $args['after_title'];
 		}
 
