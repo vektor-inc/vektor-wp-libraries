@@ -35,8 +35,8 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 				),
 				'image_3'              => array(
 					'label'            => __( 'Image card 3 colmun', 'vk_media_posts_textdomain' ),
-					'class_outer'      => 'row image_3',
-					'class_post_outer' => 'col-sm-6 col-lg-4 col-md-4',
+					'class_outer'      => 'row image_3 flex_height',
+					'class_post_outer' => 'col-sm-6 col-md-4 col-lg-4 flex_height_col',
 					'class_post_item'  => ' image_card',
 				),
 				'image_1'              => array(
@@ -48,7 +48,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 				'vert_3'               => array(
 					'label'            => __( 'Vertical card 3 column', 'vk_media_posts_textdomain' ),
 					'class_outer'      => 'row vert_3 flex_height',
-					'class_post_outer' => 'col-sm-6 col-lg-4 col-md-4 flex_height_col',
+					'class_post_outer' => 'col-sm-6 col-md-4 col-lg-4 flex_height_col',
 					'class_post_item'  => ' vertical_card normal_image',
 				),
 				'vert_1'               => array(
@@ -60,7 +60,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 				'vert_large_image_3'   => array(
 					'label'            => __( 'Vertical card large image 3 column', 'vk_media_posts_textdomain' ),
 					'class_outer'      => 'row vert_large_image_3 flex_height',
-					'class_post_outer' => 'col-sm-6 col-lg-4 col-md-4 flex_height_col',
+					'class_post_outer' => 'col-sm-6 col-md-4 col-lg-4 flex_height_col',
 					'class_post_item'  => ' vertical_card large_image',
 				),
 				'vert_large_image_1'   => array(

@@ -3,8 +3,24 @@
 $border_primary : 1px solid #e3e3e3;
 $item_bottom_margin : 25px;
 
-.col-sm-6 {
-	@media (min-width: 576px) and (max-width: 991px){ width:50%; }
+/*
+Bootstrap3
+sm : 768〜 / md : 992〜
+Bootstrap4
+sm : 576〜 / md : 768〜
+
+なので bs 4 基準に上書きする
+
+タブレットでも３カラムにしたいが 標準のBS3の sm-6 に負ける ので flex_height_col を付与
+
+*/
+
+.flex_height_col.col-sm-6 {
+	@media (min-width: 576px) and (max-width: 767px){ width:50%; }
+}
+
+.flex_height_col.col-md-4 {
+	@media (min-width: 768px) and (max-width: 991px) { width:33.3333%; }
 }
 
 .row.flex_height:before { display: block;content:""; }
@@ -38,8 +54,11 @@ $item_bottom_margin : 25px;
 	.media_post_text { display:block; overflow:hidden;
 		.media_post_meta { margin-bottom:2px;font-size:12px;
 			.media_post_date { opacity: 0.8;margin-right:8px; }
+			// .media_post_term { display: inline-block;font-size:10px;line-height:1.1em;color:#fff; padding: 3px 1em 2px;position:relative;top:-1px;
+			// 	border-radius: 1em;
+			// }
 			.media_post_term { display: inline-block;font-size:10px;line-height:1.1em;color:#fff; padding: 3px 1em 2px;position:relative;top:-1px;
-				border-radius: 1em;
+				position: absolute;top:0;right:0;
 			}
 			.vcard.author { display: none; }
 		}
@@ -49,7 +68,6 @@ $item_bottom_margin : 25px;
 			margin-bottom:2px;
 			font-size:12px;
 			transition: font-size 0.6s, transform 0.6s;
-			// max-height:2.4em;
 			overflow: hidden;
 			text-overflow: ellipsis;
 		}
@@ -134,6 +152,29 @@ $item_bottom_margin : 25px;
 } // @media (min-width: 768px){
 
 /*-------------------------------------------*/
+/*	.image_3
+/*-------------------------------------------*/
+.image_3 {
+	.media_post_image {
+		img { display: none; }
+		height:60vw;
+		@media (min-width: 576px){ height:33vw; }
+		@media (min-width: 768px){ height:180px; }
+		@media (min-width: 992px){ height:170px; }
+		@media (min-width: 1200px){ height:180px; }
+	}
+}
+
+.col-md-12 {
+	.image_3 {
+		.media_post_image {
+			@media (min-width: 992px){ height:230px; }
+			@media (min-width: 1200px){ height:250px; }
+		}
+	}
+}
+
+/*-------------------------------------------*/
 /*	.vertical_card
 /*-------------------------------------------*/
 
@@ -153,7 +194,7 @@ $item_bottom_margin : 25px;
 	.media_post_image { margin-bottom:20px;
 		height:48vw;
 		@media (min-width: 576px){ height:23vw; }
-		@media (min-width: 768px){ height:170px; }
+		@media (min-width: 768px){ height:120px; }
 		@media (min-width: 992px){ height:85px; }
 		@media (min-width: 1200px){ height:120px; }
 	}
@@ -164,8 +205,8 @@ $item_bottom_margin : 25px;
 	.media_post_image {
 		height:50vw;
 		@media (min-width: 576px){ height:25vw; }
-		@media (min-width: 768px){ height:190px; }
-		@media (min-width: 992px){ height:100px; }
+		@media (min-width: 768px){ height:130px; }
+		@media (min-width: 992px){ height:110px; }
 		@media (min-width: 1200px){ height:140px; }
 	}
 }
