@@ -234,16 +234,18 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 			// 0.618 = 1:1.618 = 0.38 : 0.62
 			add_image_size( 'media_thumbnail', 600, 371, true );
 
+			require_once( 'class-media-posts-admin.php' );
+
 			if ( locate_template( array( 'inc/media-posts/views/class-loop-post-view.php' ), false, false ) ) {
 				get_template_part( 'inc/media-posts/views/class-loop-post-view' );
 			} else {
 				require_once( 'views/class-loop-post-view.php' );
 			}
 
-			if ( locate_template( array( 'inc/media-posts/class-widget-media-posts.php' ), false, false ) ) {
-				get_template_part( 'inc/media-posts/class-widget-media-posts' );
+			if ( locate_template( array( 'inc/media-posts/class-media-posts-widget.php' ), false, false ) ) {
+				get_template_part( 'inc/media-posts/class-media-posts-widget' );
 			} else {
-				require_once( 'class-widget-media-posts.php' );
+				require_once( 'class-media-posts-widget.php' );
 			}
 		}
 
