@@ -130,11 +130,7 @@ gulp.task('watch_template-tags', function () {
 gulp.task('watch_cta', function () {
     gulp.watch('./call-to-action/package/**', ['copy_call-to-action']);
 });
-gulp.task('watch_font', function () {
-    gulp.watch('./vk-font-selector/tests/**', ['copy_font-switching-function']);
-    gulp.watch('./vk-font-selector/package/_scss/**', ['ssass_vk-font-selector']);
-    gulp.watch('./vk-font-selector/package/**', ['copy_font-switching-function']);
-});
+
 
 
 gulp.task('watch_full-title', function () {
@@ -199,11 +195,11 @@ gulp.task('sass_vk-font-selector', function () {
 });
 gulp.task('copy_font-selector', function () {
 	gulp.src('./vk-font-selector/package/**')
-		// .pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/vk-font-selector/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-font-selector/'));
 });
-gulp.task('watch_font-switch', function () {
-    gulp.watch('./vk-font-selector/package/**', ['copy_font-selector']);
+gulp.task('watch_font', function () {
+		gulp.watch('./vk-font-selector/package/**', ['copy_font-selector']);
+    gulp.watch('./vk-font-selector/package/_scss/**', ['sass_vk-font-selector']);
 });
 
 /*-------------------------------------*/
