@@ -193,13 +193,13 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 			// 固定ページの場合
 			if ( $post_type['slug'] == 'page' ) {
-				 global $post;
+				global $post;
 				if ( $post->vk_page_header_image ) {
 					// 今の固定ページに画像が登録されていればそのまま使用
 					$image_id = $post->vk_page_header_image;
 				} else {
 					// 先祖階層を取得
-					   $ancestors = array_reverse( get_post_ancestors( $post->ID ) );
+					$ancestors = array_reverse( get_post_ancestors( $post->ID ) );
 					   // array_push( $ancestors, $post->ID );
 					foreach ( $ancestors as $ancestor ) {
 						$vk_page_header_image = '';
@@ -213,8 +213,12 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 				// 固定ページで画像の登録があった場合のみ $image_url を上書きする
 				if ( isset( $image_id ) && $image_id ) {
-					   $image_url = wp_get_attachment_image_src( $image_id, 'full', false );
-					   $image_url = $image_url[0];
+
+					$image_url = wp_get_attachment_image_src( $image_id, 'full', false );
+					// 元のメディアが削除されて画像が取得出来ない事があるため、画像がある時だけ上書き
+					if ( $image_url ) {
+						$image_url = $image_url[0];
+					}
 				}
 			} // if ( $post_type == 'page' ){
 			return $image_url;
