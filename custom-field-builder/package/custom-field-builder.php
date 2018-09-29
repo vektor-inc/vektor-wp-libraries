@@ -162,7 +162,8 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					$form_html .= '<button id="media_' . $key . '" class="cfb_media_btn btn btn-default button button-default">' . __( 'Choose Image', 'custom_field_builder_textdomain' ) . '</button> ';
 
 					// 削除ボタン
-					$form_html .= '<button id="media_reset_' . $key . '" class="media_reset_btn btn btn-default button button-default">' . __( 'Delete Image', 'custom_field_builder_textdomain' ) . '</button>';
+					// ボタンタグだとその場でページが再読込されてしまうのでaタグに変更
+					$form_html .= '<a id="media_reset_' . $key . '" class="media_reset_btn btn btn-default button button-default">' . __( 'Delete Image', 'custom_field_builder_textdomain' ) . '</a>';
 
 				} elseif ( $value['type'] == 'file' ) {
 					$form_html .= '<input name="' . $key . '" id="' . $key . '" value="' . self::form_post_value( $key ) . '" style="width:60%;" />
