@@ -372,7 +372,7 @@ gulp.task('copy_page-header', function () {
 		// .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/vk-page-header/'))
 		// .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/vk-page-header/'))
 		// .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/vk-page-header/'))
-		.pipe(gulp.dest('../plugins/lightning-pro/inc/vk-page-header/'))
+		// .pipe(gulp.dest('../plugins/lightning-pro/inc/vk-page-header/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-page-header/'));
 });
 gulp.task('watch_page-header', function () {
