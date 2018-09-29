@@ -12,7 +12,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 	class Vk_Font_Selector_Customize {
 
 
-		public static $version = '0.0.0';
+		public static $version = '0.1.0';
 
 		public function __construct() {
 			add_action( 'customize_register', array( $this, 'register' ) );
@@ -42,7 +42,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					'font-family' => '-apple-system,BlinkMacSystemFont,"メイリオ",Meiryo,"ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN,sans-serif',
 				),
 			);
-			return apply_filters( 'vk_fonts_array', $fonts_array );
+			return apply_filters( 'vk_font_family_array', $fonts_array );
 		}
 
 		public static function target_array() {
@@ -64,7 +64,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					'selector' => 'body',
 				),
 			);
-			return apply_filters( 'vk_target_array', $target_array );
+			return apply_filters( 'vk_font_target_array', $target_array );
 		}
 
 		public static function register( $wp_customize ) {
