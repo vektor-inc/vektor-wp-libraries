@@ -108,12 +108,24 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 				$banner .= '<a href="//billvektor.com" target="_blank" class="admin_banner"><img src="' . $dir_url . 'images/billvektor_banner.png" alt="見積書・請求書管理用WordPressテーマ" /></a>';
 			}
 
+			if ( $lang == 'ja' && $theme != 'lightning-pro' ) {
+				$banner .= '<a href="https://lightning.nagoya/ja/expansion/lightning-pro" target="_blank" class="admin_banner"><img src="' . $dir_url . 'images/lightning-pro-bnr.jpg" alt="" /></a>';
+			}
+
 			if ( $lang == 'ja' && ! is_plugin_active( 'lightning-skin-jpnstyle/lightning_skin_jpnstyle.php' ) ) {
 				$banner .= '<a href="https://lightning.nagoya/ja/expansion/ex_plugin/lightning-jpnstyle/?rel=vkadmin" target="_blank" class="admin_banner"><img src="' . $dir_url . 'images/jpnstyle-bnr.jpg" alt="" /></a>';
 			}
 
 			if ( $lang == 'ja' && ! is_plugin_active( 'lightning-skin-fort/lightning-skin-fort.php' ) ) {
 					$banner .= '<a href="https://lightning.nagoya/ja/expansion/ex_plugin/lightning-fort/?rel=vkadmin" target="_blank" class="admin_banner"><img src="' . $dir_url . 'images/fort-bnr.jpg" alt="" /></a>';
+			}
+
+			if ( $lang == 'ja' && ! is_plugin_active( 'lightning-skin-pale/lightning-skin-pale.php' ) ) {
+					$banner .= '<a href="https://lightning.nagoya/ja/expansion/ex_plugin/lightning-pale/?rel=vkadmin" target="_blank" class="admin_banner"><img src="' . $dir_url . 'images/pale-bnr.jpg" alt="" /></a>';
+			}
+
+			if ( $lang == 'ja' && ! is_plugin_active( 'lightning-skin-pale/lightning-skin-variety.php' ) ) {
+					$banner .= '<a href="https://lightning.nagoya/ja/expansion/ex_plugin/lightning-variety/?rel=vkadmin" target="_blank" class="admin_banner"><img src="' . $dir_url . 'images/variety-bnr.jpg" alt="" /></a>';
 			}
 
 			if ( $lang == 'ja' && ! is_plugin_active( 'vk-all-in-one-expansion-unit/vkExUnit.php' ) ) {
