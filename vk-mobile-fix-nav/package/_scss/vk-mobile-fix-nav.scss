@@ -39,6 +39,7 @@
 
 .mobile-fix-nav_enable .vk-mobile-nav{
 	height:calc( 100% - 62px);
+	box-sizing: border-box;
 }
 
 .admin-bar .vk-mobile-nav{

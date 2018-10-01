@@ -11,6 +11,7 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 
 	global $library_url;
 	$library_url = plugin_dir_url( __FILE__ ) . 'vk-mobile-nav';
+	// $library_url = get_template_directory_uri() . '/inc/vk-mobile-nav/';
 
 }
 

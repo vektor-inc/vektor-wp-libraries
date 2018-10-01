@@ -277,7 +277,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 						'default'           => $default_options[ 'link_url_' . $i ],
 						'type'              => 'option', // 保存先 option or theme_mod
 						'capability'        => 'edit_theme_options', // サイト編集者
-						'sanitize_callback' => 'sanitize_text_field',
+						'sanitize_callback' => 'esc_url_raw',
 					)
 				);
 
