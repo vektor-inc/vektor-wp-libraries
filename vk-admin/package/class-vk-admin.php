@@ -97,8 +97,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 			$theme != 'lightning' &&
 			$theme != 'Lightning-master' &&
 			$theme != 'Lightning-pro' &&
-			$theme != 'lightning-pro' &&
-			$theme != 'Lightning-pro-master'
+			$theme != 'lightning-pro'
 			) {
 				if ( $lang == 'ja' ) {
 					$banner .= '<a href="//lightning.nagoya/ja/" target="_blank" class="admin_banner"><img src="' . $dir_url . 'images/lightning_bnr_ja.jpg" alt="lightning_bnr_ja" /></a>';
@@ -114,9 +113,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 			if (
 				$lang == 'ja' &&
 				$theme != 'Lightning-pro' &&
-				$theme != 'lightning-pro' &&
-				$theme != 'Lightning-pro-master' &&
-				$theme != 'lightning-pro-master'
+				$theme != 'lightning-pro'
 			) {
 				$banner .= '<a href="https://lightning.nagoya/ja/expansion/lightning-pro" target="_blank" class="admin_banner"><img src="' . $dir_url . 'images/lightning-pro-bnr.jpg" alt="" /></a>';
 			}
