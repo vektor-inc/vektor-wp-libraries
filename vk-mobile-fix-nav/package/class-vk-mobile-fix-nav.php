@@ -63,8 +63,8 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 		public static function default_options() {
 			$default_options = array(
-				'hidden'       => false,
-				'add_menu_btn' => true,
+				'hidden'       => true,
+				'add_menu_btn' => false,
 				'link_text_0'  => 'MENU',
 				'link_text_1'  => 'HOME',
 				'link_icon_1'  => 'fas fa-home',
@@ -111,6 +111,8 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			// セクション、テーマ設定、コントロールを追加
 			global $vk_mobile_fix_nav_prefix;
 
+			$default_options = $this->default_options();
+
 			// セクション追加
 			$wp_customize->add_section(
 				'vk_mobil_fix_nav_setting', array(
@@ -122,7 +124,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			// hidden セッティング
 			$wp_customize->add_setting(
 				'vk_mobil_fix_nav_options[hidden]', array(
-					'default'           => false,
+					'default'           => $default_options['hidden'],
 					'type'              => 'option', // 保存先 option or theme_mod
 					'capability'        => 'edit_theme_options', // サイト編集者
 					'sanitize_callback' => 'veu_sanitize_boolean',
@@ -156,8 +158,6 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					)
 				)
 			);
-
-			$default_options = $this->default_options();
 
 			// add_menu_btn セッティング
 			$wp_customize->add_setting(
