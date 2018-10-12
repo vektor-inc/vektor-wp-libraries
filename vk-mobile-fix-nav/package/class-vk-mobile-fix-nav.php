@@ -570,8 +570,13 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 									$event .= $options[ 'event_' . $i ] . '"';
 								} // if ( ! empty( $options['event_'.$i] ) && $options['event_'.$i] ){
 
+								$print_fa = '';
+								if ( class_exists( 'Vk_Font_Awesome_Versions' ) ) {
+									$print_fa = Vk_Font_Awesome_Versions::print_fa();
+								}
+
 								echo '<a href="' . esc_url( $link_url ) . '" ' . $blank . ' style="color: ' . $color_style . ';"' . $event . '>
-		            <span class="link-icon"><i class="fa ' . esc_html( $link_icon ) . '"></i></span>' . esc_html( $link_text ) . '</a>';
+		            <span class="link-icon"><i class="' . $print_fa . esc_html( $link_icon ) . '"></i></span>' . esc_html( $link_text ) . '</a>';
 								echo '</li>';
 							}
 						} // <?php for ( $i = 1; $i <= 4; $i++ ) {
