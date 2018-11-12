@@ -13,17 +13,17 @@ class VK_Widget_Pr_Content extends WP_Widget {
 	/*  Widgetを登録する
 	/*-------------------------------------------*/
 
-	public static $version       = '0.0.0';
+	public static $version       = '0.0.1';
 	public static $color_default = '#337ab7';
 
 	function __construct() {
 
-		if ( function_exists( 'lightning_get_theme_name_short' ) ) {
-			$prefix = lightning_get_theme_name_short();
+		if ( function_exists( 'lightning_get_prefix' ) ) {
+			$prefix = lightning_get_prefix();
 		} else {
-			$prefix = 'VK';
+			$prefix = 'VK ';
 		}
-		$widget_name = $prefix . ' ' . __( 'PR Content', 'vk_pr_content_textdomain' );
+		$widget_name = $prefix . __( 'PR Content', 'vk_pr_content_textdomain' );
 		parent::__construct(
 			'VK_Widget_Pr_Content', //ID
 			$widget_name, //widget_name
