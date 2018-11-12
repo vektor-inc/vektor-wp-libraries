@@ -205,8 +205,9 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 			} // if ( isset( $add_menu_btn ) && $add_menu_btn == true ) {
 
-			for ( $i = 1; $i <= 4; $i++ ) {
-
+			//メニュー数をカスタマイズできるフィルターフックを追加
+			$menu_num = apply_filters( 'vk_mobil_fix_nav_menu_number', 4 );
+			for ( $i = 1; $i <= $menu_num; $i ++ ) {
 				// nav_title
 				$wp_customize->add_setting(
 					'nav_title_' . $i, array(
@@ -506,8 +507,9 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 							echo '</li>';
 						}
 
-						for ( $i = 1; $i <= 4; $i++ ) {
-
+						//メニュー数をカスタマイズできるフィルターフックを追加
+						$menu_num = apply_filters( 'vk_mobil_fix_nav_menu_number', 4 );
+						for ( $i = 1; $i <= $menu_num; $i ++ ) {
 							// link text
 							if ( ! empty( $options[ 'link_text_' . $i ] ) ) {
 								$link_text = $options[ 'link_text_' . $i ];
