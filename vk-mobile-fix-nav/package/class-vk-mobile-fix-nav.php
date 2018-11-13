@@ -83,6 +83,25 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				'link_url_4'   => 'tel:000-000-0000',
 				'link_blank_4' => true,
 			);
+
+			// フックでメニューの数を増やされた時に カスタマイザーのデフォルト値のところで Undefined index にならないように
+			$menu_num = apply_filters( 'vk_mobil_fix_nav_menu_number', 4 );
+			// 追加するフィールド配列
+			$keys = array(
+				'link_text_',
+				'link_icon_',
+				'link_url_',
+				'link_blank_',
+			);
+			// 空の配列を作成
+			for ( $i = 1; $i <= $menu_num; $i ++ ) {
+				foreach ( $keys as $key ) {
+					$default_options_added[ $key . $i ] = '';
+				}
+			}
+			// デフォルト値を結合
+			$default_options = wp_parse_args( $default_options, $default_options_added );
+
 			return $default_options;
 		}
 
