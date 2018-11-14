@@ -104,7 +104,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 			foreach ( $targets as $key => $label ) {
 				$wp_customize->add_setting(
 					'vk_font_selector[' . $key . ']', array(
-						'default'           => 'mincho',
+						'default'           => '',
 						'type'              => 'option',
 						'capability'        => 'edit_theme_options',
 						'sanitize_callback' => 'sanitize_text_field',
