@@ -1,5 +1,5 @@
 /*!
- * vk-parallax.js v 0.0.0
+ * vk-parallax.js v 0.0.1
  * Copyright 2018 Vektor,Inc.
  * MIT License
  */
@@ -28,7 +28,7 @@
 		var scrled_Y = jQuery(window).scrollTop();
 		// ウィンドウの高さ
 		var window_H = document.documentElement.clientHeight;
-		// 画像URLを取得する正規表現
+		// 画像URLを取得する正規表現（background-image指定のurl()内だけを抽出する）
 		var urlRegex = /.*url\(['"]*(.*?)['"]*\).*/g;
 
 		// .scr_item のクラスが付いている要素を
@@ -39,6 +39,7 @@
 			/*-------------------------------------*/
 			// 画像のURLを取得
 			var url = jQuery(this).css('background-image').replace(urlRegex, '$1');
+			if ( url != 'none' ){
 
 			var img = new Image();
 			img.src = url;
@@ -170,7 +171,8 @@
 				"background-position": backgroundPosition,
 				"background-size": bg_W + 'px ' + bg_H + 'px',
 			});
-		});
-	}
+			} // if ( url != 'none' ){
+		}); // jQuery('.vk-prlx').each(function(i) {
+	} // 	function prlx_scr() {
 
 })(jQuery);

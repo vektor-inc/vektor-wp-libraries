@@ -81,7 +81,9 @@ gulp.task('parallax', function () {
                 suffix: '.min'
             }))
             .pipe(gulp.dest('./js-libraries/'))
-            .pipe(gulp.dest('../themes/lightning/js/'));
+						.pipe(concat('_vk-prlx.min.js'))
+            .pipe(gulp.dest('../themes/lightning/assets/js/'))
+            .pipe(gulp.dest('../themes/lightning-pro/assets/js/'));
     });
 });
 
