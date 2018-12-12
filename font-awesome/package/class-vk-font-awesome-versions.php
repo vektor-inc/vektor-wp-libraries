@@ -20,7 +20,7 @@ if ( ! class_exists( 'Vk_Font_Awesome_Versions' ) ) {
 			$versions = array(
 				'5_SVG_JS'       => array(
 					'label'   => '5 SVG with JS ( ' . __( 'Not recommended', 'vk_font_awesome_version_textdomain' ) . ' )',
-					'version' => '5',
+					'version' => '5.6',
 					'type'    => 'svg-with-js',
 					/* [ Notice ] use editor css*/
 					'url_css' => $font_awesome_directory_uri . 'versions/5.6.0/css/all.min.css',
@@ -28,7 +28,7 @@ if ( ! class_exists( 'Vk_Font_Awesome_Versions' ) ) {
 				),
 				'5_WebFonts_CSS' => array(
 					'label'   => '5 Web Fonts with CSS',
-					'version' => '5',
+					'version' => '5.6',
 					'type'    => 'web-fonts-with-css',
 					'url_css' => $font_awesome_directory_uri . 'versions/5.6.0/css/all.min.css',
 					'url_js'  => '',
@@ -57,15 +57,15 @@ if ( ! class_exists( 'Vk_Font_Awesome_Versions' ) ) {
 		}
 
 		public static function current_info() {
-			$versions                = self::versions();
-			$vk_font_awesome_version = self::get_option_fa();
-			$current_info            = $versions[ $vk_font_awesome_version ];
+			$versions       = self::versions();
+			$current_option = self::get_option_fa();
+			$current_info   = $versions[ $current_option ];
 			return $current_info;
 		}
 
 		public static function ex_and_link() {
-			$current = self::current_info();
-			if ( $current['version'] == '5' ) {
+			$current_option = self::get_option_fa();
+			if ( $current_option == '5_WebFonts_CSS' || $current_option == '5_SVG_JS' ) {
 				$ex_and_link = '<strong>Font Awesome 5</strong><br>' . __( 'Ex ) ', 'vk_font_awesome_version_textdomain' ) . 'far fa-file-alt [ <a href="//fontawesome.com/icons?d=gallery&m=free" target="_blank">Icon list</a> ]';
 			} else {
 				$ex_and_link = '<strong>Font Awesome 4.7</strong><br>' . __( 'Ex ) ', 'vk_font_awesome_version_textdomain' ) . 'fa-file-text-o [ <a href="//fontawesome.com/v4.7.0/icons/" target="_blank">Icon list</a> ]';
@@ -78,9 +78,9 @@ if ( ! class_exists( 'Vk_Font_Awesome_Versions' ) ) {
 		 * @var strings;
 		 */
 		public static function print_fa() {
-			$fa                   = '';
-			$font_awesome_current = self::current_info();
-			if ( $font_awesome_current['version'] == '4.7' ) {
+			$fa             = '';
+			$current_option = self::get_option_fa();
+			if ( $current_option == '4.7' ) {
 				$fa = 'fa ';
 			}
 			return $fa;
@@ -105,12 +105,12 @@ if ( ! class_exists( 'Vk_Font_Awesome_Versions' ) ) {
 		}
 
 		static function load_gutenberg_font_awesome() {
-			$current = self::current_info();
+			$current_info = self::current_info();
 			wp_enqueue_style(
 				'lightning-gutenberg-editor',
-				$current['url_css'],
+				$current_info['url_css'],
 				array(),
-				$current['version'],
+				$current_info['version'],
 			);
 		}
 
@@ -119,12 +119,12 @@ if ( ! class_exists( 'Vk_Font_Awesome_Versions' ) ) {
 	 * @return [type] [description]
 	 */
 		static function add_body_class_fa_version( $class ) {
-			$current = self::get_option_fa();
-			if ( $current == '4.7' ) {
+			$current_option = self::get_option_fa();
+			if ( $current_option == '4.7' ) {
 				$class[] = 'fa_v4';
-			} elseif ( $current == '5_WebFonts_CSS' ) {
+			} elseif ( $current_option == '5_WebFonts_CSS' ) {
 				$class[] = 'fa_v5_css';
-			} elseif ( $current == '5_SVG_JS' ) {
+			} elseif ( $current_option == '5_SVG_JS' ) {
 				$class[] = 'fa_v5_svg';
 			}
 			return $class;
@@ -156,8 +156,8 @@ if ( ! class_exists( 'Vk_Font_Awesome_Versions' ) ) {
 		}
 
 		public static function class_switch( $class_v4 = '', $class_v5 = '' ) {
-			$current = self::current_info();
-			if ( $current['version'] == '5' ) {
+			$current_option = self::get_option_fa();
+			if ( $current_option == '5_WebFonts_CSS' || $current_option == '5_SVG_JS' || ) {
 				return $class_v5;
 			} else {
 				return $class_v4;
