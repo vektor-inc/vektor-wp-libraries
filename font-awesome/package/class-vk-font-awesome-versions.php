@@ -17,6 +17,21 @@ if ( ! class_exists( 'Vk_Font_Awesome_Versions' ) ) {
 		static function versions() {
 			global $font_awesome_directory_uri;
 			$versions = array(
+				'5_SVG_JS'         => array(
+					'label'   => '5 SVG with JS ( ' . __( 'Not recommended', 'vk_font_awesome_version_textdomain' ) . ' )',
+					'version' => '5',
+					'type'    => 'svg-with-js',
+					// 'url_css' => $font_awesome_directory_uri . 'versions/5.6.0/css/all.min.css',
+					'url_css' => '',
+					'url_js'  => $font_awesome_directory_uri . 'versions/5.6.0/js/all.min.js',
+				),
+				'5_WebFonts_CSS'   => array(
+					'label'   => '5 Web Fonts with CSS',
+					'version' => '5',
+					'type'    => 'web-fonts-with-css',
+					'url_css' => $font_awesome_directory_uri . 'versions/5.6.0/css/all.min.css',
+					'url_js'  => '',
+				),
 				'5.0_SVG_JS'       => array(
 					'label'   => '5.0 SVG with JS ( ' . __( 'Not recommended', 'vk_font_awesome_version_textdomain' ) . ' )',
 					'version' => '5.0',
@@ -25,14 +40,14 @@ if ( ! class_exists( 'Vk_Font_Awesome_Versions' ) ) {
 					'url_js'  => $font_awesome_directory_uri . 'versions/5.0.13/svg-with-js/js/fontawesome-all.min.js',
 				),
 				'5.0_WebFonts_CSS' => array(
-					'label'   => '5.0 Web Fonts with CSS',
+					'label'   => '5.0 Web Fonts with CSS ( ' . __( 'Not recommended', 'vk_font_awesome_version_textdomain' ) . ' )',
 					'version' => '5.0',
 					'type'    => 'web-fonts-with-css',
 					'url_css' => $font_awesome_directory_uri . 'versions/5.0.13/web-fonts-with-css/css/fontawesome-all.min.css',
 					'url_js'  => '',
 				),
 				'4.7'              => array(
-					'label'   => '4.7',
+					'label'   => '4.7 ( ' . __( 'Not recommended', 'vk_font_awesome_version_textdomain' ) . ' )',
 					'version' => '4.7',
 					'type'    => 'web-fonts-with-css',
 					'url_css' => $font_awesome_directory_uri . 'versions/4.7.0/css/font-awesome.min.css',
@@ -51,7 +66,7 @@ if ( ! class_exists( 'Vk_Font_Awesome_Versions' ) ) {
 
 		public static function ex_and_link() {
 			$current = self::current_info();
-			if ( $current['version'] == '5.0' ) {
+			if ( $current['version'] == '5.0' || $current['version'] == '5' ) {
 				$ex_and_link = '<strong>Font Awesome 5</strong><br>' . __( 'Ex ) ', 'vk_font_awesome_version_textdomain' ) . 'far fa-file-alt [ <a href="//fontawesome.com/icons?d=gallery&m=free" target="_blank">Icon list</a> ]';
 			} else {
 				$ex_and_link = '<strong>Font Awesome 4.7</strong><br>' . __( 'Ex ) ', 'vk_font_awesome_version_textdomain' ) . 'fa-file-text-o [ <a href="//fontawesome.com/v4.7.0/icons/" target="_blank">Icon list</a> ]';
@@ -98,9 +113,9 @@ if ( ! class_exists( 'Vk_Font_Awesome_Versions' ) ) {
 			$current = get_option( 'vk_font_awesome_version', self::$version_default );
 			if ( $current == '4.7' ) {
 				$class[] = 'fa_v4';
-			} elseif ( $current == '5.0_WebFonts_CSS' ) {
+			} elseif ( $current == '5.0_WebFonts_CSS' || $current == '5_WebFonts_CSS' ) {
 				$class[] = 'fa_v5_css';
-			} elseif ( $current == '5.0_SVG_JS' ) {
+			} elseif ( $current == '5.0_SVG_JS' || $current == '5_SVG_JS' ) {
 				$class[] = 'fa_v5_svg';
 			}
 			return $class;
