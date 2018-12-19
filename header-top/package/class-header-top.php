@@ -160,8 +160,8 @@ if ( ! class_exists( 'Lightning_header_top' ) ) {
 			if ( isset( $btn_txt ) && $btn_txt && isset( $link_url ) && $link_url ) {
 
 				if ( class_exists( 'Vk_Font_Awesome_Versions' ) ) {
-					$current_info = Vk_Font_Awesome_Versions::current_info();
-					if ( $current_info['version'] == '5.0' ) {
+					$current_info = Vk_Font_Awesome_Versions::get_option_fa();
+					if ( $current_info == '5_WebFonts_CSS' || $current_info == '5_SVG_JS' ) {
 						$icon = 'far fa-envelope';
 					} else {
 						$icon = 'fa fa-envelope-o';
