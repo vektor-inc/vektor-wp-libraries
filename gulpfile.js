@@ -297,6 +297,7 @@ gulp.task('copy_font-awesome', function () {
         .pipe(gulp.dest('../themes/lightning/inc/font-awesome/'))
         .pipe(gulp.dest('../themes/lightning-pro/inc/font-awesome/'))
         .pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/font-awesome/'))
+        .pipe(gulp.dest('../plugins/vk-blocks/inc/font-awesome/'))
         .pipe(gulp.dest('../plugins/vk-post-author-display/inc/font-awesome/'));
 });
 gulp.task('watch_fa', function () {
