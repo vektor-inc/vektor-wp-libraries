@@ -17,29 +17,372 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 		public function __construct() {
 			add_action( 'customize_register', array( $this, 'register' ) );
 			add_action( 'wp_head', array( $this, 'dynamic_header_css' ), 5 );
+			add_action( 'wp_footer', array( $this, 'load_web_fonts' ) );
 		}
 
 		public static function fonts_array() {
 			$fonts_array = array(
-				'mincho'        => array(
+				'mincho'                => array(
 					'label'       => __( 'Mincho', 'vk_font_selector_textdomain' ),
 					'font-family' => 'Hiragino Mincho ProN,"游明朝",serif',
 				),
-				'hira-kaku'     => array(
+				'hira-kaku'             => array(
 					'label'       => __( 'Hiragino Kaku Gothic', 'vk_font_selector_textdomain' ),
 					'font-family' => '"ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN,"游ゴシック Medium","Yu Gothic Medium","游ゴシック体",YuGothic, "Helvetica Neue", sans-serif',
 				),
-				'yu-gothic'     => array(
+				'yu-gothic'             => array(
 					'label'       => __( 'Yu Gothic', 'vk_font_selector_textdomain' ),
 					'font-family' => '"游ゴシック Medium","Yu Gothic Medium","游ゴシック体",YuGothic,"ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN,sans-serif',
 				),
-				'meiryo'        => array(
+				'meiryo'                => array(
 					'label'       => __( 'Meiryo', 'vk_font_selector_textdomain' ),
 					'font-family' => '"メイリオ",Meiryo,"ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN,sans-serif',
 				),
-				'san-francisco' => array(
+				'san-francisco'         => array(
 					'label'       => __( 'San Francisco', 'vk_font_selector_textdomain' ),
 					'font-family' => '-apple-system,BlinkMacSystemFont,"メイリオ",Meiryo,"ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN,sans-serif',
+				),
+				// 'Noto+Sans+JP:100'      => array(
+				// 	'label'           => 'Noto Sans JP 100 ( Google Fonts )',
+				// 	'font-family'     => '"Noto Sans JP",sans-serif',
+				// 	'font-family-key' => 'Noto+Sans+JP',
+				// 	'font-weight'     => 100,
+				// ),
+				'Noto+Sans+JP:300'      => array(
+					'label'           => 'Noto Sans JP 300 ( Google Fonts )',
+					'font-family'     => '"Noto Sans JP",sans-serif',
+					'font-family-key' => 'Noto+Sans+JP',
+					'font-weight'     => 300,
+				),
+				'Noto+Sans+JP:400'      => array(
+					'label'           => 'Noto Sans JP 400 ( Google Fonts )',
+					'font-family'     => '"Noto Sans JP",sans-serif',
+					'font-family-key' => 'Noto+Sans+JP',
+					'font-weight'     => 400,
+				),
+				'Noto+Sans+JP:500'      => array(
+					'label'           => 'Noto Sans JP 500 ( Google Fonts )',
+					'font-family'     => '"Noto Sans JP",sans-serif',
+					'font-family-key' => 'Noto+Sans+JP',
+					'font-weight'     => 500,
+				),
+				'Noto+Sans+JP:700'      => array(
+					'label'           => 'Noto Sans JP 700 ( Google Fonts )',
+					'font-family'     => '"Noto Sans JP",sans-serif',
+					'font-family-key' => 'Noto+Sans+JP',
+					'font-weight'     => 700,
+				),
+				// 'Noto+Sans+JP:900'      => array(
+				// 	'label'           => 'Noto Sans JP 900 ( Google Fonts )',
+				// 	'font-family'     => '"Noto Sans JP",sans-serif',
+				// 	'font-family-key' => 'Noto+Sans+JP',
+				// 	'font-weight'     => 900,
+				// ),
+				// 'Noto+Sans+TC:100'      => array(
+				// 	'label'           => 'Noto Sans TC 100 ( Google Fonts )',
+				// 	'font-family'     => '"Noto Sans TC",sans-serif',
+				// 	'font-family-key' => 'Noto+Sans+TC',
+				// 	'font-weight'     => 100,
+				// ),
+				'Noto+Sans+TC:300'      => array(
+					'label'           => 'Noto Sans TC 300 ( Google Fonts )',
+					'font-family'     => '"Noto Sans TC",sans-serif',
+					'font-family-key' => 'Noto+Sans+TC',
+					'font-weight'     => 300,
+				),
+				'Noto+Sans+TC:400'      => array(
+					'label'           => 'Noto Sans TC 400 ( Google Fonts )',
+					'font-family'     => '"Noto Sans TC",sans-serif',
+					'font-family-key' => 'Noto+Sans+TC',
+					'font-weight'     => 400,
+				),
+				'Noto+Sans+TC:500'      => array(
+					'label'           => 'Noto Sans TC 500 ( Google Fonts )',
+					'font-family'     => '"Noto Sans TC",sans-serif',
+					'font-family-key' => 'Noto+Sans+TC',
+					'font-weight'     => 500,
+				),
+				'Noto+Sans+TC:700'      => array(
+					'label'           => 'Noto Sans TC 700 ( Google Fonts )',
+					'font-family'     => '"Noto Sans TC",sans-serif',
+					'font-family-key' => 'Noto+Sans+TC',
+					'font-weight'     => 700,
+				),
+				// 'Noto+Sans+TC:900'      => array(
+				// 	'label'           => 'Noto Sans TC 900 ( Google Fonts )',
+				// 	'font-family'     => '"Noto Sans TC",sans-serif',
+				// 	'font-family-key' => 'Noto+Sans+TC',
+				// 	'font-weight'     => 900,
+				// ),
+				// 'Noto+Sans+SC:100'      => array(
+				// 	'label'           => 'Noto Sans SC 100 ( Google Fonts )',
+				// 	'font-family'     => '"Noto Sans SC",sans-serif',
+				// 	'font-family-key' => 'Noto+Sans+SC',
+				// 	'font-weight'     => 100,
+				// ),
+				'Noto+Sans+SC:300'      => array(
+					'label'           => 'Noto Sans SC 300 ( Google Fonts )',
+					'font-family'     => '"Noto Sans SC",sans-serif',
+					'font-family-key' => 'Noto+Sans+SC',
+					'font-weight'     => 300,
+				),
+				'Noto+Sans+SC:400'      => array(
+					'label'           => 'Noto Sans SC 400 ( Google Fonts )',
+					'font-family'     => '"Noto Sans SC",sans-serif',
+					'font-family-key' => 'Noto+Sans+SC',
+					'font-weight'     => 400,
+				),
+				'Noto+Sans+SC:500'      => array(
+					'label'           => 'Noto Sans SC 500 ( Google Fonts )',
+					'font-family'     => '"Noto Sans SC",sans-serif',
+					'font-family-key' => 'Noto+Sans+SC',
+					'font-weight'     => 500,
+				),
+				'Noto+Sans+SC:700'      => array(
+					'label'           => 'Noto Sans SC 700 ( Google Fonts )',
+					'font-family'     => '"Noto Sans SC",sans-serif',
+					'font-family-key' => 'Noto+Sans+SC',
+					'font-weight'     => 700,
+				),
+				// 'Noto+Sans+SC:900'      => array(
+				// 	'label'           => 'Noto Sans SC 900 ( Google Fonts )',
+				// 	'font-family'     => '"Noto Sans SC",sans-serif',
+				// 	'font-family-key' => 'Noto+Sans+SC',
+				// 	'font-weight'     => 900,
+				// ),
+				'Noto+Serif+TC:200'     => array(
+					'label'           => 'Noto Serif TC 200 ( Google Fonts )',
+					'font-family'     => '"Noto Serif TC",sans-serif',
+					'font-family-key' => 'Noto+Serif+TC',
+					'font-weight'     => 200,
+				),
+				'Noto+Serif+TC:300'     => array(
+					'label'           => 'Noto Serif TC 300 ( Google Fonts )',
+					'font-family'     => '"Noto Serif TC",sans-serif',
+					'font-family-key' => 'Noto+Serif+TC',
+					'font-weight'     => 300,
+				),
+				'Noto+Serif+TC:400'     => array(
+					'label'           => 'Noto Serif TC 400 ( Google Fonts )',
+					'font-family'     => '"Noto Serif TC",sans-serif',
+					'font-family-key' => 'Noto+Serif+TC',
+					'font-weight'     => 400,
+				),
+				'Noto+Serif+TC:500'     => array(
+					'label'           => 'Noto Serif TC 500 ( Google Fonts )',
+					'font-family'     => '"Noto Serif TC",sans-serif',
+					'font-family-key' => 'Noto+Serif+TC',
+					'font-weight'     => 500,
+				),
+				'Noto+Serif+TC:600'     => array(
+					'label'           => 'Noto Serif TC 600 ( Google Fonts )',
+					'font-family'     => '"Noto Serif TC",sans-serif',
+					'font-family-key' => 'Noto+Serif+TC',
+					'font-weight'     => 600,
+				),
+				'Noto+Serif+TC:700'     => array(
+					'label'           => 'Noto Serif TC 700 ( Google Fonts )',
+					'font-family'     => '"Noto Serif TC",sans-serif',
+					'font-family-key' => 'Noto+Serif+TC',
+					'font-weight'     => 700,
+				),
+				'Noto+Serif+TC:900'     => array(
+					'label'           => 'Noto Serif TC 900 ( Google Fonts )',
+					'font-family'     => '"Noto Serif TC",sans-serif',
+					'font-family-key' => 'Noto+Serif+TC',
+					'font-weight'     => 900,
+				),
+				'Noto+Serif+SC:200'     => array(
+					'label'           => 'Noto Serif SC 200 ( Google Fonts )',
+					'font-family'     => '"Noto Serif SC",sans-serif',
+					'font-family-key' => 'Noto+Serif+SC',
+					'font-weight'     => 200,
+				),
+				'Noto+Serif+SC:300'     => array(
+					'label'           => 'Noto Serif SC 300 ( Google Fonts )',
+					'font-family'     => '"Noto Serif SC",sans-serif',
+					'font-family-key' => 'Noto+Serif+SC',
+					'font-weight'     => 300,
+				),
+				'Noto+Serif+SC:400'     => array(
+					'label'           => 'Noto Serif SC 400 ( Google Fonts )',
+					'font-family'     => '"Noto Serif SC",sans-serif',
+					'font-family-key' => 'Noto+Serif+SC',
+					'font-weight'     => 400,
+				),
+				'Noto+Serif+SC:500'     => array(
+					'label'           => 'Noto Serif SC 500 ( Google Fonts )',
+					'font-family'     => '"Noto Serif SC",sans-serif',
+					'font-family-key' => 'Noto+Serif+SC',
+					'font-weight'     => 500,
+				),
+				'Noto+Serif+SC:600'     => array(
+					'label'           => 'Noto Serif SC 600 ( Google Fonts )',
+					'font-family'     => '"Noto Serif SC",sans-serif',
+					'font-family-key' => 'Noto+Serif+SC',
+					'font-weight'     => 600,
+				),
+				'Noto+Serif+SC:700'     => array(
+					'label'           => 'Noto Serif SC 700 ( Google Fonts )',
+					'font-family'     => '"Noto Serif SC",sans-serif',
+					'font-family-key' => 'Noto+Serif+SC',
+					'font-weight'     => 700,
+				),
+				'Noto+Serif+SC:900'     => array(
+					'label'           => 'Noto Serif SC 900 ( Google Fonts )',
+					'font-family'     => '"Noto Serif SC",sans-serif',
+					'font-family-key' => 'Noto+Serif+SC',
+					'font-weight'     => 900,
+				),
+				'Noto+Serif+JP:200'     => array(
+					'label'           => 'Noto Serif JP 200 ( Google Fonts )',
+					'font-family'     => '"Noto Serif JP",sans-serif',
+					'font-family-key' => 'Noto+Serif+JP',
+					'font-weight'     => 200,
+				),
+				'Noto+Serif+JP:300'     => array(
+					'label'           => 'Noto Serif JP 300 ( Google Fonts )',
+					'font-family'     => '"Noto Serif JP",sans-serif',
+					'font-family-key' => 'Noto+Serif+JP',
+					'font-weight'     => 300,
+				),
+				'Noto+Serif+JP:400'     => array(
+					'label'           => 'Noto Serif JP 400 ( Google Fonts )',
+					'font-family'     => '"Noto Serif JP",sans-serif',
+					'font-family-key' => 'Noto+Serif+JP',
+					'font-weight'     => 400,
+				),
+				'Noto+Serif+JP:500'     => array(
+					'label'           => 'Noto Serif JP 500 ( Google Fonts )',
+					'font-family'     => '"Noto Serif JP",sans-serif',
+					'font-family-key' => 'Noto+Serif+JP',
+					'font-weight'     => 500,
+				),
+				'Noto+Serif+JP:600'     => array(
+					'label'           => 'Noto Serif JP 600 ( Google Fonts )',
+					'font-family'     => '"Noto Serif JP",sans-serif',
+					'font-family-key' => 'Noto+Serif+JP',
+					'font-weight'     => 600,
+				),
+				'Noto+Serif+JP:700'     => array(
+					'label'           => 'Noto Serif JP 700 ( Google Fonts )',
+					'font-family'     => '"Noto Serif JP",sans-serif',
+					'font-family-key' => 'Noto+Serif+JP',
+					'font-weight'     => 700,
+				),
+				'Noto+Serif+JP:900'     => array(
+					'label'           => 'Noto Serif JP 900 ( Google Fonts )',
+					'font-family'     => '"Noto Serif JP",sans-serif',
+					'font-family-key' => 'Noto+Serif+JP',
+					'font-weight'     => 900,
+				),
+				// 'M+PLUS+1p:100'         => array(
+				// 	'label'           => 'M PLUS 1p 100 ( Google Fonts )',
+				// 	'font-family'     => '"M PLUS 1p",sans-serif',
+				// 	'font-family-key' => 'M+PLUS+1p',
+				// 	'font-weight'     => 100,
+				// ),
+				'M+PLUS+1p:300'         => array(
+					'label'           => 'M PLUS 1p 300 ( Google Fonts )',
+					'font-family'     => '"M PLUS 1p",sans-serif',
+					'font-family-key' => 'M+PLUS+1p',
+					'font-weight'     => 300,
+				),
+				'M+PLUS+1p:400'         => array(
+					'label'           => 'M PLUS 1p 400 ( Google Fonts )',
+					'font-family'     => '"M PLUS 1p",sans-serif',
+					'font-family-key' => 'M+PLUS+1p',
+					'font-weight'     => 400,
+				),
+				'M+PLUS+1p:500'         => array(
+					'label'           => 'M PLUS 1p 500 ( Google Fonts )',
+					'font-family'     => '"M PLUS 1p",sans-serif',
+					'font-family-key' => 'M+PLUS+1p',
+					'font-weight'     => 500,
+				),
+				'M+PLUS+1p:700'         => array(
+					'label'           => 'M PLUS 1p 700 ( Google Fonts )',
+					'font-family'     => '"M PLUS 1p",sans-serif',
+					'font-family-key' => 'M+PLUS+1p',
+					'font-weight'     => 700,
+				),
+				// 'M+PLUS+1p:800'         => array(
+				// 	'label'           => 'M PLUS 1p 800 ( Google Fonts )',
+				// 	'font-family'     => '"M PLUS 1p",sans-serif',
+				// 	'font-family-key' => 'M+PLUS+1p',
+				// 	'font-weight'     => 800,
+				// ),
+				// 'M+PLUS+1p:900'         => array(
+				// 	'label'           => 'M PLUS 1p 900 ( Google Fonts )',
+				// 	'font-family'     => '"M PLUS 1p",sans-serif',
+				// 	'font-family-key' => 'M+PLUS+1p',
+				// 	'font-weight'     => 900,
+				// ),
+				// 'M+PLUS+Rounded+1c:100' => array(
+				// 	'label'           => 'M PLUS Rounded 1c 100 ( Google Fonts )',
+				// 	'font-family'     => '"M PLUS Rounded 1c",sans-serif',
+				// 	'font-family-key' => 'M+PLUS+Rounded+1c',
+				// 	'font-weight'     => 100,
+				// ),
+				'M+PLUS+Rounded+1c:300' => array(
+					'label'           => 'M PLUS Rounded 1c 300 ( Google Fonts )',
+					'font-family'     => '"M PLUS Rounded 1c",sans-serif',
+					'font-family-key' => 'M+PLUS+Rounded+1c',
+					'font-weight'     => 300,
+				),
+				'M+PLUS+Rounded+1c:400' => array(
+					'label'           => 'M PLUS Rounded 1c 400 ( Google Fonts )',
+					'font-family'     => '"M PLUS Rounded 1c",sans-serif',
+					'font-family-key' => 'M+PLUS+Rounded+1c',
+					'font-weight'     => 400,
+				),
+				'M+PLUS+Rounded+1c:500' => array(
+					'label'           => 'M PLUS Rounded 1c 500 ( Google Fonts )',
+					'font-family'     => '"M PLUS Rounded 1c",sans-serif',
+					'font-family-key' => 'M+PLUS+Rounded+1c',
+					'font-weight'     => 500,
+				),
+				'M+PLUS+Rounded+1c:700' => array(
+					'label'           => 'M PLUS Rounded 1c 700 ( Google Fonts )',
+					'font-family'     => '"M PLUS Rounded 1c",sans-serif',
+					'font-family-key' => 'M+PLUS+Rounded+1c',
+					'font-weight'     => 700,
+				),
+				// 'M+PLUS+Rounded+1c:800' => array(
+				// 	'label'           => 'M PLUS Rounded 1c 800 ( Google Fonts )',
+				// 	'font-family'     => '"M PLUS Rounded 1c",sans-serif',
+				// 	'font-family-key' => 'M+PLUS+Rounded+1c',
+				// 	'font-weight'     => 800,
+				// ),
+				// 'M+PLUS+Rounded+1c:900' => array(
+				// 	'label'           => 'M PLUS Rounded 1c 900 ( Google Fonts )',
+				// 	'font-family'     => '"M PLUS Rounded 1c",sans-serif',
+				// 	'font-family-key' => 'M+PLUS+Rounded+1c',
+				// 	'font-weight'     => 900,
+				// ),
+				'Sawarabi+Mincho'       => array(
+					'label'           => 'Sawarabi Mincho ( Google Fonts )',
+					'font-family'     => '"Sawarabi Mincho",sans-serif',
+					'font-family-key' => 'Sawarabi+Mincho',
+					'web-fonts'       => 'google',
+				),
+				'Sawarabi+Gothic'       => array(
+					'label'           => 'Sawarabi Gothic ( Google Fonts )',
+					'font-family'     => '"Sawarabi Gothic",sans-serif',
+					'font-family-key' => 'Sawarabi+Gothic',
+					'web-fonts'       => 'google',
+				),
+				'Kosugi+Maru'           => array(
+					'label'           => 'Kosugi Maru ( Google Fonts )',
+					'font-family'     => '"Kosugi Maru",sans-serif',
+					'font-family-key' => 'Kosugi+Maru',
+					'web-fonts'       => 'google',
+				),
+				'Kosugi'                => array(
+					'label'           => 'Kosugi ( Google Fonts )',
+					'font-family'     => '"Kosugi",sans-serif',
+					'font-family-key' => 'Kosugi',
+					'web-fonts'       => 'google',
 				),
 			);
 			return apply_filters( 'vk_font_family_array', $fonts_array );
@@ -126,12 +469,11 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 			}
 		} // public function vk_font_selector_function_customize_register( $wp_customize )
 
+
 		/*-------------------------------------------*/
 		/*  print head style
 		/*-------------------------------------------*/
-
-		public function dynamic_header_css() {
-
+		public function get_selected_fonts_info() {
 			// どの場所にどのフォント指定をするのかが格納されている
 			$options = get_option( 'vk_font_selector' );
 			// $options = array(
@@ -168,7 +510,8 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 			// 		),
 			// 	);
 
-			$dynamic_css = '';
+			$dynamic_css       = '';
+			$selected_webFonts = array();
 
 			// フォントを指定するターゲット項目をループする
 			foreach ( $target_array as $target_key => $target_value ) {
@@ -183,12 +526,40 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					// そのフォントキーがフォントの配列に登録されていたら
 					if ( isset( $fonts_array[ $font_key ] ) ) {
 						// 配列の中から実際のフォントファミリーを代入
-						$font_family = $fonts_array[ $font_key ]['font-family'];
+						$font_family = 'font-family:' . $fonts_array[ $font_key ]['font-family'] . ';';
+
+						// Google Fonts など weight指定があるものは追加
+						$font_weight = '';
+						if ( isset( $fonts_array[ $font_key ]['font-weight'] ) ) {
+							$font_weight = 'font-weight:' . $fonts_array[ $font_key ]['font-weight'] . ';';
+						}
 						// 出力するCSSに登録
-						$dynamic_css .= $target_value['selector'] . '{ font-family:' . $font_family . '}';
+						$dynamic_css .= $target_value['selector'] . '{ ' . $font_family . $font_weight . '}';
 					}
-				} // if ( ! empty($options[$target_key] ){
+
+					// ウェブフォントを使用していたらウェブフォント情報を取得
+					if ( isset( $fonts_array[ $font_key ]['font-family-key'] ) ) {
+						$selected_webFonts[ $font_key ] = $fonts_array[ $font_key ];
+					}
+				} // if ( ! empty( $options[ $target_key ] ) ) {
 			}
+
+			// 動的に書き出すCSS情報
+			$selected_fonts_info['dynamic_css'] = $dynamic_css;
+			// ウェブフォントが使用されていた場合のウェブフォント情報（ウェブフォントを取得するため）
+			$selected_fonts_info['selected_webFonts'] = $selected_webFonts;
+			return $selected_fonts_info;
+		}
+
+
+		/*-------------------------------------------*/
+		/*  print head style
+		/*-------------------------------------------*/
+
+		public function dynamic_header_css() {
+
+			$selected_fonts_info = $this::get_selected_fonts_info();
+			$dynamic_css         = $selected_fonts_info['dynamic_css'];
 
 			// 出力するインラインスタイルが存在していたら
 			if ( $dynamic_css ) {
@@ -208,8 +579,59 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 		} // public function skin_dynamic_css(){
 
+		public function load_web_fonts() {
+			$selected_fonts_info = $this::get_selected_fonts_info();
+			if ( ! empty( $selected_fonts_info['selected_webFonts'] ) ) {
+
+				// 同じフォントでウェイト違いが入ってくるので、フォントごとにまとめた配列を生成する
+				foreach ( $selected_fonts_info['selected_webFonts'] as $key => $value ) {
+
+					$family = $value['font-family-key'];
+					if ( isset( $value['font-weight'] ) ) {
+						$fonts[ $family ]['weight'][] = $value['font-weight'];
+					} else {
+						$fonts[ $family ] = '';
+					}
+				} // foreach ( $selected_fonts_info['selected_webFonts'] as $key => $value ) {
+
+				// Googleに投げるパラメーターの生成
+				$family_parameter = '';
+				$before_family    = '';
+				$count_family     = 0;
+				foreach ( $fonts as $family => $family_info ) {
+
+					// font-familyが2つ目以降はセパレーターを追加
+					if ( $count_family ) {
+						$family_parameter .= '|';
+					}
+					$family_parameter .= $family;
+
+					// font-weight 指定がある場合
+					if ( isset( $family_info['weight'] ) && is_array( $family_info['weight'] ) ) {
+						$count_weight      = 0;
+						$family_parameter .= ':';
+						foreach ( $family_info['weight'] as $key => $value ) {
+									// font-weightが2つ目以降はセパレーターを追加
+							if ( $count_weight ) {
+								$family_parameter .= ',';
+							}
+							$family_parameter .= $value;
+							$count_weight++;
+						}
+					}
+
+					$count_family++;
+				}
+				echo '<link href="https://fonts.googleapis.com/css?family=' . $family_parameter . '" rel="stylesheet">';
+			} // if ( ! empty( $selected_fonts_info['selected_webFonts'] ) ) {
+		} // public function load_web_fonts() {
+
 	} // class Vk_Font_Selector_Customize
-	// テーマ設定やコントロールをセットアップします。
 
 	new Vk_Font_Selector_Customize();
 } // if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
+
+	add_filter( 'lightning_headfix_enable', 'lightning_headfix_disabel' );
+function lightning_headfix_disabel() {
+	return false;
+}
