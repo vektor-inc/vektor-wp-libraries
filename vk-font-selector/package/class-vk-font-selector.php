@@ -630,8 +630,3 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 	new Vk_Font_Selector_Customize();
 } // if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
-
-	add_filter( 'lightning_headfix_enable', 'lightning_headfix_disabel' );
-function lightning_headfix_disabel() {
-	return false;
-}
