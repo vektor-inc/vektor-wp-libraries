@@ -8,11 +8,43 @@ https://github.com/vektor-inc/vektor-wp-libraries
 /*	Customizer
 /*-------------------------------------------*/
 
+add_action( 'customize_register', 'vkfs_customize_register_add_control', 10 );
+
+/*-------------------------------------------*/
+/*	ExUnit Original Controls
+/*-------------------------------------------*/
+if ( ! function_exists( 'vkfs_customize_register_add_control' ) ) {
+	function vkfs_customize_register_add_control() {
+
+		/*	Add text control description
+		/*-------------------------------------------*/
+		class Vk_Font_Selector_Custom_Html extends WP_Customize_Control {
+			public $type             = 'customtext';
+			public $custom_title_sub = ''; // we add this for the extra custom_html
+			public $custom_html      = ''; // we add this for the extra custom_html
+			public function render_content() {
+				if ( $this->label ) {
+					// echo '<h2 class="admin-custom-h2">' . wp_kses_post( $this->label ) . '</h2>';
+					echo '<h2 class="admin-custom-h2">' . wp_kses_post( $this->label ) . '</h2>';
+				}
+				if ( $this->custom_title_sub ) {
+					echo '<h3 class="admin-custom-h3">' . wp_kses_post( $this->custom_title_sub ) . '</h3>';
+				}
+				if ( $this->custom_html ) {
+					echo '<div>' . wp_kses_post( $this->custom_html ) . '</div>';
+				}
+			} // public function render_content() {
+		} // class VkVk_Font_Selector_Custom_Html extends WP_Customize_Control
+
+	} // function veu_customize_register_add_control(){
+} // if ( ! function_exists( 'vkfs_customize_register_add_control' ) ) {
+
+
 if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
+
 	class Vk_Font_Selector_Customize {
 
-
-		public static $version = '0.1.0';
+		public static $version = '0.1.1';
 
 		public function __construct() {
 			add_action( 'customize_register', array( $this, 'register' ) );
@@ -424,6 +456,23 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 				)
 			);
 
+			$wp_customize->add_setting( 'font_mobile_caution', array( 'sanitize_callback' => 'sanitize_text_field' ) );
+			$html  = '<ul>';
+			$html .= '<li>' . __( 'If you want to apply the same font on mobile devices, please select web font (Google Fonts).', 'vk_font_selector_textdomain' ) . '</li>';
+			$html .= '<li>' . __( 'The web font (Google Fonts) loads the font data, so the display will be slightly late.', 'vk_font_selector_textdomain' ) . '</li>';
+			$html .= '</ul>';
+			$wp_customize->add_control(
+				new Vk_Font_Selector_Custom_Html(
+					$wp_customize, 'font_mobile_caution', array(
+						'label'            => '',
+						'section'          => 'vk_font_selector_related_setting',
+						'type'             => 'text',
+						'custom_title_sub' => '',
+						'custom_html'      => $html,
+					)
+				)
+			);
+
 			// フォントセット読み込み
 			$fonts_array = self::fonts_array();
 			// プルダウン用の項目
@@ -629,4 +678,5 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 	} // class Vk_Font_Selector_Customize
 
 	new Vk_Font_Selector_Customize();
+
 } // if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
