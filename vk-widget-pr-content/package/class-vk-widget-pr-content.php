@@ -58,6 +58,8 @@ class VK_Widget_Pr_Content extends WP_Widget {
 		preg_match( '/\/themes\//', $path, $m );
 		if ( $m ) {
 			wp_enqueue_script( 'admin-widget-color-js', get_template_directory_uri() . '/inc/vk-widget-pr-content/js/admin-widget-color.min.js', array( 'jquery' ), date( 'His' ) );
+			// Gutenbergではページのスクロールではなく中がスクロールしてしまうので現実にはほとんど役に立ってない
+			wp_enqueue_script( 'admin-parlx-js', get_template_directory_uri() . '/inc/vk-widget-pr-content/js/vk-prlx.min.js', array( 'jquery' ), date( 'His' ) );
 		} else {
 			wp_enqueue_script( 'admin-widget-color-js', plugin_dir_url( __FILE__ ) . 'js/admin-widget-color.min.js', array( 'jquery' ), date( 'His' ) );
 		}
