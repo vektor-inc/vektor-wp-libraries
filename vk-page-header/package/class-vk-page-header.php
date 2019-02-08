@@ -486,6 +486,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 	} // class Vk_Page_Header
 
-	new Vk_Page_Header();
-	// Vk_Page_Header::init();
+	// フックではずしやすいようにグローバル変数にいれている
+	$vk_page_header = new Vk_Page_Header();
+
 }
