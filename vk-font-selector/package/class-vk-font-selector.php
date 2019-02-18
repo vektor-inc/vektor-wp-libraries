@@ -44,12 +44,12 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 	class Vk_Font_Selector_Customize {
 
-		public static $version = '0.1.1';
+		public static $version = '0.1.2';
 
-		public function __construct() {
-			add_action( 'customize_register', array( $this, 'register' ) );
-			add_action( 'wp_head', array( $this, 'dynamic_header_css' ), 5 );
-			add_action( 'wp_footer', array( $this, 'load_web_fonts' ) );
+		public static function init() {
+			add_action( 'customize_register', array( __CLASS__, 'register' ) );
+			add_action( 'wp_head', array( __CLASS__, 'dynamic_header_css' ), 5 );
+			add_action( 'wp_footer', array( __CLASS__, 'load_web_fonts' ) );
 		}
 
 		public static function fonts_array() {
@@ -522,7 +522,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 		/*-------------------------------------------*/
 		/*  print head style
 		/*-------------------------------------------*/
-		public function get_selected_fonts_info() {
+		public static function get_selected_fonts_info() {
 			// どの場所にどのフォント指定をするのかが格納されている
 			$options = get_option( 'vk_font_selector' );
 			// $options = array(
@@ -606,9 +606,9 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 		/*  print head style
 		/*-------------------------------------------*/
 
-		public function dynamic_header_css() {
+		public static function dynamic_header_css() {
 
-			$selected_fonts_info = $this::get_selected_fonts_info();
+			$selected_fonts_info = Vk_Font_Selector_Customize::get_selected_fonts_info();
 			$dynamic_css         = $selected_fonts_info['dynamic_css'];
 
 			// 出力するインラインスタイルが存在していたら
@@ -629,8 +629,8 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 		} // public function skin_dynamic_css(){
 
-		public function load_web_fonts() {
-			$selected_fonts_info = $this::get_selected_fonts_info();
+		public static function load_web_fonts() {
+			$selected_fonts_info = Vk_Font_Selector_Customize::get_selected_fonts_info();
 			if ( ! empty( $selected_fonts_info['selected_webFonts'] ) ) {
 
 				// 同じフォントでウェイト違いが入ってくるので、フォントごとにまとめた配列を生成する
@@ -678,6 +678,15 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 	} // class Vk_Font_Selector_Customize
 
-	new Vk_Font_Selector_Customize();
+	Vk_Font_Selector_Customize::init();
+
+	// 外す時
+	// add_action(
+	// 	'after_setup_theme', function() {
+	// 		remove_action( 'customize_register', array( 'Vk_Font_Selector_Customize', 'register' ) );
+	// 		remove_action( 'wp_head', array( 'Vk_Font_Selector_Customize', 'dynamic_header_css' ), 5 );
+	// 		remove_action( 'wp_footer', array( 'Vk_Font_Selector_Customize', 'load_web_fonts' ) );
+	// 	}
+	// );
 
 } // if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
