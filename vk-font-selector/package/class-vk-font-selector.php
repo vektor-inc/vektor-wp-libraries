@@ -54,6 +54,10 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 		public static function fonts_array() {
 			$fonts_array = array(
+				''                      => array(
+					'label'       => __( 'Unspecified', 'vk_font_selector_textdomain' ),
+					'font-family' => '',
+				),
 				'mincho'                => array(
 					'label'       => __( 'Mincho', 'vk_font_selector_textdomain' ),
 					'font-family' => 'Hiragino Mincho ProN,"游明朝",serif',
@@ -396,25 +400,21 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					'label'           => 'Sawarabi Mincho ( Google Fonts )',
 					'font-family'     => '"Sawarabi Mincho",sans-serif',
 					'font-family-key' => 'Sawarabi+Mincho',
-					'web-fonts'       => 'google',
 				),
 				'Sawarabi+Gothic'       => array(
 					'label'           => 'Sawarabi Gothic ( Google Fonts )',
 					'font-family'     => '"Sawarabi Gothic",sans-serif',
 					'font-family-key' => 'Sawarabi+Gothic',
-					'web-fonts'       => 'google',
 				),
 				'Kosugi+Maru'           => array(
 					'label'           => 'Kosugi Maru ( Google Fonts )',
 					'font-family'     => '"Kosugi Maru",sans-serif',
 					'font-family-key' => 'Kosugi+Maru',
-					'web-fonts'       => 'google',
 				),
 				'Kosugi'                => array(
 					'label'           => 'Kosugi ( Google Fonts )',
 					'font-family'     => '"Kosugi",sans-serif',
 					'font-family-key' => 'Kosugi',
-					'web-fonts'       => 'google',
 				),
 			);
 			return apply_filters( 'vk_font_family_array', $fonts_array );
@@ -595,6 +595,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 			// 動的に書き出すCSS情報
 			$selected_fonts_info['dynamic_css'] = $dynamic_css;
+
 			// ウェブフォントが使用されていた場合のウェブフォント情報（ウェブフォントを取得するため）
 			$selected_fonts_info['selected_webFonts'] = $selected_webFonts;
 			return $selected_fonts_info;
