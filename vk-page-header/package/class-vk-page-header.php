@@ -5,21 +5,22 @@ https://github.com/vektor-inc/vektor-wp-libraries
 にあります。修正の際は上記リポジトリのデータを修正してください。
 */
 
-/*-------------------------------------------*/
-/*  Template Tags
-/*		is_theme()
-/*		default_option()
-/*		options_load()
-/*		get_page_for_posts()
-/*		get_post_type()
-/*		get_all_post_types_info()
-/*		header_image_url()
-/*-------------------------------------------*/
-/*  Customizer
-/*-------------------------------------------*/
-/*  page meta box
-/*-------------------------------------------*/
-/*  print head style
+/*
+  Template Tags
+-------------------------------------------*/
+/*
+	  is_theme()
+	  default_option()
+	  options_load()
+	  get_page_for_posts()
+	  get_post_type()
+	  get_all_post_types_info()
+	  header_image_url()
+/*
+/*
+  Customizer
+  page meta box
+  print head style
 /*-------------------------------------------*/
 
 
@@ -39,11 +40,13 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 		}
 
-		/*-------------------------------------------*/
-		/*  Template Tags
+
+		/*
+		  Template Tags
 		/*-------------------------------------------*/
 
-		/*	テーマで使用されているかプラグインで使用されているか
+		/*
+		  テーマで使用されているかプラグインで使用されているか
 		/*		is_theme()
 		/*-------------------------------------------*/
 		public static function is_theme() {
@@ -56,7 +59,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			}
 		}
 
-		/*		default_option()
+		/*
+			  default_option()
 		/*-------------------------------------------*/
 		public static function default_option() {
 
@@ -64,7 +68,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			return $option = apply_filters( 'vk_page_header_default_option', $vk_page_header_default );
 		}
 
-		/*		options_load()
+		/*
+			  options_load()
 		/*-------------------------------------------*/
 		public static function options_load() {
 
@@ -73,14 +78,14 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 			// オプション値が存在しているが空の場合はデフォルトオプションを返す
 			// if ( is_array( $option ) && ! isset( $option['image_basic'] ) ) {
-			// 	global $vk_page_header_default_bg_url;
-			// 	$option['image_basic'] = $vk_page_header_default_bg_url;
+			// global $vk_page_header_default_bg_url;
+			// $option['image_basic'] = $vk_page_header_default_bg_url;
 			// }
-
 			return $option;
 		}
 
-		/*  	Chack use post top page
+		/*
+			  Chack use post top page
 		/*		get_page_for_posts()
 		/*-------------------------------------------*/
 		public static   function get_page_for_posts() {
@@ -96,7 +101,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			return $page_for_posts;
 		}
 
-		/*  	Chack post type info
+		/*
+			  Chack post type info
 		/*		get_post_type()
 		/*-------------------------------------------*/
 		public static function get_post_type() {
@@ -144,11 +150,12 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			return $postType;
 		}
 
-		/*		get_all_post_types_info()
+		/*
+			  get_all_post_types_info()
 		/*-------------------------------------------*/
 		public static function get_all_post_types_info() {
 
-			//gets all custom post types set PUBLIC
+			// gets all custom post types set PUBLIC
 			$args = array(
 				'public' => true,
 				// '_builtin' => false,
@@ -164,7 +171,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			return $custom_types_labels;
 		}
 
-		/*		header_image_url()
+		/*
+			  header_image_url()
 		/*-------------------------------------------*/
 		public static function header_image_url() {
 
@@ -225,8 +233,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		}
 
 
-		/*-------------------------------------------*/
-		/*  Customizer
+		/*
+		  Customizer
 		/*-------------------------------------------*/
 		public function customize_register( $wp_customize ) {
 
@@ -331,7 +339,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				)
 			);
 
-			/*	background common image
+			/*
+			  background common image
 			--------------------------------------------- */
 			$wp_customize->add_setting(
 				'vk_page_header[image_basic]', array(
@@ -352,7 +361,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				)
 			);
 
-			/*	background post type image
+			/*
+			  background post type image
 			--------------------------------------------- */
 			$custom_types = Vk_Page_Header::get_all_post_types_info();
 			foreach ( $custom_types as $name => $label ) {
@@ -388,8 +398,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 		}
 
-		/*-------------------------------------------*/
-		/*  page meta box
+		/*
+		  page meta box
 		/*-------------------------------------------*/
 		/* static にすると環境によってmetabox内のコールバック関数が反応しない */
 		public function add_pagehead_setting_meta_box() {
@@ -425,8 +435,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			return $custom_fields_array;
 		} // custom_fields_array(){
 
-		/*-------------------------------------------*/
-		/*  print head style
+		/*
+		  print head style
 		/*-------------------------------------------*/
 
 		public function dynamic_header_css() {
