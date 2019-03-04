@@ -1,6 +1,6 @@
 <?php
-/*-------------------------------------------*/
-/*  Load modules ( master config )
+/*
+  Load modules ( master config )
 /*-------------------------------------------*/
 if ( ! class_exists( 'Vk_Page_Header' ) ) {
 	require_once( 'vk-page-header/class-vk-page-header.php' );
@@ -11,6 +11,9 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 	global $vk_page_header_output_class;
 	$vk_page_header_output_class = '.page-header';
+
+	global $vk_page_header_inner_class;
+	$vk_page_header_inner_class = '.page-header h1.page-header_pageTitle,.page-header div.page-header_pageTitle';
 
 	global $vk_page_header_default;
 	$vk_page_header_default = array(

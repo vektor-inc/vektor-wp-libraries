@@ -25,10 +25,49 @@ https://github.com/vektor-inc/vektor-wp-libraries
 
 
 if ( ! class_exists( 'Vk_Page_Header' ) ) {
+
+	/*
+	  customize_register
+	/*-------------------------------------------*/
+	add_action( 'customize_register', 'vk_page_header_customize_register' );
+	function vk_page_header_customize_register( $wp_customize ) {
+
+		/*
+		  Add text control description
+		/*-------------------------------------------*/
+		class Vk_Page_Header_Custom_Text_Control extends WP_Customize_Control {
+			public $type         = 'customtext';
+			public $description  = ''; // we add this for the extra description
+			public $input_before = '';
+			public $input_after  = '';
+			public function render_content() {
+			?>
+			<label>
+				<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
+				<?php $style = ( $this->input_before || $this->input_after ) ? ' style="width:50%"' : ''; ?>
+				<div>
+				<?php echo wp_kses_post( $this->input_before ); ?>
+				<?php
+				if ( $this->type == 'test' ) {
+					$type = 'text';
+				} elseif ( $this->type == 'number' ) {
+					$type = 'number';
+				}
+					?>
+				<input type="<?php echo $type; ?>" value="<?php echo esc_attr( $this->value() ); ?>"<?php echo $style; ?> <?php $this->link(); ?> />
+				<?php echo wp_kses_post( $this->input_after ); ?>
+				</div>
+				<div><?php echo $this->description; ?></div>
+			</label>
+			<?php
+			} // public function render_content() {
+		} // class Vk_Page_Header_Custom_Text_Control extends WP_Customize_Control
+	}
+
 	class Vk_Page_Header {
 
 
-		public static $version     = '0.0.0';
+		public static $version     = '0.1.0';
 		private static $post_types = array( 'post' => 0 );
 
 		public function __construct() {
@@ -63,7 +102,6 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			  default_option()
 		/*-------------------------------------------*/
 		public static function default_option() {
-
 			global $vk_page_header_default;
 			return $option = apply_filters( 'vk_page_header_default_option', $vk_page_header_default );
 		}
@@ -339,6 +377,29 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				)
 			);
 
+			// text position
+			$wp_customize->add_setting(
+				'vk_page_header[text_margin]', array(
+					'default'           => '',
+					'type'              => 'option',
+					'capability'        => 'edit_theme_options',
+					'sanitize_callback' => 'esc_attr',
+				)
+			);
+
+			$wp_customize->add_control(
+				new Vk_Page_Header_Custom_Text_Control(
+					$wp_customize, 'text_margin', array(
+						'label'       => __( 'Text margin (top and bottom)', 'vk_page_header_textdomain' ),
+						'section'     => 'vk_page_header_setting',
+						'settings'    => 'vk_page_header[text_margin]',
+						'type'        => 'number',
+						'description' => '',
+						'input_after' => 'em',
+					)
+				)
+			);
+
 			/*
 			  background common image
 			--------------------------------------------- */
@@ -441,44 +502,68 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 		public function dynamic_header_css() {
 
-			// ページヘッダーPC画像設定
+			/*
+			アウター部分のCSS
+			/*-------------------------------------------*/
 			if ( ! is_front_page() ) {
 
-				$dynamic_css = '';
+				$title_outer_dynamic_css = '';
 
 				$options = self::options_load();
 
 				if ( isset( $options['text_color'] ) && $options['text_color'] ) {
-					$dynamic_css .= 'color:' . $options['text_color'] . ';';
+					$title_outer_dynamic_css .= 'color:' . $options['text_color'] . ';';
 				}
 
 				if ( isset( $options['text_shadow_color'] ) && $options['text_shadow_color'] ) {
-					$dynamic_css .= 'text-shadow:0px 0px 10px ' . $options['text_shadow_color'] . ';';
+					$title_outer_dynamic_css .= 'text-shadow:0px 0px 10px ' . $options['text_shadow_color'] . ';';
 				}
 
 				if ( isset( $options['text_align'] ) && $options['text_align'] ) {
 					// left 指定の場合は出力しないようにしたかったが、中央揃えがデフォルトのスキンもあるので、leftでもcss出力
 					// if ( $options['text_align'] != 'left' ){
-					$dynamic_css .= 'text-align:' . $options['text_align'] . ';';
+					$title_outer_dynamic_css .= 'text-align:' . $options['text_align'] . ';';
 					// }
 				}
 
 				if ( isset( $options['bg_color'] ) && $options['bg_color'] ) {
-					$dynamic_css .= 'background-color:' . $options['bg_color'] . ';';
+					$title_outer_dynamic_css .= 'background-color:' . $options['bg_color'] . ';';
 				}
 
 				// ヘッダー背景画像URL取得
 				$image_url = self::header_image_url();
 				if ( $image_url ) {
-					$dynamic_css .= 'background: url(' . esc_url( $image_url ) . ') no-repeat 50% center;';
-					$dynamic_css .= 'background-size: cover;';
+					$title_outer_dynamic_css .= 'background: url(' . esc_url( $image_url ) . ') no-repeat 50% center;';
+					$title_outer_dynamic_css .= 'background-size: cover;';
+				}
+
+				// アウター部分のセレクタと結合
+				if ( $title_outer_dynamic_css ) {
+					// 対象とするclass名を取得
+					global $vk_page_header_output_class;
+					$title_outer_dynamic_css = $vk_page_header_output_class . '{' . $title_outer_dynamic_css . '}';
+
+				}
+
+				/*
+				テキスト部分のCSS
+				/*-------------------------------------------*/
+				$title_text_dynamic_css = '';
+				if ( isset( $options['text_margin'] ) && $options['text_margin'] ) {
+					// if ( $options['text_align'] != 'left' ){
+					$title_text_dynamic_css .= 'margin-top:' . $options['text_margin'] . 'em;';
+					$title_text_dynamic_css .= 'margin-bottom:calc( ' . $options['text_margin'] . 'em - 0.1em );';
+
+					if ( $title_text_dynamic_css ) {
+						global $vk_page_header_inner_class;
+						$title_text_dynamic_css = $vk_page_header_inner_class . '{' . $title_text_dynamic_css . '}';
+					}
 				}
 
 				// CSS が存在している場合のみ出力
-				if ( $dynamic_css ) {
-					// 対象とするclass名を取得
-					global $vk_page_header_output_class;
-					$dynamic_css = $vk_page_header_output_class . '{' . $dynamic_css . '}';
+				if ( $title_outer_dynamic_css || $title_text_dynamic_css ) {
+
+					$dynamic_css = $title_outer_dynamic_css . $title_text_dynamic_css;
 
 					// delete before after space
 					$dynamic_css = trim( $dynamic_css );
@@ -486,6 +571,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					$dynamic_css = preg_replace( '/[\n\r\t]/', '', $dynamic_css );
 					// Change multiple spaces to single space
 					$dynamic_css = preg_replace( '/\s(?=\s)/', '', $dynamic_css );
+
+					$dynamic_css = '/* page header */' . $dynamic_css;
 
 					// 出力を実行
 					wp_add_inline_style( 'lightning-design-style', $dynamic_css );
