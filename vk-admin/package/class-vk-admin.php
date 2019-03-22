@@ -72,6 +72,14 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 			$lang    = ( get_locale() == 'ja' ) ? 'ja' : 'en';
 
 			$banner .= '<div class="vk-admin-banner">';
+			if ( $lang == 'ja' ) {
+				$banner .= '<a class="admin_banner" href="https://recruit.vektor-inc.co.jp/?rel=vkadmin" target="_blank">';
+				$banner .= '<img src="' . $dir_url . 'images/admin_banner_recruit.jpg" alt="[ Vektor,Inc. 採用情報 ]" />';
+				$banner .= '</a>';
+			} else {
+				$banner .= '<a href="https://lightning.nagoya/lightning_copyright_customizer/?rel=vkadmin" target="_blank" class="button button-primary button-primary button-block" style="margin-bottom:1em;">Lightning Copyright Customizer <span class="screen-reader-text">(opens in a new tab)</span><span aria-hidden="true" class="dashicons dashicons-external" style="position:relative;top:3px;"></span></a>';
+			}
+
 			$banner .= '<div class="vk-admin-banner-grid">';
 
 			// プラグイン Link Target Controller を有効化していない人にバナーを表示
