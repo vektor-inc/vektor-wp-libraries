@@ -235,9 +235,9 @@ if ( ! function_exists( 'vk_get_page_description' ) ) {
 		 " esc_attr でエスケープを実施する
 		本来ショートコードが出る場合は適切に抜粋欄に記入して運用でカバーする。
 		*/
+		// この関数は get_the_ ではないので関数内では esc_attr() は行わない
 		$page_description = strip_tags( $page_description );
 		$page_description = strip_shortcodes( $page_description );
-		$page_description = esc_attr( $page_description );
 
 		if ( is_singular() ) {
 			$page_description = mb_substr( $page_description, 0, 240 ); // kill tags and trim 240 chara
