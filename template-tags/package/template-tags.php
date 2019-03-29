@@ -221,6 +221,7 @@ if ( ! function_exists( 'vk_get_page_description' ) ) {
 		if ( $paged != '0' ) {
 			$page_description = '[' . sprintf( __( 'Page of %s', 'vkExUnit' ), $paged ) . '] ' . $page_description;
 		}
+		// This filter (vkExUnit_pageDescriptionCustom) is deprecated.
 		$page_description = apply_filters( 'vkExUnit_pageDescriptionCustom', $page_description );
 
 		/*
