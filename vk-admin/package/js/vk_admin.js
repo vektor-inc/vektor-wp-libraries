@@ -25,14 +25,14 @@ jQuery(document).ready(function($){
             return;
         }
         custom_uploader = wp.media({
-            title: 'Choose Image',
+            // title: 'Choose Image',
             // 以下のコメントアウトを解除すると画像のみに限定される。 → されないみたい
             library: {
                 type: 'image'
             },
-            button: {
-                text: 'Choose Image'
-            },
+            // button: {
+            //     text: 'Choose Image'
+            // },
             multiple: false, // falseにすると画像を1つしか選択できなくなる
         });
         custom_uploader.on('select', function() {
