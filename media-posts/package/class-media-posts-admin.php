@@ -26,7 +26,7 @@ class Lightning_Media_Admin {
 		global $system_name;
 
 		$wp_customize->add_section(
-			'lightning_archive_layout', array(
+			'vk_post_type_archive', array(
 				'title'    => $customize_section_name . __( 'Archive Layouts', 'vk_media_posts_textdomain' ),
 				'priority' => 800,
 			)
@@ -68,13 +68,33 @@ class Lightning_Media_Admin {
 			$wp_customize->add_control(
 				'ltg_media_unit_archive_loop_layout[' . $type . ']', array(
 					'label'    => sprintf( __( 'Archive Page Layout [ %s ]', 'vk_media_posts_textdomain' ), $post_types_labels[ $type ] ),
-					'section'  => 'lightning_archive_layout',
+					'section'  => 'vk_post_type_archive',
 					'settings' => 'ltg_media_unit_archive_loop_layout[' . $type . ']',
 					'type'     => 'select',
 					'choices'  => $layouts,
 					'priority' => 500,
 				)
 			);
+
+			$wp_customize->add_setting(
+				'vk_post_type_archive_count[' . $type . ']', array(
+					'default'           => null,
+					'type'              => 'option',
+					'capability'        => 'edit_theme_options',
+					'sanitize_callback' => 'vk_sanitize_number',
+				)
+			);
+			$wp_customize->add_control(
+				'vk_post_type_archive_count[' . $type . ']', array(
+					'label'    => sprintf( __( 'Post counts per pages [ %s ]', 'vk_media_posts_textdomain' ), $post_types_labels[ $type ] ),
+					'section'  => 'vk_post_type_archive',
+					'settings' => 'vk_post_type_archive_count[' . $type . ']',
+					'type'     => 'number',
+					'choices'  => $layouts,
+					'priority' => 500,
+				)
+			);
+
 		}
 
 		return $wp_customize;

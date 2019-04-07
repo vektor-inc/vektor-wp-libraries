@@ -224,9 +224,6 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 			}
 		}
 
-
-
-
 		/*
 		  実行
 		/*-------------------------------------------*/
@@ -252,6 +249,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 			} else {
 				require_once( 'class-media-posts-widget.php' );
 			}
+
 		}
 
 	} // class Lightning_media_posts
@@ -314,5 +312,55 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 
 			echo '</div>';
 		}
+	}
+
+	/*
+		posts_per_page_custom
+	/*-------------------------------------------*/
+	add_action( 'pre_get_posts', 'lmu_posts_per_page_custom' );
+	function lmu_posts_per_page_custom( $query ) {
+
+		if ( is_admin() || ! $query->is_main_query() ) {
+			 return;
+		}
+
+		// アーカイブの時以外は関係ないので return
+		if ( ! $query->is_archive() && ! $query->is_home() ) {
+			return;
+		}
+
+		// アーカイブページのっ表示件数情報を取得
+		$archive_count = get_option( 'vk_post_type_archive_count' );
+
+		if ( $query->is_home() && ! $query->is_front_page() && ! empty( $archive_count['post'] ) ) {
+				return $query->set( 'posts_per_page', $archive_count['post'] );
+		}
+
+		// authhor archive
+		if ( $query->is_author() && ! empty( $archive_count['author'] ) ) {
+			return $query->set( 'posts_per_page', $archive_count['author'] );
+		}
+
+		if ( $query->is_archive() ) {
+
+			$page_for_posts['post_top_id'] = get_option( 'page_for_posts' );
+
+			// post_type_archive & is_date and other
+			if ( ! empty( $query->query_vars['post_type'] ) ) {
+				return $query->set( 'posts_per_page', $archive_count[ $query->query_vars['post_type'] ] );
+			}
+
+			// カスタム分類アーカイブ
+			if ( ! empty( $query->tax_query->queries ) ) {
+				$taxonomy  = $query->tax_query->queries[0]['taxonomy'];
+				$post_type = get_taxonomy( $taxonomy )->object_type[0];
+				if ( ! empty( $archive_count[ $post_type ] ) ) {
+					return $query->set( 'posts_per_page', $archive_count[ $post_type ] );
+				}
+			}
+		}
+
+		return $query;
+
 	}
 } // if ( ! class_exists( 'Lightning_media_posts' ) )
