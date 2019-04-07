@@ -103,7 +103,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 			echo $select_html;
 		}
 
-		//get label names from theme options & translation file (if)
+		// get label names from theme options & translation file (if)
 		public static function labelNames() {
 
 			$post_types_labels = array(
@@ -116,7 +116,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 
 		public static function get_custom_types() {
 
-			//gets all custom post types set PUBLIC
+			// gets all custom post types set PUBLIC
 			$args = array(
 				'public'   => true,
 				'_builtin' => false,
@@ -125,15 +125,14 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 			$custom_types = get_post_types( $args, 'names' );
 
 			// foreach ($custom_types as $name => $slug) {
-			//  	$custom_types[ $name ] = 0;
+			// $custom_types[ $name ] = 0;
 			// }
-
 			return $custom_types;
 		}
 
 		public static function get_custom_types_labels() {
 
-			//gets all custom post types set PUBLIC
+			// gets all custom post types set PUBLIC
 			$args = array(
 				'public'   => true,
 				'_builtin' => false,
@@ -149,8 +148,8 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 			return $custom_types_labels;
 		}
 
-		/*-------------------------------------------*/
-		/*  Widgets init
+		/*
+		  Widgets init
 		/*-------------------------------------------*/
 		static function widgets_init() {
 
@@ -213,8 +212,8 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 			endif;
 		}
 
-		/*-------------------------------------------*/
-		/*  Add media unit css
+		/*
+		  Add media unit css
 		/*-------------------------------------------*/
 
 		static function print_css() {
@@ -225,8 +224,11 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 			}
 		}
 
-		/*-------------------------------------------*/
-		/*  実行
+
+
+
+		/*
+		  実行
 		/*-------------------------------------------*/
 
 		public function __construct() {
@@ -257,8 +259,10 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 	new Lightning_media_posts();
 	Lightning_media_posts::init();
 
-	/*-------------------------------------------*/
-	/*  Archive Loop change
+	/*
+	-------------------------------------------*/
+	/*
+	  Archive Loop change
 	/*-------------------------------------------*/
 	/* アーカイブループのレイアウトを改変するかどうかの判定 */
 	function lmu_is_loop_layout_change_flag( $post_type = 'post', $flag = false ) {
@@ -290,9 +294,8 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 	// 発火不良の時用
 	// add_action( 'after_setup_theme', 'lmu_do_loop_layout_change_trigger' );
 	// function lmu_do_loop_layout_change_trigger() {
-	// 	add_action( 'lightning_extend_loop', 'lmu_do_loop_layout_change' );
+	// add_action( 'lightning_extend_loop', 'lmu_do_loop_layout_change' );
 	// }
-
 	add_action( 'lightning_extend_loop', 'lmu_do_loop_layout_change' );
 	function lmu_do_loop_layout_change() {
 
