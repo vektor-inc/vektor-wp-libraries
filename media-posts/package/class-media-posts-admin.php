@@ -2,7 +2,7 @@
 
 class Lightning_Media_Admin {
 
-	//controls post types that can be displayed with grid layout on front-end (archives list pages)
+	// controls post types that can be displayed with grid layout on front-end (archives list pages)
 	private static $post_types        = array( 'post' => 0 );
 	private static $post_types_labels = array();
 
@@ -10,11 +10,10 @@ class Lightning_Media_Admin {
 
 		// Add a link to this plugin's settings page
 		// add_filter('plugin_action_links_'.LTG_MEDIA_BASENAME , array( __CLASS__, 'set_plugin_meta'), 10, 1);
-
-		//gets custom post types too
+		// gets custom post types too
 		self::$post_types = Lightning_media_posts::get_custom_types() + self::$post_types;
 
-		//all labels
+		// all labels
 		self::$post_types_labels = Lightning_media_posts::labelNames() + Lightning_media_posts::get_custom_types_labels();
 
 		add_action( 'customize_register', array( __CLASS__, 'archive_layout_customize_register' ) );
@@ -57,6 +56,7 @@ class Lightning_Media_Admin {
 		}
 
 		foreach ( $post_types as $type => $value ) {
+
 			$wp_customize->add_setting(
 				'ltg_media_unit_archive_loop_layout[' . $type . ']', array(
 					'default'           => 'default',

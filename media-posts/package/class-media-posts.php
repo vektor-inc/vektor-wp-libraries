@@ -259,8 +259,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 	new Lightning_media_posts();
 	Lightning_media_posts::init();
 
-	/*
-	-------------------------------------------*/
+
 	/*
 	  Archive Loop change
 	/*-------------------------------------------*/
