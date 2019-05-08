@@ -55,7 +55,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 		}
 
 		public static function form_required() {
-			$required = '<span class="required">必須</span>';
+			$required = '<span class="required">' . __( 'Required', 'custom_field_builder_textdomain' ) . '</span>';
 			return $required;
 		}
 
@@ -182,7 +182,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					}
 				}
 				if ( $value['description'] ) {
-					$form_html .= '<div class="description">' . apply_filters( 'the_content', $value['description'] ) . '</div>';
+					$form_html .= '<div class="description">' . wp_kses_post( $value['description'] ) . '</div>';
 				}
 				$form_html .= '</td></tr>';
 			}
