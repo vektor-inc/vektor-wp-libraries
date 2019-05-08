@@ -13,7 +13,7 @@ https://github.com/vektor-inc/vektor-wp-libraries
 
 class VK_Custom_Field_Builder_Flexible_Table {
 
-	public static $version = '0.0.0';
+	public static $version = '0.1.0';
 
 	/**
 	 * 入力フォームの生成
@@ -22,6 +22,10 @@ class VK_Custom_Field_Builder_Flexible_Table {
 	 * @return [type]                      [description]
 	 */
 	public static function form_table_flexible( $custom_fields_array ) {
+
+		// print '<pre style="text-align:left">';
+		// print_r( $custom_fields_array );
+		// print '</pre>';
 
 		$nonce_name = 'noncename__' . $custom_fields_array['field_name'];
 		wp_nonce_field( wp_create_nonce( __FILE__ ), $nonce_name );
@@ -44,7 +48,7 @@ class VK_Custom_Field_Builder_Flexible_Table {
 
 		$form_table .= '<thead><tr><th></th><th></th>';
 		foreach ( $custom_fields_array['items'] as $key => $value ) {
-			$form_table .= '<th>' . esc_html( $value['label'] ) . '</th>';
+			$form_table .= '<th class="cell-' . $key . '">' . esc_html( $value['label'] ) . '</th>';
 		}
 		$form_table .= '<th></th>';
 		$form_table .= '</tr></thead>';
@@ -83,12 +87,40 @@ class VK_Custom_Field_Builder_Flexible_Table {
 			// 列をループ
 			foreach ( $custom_fields_array['items'] as $field_key => $value ) {
 				// $bill_item_value[ $sub_field ] = ( isset( $value[ $sub_field ] ) ) ? $value[ $sub_field ] : '';
-				$form_table .= '<td class="cell-' . $key . '">';
-				$form_table .= '<input class="flexible-field-item" type="text" id="' . $custom_fields_array['field_name'] . '[' . $key . '][' . $field_key . ']" name="' . $custom_fields_array['field_name'] . '[' . $key . '][' . $field_key . ']" value="' . esc_attr( $fields_value[ $key ][ $field_key ] ) . '"></td>';
-			}
+				$form_table .= '<td class="cell-' . $field_key . '">';
+
+				$id          = $custom_fields_array['field_name'] . '[' . $key . '][' . $field_key . ']';
+				$name        = $custom_fields_array['field_name'] . '[' . $key . '][' . $field_key . ']';
+				$input_value = $fields_value[ $key ][ $field_key ];
+
+				if ( $value['type'] == 'textarea' ) {
+					$form_table .= '<textarea class="flexible-field-item" class="cf_textarea_wysiwyg" name="' . $id . '" cols="100" rows="3">' . wp_kses_post( $input_value ) . '</textarea>';
+
+				} elseif ( $value['type'] == 'select' ) {
+					$form_table .= '<select id="' . $id . '" class="flexible-field-item" name="' . $name . '"  >';
+
+					foreach ( $value['options'] as $option_value => $option_label ) {
+						if ( $input_value == $option_value ) {
+							$selected = ' selected="selected"';
+						} else {
+							$selected = '';
+						}
+
+						$form_table .= '<option value="' . esc_attr( $option_value ) . '"' . $selected . '>' . esc_html( $option_label ) . '</option>';
+					}
+					$form_table .= '</select>';
+
+				} elseif ( isset( $value['type'] ) && $value['type'] == 'datepicker' ) {
+					$form_table .= '<input class="flexible-field-item datepicker" type="text" id="' . $id . '" name="' . $name . '" value="' . esc_attr( $input_value ) . '" size="70">';
+				} else {
+					$form_table .= '<input class="flexible-field-item" type="text" id="' . $id . '" name="' . $name . '" value="' . esc_attr( $input_value ) . '">';
+				}
+
+				$form_table .= '</td>';
+			} // foreach ( $custom_fields_array['items'] as $field_key => $value ) {
 			$form_table .= '<td class="cell-control">
-			<input type="button" class="add-row button button-primary" value="行を追加" />
-			<input type="button" class="del-row button" value="行を削除" />
+			<input type="button" class="add-row button button-primary" value="＋" />
+			<input type="button" class="del-row button" value="-" />
 			</td>';
 			$form_table .= '</tr>';
 		}
