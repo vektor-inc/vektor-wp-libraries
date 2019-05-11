@@ -66,7 +66,7 @@ if ( ! class_exists( 'Ltg_Media_Post_View' ) ) {
 			echo  ( $thumbnail ) ? $thumbnail : '<img src="' . $thumbnail_src . '" alt="NO IMAGE" />';
 			echo '</div>';
 			// ※アーカイブページの場合はこのメソッドが呼び出される時点で instance に数字が入っているで、ここの数字を変更しても反映されない
-			$days  = isset( $instance['new_icon_display'] ) ? $instance['new_icon_display'] : 7; //Newを表示させたい期間の日数
+			$days  = isset( $instance['new_icon_display'] ) ? $instance['new_icon_display'] : 7; // Newを表示させたい期間の日数
 			$today = date_i18n( 'U' );
 			$entry = get_the_time( 'U' );
 			$kiji  = date( 'U', ( $today - $entry ) ) / 86400;
