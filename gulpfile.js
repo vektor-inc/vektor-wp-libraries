@@ -96,15 +96,15 @@ gulp.task('copy_post-type-manager', function() {
 		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/post-type-manager/package/'));
 });
 
-gulp.task('copy_call-to-action', function() {
-	gulp.src('./call-to-action/package/**')
-		.pipe(gulp.dest('../plugins/vk-call-to-action/inc/vk-call-to-action-package/'))
-		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/call-to-action/package/'));
-});
+// gulp.task('copy_call-to-action', function() {
+// 	gulp.src('./call-to-action/package/**')
+// 		.pipe(gulp.dest('../plugins/vk-call-to-action/inc/vk-call-to-action-package/'))
+// 		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/call-to-action/package/'));
+// });
 
 gulp.task('copy_template-tags', function() {
 	gulp.src('./template-tags/package/**')
-		.pipe(gulp.dest('../plugins/vk-call-to-action/inc/template-tags/'))
+		// .pipe(gulp.dest('../plugins/vk-call-to-action/inc/template-tags/'))
 		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/template-tags/'));
 });
 
@@ -131,9 +131,9 @@ gulp.task('watch_template-tags', function () {
 });
 
 
-gulp.task('watch_cta', function () {
-    gulp.watch('./call-to-action/package/**', ['copy_call-to-action']);
-});
+// gulp.task('watch_cta', function () {
+//     gulp.watch('./call-to-action/package/**', ['copy_call-to-action']);
+// });
 
 
 
@@ -162,7 +162,7 @@ gulp.task('copy_vk-admin', function() {
 	gulp.src('./vk-admin/package/**')
 		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/admin/vk-admin/package/'))
 		.pipe(gulp.dest('../plugins/vk-post-author-display/inc/vk-admin/'))
-		.pipe(gulp.dest('../plugins/vk-call-to-action/inc/vk-admin/'))
+		// .pipe(gulp.dest('../plugins/vk-call-to-action/inc/vk-admin/'))
 		.pipe(gulp.dest('../plugins/vk-link-target-controller/inc/vk-admin/'))
 		.pipe(gulp.dest('../plugins/wp-easy-responsive-tabs-to-accordion/vk-admin/'));
 });
