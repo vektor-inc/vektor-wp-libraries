@@ -97,11 +97,24 @@ if ( ! class_exists( 'Ltg_Media_Post_View' ) ) {
 			endif;
 			$media_post_item .= '<span class="vcard author"><span class="fn">' . get_the_author() . '</span></span>';
 			$media_post_item .= '</div>' . "\n"; // entry-meta
-			$media_post_item .= '<h4 class="media_post_title">' . esc_html( get_the_title() ) . '</h4>';
+
+			$allowed_html     = array(
+				'a'      => array(
+					'href'   => array(),
+					'class'  => array(),
+					'target' => array(),
+				),
+				'span'   => array( 'class' => array() ),
+				'b'      => array(),
+				'br'     => array(),
+				'strong' => array(),
+			);
+			$media_post_item .= '<h4 class="media_post_title">' . wp_kses( get_the_title(), $allowed_html ) . '</h4>';
 			$media_post_item .= '<p class="media_post_excerpt">' . esc_html( get_the_excerpt() ) . '</p>';
 			$media_post_item .= '</div>';
 			$media_post_item .= '</a>';
 			$media_post_item .= '</article>';
+			return $media_post_item;
 		}
 
 		public static function media_post_item( $media_post_class, $instance = '' ) {
