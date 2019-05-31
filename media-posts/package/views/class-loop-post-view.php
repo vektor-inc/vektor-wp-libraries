@@ -118,7 +118,7 @@ if ( ! class_exists( 'Ltg_Media_Post_View' ) ) {
 		}
 
 		public static function media_post_item( $media_post_class, $instance = '' ) {
-			echo Ltg_Media_Post_View::get_media_post_item( $media_post_class, $instance = '' );
+			echo wp_kses_posts( Ltg_Media_Post_View::get_media_post_item( $media_post_class, $instance = '' ) );
 		}
 
 	} // class Ltg_Media_Post_View {
