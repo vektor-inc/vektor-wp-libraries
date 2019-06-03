@@ -69,7 +69,7 @@ if ( ! class_exists( 'Ltg_Media_Post_View' ) ) {
 				$thumbnail_src  = VK_MEDIA_POSTS_URL . 'images/no-image.png';
 				$class_no_image = ' noimage';
 			}
-			$media_post_item .= '<div class="media_post_image' . $class_no_image . '" style="background-image:url(' . $thumbnail_src . ');">' . "\n";
+			$media_post_item .= '<div class="media_post_image' . $class_no_image . '" style="background-image:url(' . esc_url( $thumbnail_src ) . ');">' . "\n";
 			$thumbnail        = get_the_post_thumbnail( $post->ID, 'media_thumbnail' );
 			$media_post_item .= ( $thumbnail ) ? $thumbnail : '<img src="' . $thumbnail_src . '" alt="NO IMAGE" />';
 			$media_post_item .= '</div>';
@@ -118,7 +118,9 @@ if ( ! class_exists( 'Ltg_Media_Post_View' ) ) {
 		}
 
 		public static function media_post_item( $media_post_class, $instance = '' ) {
-			echo wp_kses_post( Ltg_Media_Post_View::get_media_post_item( $media_post_class, $instance = '' ) );
+			// wp_kses_post は background-url の画像URLにパラメーターがついた時に削除されてしまうため、
+			// 事前に他のタグで適時エスケープする
+			echo Ltg_Media_Post_View::get_media_post_item( $media_post_class, $instance = '' );
 		}
 
 	} // class Ltg_Media_Post_View {
