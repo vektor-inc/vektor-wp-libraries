@@ -17,7 +17,7 @@ if ( ! class_exists( 'Lightning_header_top' ) ) {
 		/*  実行
 		/*-------------------------------------------*/
 
-		static function init(){
+		static function init() {
 			if ( self::is_theme() ) {
 				define( 'LTG_HEADER_TOP_URL', get_template_directory_uri() . '/inc/header-top/' );
 				define( 'LTG_HEADER_TOP_DIR', dirname( __FILE__ ) );
@@ -135,7 +135,7 @@ if ( ! class_exists( 'Lightning_header_top' ) ) {
 			$vkExUnit_contact = get_option( 'vkExUnit_contact' );
 
 			if ( isset( $options['header_top_contact_txt'] ) && $options['header_top_contact_txt'] ) {
-				$btn_txt = esc_html( $options['header_top_contact_txt'] );
+				$btn_txt = wp_kses_post( $options['header_top_contact_txt'] );
 				// } elseif ( isset( $options['header_top_contact_txt'] ) && !$options['header_top_contact_txt'] ) {
 				// 	$btn_txt = '';
 				// } elseif ( !isset( $options['header_top_contact_txt'] ) && isset( $vkExUnit_contact['short_text'] ) ) {
@@ -167,7 +167,7 @@ if ( ! class_exists( 'Lightning_header_top' ) ) {
 					$icon = 'fa fa-envelope-o';
 				}
 
-				$contact_btn_html = '<div class="headerTop_contactBtn"><a href="' . $link_url . '" class="btn btn-primary"><i class="' . $icon . '"></i>' . $btn_txt . '</a></div>';
+				$contact_btn_html = '<div class="headerTop_contactBtn"><a href="' . $link_url . '" class="btn btn-primary"><i class="' . apply_filters( 'header_top_contact_icon_class', $icon ) . '"></i>' . $btn_txt . '</a></div>';
 				return $contact_btn_html;
 			}
 		}

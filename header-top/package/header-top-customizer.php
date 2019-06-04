@@ -79,7 +79,7 @@ function lightning_header_top_customize_register( $wp_customize ) {
 				'type'              => 'option',
 				'capability'        => 'edit_theme_options',
 				'transport'         => 'postMessage',
-				'sanitize_callback' => 'sanitize_text_field',
+				'sanitize_callback' => 'wp_kses_post', // sake for use i tags.
 			)
 		);
 		$wp_customize->add_control(
