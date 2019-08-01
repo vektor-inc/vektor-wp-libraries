@@ -312,7 +312,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 				}
 			} // if ( ! is_wp_error( $rss ) ) {
 
-			echo $output;
+			return $output;
 		}
 
 		public static function is_dashboard_active() {
@@ -348,7 +348,9 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 		}
 
 		public static function dashboard_widget_body() {
-			echo Vk_Admin::get_news_body();
+			if ( 'ja' == get_locale() ) {
+				echo Vk_Admin::get_news_body();
+			}
 			echo Vk_Admin::get_admin_banner();
 		}
 
@@ -361,9 +363,12 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 			if ( ! $display ) {
 				return;
 			}
-			$adminSub  = '<div class="adminSub scrTracking">' . "\n";
-			$adminSub .= '<div class="infoBox">' . Vk_Admin::get_news_body() . '</div>' . "\n";
+			$adminSub = '<div class="adminSub scrTracking">' . "\n";
+			if ( 'ja' == get_locale() ) {
+				$adminSub .= '<div class="infoBox">' . Vk_Admin::get_news_body() . '</div>' . "\n";
+			}
 			$adminSub .= '<div class="vk-admin-banner">' . Vk_Admin::get_admin_banner() . '</div>' . "\n";
+
 			$adminSub .= '</div><!-- [ /.adminSub ] -->' . "\n";
 			return $adminSub;
 		}
