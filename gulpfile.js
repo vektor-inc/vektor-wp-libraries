@@ -119,29 +119,29 @@ gulp.task('copy_custom-field-builder', function () {
     .pipe(gulp.dest('../themes/lightning-pro/inc/custom-field-builder/package/'));
 });
 gulp.task('watch_cf', function () {
-    gulp.watch('./custom-field-builder/package/**', ['copy_custom-field-builder']);
+    gulp.watch('./custom-field-builder/package/**', gulp.task('copy_custom-field-builder'));
 });
 gulp.task('watch_ptm', function () {
-    gulp.watch('./post-type-manager/package/**', ['copy_post-type-manager']);
+    gulp.watch('./post-type-manager/package/**', gulp.task('copy_post-type-manager'));
 });
 
 
 gulp.task('watch_template-tags', function () {
-    gulp.watch('./template-tags/package/**', ['copy_template-tags']);
+    gulp.watch('./template-tags/package/**', gulp.task('copy_template-tags'));
 });
 
 
 // gulp.task('watch_cta', function () {
-//     gulp.watch('./call-to-action/package/**', ['copy_call-to-action']);
+//     gulp.watch('./call-to-action/package/**', gulp.task('copy_call-to-action'));
 // });
 
 
 
 gulp.task('watch_full-title', function () {
-    gulp.watch('./vk-widget-full-wide-title/**', ['copy_full-title']);
+    gulp.watch('./vk-widget-full-wide-title/**', gulp.task('copy_full-title'));
 });
 
-// gulp.task('default', ['watch']);
+// gulp.task('default', gulp.task('watch'));
 
 /*-------------------------------------*/
 /*	vk admin
@@ -168,8 +168,8 @@ gulp.task('copy_vk-admin', function() {
 		.pipe(gulp.dest('../plugins/wp-easy-responsive-tabs-to-accordion/vk-admin/'));
 });
 gulp.task('watch_admin', function () {
-    gulp.watch('./vk-admin/package/_scss/**', ['sass_vk-admin']);
-    gulp.watch('./vk-admin/package/**', ['copy_vk-admin']);
+    gulp.watch('./vk-admin/package/_scss/**', gulp.task('sass_vk-admin'));
+    gulp.watch('./vk-admin/package/**', gulp.task('copy_vk-admin'));
 });
 
 /*-------------------------------------*/
@@ -181,7 +181,7 @@ gulp.task('copy_copyright-custom', function () {
 		.pipe(gulp.dest('../themes/lightning-pro/inc/copyright-customizer/package/'));
 });
 gulp.task('watch_copyright', function () {
-    gulp.watch('./copyright-customizer/package/**', ['copy_copyright-custom']);
+    gulp.watch('./copyright-customizer/package/**', gulp.task('copy_copyright-custom'));
 });
 /*-------------------------------------*/
 /*	Font
@@ -203,8 +203,8 @@ gulp.task('copy_font-selector', function () {
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-font-selector/package/'));
 });
 gulp.task('watch_font', function () {
-		gulp.watch('./vk-font-selector/package/**', ['copy_font-selector']);
-    gulp.watch('./vk-font-selector/package/_scss/**', ['sass_vk-font-selector']);
+		gulp.watch('./vk-font-selector/package/**', gulp.task('copy_font-selector'));
+    gulp.watch('./vk-font-selector/package/_scss/**', gulp.task('sass_vk-font-selector'));
 });
 
 /*-------------------------------------*/
@@ -238,10 +238,10 @@ gulp.task('copy_media-posts', function () {
         .pipe(gulp.dest('../themes/lightning-pro/tests/'));
 });
 gulp.task('watch_media', function () {
-		gulp.watch('./media-posts/package/_scss/**', ['sass_media-posts']);
-    gulp.watch('./media-posts/tests/**', ['copy_media-posts']);
-    gulp.watch('./media-posts/package/**', ['copy_media-posts']);
-    gulp.watch('./media-posts/package/**', ['copy_term-color']);
+		gulp.watch('./media-posts/package/_scss/**', gulp.task('sass_media-posts'));
+    gulp.watch('./media-posts/tests/**', gulp.task('copy_media-posts'));
+    gulp.watch('./media-posts/package/**', gulp.task('copy_media-posts'));
+    gulp.watch('./media-posts/package/**', gulp.task('copy_term-color'));
 });
 
 /*-------------------------------------*/
@@ -259,7 +259,7 @@ gulp.task('copy_term-color', function() {
 		// .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/term-color/'));
 });
 gulp.task('watch_term', function () {
-    gulp.watch('./term-color/package/**', ['copy_term-color']);
+    gulp.watch('./term-color/package/**', gulp.task('copy_term-color'));
 });
 
 /*-------------------------------------*/
@@ -285,8 +285,8 @@ gulp.task('copy_header-top', function() {
 		.pipe(gulp.dest('../themes/lightning-pro/inc/header-top/package'));
 });
 gulp.task('watch_header-top', function () {
-	gulp.watch('./header-top/package/_scss/**', ['sass_header-top']);
-  gulp.watch('./header-top/package/**', ['copy_header-top']);
+	gulp.watch('./header-top/package/_scss/**', gulp.task('sass_header-top'));
+  gulp.watch('./header-top/package/**', gulp.task('copy_header-top'));
 });
 
 
@@ -302,7 +302,7 @@ gulp.task('copy_font-awesome', function () {
         .pipe(gulp.dest('../plugins/vk-post-author-display/inc/font-awesome/'));
 });
 gulp.task('watch_fa', function () {
-    gulp.watch('./font-awesome/package/**', ['copy_font-awesome']);
+    gulp.watch('./font-awesome/package/**', gulp.task('copy_font-awesome'));
 });
 
 /*-------------------------------------*/
@@ -340,9 +340,9 @@ gulp.task('copy_vk-mobile-nav', function () {
 		.pipe(gulp.dest('../themes/seizen-souzoku/inc/vk-mobile-nav/'))
 });
 gulp.task('watch_mobile', function () {
-    gulp.watch('./vk-mobile-nav/package/_scss/**', ['sass_vk-mobile-nav']);
-    gulp.watch('./vk-mobile-nav/package/js/**', ['jsmin_vk-mobile-nav']);
-    gulp.watch('./vk-mobile-nav/package/**', ['copy_vk-mobile-nav']);
+    gulp.watch('./vk-mobile-nav/package/_scss/**', gulp.task('sass_vk-mobile-nav'));
+    gulp.watch('./vk-mobile-nav/package/js/**', gulp.task('jsmin_vk-mobile-nav'));
+    gulp.watch('./vk-mobile-nav/package/**', gulp.task('copy_vk-mobile-nav'));
 });
 
 /*-------------------------------------*/
@@ -366,8 +366,8 @@ gulp.task('copy_vk-mobile-fix-nav', function() {
 		.pipe(gulp.dest('../themes/seizen-souzoku/inc/vk-mobile-fix-nav/'))
 });
 gulp.task('watch_mobile-fix', function() {
-	gulp.watch('./vk-mobile-fix-nav/package/_scss/**', ['sass_vk-mobile-fix-nav']);
-	gulp.watch('./vk-mobile-fix-nav/package/**', ['copy_vk-mobile-fix-nav']);
+	gulp.watch('./vk-mobile-fix-nav/package/_scss/**', gulp.task('sass_vk-mobile-fix-nav'));
+	gulp.watch('./vk-mobile-fix-nav/package/**', gulp.task('copy_vk-mobile-fix-nav'));
 });
 
 /*-------------------------------------*/
@@ -383,7 +383,7 @@ gulp.task('copy_page-header', function () {
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-page-header/package/'));
 });
 gulp.task('watch_page-header', function () {
-    gulp.watch('./vk-page-header/package/**', ['copy_page-header', 'copy_custom-field-builder']);
+    gulp.watch('./vk-page-header/package/**', gulp.task('copy_page-header', 'copy_custom-field-builder'));
 });
 
 /*-------------------------------------*/
@@ -408,8 +408,7 @@ gulp.task('copy_widget-pr-content', function () {
 		// .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/vk-widget-pr-content/'))
 		// .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/vk-widget-pr-content/'))
 		// .pipe(gulp.dest('../plugins/lightning-skin-variety/inc/vk-widget-pr-content/'))
-		.pipe(gulp.dest('../plugins/lightning-pro/inc/vk-widget-pr-content/'))
-		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-widget-pr-content/'));
+		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-widget-pr-content/package/'));
 	gulp.src('./vk-widget-pr-content/tests/**')
 		// .pipe(gulp.dest('../plugins/lightning-skin-variety/tests/'))
 		// .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/tests/'))
@@ -420,9 +419,9 @@ gulp.task('copy_widget-pr-content', function () {
 		.pipe(gulp.dest('../themes/lightning-pro/tests/'));
 });
 gulp.task('watch_pr-content', function () {
-    gulp.watch('./vk-widget-pr-content/tests/**', ['copy_widget-pr-content']);
-    gulp.watch('./vk-widget-pr-content/package/_scss/**', ['sass_vk-widget-pr-content']);
-    // gulp.watch('./vk-widget-pr-content/package/**', ['copy_widget-pr-content', 'jsmin_jslibs', 'copy_jslibs']);
-    gulp.watch('./vk-widget-pr-content/package/**', ['copy_widget-pr-content']);
-    gulp.watch('./js-libraries/**', ['jsmin_jslibs', 'copy_jslibs']);
+    gulp.watch('./vk-widget-pr-content/tests/**', gulp.task('copy_widget-pr-content'));
+    gulp.watch('./vk-widget-pr-content/package/_scss/**', gulp.task('sass_vk-widget-pr-content'));
+    // gulp.watch('./vk-widget-pr-content/package/**', gulp.task('copy_widget-pr-content', 'jsmin_jslibs', 'copy_jslibs'));
+    gulp.watch('./vk-widget-pr-content/package/**', gulp.task('copy_widget-pr-content'));
+    gulp.watch('./js-libraries/**', gulp.parallel('jsmin_jslibs', 'copy_jslibs'));
 });
