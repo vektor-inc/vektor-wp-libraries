@@ -16,8 +16,6 @@
 /*-------------------------------------*/
 /*	page-header
 /*-------------------------------------*/
-/*	widget pr content
-/*-------------------------------------*/
 
 
 var gulp = require('gulp');
@@ -354,44 +352,4 @@ gulp.task('copy_page-header', function () {
 });
 gulp.task('watch_page-header', function () {
     gulp.watch('./vk-page-header/package/**', gulp.task('copy_page-header', 'copy_custom-field-builder'));
-});
-
-/*-------------------------------------*/
-/*	widget pr content
-/*-------------------------------------*/
-gulp.task('sass_vk-widget-pr-content', function () {
-    // gulp.src( '**/_scss/**/*.scss' )
-    gulp.src('vk-widget-pr-content/package/_scss/**/*.scss')
-        .pipe(plumber())
-        .pipe(sass())
-        .pipe(cmq({
-            log: true
-        }))
-        .pipe(autoprefixer())
-        .pipe(cleanCss())
-        .pipe(gulp.dest('./vk-widget-pr-content/package/css/'));
-});
-gulp.task('copy_widget-pr-content', function () {
-	gulp.src('./vk-widget-pr-content/package/**')
-		// .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/vk-widget-pr-content/'))
-		// .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/inc/vk-widget-pr-content/'))
-		// .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/vk-widget-pr-content/'))
-		// .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/vk-widget-pr-content/'))
-		// .pipe(gulp.dest('../plugins/lightning-skin-variety/inc/vk-widget-pr-content/'))
-		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-widget-pr-content/package/'));
-	gulp.src('./vk-widget-pr-content/tests/**')
-		// .pipe(gulp.dest('../plugins/lightning-skin-variety/tests/'))
-		// .pipe(gulp.dest('../plugins/lightning-skin-jpnstyle/tests/'))
-		// .pipe(gulp.dest('../plugins/lightning-skin-fort/tests/'))
-		// .pipe(gulp.dest('../plugins/lightning-skin-pale/tests/'))
-		// .pipe(gulp.dest('../plugins/lightning-origin-pro/tests/'))
-		.pipe(gulp.dest('../plugins/lightning-pro/tests/'))
-		.pipe(gulp.dest('../themes/lightning-pro/tests/'));
-});
-gulp.task('watch_pr-content', function () {
-    gulp.watch('./vk-widget-pr-content/tests/**', gulp.task('copy_widget-pr-content'));
-    gulp.watch('./vk-widget-pr-content/package/_scss/**', gulp.task('sass_vk-widget-pr-content'));
-    // gulp.watch('./vk-widget-pr-content/package/**', gulp.task('copy_widget-pr-content', 'jsmin_jslibs', 'copy_jslibs'));
-    gulp.watch('./vk-widget-pr-content/package/**', gulp.task('copy_widget-pr-content'));
-    gulp.watch('./js-libraries/**', gulp.parallel('jsmin_jslibs', 'copy_jslibs'));
 });
