@@ -22,7 +22,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 	global $vk_page_header_default_bg_url;
 	// このファイルがテーマで使われた場合の例
-	$vk_page_header_default_bg_url = get_template_directory_uri( '/inc/vk-page-header/images/header-sample.jpg' );
+	$vk_page_header_default_bg_url = get_template_directory_uri( '/inc/vk-page-header/package/images/header-sample.jpg' );
 	// プラグインの場合の例
 	$vk_page_header_default_bg_url = plugins_url( '/images/header-sample.jpg', __FILE__ );
 
