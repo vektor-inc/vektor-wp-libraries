@@ -296,9 +296,9 @@ gulp.task('watch_header-top', function () {
 gulp.task('copy_font-awesome', function () {
     gulp.src('./font-awesome/package/**')
         .pipe(gulp.dest('../themes/lightning/inc/font-awesome/package'))
-        // .pipe(gulp.dest('../themes/lightning-pro/inc/font-awesome/'))
+        .pipe(gulp.dest('../themes/lightning-pro/inc/font-awesome/package'))
         .pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/font-awesome/package/'))
-        .pipe(gulp.dest('../plugins/vk-blocks/inc/font-awesome/'))
+        .pipe(gulp.dest('../plugins/vk-blocks/inc/font-awesome/package'))
         .pipe(gulp.dest('../plugins/vk-post-author-display/inc/font-awesome/'));
 });
 gulp.task('watch_fa', function () {
