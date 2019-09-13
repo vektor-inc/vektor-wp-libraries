@@ -329,7 +329,7 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 			return;
 		}
 
-		// アーカイブページのっ表示件数情報を取得
+		// アーカイブページの表示件数情報を取得
 		$archive_count = get_option( 'vk_post_type_archive_count' );
 
 		if ( $query->is_home() && ! $query->is_front_page() && ! empty( $archive_count['post'] ) ) {
@@ -347,7 +347,11 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 
 			// post_type_archive & is_date and other
 			if ( ! empty( $query->query_vars['post_type'] ) ) {
-				return $query->set( 'posts_per_page', $archive_count[ $query->query_vars['post_type'] ] );
+				$post_type = $query->query_vars['post_type'];
+				if ( is_array( $post_type ) ) {
+					$post_type = current( $post_type );
+				}
+				return $query->set( 'posts_per_page', $archive_count[ $post_type ] );
 			}
 
 			// カスタム分類アーカイブ
