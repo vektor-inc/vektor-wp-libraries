@@ -217,33 +217,6 @@ gulp.task('watch_font', function () {
 });
 
 /*-------------------------------------*/
-/*	media posts
-/*-------------------------------------*/
-gulp.task('sass_media-posts', function () {
-	gulp.src('media-posts/package/_scss/**/*.scss')
-		.pipe(plumber())
-		.pipe(sass())
-		.pipe(cmq({
-		log: true
-		}))
-		.pipe(autoprefixer())
-		.pipe(cleanCss())
-		.pipe(gulp.dest('./media-posts/package/css/'));
-});
-gulp.task('copy_media', function () {
-    gulp.src('./media-posts/package/**')
-        .pipe(gulp.dest('../themes/lightning-pro/inc/media-posts/package'));
-    gulp.src('./media-posts/tests/**')
-        .pipe(gulp.dest('../themes/lightning-pro/tests/'));
-});
-gulp.task('watch_media', function () {
-		gulp.watch('./media-posts/package/_scss/**', gulp.task('sass_media-posts'));
-    gulp.watch('./media-posts/tests/**', gulp.task('copy_media'));
-    gulp.watch('./media-posts/package/**', gulp.task('copy_media'));
-    gulp.watch('./media-posts/package/**', gulp.task('copy_term-color'));
-});
-
-/*-------------------------------------*/
 /*	term color
 /*-------------------------------------*/
 gulp.task('copy_term-color', function() {
