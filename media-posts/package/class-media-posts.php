@@ -351,7 +351,9 @@ if ( ! class_exists( 'Lightning_media_posts' ) ) {
 				if ( is_array( $post_type ) ) {
 					$post_type = current( $post_type );
 				}
-				return $query->set( 'posts_per_page', $archive_count[ $post_type ] );
+				if ( isset( $archive_count[ $post_type ] ) ) {
+					return $query->set( 'posts_per_page', $archive_count[ $post_type ] );
+				}
 			}
 
 			// カスタム分類アーカイブ
