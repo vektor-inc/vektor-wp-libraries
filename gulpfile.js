@@ -262,6 +262,7 @@ gulp.task('copy_term-color', function() {
 		.pipe(gulp.dest('../plugins/vk-blocks/inc/term-color/package/'))
 		.pipe(gulp.dest('../themes/lightning-child-rerise/inc/term-color/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/term-color/package/'))
+		.pipe(gulp.dest('../themes/lightning/inc/term-color/package/'))
 });
 gulp.task('watch_term', function () {
     gulp.watch('./term-color/package/**', gulp.task('copy_term-color'));
