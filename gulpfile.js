@@ -98,12 +98,6 @@ gulp.task('copy_post-type-manager', function() {
 // 		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/call-to-action/package/'));
 // });
 
-gulp.task('copy_template-tags', function() {
-	gulp.src('./template-tags/package/**')
-		// .pipe(gulp.dest('../plugins/vk-call-to-action/inc/template-tags/'))
-		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/template-tags/'))
-		.pipe(gulp.dest('../plugins/vk-post-author-display/inc/template-tags/package/'));
-});
 
 /*-------------------------------------*/
 /*	Watch
@@ -123,9 +117,8 @@ gulp.task('watch_ptm', function () {
 });
 
 
-gulp.task('watch_template-tags', function () {
-    gulp.watch('./template-tags/package/**', gulp.task('copy_template-tags'));
-});
+
+
 
 
 // gulp.task('watch_cta', function () {
@@ -139,6 +132,22 @@ gulp.task('watch_full-title', function () {
 });
 
 // gulp.task('default', gulp.task('watch'));
+
+
+/*-------------------------------------*/
+/*	Template Tags
+/*-------------------------------------*/
+gulp.task('copy_template-tags', function() {
+	gulp.src('./template-tags/package/**')
+		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/template-tags/'))
+		.pipe(gulp.dest('../plugins/vk-post-author-display/inc/template-tags/package/'));
+	gulp.src('./template-tags/tests/**')
+		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/tests/'))
+		.pipe(gulp.dest('../plugins/vk-post-author-display/tests/'));
+});
+gulp.task('watch_tmpl', function () {
+    gulp.watch('./template-tags/package/**', gulp.task('copy_template-tags'));
+});
 
 /*-------------------------------------*/
 /*	vk admin
