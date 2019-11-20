@@ -101,7 +101,8 @@ gulp.task('copy_post-type-manager', function() {
 gulp.task('copy_template-tags', function() {
 	gulp.src('./template-tags/package/**')
 		// .pipe(gulp.dest('../plugins/vk-call-to-action/inc/template-tags/'))
-		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/template-tags/'));
+		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/template-tags/'))
+		.pipe(gulp.dest('../plugins/vk-post-author-display/inc/template-tags/package/'));
 });
 
 /*-------------------------------------*/
