@@ -17,6 +17,11 @@ https://github.com/vektor-inc/vektor-wp-libraries
 	vk_is_checked
 */
 
+if ( ! function_exists( 'vk_is_template_tags_exist' ) ) {
+	function vk_is_template_tags_exist() {
+		return true;
+	}
+}
 
 
 if ( ! function_exists( 'vk_is_excerpt' ) ) {
