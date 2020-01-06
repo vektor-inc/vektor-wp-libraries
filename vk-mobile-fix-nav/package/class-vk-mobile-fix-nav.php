@@ -57,9 +57,23 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			add_action( 'customize_register', array( $this, 'vk_mobil_fix_nav_customize_register' ) ); // $thisじゃないとエラーになる
 			add_filter( 'body_class', array( __CLASS__, 'add_body_class' ) );
 			add_action( 'wp_footer', array( __CLASS__, 'vk_mobil_fix_nav_html' ) );
+			add_action( 'widgets_init', array( __CLASS__, 'widgets_init' ) );
 			if ( wp_is_mobile() ) {
 				remove_action( 'wp_footer', 'veu_add_pagetop' );
 			}
+		}
+
+		public static function widgets_init(){
+			register_sidebar(
+				array(
+					'name'          => __( 'Widget area of mobile fix nav', 'lightning-pro' ),
+					'id'            => 'mobile-fix-nav-widget-area',
+					'before_widget' => '<aside class="mobile-fix-nav-widget %2$s" id="%1$s">',
+					'after_widget'  => '</aside>',
+					'before_title'  => '<h4 class="widget-title subSection-title">',
+					'after_title'   => '</h4>',
+				)
+			);
 		}
 
 		public static function default_options() {
@@ -537,6 +551,9 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 			?>
 			  <nav class="mobile-fix-nav">
+			  <?php if ( is_active_sidebar( 'mobile-fix-nav-widget-area' ) ) : ?>
+				<?php dynamic_sidebar( 'mobile-fix-nav-widget-area' ); ?>
+			<?php endif; ?>
 				<ul class="mobile-fix-nav-menu" style="background-color: <?php echo sanitize_hex_color( $nav_bg_color ); ?>;">
 
 						<?php
