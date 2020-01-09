@@ -262,7 +262,7 @@ gulp.task('watch_fa', function () {
 /*-------------------------------------*/
 gulp.task('sass_vk-mobile-nav', function () {
     // gulp.src( '**/_scss/**/*.scss' )
-    gulp.src('vk-mobile-nav/package/_scss/**/*.scss')
+    gulp.src('vk-mobile-nav/package/_scss/*.scss')
         .pipe(plumber())
         .pipe(sass())
         .pipe(cmq({
@@ -284,8 +284,8 @@ gulp.task('jsmin_vk-mobile-nav', function () {
 });
 gulp.task('copy_vk-mobile-nav', function () {
 	gulp.src('./vk-mobile-nav/package/**')
-		.pipe(gulp.dest('../themes/lightning/inc/vk-mobile-nav/'))
-		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-mobile-nav/'))
+		.pipe(gulp.dest('../themes/lightning/inc/vk-mobile-nav/package/'))
+		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-mobile-nav/package/'))
 		// .pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/vk-mobile-nav/'))
 		// .pipe(gulp.dest('../plugins/lightning-pro/inc/vk-mobile-nav/'))
 		.pipe(gulp.dest('../plugins/vk-mobile-nav/inc/vk-mobile-nav/'))

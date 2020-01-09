@@ -107,6 +107,7 @@ $margin-section-bottom:1.5em;
 			line-height: 1.65;
 			a {
 				padding: 0.7em 0.5em;
+				position: relative;
 				display:block; overflow:hidden;
 				&:hover {
 					text-decoration: none;
