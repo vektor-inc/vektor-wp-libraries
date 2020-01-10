@@ -137,16 +137,20 @@ gulp.task('watch_full-title', function () {
 /*-------------------------------------*/
 /*	Template Tags
 /*-------------------------------------*/
-gulp.task('copy_template-tags', function() {
-	gulp.src('./template-tags/package/**')
-		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/template-tags/'))
+gulp.task('c_tags', function(done) {
+    gulp.src('./template-tags/package/**')
+        .pipe(gulp.dest('../themes/katawara/inc/template-tags/'))
+		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/template-tags/package/'))
 		.pipe(gulp.dest('../plugins/vk-post-author-display/inc/template-tags/package/'));
-	gulp.src('./template-tags/tests/**')
+    gulp.src('./template-tags/tests/**')
+        .pipe(gulp.dest('../themes/katawara/inc/tests/'))
 		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/tests/'))
-		.pipe(gulp.dest('../plugins/vk-post-author-display/tests/'));
+        .pipe(gulp.dest('../plugins/vk-post-author-display/tests/'));
+    done();
 });
-gulp.task('watch_tmpl', function () {
-    gulp.watch('./template-tags/package/**', gulp.task('copy_template-tags'));
+gulp.task('w_tags', function (done) {
+    gulp.watch('./template-tags/package/**', gulp.task('c_tags'));
+    done();
 });
 
 /*-------------------------------------*/
@@ -189,6 +193,7 @@ gulp.task('copy_copyright-custom', function () {
 gulp.task('watch_copyright', function () {
     gulp.watch('./copyright-customizer/package/**', gulp.task('copy_copyright-custom'));
 });
+
 /*-------------------------------------*/
 /*	components
 /*-------------------------------------*/
@@ -200,11 +205,20 @@ gulp.task('copy_compo', function () {
 		.pipe(gulp.dest('../plugins/vk-blocks-pro/inc/vk-components/package/'));
 });
 gulp.task('watch_compo', function () {
-    // gulp.watch('vk-components/package/**', gulp.task('copy_compo'));
     gulp.watch('vk-components/package/**', gulp.task('copy_compo'));
 });
-
-
+/*-------------------------------------*/
+/*	components
+/*-------------------------------------*/
+gulp.task('c_mp', function (done) {
+    gulp.src('./vk-media-posts/package/**')
+        .pipe(gulp.dest('../themes/katawara/inc/vk-media-posts/package/'));
+        done();
+});
+gulp.task('w_mp', function (done) {
+    gulp.watch('vk-media-posts/package/**', gulp.task('c_mp'));
+    done();
+});
 
 /*-------------------------------------*/
 /*	Font
