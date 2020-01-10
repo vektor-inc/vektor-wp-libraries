@@ -193,15 +193,19 @@ gulp.task('watch_copyright', function () {
 /*	components
 /*-------------------------------------*/
 gulp.task('copy_compo', function () {
-	gulp.src('./vk-components/package/**')
+    gulp.src('./vk-components/package/**')
+        .pipe(gulp.dest('../themes/katawara/inc/vk-components/package/'))
 		.pipe(gulp.dest('../themes/lightning/inc/vk-components/package/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-components/package/'))
 		.pipe(gulp.dest('../plugins/vk-blocks-pro/inc/vk-components/package/'));
 });
 gulp.task('watch_compo', function () {
     // gulp.watch('vk-components/package/**', gulp.task('copy_compo'));
-    gulp.watch(['vk-components/package/**'], ['copy_compo']);
+    gulp.watch('vk-components/package/**', gulp.task('copy_compo'));
 });
+
+
+
 /*-------------------------------------*/
 /*	Font
 /*-------------------------------------*/
