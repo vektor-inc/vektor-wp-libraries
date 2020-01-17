@@ -197,6 +197,18 @@ gulp.task('watch_copyright', function () {
 /*-------------------------------------*/
 /*	components
 /*-------------------------------------*/
+gulp.task('sass_compo', function () {
+    // gulp.src( '**/_scss/**/*.scss' )
+    gulp.src('vk-components/package/_scss/*.scss')
+        .pipe(plumber())
+        .pipe(sass())
+        .pipe(cmq({
+            log: true
+        }))
+        .pipe(autoprefixer())
+        .pipe(cleanCss())
+        .pipe(gulp.dest('./vk-components/package/css/'));
+});
 gulp.task('copy_compo', function () {
     gulp.src('./vk-components/package/**')
         .pipe(gulp.dest('../themes/katawara/inc/vk-components/package/'))
@@ -205,10 +217,10 @@ gulp.task('copy_compo', function () {
 		.pipe(gulp.dest('../plugins/vk-blocks-pro/inc/vk-components/package/'));
 });
 gulp.task('watch_compo', function () {
-    gulp.watch('vk-components/package/**', gulp.task('copy_compo'));
+    gulp.watch('vk-components/package/**', gulp.series('sass_compo','copy_compo'));
 });
 /*-------------------------------------*/
-/*	components
+/*	media posts
 /*-------------------------------------*/
 gulp.task('c_mp', function (done) {
     gulp.src('./vk-media-posts/package/**')
