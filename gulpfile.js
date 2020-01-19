@@ -217,7 +217,7 @@ gulp.task('copy_compo', function () {
 		.pipe(gulp.dest('../plugins/vk-blocks-pro/inc/vk-components/package/'));
 });
 gulp.task('watch_compo', function () {
-    gulp.watch('vk-components/package/**', gulp.series('sass_compo','copy_compo'));
+    gulp.watch('vk-components/package/**', gulp.parallel('sass_compo','copy_compo'));
 });
 /*-------------------------------------*/
 /*	media posts
