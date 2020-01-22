@@ -197,7 +197,7 @@ gulp.task('watch_copyright', function () {
 /*-------------------------------------*/
 /*	components
 /*-------------------------------------*/
-gulp.task('sass_compo', function () {
+gulp.task('sass_compo', function (done) {
     // gulp.src( '**/_scss/**/*.scss' )
     gulp.src('vk-components/package/_scss/*.scss')
         .pipe(plumber())
@@ -208,16 +208,19 @@ gulp.task('sass_compo', function () {
         .pipe(autoprefixer())
         .pipe(cleanCss())
         .pipe(gulp.dest('./vk-components/package/css/'));
+        done();
 });
-gulp.task('copy_compo', function () {
+gulp.task('copy_compo', function (done) {
     gulp.src('./vk-components/package/**')
         .pipe(gulp.dest('../themes/katawara/inc/vk-components/package/'))
 		.pipe(gulp.dest('../themes/lightning/inc/vk-components/package/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-components/package/'))
-		.pipe(gulp.dest('../plugins/vk-blocks-pro/inc/vk-components/package/'));
+        .pipe(gulp.dest('../plugins/vk-blocks-pro/inc/vk-components/package/'));
+        done();
 });
 gulp.task('watch_compo', function () {
-    gulp.watch('vk-components/package/**', gulp.parallel('sass_compo','copy_compo'));
+    gulp.watch('vk-components/package/**', gulp.series('sass_compo','copy_compo'));
+    // gulp.watch('vk-components/package/**', gulp.series('sass_compo','copy_compo'));
 });
 /*-------------------------------------*/
 /*	media posts
