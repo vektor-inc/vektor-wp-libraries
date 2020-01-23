@@ -219,8 +219,8 @@ gulp.task('copy_compo', function (done) {
         done();
 });
 gulp.task('watch_compo', function () {
-    gulp.watch('vk-components/package/**', gulp.series('sass_compo','copy_compo'));
-    // gulp.watch('vk-components/package/**', gulp.series('sass_compo','copy_compo'));
+    gulp.watch('vk-components/package/**', gulp.series('copy_compo'));
+    gulp.watch('vk-components/package/_scss', gulp.series('sass_compo'));
 });
 /*-------------------------------------*/
 /*	media posts
