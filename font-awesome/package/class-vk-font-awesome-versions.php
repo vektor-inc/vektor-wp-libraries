@@ -166,8 +166,6 @@ if ( ! class_exists( 'Vk_Font_Awesome_Versions' ) ) {
 		}
 
 		/*
-		-------------------------------------------*/
-		/*
 		  customize_register
 		/*-------------------------------------------*/
 		static function customize_register( $wp_customize ) {
