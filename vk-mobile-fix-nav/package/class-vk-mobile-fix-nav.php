@@ -53,7 +53,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 		public static $version = '0.0.0';
 
 		public function __construct() {
-			add_action( 'wp_enqueue_scripts', array( get_called_class(), 'add_style' ) ); // get_called_class()じゃないと外しにくい
+			add_action( 'wp_footer', array( get_called_class(), 'add_style' ) ); // get_called_class()じゃないと外しにくい
 			add_action( 'customize_register', array( $this, 'vk_mobil_fix_nav_customize_register' ) ); // $thisじゃないとエラーになる
 			add_filter( 'body_class', array( __CLASS__, 'add_body_class' ) );
 			add_action( 'wp_footer', array( __CLASS__, 'vk_mobil_fix_nav_html' ) );
