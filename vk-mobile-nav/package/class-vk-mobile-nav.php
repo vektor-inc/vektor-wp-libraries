@@ -26,6 +26,7 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 
 		/**
 		 * body class 端末識別クラス追加
+		 *
 		 * @return [type] [description]
 		 */
 		function add_body_class_mobile_device( $class ) {
@@ -39,6 +40,7 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 
 		/**
 		 * モバイル用メニュー追加
+		 *
 		 * @return [type] [description]
 		 */
 		public static function setup_menu() {
@@ -47,6 +49,7 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 
 		/**
 		 * モバイルメニュー用ウィジェットエリア追加
+		 *
 		 * @return [type] [description]
 		 */
 		static function setup_widget() {
@@ -145,8 +148,10 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 			echo '</div>';
 		}
 
-		/*-------------------------------------------*/
-		/*  Load js & CSS
+		/*
+		-------------------------------------------*/
+		/*
+		  Load js & CSS
 		/*-------------------------------------------*/
 
 		public static function add_script() {
