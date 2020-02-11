@@ -88,7 +88,7 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 				echo '<div class="vk-mobile-nav-menu-btn">MENU</div>';
 			}
 
-			echo '<div class="vk-mobile-nav">';
+			echo '<div class="vk-mobile-nav" id="vk-mobile-nav">';
 			if ( is_active_sidebar( 'vk-mobile-nav-upper' ) ) {
 				dynamic_sidebar( 'vk-mobile-nav-upper' );
 			} else {
@@ -104,7 +104,7 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 				array(
 					'theme_location' => 'vk-mobile-nav',
 					'container'      => '',
-					'items_wrap'     => '<nav class="global-nav"><ul id="%1$s" class="vk-menu-acc  %2$s">%3$s</ul></nav>',
+					'items_wrap'     => '<nav class="global-nav" role="navigation"><ul id="%1$s" class="vk-menu-acc  %2$s">%3$s</ul></nav>',
 					'fallback_cb'    => '',
 					'echo'           => false,
 					// 'depth'          => 1,
