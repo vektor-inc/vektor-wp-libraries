@@ -145,7 +145,7 @@ gulp.task('w_tags', function (done) {
 /*-------------------------------------*/
 /*	vk admin
 /*-------------------------------------*/
-gulp.task('sass_vk-admin', function() {
+gulp.task('sass_vk-admin', function(done) {
 	// gulp.src( '**/_scss/**/*.scss' )
 	gulp.src('vk-admin/package/_scss/**/*.scss')
 		.pipe(plumber())
@@ -155,20 +155,23 @@ gulp.task('sass_vk-admin', function() {
 		}))
 		.pipe(autoprefixer())
 		.pipe(cleanCss())
-		.pipe(gulp.dest('./vk-admin/package/css/'));
+        .pipe(gulp.dest('./vk-admin/package/css/'));
+        done();
 });
-gulp.task('copy_vk-admin', function() {
+gulp.task('copy_vk-admin', function(done) {
 	gulp.src('./vk-admin/package/**')
 		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/admin/vk-admin/package/'))
 		.pipe(gulp.dest('../plugins/vk-post-author-display/inc/vk-admin/'))
 		// .pipe(gulp.dest('../plugins/vk-call-to-action/inc/vk-admin/'))
 		.pipe(gulp.dest('../plugins/vk-link-target-controller/inc/vk-admin/'))
 		.pipe(gulp.dest('../plugins/vk-plugin-beta-tester/inc/vk-admin/package/'))
-		.pipe(gulp.dest('../plugins/wp-easy-responsive-tabs-to-accordion/vk-admin/'));
+        .pipe(gulp.dest('../plugins/wp-easy-responsive-tabs-to-accordion/vk-admin/'));
+        done();
 });
-gulp.task('watch_admin', function () {
+gulp.task('watch_admin', function (done) {
     gulp.watch('./vk-admin/package/_scss/**', gulp.task('sass_vk-admin'));
     gulp.watch('./vk-admin/package/**', gulp.task('copy_vk-admin'));
+    done();
 });
 
 /*-------------------------------------*/
@@ -311,9 +314,6 @@ gulp.task('copy_vk-mobile-nav', function (done) {
 	gulp.src('./vk-mobile-nav/package/**')
 		.pipe(gulp.dest('../themes/lightning/inc/vk-mobile-nav/package/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-mobile-nav/package/'))
-		// .pipe(gulp.dest('../plugins/lightning-advanced-unit/inc/vk-mobile-nav/'))
-		// .pipe(gulp.dest('../plugins/lightning-pro/inc/vk-mobile-nav/'))
-		.pipe(gulp.dest('../plugins/vk-mobile-nav/inc/vk-mobile-nav/'))
         .pipe(gulp.dest('../themes/seizen-souzoku/inc/vk-mobile-nav/'));
         done();
 });

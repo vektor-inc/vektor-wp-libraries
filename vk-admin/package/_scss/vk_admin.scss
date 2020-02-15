@@ -359,6 +359,12 @@ textarea {
 	height: auto;
 }
 
-.vk_checkbox_label-wrap-block {
-	border: 1px solid #ff0000;
+.vk_checklist_item {
+	&-style-vertical {
+		display: flex;
+	}
+	// & & にしないと指定が負けるため特別
+	& &_input {
+		margin-top: 0;
+	}
 }
