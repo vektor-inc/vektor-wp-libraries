@@ -10,6 +10,26 @@ https://github.com/vektor-inc/vektor-wp-libraries
  * ExUnit固有の関数だが、ExUnitの機能を複製している他のプラグインにも使用されるものもある
  */
 
+ /**
+  * VK Blocks Widget カテゴリーを登録
+  * ExUnit 内から VK Blocks Widget にブロック
+  * ブロック登録元に下記の行を追加して登録する
+  * add_filter( 'block_categories', 'vew_add_block_category', 10, 2 );
+  */
+
+function vew_add_block_category( $categories, $post ) {
+	return array_merge(
+		$categories,
+		array(
+			array(
+				'slug'  => 'vk-blocks-widget',
+				'title' => __( 'VK Blocks Widget', 'vk-all-in-one-expansion-unit' ),
+				'icon'  => '',
+			),
+		)
+	);
+}
+
 function veu_get_common_options() {
 	$dafault = veu_get_common_options_default();
 	$options = get_option( 'vkExUnit_common_options' );
