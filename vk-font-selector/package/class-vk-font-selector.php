@@ -4,16 +4,13 @@
 https://github.com/vektor-inc/vektor-wp-libraries
 にあります。修正の際は上記リポジトリのデータを修正してください。
 */
-/*
--------------------------------------------*/
+
 /*
   Customizer
 /*-------------------------------------------*/
 
 add_action( 'customize_register', 'vkfs_customize_register_add_control', 10 );
 
-/*
--------------------------------------------*/
 /*
   ExUnit Original Controls
 /*-------------------------------------------*/
@@ -528,9 +525,6 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 			}
 		} // public function vk_font_selector_function_customize_register( $wp_customize )
 
-
-		/*
-		-------------------------------------------*/
 		/*
 		  print head style
 		/*-------------------------------------------*/
@@ -613,9 +607,6 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 			return $selected_fonts_info;
 		}
 
-
-		/*
-		-------------------------------------------*/
 		/*
 		  print head style
 		/*-------------------------------------------*/
