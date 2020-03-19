@@ -107,7 +107,9 @@ gulp.task('copy_custom-field-builder', function () {
     .pipe(gulp.dest('../plugins/vk-google-job-posting-manager/inc/custom-field-builder/package/'))
     .pipe(gulp.dest('../plugins/vk-version-table/inc/custom-field-builder/package/'))
     .pipe(gulp.dest('../themes/bill-vektor/inc/custom-field-builder/'))
+    .pipe(gulp.dest('../themes/katawara/inc/custom-field-builder/package/'))
     .pipe(gulp.dest('../themes/lightning-pro/inc/custom-field-builder/package/'));
+
 });
 gulp.task('watch_cf', function () {
     gulp.watch('./custom-field-builder/package/**', gulp.task('copy_custom-field-builder'));
@@ -243,7 +245,8 @@ gulp.task('sass_vk-font-selector', function () {
         .pipe(gulp.dest('./vk-font-selector/package/css/'));
 });
 gulp.task('copy_font-selector', function () {
-	gulp.src('./vk-font-selector/package/**')
+    gulp.src('./vk-font-selector/package/**')
+        .pipe(gulp.dest('../themes/katawara/inc/vk-font-selector/package/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-font-selector/package/'));
 });
 gulp.task('watch_font', function () {
@@ -273,6 +276,9 @@ gulp.task('copy_font-awesome', function (done) {
     gulp.src('./font-awesome/package/**')
         .pipe(gulp.dest('../themes/lightning/inc/font-awesome/package'))
         .pipe(gulp.dest('../themes/lightning-pro/inc/font-awesome/package'))
+        .pipe(gulp.dest('../themes/katawara/inc/font-awesome/package'))
+
+
         .pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/font-awesome/package/'))
         .pipe(gulp.dest('../plugins/vk-blocks/inc/font-awesome/package'))
         .pipe(gulp.dest('../plugins/vk-blocks-pro/inc/font-awesome/package'))
@@ -314,6 +320,7 @@ gulp.task('copy_vk-mobile-nav', function (done) {
 	gulp.src('./vk-mobile-nav/package/**')
 		.pipe(gulp.dest('../themes/lightning/inc/vk-mobile-nav/package/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-mobile-nav/package/'))
+        .pipe(gulp.dest('../themes/katawara/inc/vk-mobile-nav/package/'))
         .pipe(gulp.dest('../themes/seizen-souzoku/inc/vk-mobile-nav/'));
         done();
 });
@@ -341,7 +348,8 @@ gulp.task('sass_vk-mobile-fix-nav', function(done) {
 gulp.task('copy_vk-mobile-fix-nav', function(done) {
 	gulp.src('./vk-mobile-fix-nav/package/**')
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-mobile-fix-nav/package/'))
-		.pipe(gulp.dest('../themes/souzoku/inc/vk-mobile-fix-nav/'))
+        .pipe(gulp.dest('../themes/katawara/inc/vk-mobile-fix-nav/package/'))
+        .pipe(gulp.dest('../themes/souzoku/inc/vk-mobile-fix-nav/'))
         .pipe(gulp.dest('../themes/seizen-souzoku/inc/vk-mobile-fix-nav/'));
         done();
 });
@@ -360,7 +368,8 @@ gulp.task('copy_page-header', function () {
 		// .pipe(gulp.dest('../plugins/lightning-skin-fort/inc/vk-page-header/'))
 		// .pipe(gulp.dest('../plugins/lightning-skin-pale/inc/vk-page-header/'))
 		// .pipe(gulp.dest('../plugins/lightning-origin-pro/inc/vk-page-header/'))
-		// .pipe(gulp.dest('../plugins/lightning-pro/inc/vk-page-header/'))
+        // .pipe(gulp.dest('../plugins/lightning-pro/inc/vk-page-header/'))
+        .pipe(gulp.dest('../themes/katawara/inc/vk-page-header/package/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-page-header/package/'));
 });
 gulp.task('watch_page-header', function () {
