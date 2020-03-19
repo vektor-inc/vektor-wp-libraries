@@ -26,6 +26,9 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 	// プラグインの場合の例
 	$vk_page_header_default_bg_url = plugins_url( '/images/header-sample.jpg', __FILE__ );
 
+	global $vk_page_header_enqueue_handle_style;
+	$vk_page_header_enqueue_handle_style = 'デザインのcssハンドル名';
+
 }
 
 /*
