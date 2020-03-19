@@ -4,19 +4,21 @@
 https://github.com/vektor-inc/vektor-wp-libraries
 にあります。修正の際は上記リポジトリのデータを修正してください。
 */
-/*-------------------------------------------*/
-/*	Customizer
+
+/*
+  Customizer
 /*-------------------------------------------*/
 
 add_action( 'customize_register', 'vkfs_customize_register_add_control', 10 );
 
-/*-------------------------------------------*/
-/*	ExUnit Original Controls
+/*
+  ExUnit Original Controls
 /*-------------------------------------------*/
 if ( ! function_exists( 'vkfs_customize_register_add_control' ) ) {
 	function vkfs_customize_register_add_control() {
 
-		/*	Add text control description
+		/*
+		  Add text control description
 		/*-------------------------------------------*/
 		class Vk_Font_Selector_Custom_Html extends WP_Customize_Control {
 			public $type             = 'customtext';
@@ -79,10 +81,10 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					'font-family' => '-apple-system,BlinkMacSystemFont,"メイリオ",Meiryo,"ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN,sans-serif',
 				),
 				// 'Noto+Sans+JP:100'      => array(
-				// 	'label'           => 'Noto Sans JP 100 ( Google Fonts )',
-				// 	'font-family'     => '"Noto Sans JP",sans-serif',
-				// 	'font-family-key' => 'Noto+Sans+JP',
-				// 	'font-weight'     => 100,
+				// 'label'           => 'Noto Sans JP 100 ( Google Fonts )',
+				// 'font-family'     => '"Noto Sans JP",sans-serif',
+				// 'font-family-key' => 'Noto+Sans+JP',
+				// 'font-weight'     => 100,
 				// ),
 				'Noto+Sans+JP:300'      => array(
 					'label'           => 'Noto Sans JP 300 ( Google Fonts )',
@@ -109,16 +111,16 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					'font-weight'     => 700,
 				),
 				// 'Noto+Sans+JP:900'      => array(
-				// 	'label'           => 'Noto Sans JP 900 ( Google Fonts )',
-				// 	'font-family'     => '"Noto Sans JP",sans-serif',
-				// 	'font-family-key' => 'Noto+Sans+JP',
-				// 	'font-weight'     => 900,
+				// 'label'           => 'Noto Sans JP 900 ( Google Fonts )',
+				// 'font-family'     => '"Noto Sans JP",sans-serif',
+				// 'font-family-key' => 'Noto+Sans+JP',
+				// 'font-weight'     => 900,
 				// ),
 				// 'Noto+Sans+TC:100'      => array(
-				// 	'label'           => 'Noto Sans TC 100 ( Google Fonts )',
-				// 	'font-family'     => '"Noto Sans TC",sans-serif',
-				// 	'font-family-key' => 'Noto+Sans+TC',
-				// 	'font-weight'     => 100,
+				// 'label'           => 'Noto Sans TC 100 ( Google Fonts )',
+				// 'font-family'     => '"Noto Sans TC",sans-serif',
+				// 'font-family-key' => 'Noto+Sans+TC',
+				// 'font-weight'     => 100,
 				// ),
 				'Noto+Sans+TC:300'      => array(
 					'label'           => 'Noto Sans TC 300 ( Google Fonts )',
@@ -145,16 +147,16 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					'font-weight'     => 700,
 				),
 				// 'Noto+Sans+TC:900'      => array(
-				// 	'label'           => 'Noto Sans TC 900 ( Google Fonts )',
-				// 	'font-family'     => '"Noto Sans TC",sans-serif',
-				// 	'font-family-key' => 'Noto+Sans+TC',
-				// 	'font-weight'     => 900,
+				// 'label'           => 'Noto Sans TC 900 ( Google Fonts )',
+				// 'font-family'     => '"Noto Sans TC",sans-serif',
+				// 'font-family-key' => 'Noto+Sans+TC',
+				// 'font-weight'     => 900,
 				// ),
 				// 'Noto+Sans+SC:100'      => array(
-				// 	'label'           => 'Noto Sans SC 100 ( Google Fonts )',
-				// 	'font-family'     => '"Noto Sans SC",sans-serif',
-				// 	'font-family-key' => 'Noto+Sans+SC',
-				// 	'font-weight'     => 100,
+				// 'label'           => 'Noto Sans SC 100 ( Google Fonts )',
+				// 'font-family'     => '"Noto Sans SC",sans-serif',
+				// 'font-family-key' => 'Noto+Sans+SC',
+				// 'font-weight'     => 100,
 				// ),
 				'Noto+Sans+SC:300'      => array(
 					'label'           => 'Noto Sans SC 300 ( Google Fonts )',
@@ -181,10 +183,10 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					'font-weight'     => 700,
 				),
 				// 'Noto+Sans+SC:900'      => array(
-				// 	'label'           => 'Noto Sans SC 900 ( Google Fonts )',
-				// 	'font-family'     => '"Noto Sans SC",sans-serif',
-				// 	'font-family-key' => 'Noto+Sans+SC',
-				// 	'font-weight'     => 900,
+				// 'label'           => 'Noto Sans SC 900 ( Google Fonts )',
+				// 'font-family'     => '"Noto Sans SC",sans-serif',
+				// 'font-family-key' => 'Noto+Sans+SC',
+				// 'font-weight'     => 900,
 				// ),
 				'Noto+Serif+TC:200'     => array(
 					'label'           => 'Noto Serif TC 200 ( Google Fonts )',
@@ -313,10 +315,10 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					'font-weight'     => 900,
 				),
 				// 'M+PLUS+1p:100'         => array(
-				// 	'label'           => 'M PLUS 1p 100 ( Google Fonts )',
-				// 	'font-family'     => '"M PLUS 1p",sans-serif',
-				// 	'font-family-key' => 'M+PLUS+1p',
-				// 	'font-weight'     => 100,
+				// 'label'           => 'M PLUS 1p 100 ( Google Fonts )',
+				// 'font-family'     => '"M PLUS 1p",sans-serif',
+				// 'font-family-key' => 'M+PLUS+1p',
+				// 'font-weight'     => 100,
 				// ),
 				'M+PLUS+1p:300'         => array(
 					'label'           => 'M PLUS 1p 300 ( Google Fonts )',
@@ -343,22 +345,22 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					'font-weight'     => 700,
 				),
 				// 'M+PLUS+1p:800'         => array(
-				// 	'label'           => 'M PLUS 1p 800 ( Google Fonts )',
-				// 	'font-family'     => '"M PLUS 1p",sans-serif',
-				// 	'font-family-key' => 'M+PLUS+1p',
-				// 	'font-weight'     => 800,
+				// 'label'           => 'M PLUS 1p 800 ( Google Fonts )',
+				// 'font-family'     => '"M PLUS 1p",sans-serif',
+				// 'font-family-key' => 'M+PLUS+1p',
+				// 'font-weight'     => 800,
 				// ),
 				// 'M+PLUS+1p:900'         => array(
-				// 	'label'           => 'M PLUS 1p 900 ( Google Fonts )',
-				// 	'font-family'     => '"M PLUS 1p",sans-serif',
-				// 	'font-family-key' => 'M+PLUS+1p',
-				// 	'font-weight'     => 900,
+				// 'label'           => 'M PLUS 1p 900 ( Google Fonts )',
+				// 'font-family'     => '"M PLUS 1p",sans-serif',
+				// 'font-family-key' => 'M+PLUS+1p',
+				// 'font-weight'     => 900,
 				// ),
 				// 'M+PLUS+Rounded+1c:100' => array(
-				// 	'label'           => 'M PLUS Rounded 1c 100 ( Google Fonts )',
-				// 	'font-family'     => '"M PLUS Rounded 1c",sans-serif',
-				// 	'font-family-key' => 'M+PLUS+Rounded+1c',
-				// 	'font-weight'     => 100,
+				// 'label'           => 'M PLUS Rounded 1c 100 ( Google Fonts )',
+				// 'font-family'     => '"M PLUS Rounded 1c",sans-serif',
+				// 'font-family-key' => 'M+PLUS+Rounded+1c',
+				// 'font-weight'     => 100,
 				// ),
 				'M+PLUS+Rounded+1c:300' => array(
 					'label'           => 'M PLUS Rounded 1c 300 ( Google Fonts )',
@@ -385,16 +387,16 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					'font-weight'     => 700,
 				),
 				// 'M+PLUS+Rounded+1c:800' => array(
-				// 	'label'           => 'M PLUS Rounded 1c 800 ( Google Fonts )',
-				// 	'font-family'     => '"M PLUS Rounded 1c",sans-serif',
-				// 	'font-family-key' => 'M+PLUS+Rounded+1c',
-				// 	'font-weight'     => 800,
+				// 'label'           => 'M PLUS Rounded 1c 800 ( Google Fonts )',
+				// 'font-family'     => '"M PLUS Rounded 1c",sans-serif',
+				// 'font-family-key' => 'M+PLUS+Rounded+1c',
+				// 'font-weight'     => 800,
 				// ),
 				// 'M+PLUS+Rounded+1c:900' => array(
-				// 	'label'           => 'M PLUS Rounded 1c 900 ( Google Fonts )',
-				// 	'font-family'     => '"M PLUS Rounded 1c",sans-serif',
-				// 	'font-family-key' => 'M+PLUS+Rounded+1c',
-				// 	'font-weight'     => 900,
+				// 'label'           => 'M PLUS Rounded 1c 900 ( Google Fonts )',
+				// 'font-family'     => '"M PLUS Rounded 1c",sans-serif',
+				// 'font-family-key' => 'M+PLUS+Rounded+1c',
+				// 'font-weight'     => 900,
 				// ),
 				'Sawarabi+Mincho'       => array(
 					'label'           => 'Sawarabi Mincho ( Google Fonts )',
@@ -450,7 +452,8 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 			// セクション追加
 			$wp_customize->add_section(
-				'vk_font_selector_related_setting', array(
+				'vk_font_selector_related_setting',
+				array(
 					'title'    => $vk_font_selector_prefix . __( 'Font Setting', 'vk_font_selector_textdomain' ),
 					'priority' => 900,
 				)
@@ -463,7 +466,9 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 			$html .= '</ul>';
 			$wp_customize->add_control(
 				new Vk_Font_Selector_Custom_Html(
-					$wp_customize, 'font_mobile_caution', array(
+					$wp_customize,
+					'font_mobile_caution',
+					array(
 						'label'            => '',
 						'section'          => 'vk_font_selector_related_setting',
 						'type'             => 'text',
@@ -489,13 +494,14 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 			}
 
 			// $targets = array(
-			// 	'title' => 'Title',
-			// 	'text'  => 'Text',
+			// 'title' => 'Title',
+			// 'text'  => 'Text',
 			// );
 
 			foreach ( $targets as $key => $label ) {
 				$wp_customize->add_setting(
-					'vk_font_selector[' . $key . ']', array(
+					'vk_font_selector[' . $key . ']',
+					array(
 						'default'           => '',
 						'type'              => 'option',
 						'capability'        => 'edit_theme_options',
@@ -503,61 +509,61 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					)
 				);
 				$wp_customize->add_control(
-					'vk_font_selector[' . $key . ']', array(
+					'vk_font_selector[' . $key . ']',
+					array(
 						'label'    => __( $label . ':', 'vk_font_selector_textdomain' ),
 						'section'  => 'vk_font_selector_related_setting',
 						'settings' => 'vk_font_selector[' . $key . ']',
 						'type'     => 'select',
 						'choices'  => $choices,
 					// 'choices'  => array(
-					// 	'mincho' => __( 'Mincho', 'vk_font_selector_textdomain' ),
-					// 	'gothic' => __( 'Gothic', 'vk_font_selector_textdomain' ),
+					// 'mincho' => __( 'Mincho', 'vk_font_selector_textdomain' ),
+					// 'gothic' => __( 'Gothic', 'vk_font_selector_textdomain' ),
 					// ),
 					)
 				);
 			}
 		} // public function vk_font_selector_function_customize_register( $wp_customize )
 
-
-		/*-------------------------------------------*/
-		/*  print head style
+		/*
+		  print head style
 		/*-------------------------------------------*/
 		public static function get_selected_fonts_info() {
 			// どの場所にどのフォント指定をするのかが格納されている
 			$options = get_option( 'vk_font_selector' );
 			// $options = array(
-			// 	    [title] => gothic,
-			// 	    [menu] => gothic,
-			// 	    [text] => gothic,
+			// [title] => gothic,
+			// [menu] => gothic,
+			// [text] => gothic,
 			// );
 
 			// フォントリストの情報を読み込み
 			$fonts_array = self::fonts_array();
 			// $fonts_array = array(
-			// 	'mincho' => array(
-			// 		'label' => __( 'Mincho','vk_font_selector_textdomain'),
-			// 		'font-family' => 'serif',
-			// 	),
-			// 	'gothic' => array(
-			// 		'label' => __( 'Gothic','vk_font_selector_textdomain'),
-			// 		'font-family' => 'sans-serif',
-			// 	),
+			// 'mincho' => array(
+			// 'label' => __( 'Mincho','vk_font_selector_textdomain'),
+			// 'font-family' => 'serif',
+			// ),
+			// 'gothic' => array(
+			// 'label' => __( 'Gothic','vk_font_selector_textdomain'),
+			// 'font-family' => 'sans-serif',
+			// ),
 			// );
 			$target_array = self::target_array();
 			// $target_array = array(
-			// 		'text' => array(
-			// 			'label' => __('Text', 'vk_font_selector_textdomain'),
-			// 			'selector' => 'body',
-			// 		),
-			// 		'title' => array(
-			// 			'label' => __('Title', 'vk_font_selector_textdomain'),
-			// 			'selector' => 'h1,h2,h3,h4,h5,h6',
-			// 		),
-			// 		'menu' => array(
-			// 			'label' => __('Global Menu', 'vk_font_selector_textdomain'),
-			// 			'selector' => '.gMenu',
-			// 		),
-			// 	);
+			// 'text' => array(
+			// 'label' => __('Text', 'vk_font_selector_textdomain'),
+			// 'selector' => 'body',
+			// ),
+			// 'title' => array(
+			// 'label' => __('Title', 'vk_font_selector_textdomain'),
+			// 'selector' => 'h1,h2,h3,h4,h5,h6',
+			// ),
+			// 'menu' => array(
+			// 'label' => __('Global Menu', 'vk_font_selector_textdomain'),
+			// 'selector' => '.gMenu',
+			// ),
+			// );
 
 			$dynamic_css       = '';
 			$selected_webFonts = array();
@@ -601,14 +607,13 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 			return $selected_fonts_info;
 		}
 
-
-		/*-------------------------------------------*/
-		/*  print head style
+		/*
+		  print head style
 		/*-------------------------------------------*/
 
 		public static function dynamic_header_css() {
 
-			$selected_fonts_info = Vk_Font_Selector_Customize::get_selected_fonts_info();
+			$selected_fonts_info = self::get_selected_fonts_info();
 			$dynamic_css         = $selected_fonts_info['dynamic_css'];
 
 			// 出力するインラインスタイルが存在していたら
@@ -630,7 +635,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 		} // public function skin_dynamic_css(){
 
 		public static function load_web_fonts() {
-			$selected_fonts_info = Vk_Font_Selector_Customize::get_selected_fonts_info();
+			$selected_fonts_info = self::get_selected_fonts_info();
 			if ( ! empty( $selected_fonts_info['selected_webFonts'] ) ) {
 
 				// 同じフォントでウェイト違いが入ってくるので、フォントごとにまとめた配列を生成する
@@ -672,7 +677,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 					$count_family++;
 				}
-				echo '<link href="https://fonts.googleapis.com/css?family=' . $family_parameter . '" rel="stylesheet">';
+				echo '<link href="https://fonts.googleapis.com/css?family=' . $family_parameter . '&display=swap" rel="stylesheet">';
 			} // if ( ! empty( $selected_fonts_info['selected_webFonts'] ) ) {
 		} // public function load_web_fonts() {
 
@@ -682,11 +687,11 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 	// 外す時
 	// add_action(
-	// 	'after_setup_theme', function() {
-	// 		remove_action( 'customize_register', array( 'Vk_Font_Selector_Customize', 'register' ) );
-	// 		remove_action( 'wp_head', array( 'Vk_Font_Selector_Customize', 'dynamic_header_css' ), 5 );
-	// 		remove_action( 'wp_footer', array( 'Vk_Font_Selector_Customize', 'load_web_fonts' ) );
-	// 	}
+	// 'after_setup_theme', function() {
+	// remove_action( 'customize_register', array( 'Vk_Font_Selector_Customize', 'register' ) );
+	// remove_action( 'wp_head', array( 'Vk_Font_Selector_Customize', 'dynamic_header_css' ), 5 );
+	// remove_action( 'wp_footer', array( 'Vk_Font_Selector_Customize', 'load_web_fonts' ) );
+	// }
 	// );
 
 } // if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
