@@ -45,7 +45,7 @@ class Lightning_Copyright_Custom {
 		$wp_customize->add_section(
 			'lightning_copyright_section', array(
 				'title'    => $vk_copyright_customizer_prefix . __( 'Copyright Setting', 'lightning_footerPowerCustom' ),
-				'priority' => 700,
+				'priority' => 900,
 			)
 		);
 
