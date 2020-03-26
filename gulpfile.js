@@ -36,15 +36,11 @@ var rename = require('gulp-rename');
 var concat = require('gulp-concat');
 // js最小化
 var jsmin = require('gulp-jsmin');
+var uglify = require('gulp-uglify');
 // エラーでも監視を続行させる
 var plumber = require('gulp-plumber');
 
-
-
-
-
-
-
+var babel = require('gulp-babel');
 
 /*-------------------------------------*/
 /*	sass
@@ -310,8 +306,10 @@ gulp.task('sass_vk-mobile-nav', function (done) {
 // js最小化
 gulp.task('jsmin_vk-mobile-nav', function (done) {
     gulp.src(['./vk-mobile-nav/package/js/vk-mobile-nav.js'])
-        .pipe(plumber()) // エラーでも監視を続行
-        .pipe(jsmin())
+        .pipe(babel({
+          presets: ['@babel/env']
+        }))
+        .pipe(uglify())
         .pipe(rename({
             suffix: '.min'
         }))
