@@ -629,7 +629,8 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 				$dynamic_css = preg_replace( '/\s(?=\s)/', '', $dynamic_css );
 
 				// 出力を実行
-				wp_add_inline_style( 'lightning-design-style', $dynamic_css );
+				global $vk_font_selector_enqueue_handle_style;
+				wp_add_inline_style( $vk_font_selector_enqueue_handle_style, $dynamic_css );
 			}
 
 		} // public function skin_dynamic_css(){
