@@ -9,7 +9,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 
 	class VK_Component_Posts {
 
-		/*-------------------------------------------
+		/*
 		 Basic method
 		 Common Parts
 		 Layout patterns
@@ -58,6 +58,8 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				$html = self::get_view_type_card_horizontal( $post, $options );
 			} elseif ( $options['layout'] == 'media' ) {
 				$html = self::get_view_type_media( $post, $options );
+			} elseif ( $options['layout'] == 'postListText' ) {
+				$html = self::get_view_type_text( $post, $options );
 			} else {
 				$html = self::get_view_type_card( $post, $options );
 			}
@@ -127,6 +129,8 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				$class_outer = 'card card-post card-horizontal';
 			} elseif ( $options['layout'] == 'media' ) {
 				$class_outer = 'media';
+			} elseif ( $options['layout'] == 'postListText' ) {
+				$class_outer = 'postListText';
 			} else {
 				$class_outer = 'card card-post';
 			}
@@ -314,12 +318,12 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 			$html  = '';
 			$html .= self::get_view_first_div( $post, $options );
 
-			$attr  = array(
+			$attr = array(
 				'class_outer' => '',
 				'class_image' => 'card-img-top',
 			);
-			$html .= self::get_thumbnail_image( $post, $options, $attr );
 
+			$html .= self::get_thumbnail_image( $post, $options, $attr );
 			$html .= self::get_view_body( $post, $options );
 
 			$html .= '</div><!-- [ /.card ] -->';
@@ -385,6 +389,52 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 			$html .= self::get_view_body( $post, $options );
 
 			$html .= '</div><!-- [ /.media ] -->';
+			return $html;
+		}
+
+		/**
+		 * Text
+		 *
+		 * @var [type]
+		 */
+		public static function get_view_type_text( $post, $options ) {
+
+			$layout_type = $options['layout'];
+			
+			$html  = '';
+			$html .= self::get_view_first_div( $post, $options );
+
+			if ( $options['display_date'] ) {
+				$html .= '<span class="postListText_date published">';
+				$html .= esc_html( get_the_date( null, $post->ID ) );
+				$html .= '</span>';
+			}
+
+			if ( $options['display_image_overlay_term'] ) {
+				$html .= '<span class="postListText_singleTermLabel">';
+				$term_args = array(
+					'class' => 'postListText_singleTermLabel_inner',
+				);
+				if ( method_exists( 'Vk_term_color', 'get_single_term_with_color' ) ) {
+					$html .= Vk_term_color::get_single_term_with_color( $post, $term_args );
+				}
+				$html .= '</span>';
+			}
+
+			$html .= '<h5 class="postListText_title"><a href="' . get_the_permalink( $post->ID ) . '">';
+			$html .= get_the_title( $post->ID );
+			$html .= '</a></h5>';
+
+			if ( $options['display_new'] ) {
+				$today = date_i18n( 'U' );
+				$entry = get_the_time( 'U' );
+				$kiji  = date( 'U', ( $today - $entry ) ) / 86400;
+				if ( $options['new_date'] > $kiji ) {
+					$html .= '<span class="vk_post_title_new">' . $options['new_text'] . '</span>';
+				}
+			}
+
+			$html .= '</div>';
 			return $html;
 		}
 
