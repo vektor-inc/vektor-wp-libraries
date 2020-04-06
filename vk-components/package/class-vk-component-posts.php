@@ -77,20 +77,34 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 		 */
 		public static function get_loop( $wp_query, $options, $options_loop = array() ) {
 
-			$options_loop_dafault = array(
-				'class_loop_outer' => '',
-			);
-			$options_loop         = wp_parse_args( $options_loop, $options_loop_dafault );
+			// Outer Post Type classes
+			$patterns = self::get_patterns();
+			$outer_class_post_types = array();
+			if ( !isset( $wp_query->query['post_type'] ) ) {
+				$outer_class_post_types[] = 'vk_posts-postType-post';
+			} else {
+				foreach ( $wp_query->query['post_type'] as $key => $value ) {
+					$outer_class_post_types[] = 'vk_posts-postType-' . $value;
+				}
+			}
+			// Additional loop option
+			$outer_class = implode( ' ', $outer_class_post_types );
+
+			if ( ! empty( $options_loop['class_loop_outer'] ) ){
+				$outer_class .= ' ' . $options_loop['class_loop_outer'];
+			}
+
+			// Set post item outer col class
+			if ( $options['layout'] === 'postListText' ){
+				$options['class_outer'] = '';
+			} else {
+				$options['class_outer'] = self::get_col_size_classes( $options );
+			}
 
 			$loop = '';
 			if ( $wp_query->have_posts() ) :
 
-				$outer_class = '';
-				if ( $options_loop['class_loop_outer'] ) {
-					$outer_class = ' ' . $options_loop['class_loop_outer'];
-				}
-
-				$loop .= '<div class="vk_posts' . $outer_class . '">';
+				$loop .= '<div class="vk_posts ' . esc_attr( $outer_class ) . '">';
 
 				while ( $wp_query->have_posts() ) {
 					$wp_query->the_post();
@@ -143,10 +157,11 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 			}
 
 			// Add btn class
-			if ( $options['display_btn'] ) {
+			if ( $options['display_btn'] && $options['layout'] !== 'postListText' ) {
 				$class_outer .= ' vk_post-btn-display';
 			}
-			$html = '<div id="post-' . esc_attr( $post->ID ) . '" class="vk_post ' . join( ' ', get_post_class( $class_outer ) ) . '">';
+			global $post;
+			$html = '<div id="post-' . esc_attr( $post->ID ) . '" class="vk_post vk-post-postType-'. esc_attr( $post->post_type ) . ' ' . join( ' ', get_post_class( $class_outer ) ) . '">';
 			return $html;
 		}
 
