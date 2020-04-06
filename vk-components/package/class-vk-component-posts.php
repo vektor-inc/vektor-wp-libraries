@@ -462,6 +462,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				$html .= '<span class="postListText_singleTermLabel">';
 				$term_args = array(
 					'class' => 'postListText_singleTermLabel_inner',
+					'link' => true,
 				);
 				if ( method_exists( 'Vk_term_color', 'get_single_term_with_color' ) ) {
 					$html .= Vk_term_color::get_single_term_with_color( $post, $term_args );
