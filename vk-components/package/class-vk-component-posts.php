@@ -101,7 +101,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 			// Set post item outer col class
 			if ( $options['layout'] !== 'postListText' ){
 				// If get info of column that deploy col to class annd add
-				if ( $options['class_outer'] ) {
+				if ( ! empty( $options['class_outer'] ) ) {
 					$options['class_outer'] .= ' ';
 				}
 				$options['class_outer'] .= self::get_col_size_classes( $options );
