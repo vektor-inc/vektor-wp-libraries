@@ -256,13 +256,15 @@ gulp.task('watch_font', function () {
 /*-------------------------------------*/
 /*	term color
 /*-------------------------------------*/
-gulp.task('copy_term-color', function() {
+gulp.task('copy_term-color', function(done) {
 	gulp.src('./term-color/package/**')
 		.pipe(gulp.dest('../plugins/vk-post-author-display/inc/term-color/'))
 		.pipe(gulp.dest('../plugins/vk-blocks/inc/term-color/package/'))
+		.pipe(gulp.dest('../plugins/vk-blocks-pro/inc/term-color/package/'))
 		.pipe(gulp.dest('../themes/lightning-child-rerise/inc/term-color/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/term-color/package/'))
 		.pipe(gulp.dest('../themes/lightning/inc/term-color/package/'))
+		done();
 });
 gulp.task('watch_term', function () {
     gulp.watch('./term-color/package/**', gulp.task('copy_term-color'));
