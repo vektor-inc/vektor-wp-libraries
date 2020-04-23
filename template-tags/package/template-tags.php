@@ -14,7 +14,6 @@ https://github.com/vektor-inc/vektor-wp-libraries
   vk_is_plugin_active
   Sanitize
   Post Type Check Box
-	vk_is_checked
 */
 
 if ( ! function_exists( 'vk_is_template_tags_exist' ) ) {
