@@ -571,7 +571,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 						// add_menu_btn
 						if ( ! empty( $options['add_menu_btn'] ) ) {
 							echo '<li>';
-							echo '<span class="vk-mobile-nav-menu-btn" style="color: ' . $color . ';"><span class="link-icon"><i class="fas fa fa-bars" aria-hidden="true"></i></span>' . esc_html( $options['link_text_0'] ) . '</span>';
+							echo '<span id="vk-mobile-nav-menu-btn" class="vk-mobile-nav-menu-btn" style="color: ' . $color . ';"><span class="link-icon"><i class="fas fa fa-bars" aria-hidden="true"></i></span>' . esc_html( $options['link_text_0'] ) . '</span>';
 							echo '</li>';
 						}
 
