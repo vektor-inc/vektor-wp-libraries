@@ -55,12 +55,12 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 		public function __construct() {
 
 			/**
-			 * Reason of Using through the after_setup_theme is 
+			 * Reason of Using through the after_setup_theme is
 			 * to be able to change the action hook point of css load from theme..
 			 */
 			// get_called_class()じゃないと外しにくい
-			add_action( 'after_setup_theme', array( get_called_class(), 'load_css_action' ) ); 
-			
+			add_action( 'after_setup_theme', array( get_called_class(), 'load_css_action' ) );
+
 			add_action( 'customize_register', array( $this, 'vk_mobil_fix_nav_customize_register' ) ); // $thisじゃないとエラーになる
 			add_filter( 'body_class', array( __CLASS__, 'add_body_class' ) );
 			add_action( 'wp_footer', array( __CLASS__, 'vk_mobil_fix_nav_html' ) );
@@ -504,7 +504,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 		/*-------------------------------------------*/
 
 		static function add_style() {
-			wp_enqueue_style( 'vk-mobile-fix-nav', get_template_directory_uri( __FILE__ ) . '/inc/vk-mobile-fix-nav/css/vk-mobile-fix-nav.css', array(), self::$version, 'all' );
+			wp_enqueue_style( 'vk-mobile-fix-nav', get_template_directory_uri( __FILE__ ) . '/inc/vk-mobile-fix-nav/package/css/vk-mobile-fix-nav.css', array(), self::$version, 'all' );
 		}
 
 		/**
