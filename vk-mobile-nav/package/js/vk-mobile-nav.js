@@ -33,8 +33,8 @@ If you want to change this file that, you have to change original file.
         /*-------------------------------------*/
         // メニューを閉じる
         function vk_mobile_nav_close(target){
-            // ※ fix nav の方を押される事もあるので each 処理している
-            removeClass(target, 'menu-open')
+            // ※ fix nav の方を押される事もある
+			document.getElementById('vk-mobile-nav-menu-btn').classList.remove('menu-open')
             // メニュー本体から .vk-mobile-nav-open を削除
             document.getElementById('vk-mobile-nav').classList.remove('vk-mobile-nav-open')
         }
