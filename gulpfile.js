@@ -85,7 +85,7 @@ gulp.task('parallax', function () {
 gulp.task('copy_post-type-manager', function() {
 	gulp.src('./post-type-manager/package/**')
 		.pipe(gulp.dest('../themes/biz-vektor/plugins/post-type-manager/'))
-		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/post-type-manager/package/'));
+		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/post-type-manager/package/'));
 });
 
 // gulp.task('copy_call-to-action', function() {
