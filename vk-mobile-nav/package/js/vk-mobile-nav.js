@@ -41,8 +41,14 @@ If you want to change this file that, you have to change original file.
 
         // 実行関数
         function vk_mobile_nav_run(target){
-            document.getElementById('vk-mobile-nav-menu-btn').addEventListener('click', (e) => {
-                if(e.target.classList.contains('menu-open')){
+			/*
+			モバイル固定ナビ利用時にアイコンフォントのタグを押されてしまうので
+			addEventListener('click', (e) => からの e.target.classList などで取得しても
+			fontawesome のクラス名が返ってきて誤動作してしまうため、buttn に一旦格納
+			*/
+			let button = document.getElementById('vk-mobile-nav-menu-btn');
+            button.addEventListener('click', () => {
+                if( button.classList.contains('menu-open') ){
                     vk_mobile_nav_close(target);
                 }else{
                     addClass(target, 'menu-open')
