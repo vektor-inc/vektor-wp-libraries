@@ -1,171 +1,199 @@
-;
-(function($) {
-	/*-------------------------------------*/
-	/*
-	/*-------------------------------------*/
-	// メニューを閉じる
-	function vk_mobile_nav_close(target){
-		// ※ fix nav の方を押される事もあるので each 処理している
-		jQuery(target).each(function(){
-			jQuery(this).removeClass('menu-open');
-		});
-		// メニュー本体から .vk-mobile-nav-open を削除
-		jQuery('.vk-mobile-nav').removeClass('vk-mobile-nav-open');
-		jQuery('.mobile-fix-nav .vk-mobile-nav-menu-btn i').removeClass('fa-times');
-		jQuery('.mobile-fix-nav .vk-mobile-nav-menu-btn i').addClass('fa-bars');
-	}
+/* ************************************* */
 
-	// 実行関数
-	function vk_mobile_nav_run(target){
-		// クリックされた時
-		jQuery(target).click(function() {
-			// メニューボタンに .menu-open クラスがついていたら
-			if (jQuery(this).hasClass('menu-open')) {
-				vk_mobile_nav_close(target);
-			} else {
-				jQuery(target).each(function(){
-					jQuery(this).addClass('menu-open');
-				});
-				jQuery('.vk-mobile-nav').addClass('vk-mobile-nav-open');
-				jQuery('.mobile-fix-nav .vk-mobile-nav-menu-btn i').removeClass('fa-bars');
-				jQuery('.mobile-fix-nav .vk-mobile-nav-menu-btn i').addClass('fa-times');
-			}
-		});
-	}
+/* **** Caution **** */
 
-	// ページ内リンクをクリックされた時に閉じるための処理
-	jQuery('.vk-mobile-nav li > a').click(function() {
-		vk_mobile_nav_close('.vk-mobile-nav-menu-btn');
-	});
+/*
+This riginal file is following place.
+https://github.com/vektor-inc/vektor-wp-libraries
+If you want to change this file that, you have to change original file.
+*/
 
-	// モバイルナビの実行
-	jQuery(document).ready(function() {
-		/* ※ vk-mobile-menu の読み込みが遅いので document).ready(function() しないと動作しない */
-		vk_mobile_nav_run('.vk-mobile-nav-menu-btn');
-	});
+/* ************************************* */
 
-})(jQuery);
+((window, document) => {
+    function action(query, fn) {
+        Array.prototype.forEach.call(
+            document.querySelectorAll(query),
+            fn
+        )
+    }
 
-/*-------------------------------------*/
-/*	sub item accordion
-/*-------------------------------------*/
-;
-(function($) {
+    function removeClass(query, className) {
+        action(query, (elem)=>elem.classList.remove(className))
+    }
 
-	function vk_menu_acc_run() {
-		// var breakPoint = 767;
-		var breakPoint = 5000;
-		// var bodyWidth = jQuery(window).width();
-		/*
-		cssのメディアクエリがスクロールバーを含んだ幅になるので、
-		js側もスクロールバーを含んだ幅にするため window.innerWidth を使用
-		*/
-		var bodyWidth = window.innerWidth;
+    function addClass(query, className) {
+        action(query, (elem)=>elem.classList.add(className))
+    }
 
-		// ブレイクポイントより小さい場合
-		if (bodyWidth <= breakPoint) {
-			$.when(
-				vk_menu_acc_clear()
-			).done(function() {
-				vk_menu_acc_init();
-				vk_menu_acc_click();
-			});
-		} else {
-			vk_menu_acc_clear();
-		}
-	} // function vk_menu_acc_run(){
 
-	function vk_menu_acc_clear() {
-		jQuery('ul.vk-menu-acc').removeClass('vk-menu-acc-active');
-		jQuery('ul.vk-menu-acc li').removeClass('acc-parent-open');
-		jQuery('ul.vk-menu-acc li .acc-btn').remove();
-		jQuery('ul.vk-menu-acc li .acc-child-close').removeClass('acc-child-close');
-		jQuery('ul.vk-menu-acc li .acc-child-open').removeClass('acc-child-open');
-	}
+    (function(window, document, target) {
+        /*-------------------------------------*/
+        /*
+        /*-------------------------------------*/
+        // メニューを閉じる
+        function vk_mobile_nav_close(target){
+            // ※ fix nav の方を押される事もあるので each 処理している
+            removeClass(target, 'menu-open')
+            // メニュー本体から .vk-mobile-nav-open を削除
+            document.getElementById('vk-mobile-nav').classList.remove('vk-mobile-nav-open')
+        }
 
-	function vk_menu_acc_init() {
-		// アクティブクラスを付与
-		jQuery('ul.vk-menu-acc').addClass('vk-menu-acc-active');
+        // 実行関数
+        function vk_mobile_nav_run(target){
+            document.getElementById('vk-mobile-nav-menu-btn').addEventListener('click', (e) => {
+                if(e.target.classList.contains('menu-open')){
+                    vk_mobile_nav_close(target);
+                }else{
+                    addClass(target, 'menu-open')
+                    document.getElementById('vk-mobile-nav').classList.add('vk-mobile-nav-open')
+                }
+            })
 
-		// 子階層毎の処理
-		jQuery('ul.vk-menu-acc li ul').each(function() {
-			// 子階層の直前の要素（ <a> ）の後に「開くボタン」を設置
-			jQuery(this).prev().after('<span class="acc-btn acc-btn-open"></span>');
-			// 下階層となるul要素には close クラス追加
-			jQuery(this).addClass("acc-child-close");
-		});
-	}
+            action('.vk-mobile-nav li > a', (elm) => {
+                elm.addEventListener('click', (e) => {
+                    let me = e.target
+                    let href = me.getAttribute('href')
 
-	function vk_menu_acc_click() {
-		jQuery('ul.vk-menu-acc li .acc-btn').click(function() {
+                    // クリックされたリンク先がページ内リンクかどうか
+                    if(href.indexOf('#' == 0)) {
+                        vk_mobile_nav_close('.vk-mobile-nav-menu-btn');
+                    }else{
+                        // 閉じない
+                        // ページ内リンク以外で閉じるとモバイルSafariにおいて
+                        // 閉じる動作の途中で画面遷移時に画面を停止させられるため
+                        // ページ内リンク以外では閉じないようにする
+                    }
+                })
+            })
+        }
 
-			// クリックされたボタンが開くボタンだったら
-			if (jQuery(this).hasClass('acc-btn-open')) {
+        // モバイルナビの実行
+        window.addEventListener('DOMContentLoaded', () => {
+            vk_mobile_nav_run(target);
+        });
 
-				// 親である li に open クラス追加
-				jQuery(this).parent().addClass('acc-parent-open');
-				jQuery(this).removeClass('acc-btn-open').addClass('acc-btn-close');
-				jQuery(this).next().removeClass('acc-child-close').addClass('acc-child-open');
+    })(window, document, '.vk-mobile-nav-menu-btn');
 
-				// 閉じるボタンがクリックされたら
-			} else {
-				// 親である li から open クラス除去
-				jQuery(this).parent().removeClass('acc-parent-open');
-				// クリックされた閉じるボタンから close クラスを除去して open クラス追加
-				jQuery(this).removeClass('acc-btn-close').addClass('acc-btn-open');
-				// 下階層となる ul 要素から open クラスを除去して close クラス追加
-				jQuery(this).next().removeClass('acc-child-open').addClass('acc-child-close');
-			}
-		});
-	}
+    /*-------------------------------------*/
+    /*  sub item accordion
+    /*-------------------------------------*/
+    ;
+    (function(breakPoint) {
+        function vk_menu_acc_run() {
+            // var breakPoint = 767;
+            // var bodyWidth = jQuery(window).width();
+            /*
+            cssのメディアクエリがスクロールバーを含んだ幅になるので、
+            js側もスクロールバーを含んだ幅にするため window.innerWidth を使用
+            */
+            var bodyWidth = window.innerWidth;
 
-	function vk_menu_acc_resize() {
-		var timer = false;
-		// リサイズ前のウィンドウサイズ
-		var before_window_size = jQuery(window).width();
-		// リサイズを作動させない幅
-		var window_size_margin = 8;
+            // ブレイクポイントより小さい場合
+            if (bodyWidth <= breakPoint) {
+                vk_menu_acc_clear()
+                vk_menu_acc_init();
+            } else {
+                vk_menu_acc_clear();
+            }
+        }
 
-		$(window).resize(function() {
-			if (timer !== false) {
-				clearTimeout(timer);
-			}
-			timer = setTimeout(function() {
+        function vk_menu_acc_clear() {
+            removeClass('ul.vk-menu-acc', 'vk-menu-acc-active')
+            removeClass('ul.vk-menu-acc li', 'acc-parent-open')
+            action('ul.vk-menu-acc li .acc-btn', (elm) => elm.remove())
+            removeClass('ul.vk-menu-acc li .acc-child-close', 'acc-child-close')
+            removeClass('ul.vk-menu-acc li .acc-child-open', 'acc-child-open')
+        }
 
-				/*
-				スマートフォンにおいてスライドしてスクロールバー表示された時、
-				消える時でリサイズ判定されてしまうので、
-				スクロールバー相当の幅以上の変化があった時のみ実行する
-				*/
+        function vk_menu_acc_init() {
+            // アクティブクラスを付与
+            addClass('ul.vk-menu-acc', 'vk-menu-acc-active')
 
-				// リサイズ後のウィンドウサイズ
-				var after_window_size = jQuery(window).width();
+            action('ul.vk-menu-acc ul.sub-menu', (elm) => {
+                let button = document.createElement('span')
+                button.classList.add('acc-btn','acc-btn-open')
+                button.addEventListener('click', acc_click_action)
 
-				// これより大きくなってたら実行するサイズ
-				var max_change_size = before_window_size + window_size_margin;
+                elm.parentNode.insertBefore(button, elm)
+                elm.classList.add('acc-child-close')
+            })
+        }
 
-				// これより小さくなってたら実行するサイズ
-				var min_change_size = before_window_size - window_size_margin;
+        function acc_click_action(event) {
+            let self = event.target,
+            parent = self.parentNode,
+            next = self.nextSibling
 
-				if (after_window_size < min_change_size || max_change_size < after_window_size) {
-					vk_menu_acc_run();
-					// console.log( min_change_size + ' < ' + after_window_size + ' < ' + max_change_size);
-					// console.log('Resize run');
-					before_window_size = after_window_size;
-					// console.log('before_window_size : ' + before_window_size);
-				} else {
-					// console.log( min_change_size + ' < ' + after_window_size + ' < ' + max_change_size);
-					// console.log('Resize none');
-				}
-			}, 500);
-		});
-	}
+            if (self.classList.contains('acc-btn-open')) {
+                console.log("action")
+                // 親である li に open クラス追加
+                parent.classList.add('acc-parent-open')
+                self.classList.remove('acc-btn-open')
+                self.classList.add('acc-btn-close')
 
-	vk_menu_acc_run();
-	vk_menu_acc_resize();
+                next.classList.remove('acc-child-close')
+                next.classList.add('acc-child-open')
+            }else{
+                // 閉じるボタンがクリックされたら
 
-	jQuery(document).ready(function() {
-		vk_menu_acc_run();
-	});
+                // 親である li から open クラス除去
+                parent.classList.remove('acc-parent-open')
+                // クリックされた閉じるボタンから close クラスを除去して open クラス追加
+                self.classList.remove('acc-btn-close')
+                self.classList.add('acc-btn-open')
+                // $(self).removeClass('acc-btn-close').addClass('acc-btn-open');
+                // 下階層となる ul 要素から open クラスを除去して close クラス追加
+                next.classList.remove('acc-child-open')
+                next.classList.add('acc-child-close')
+            }
+        }
 
-})(jQuery);
+        function vk_menu_acc_resize() {
+            let timer = false,
+            // リサイズ前のウィンドウサイズ
+            before_window_size = document.body.offsetWidth,
+            // リサイズを作動させない幅
+            window_size_margin = 8,
+
+            action = () => {
+                /*
+                スマートフォンにおいてスライドしてスクロールバー表示された時、
+                消える時でリサイズ判定されてしまうので、
+                スクロールバー相当の幅以上の変化があった時のみ実行する
+                */
+
+                // リサイズ後のウィンドウサイズ
+                let after_window_size = document.body.offsetWidth
+
+                // これより大きくなってたら実行するサイズ
+                let max_change_size = before_window_size + window_size_margin
+
+                // これより小さくなってたら実行するサイズ
+                let min_change_size = before_window_size - window_size_margin
+
+                if (after_window_size < min_change_size || max_change_size < after_window_size) {
+                    vk_menu_acc_run();
+                    // console.log( min_change_size + ' < ' + after_window_size + ' < ' + max_change_size);
+                    // console.log('Resize run');
+                    before_window_size = after_window_size;
+                    // console.log('before_window_size : ' + before_window_size);
+                } else {
+                    // console.log( min_change_size + ' < ' + after_window_size + ' < ' + max_change_size);
+                    // console.log('Resize none');
+                }
+            }
+
+            window.addEventListener('resize', () => {
+                if (timer !== false) {
+                    clearTimeout(timer);
+                }
+                timer = setTimeout(action, 500)
+            })
+        }
+
+        vk_menu_acc_resize()
+
+        document.addEventListener('DOMContentLoaded', vk_menu_acc_run)
+    })(5000);
+})(window, document);

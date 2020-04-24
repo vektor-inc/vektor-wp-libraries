@@ -575,7 +575,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					$dynamic_css = '/* page header */' . $dynamic_css;
 
 					// 出力を実行
-					wp_add_inline_style( 'lightning-design-style', $dynamic_css );
+					global $vk_page_header_enqueue_handle_style;
+					wp_add_inline_style( $vk_page_header_enqueue_handle_style, $dynamic_css );
 				}
 			} // if( !is_front_page() ){
 

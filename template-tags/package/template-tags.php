@@ -353,57 +353,62 @@ if ( ! function_exists( 'vk_sanitize_array' ) ) {
  * @param  [type] $args 取得する投稿タイプ情報の判別や保存されてる値の情報など
  * @return [type]       [description]
  */
-function vk_the_post_type_check_list( $args ) {
-	$default    = array(
-		'post_types_args'    => array(
-			'public' => true,
-		),
-		'name'               => '',
-		'checked'            => array( 'post' => true ),
-		'id'                 => '',
-		'exclude_post_types' => array( 'attachment' ),
-	);
-	$args       = wp_parse_args( $args, $default );
-	$post_types = get_post_types( $args['post_types_args'], 'object' );
+if ( ! function_exists( 'vk_the_post_type_check_list' ) ) {
+	function vk_the_post_type_check_list( $args ) {
+		$default    = array(
+			'post_types_args'    => array(
+				'public' => true,
+			),
+			'name'               => '',
+			'checked'            => array( 'post' => true ),
+			'id'                 => '',
+			'exclude_post_types' => array( 'attachment' ),
+		);
+		$args       = wp_parse_args( $args, $default );
+		$post_types = get_post_types( $args['post_types_args'], 'object' );
 
-	echo '<ul>';
-	foreach ( $post_types as $key => $value ) {
+		echo '<ul>';
+		foreach ( $post_types as $key => $value ) {
 
-		if ( ! in_array( $key, $args['exclude_post_types'] ) ) {
+			if ( ! in_array( $key, $args['exclude_post_types'] ) ) {
 
-			$checked = ( isset( $args['checked'][ $key ] ) && ( $args['checked'][ $key ] ) ) ? ' checked' : '';
+				$checked = ( isset( $args['checked'][ $key ] ) && ( $args['checked'][ $key ] ) ) ? ' checked' : '';
 
-			if ( ! empty( $args['id'][ $key ] ) ) {
-				$id = ' id="' . esc_attr( $args['id'][ $key ] ) . '"';
-			} elseif ( ! empty( $args['name'][ $key ] ) ) {
-				$id = ' id="' . esc_attr( $args['name'][ $key ] ) . '"';
-			} else {
-				$id = '';
+				if ( ! empty( $args['id'][ $key ] ) ) {
+					$id = ' id="' . esc_attr( $args['id'][ $key ] ) . '"';
+				} elseif ( ! empty( $args['name'][ $key ] ) ) {
+					$id = ' id="' . esc_attr( $args['name'][ $key ] ) . '"';
+				} else {
+					$id = '';
+				}
+
+				echo '<li><label>';
+				echo '<input type="checkbox" name="' . esc_attr( $args['name'] ) . '[' . $key . ']"' . $id . ' value="true"' . $checked . ' />' . esc_html( $value->label );
+				echo '</label></li>';
 			}
-
-			 echo '<li><label>';
-			 echo '<input type="checkbox" name="' . esc_attr( $args['name'] ) . '[' . $key . ']"' . $id . ' value="true"' . $checked . ' />' . esc_html( $value->label );
-			 echo '</label></li>';
 		}
+		echo '</ul>';
 	}
-	echo '</ul>';
 }
 
 /**
  * vk_the_post_type_check_list で保存される配列が、キーに投稿タイプ名が入る微妙な仕様のため、投稿タイプだけを配列で返すように変換
+ *
  * @param  [type] $post_types : array( 'post' => 'true', 'info' => '' );
  * @return [type] $return : array( 'post' );
  */
-function vk_the_post_type_check_list_saved_array_convert( $post_types ) {
-	$return = array();
-	if ( is_array( $post_types ) ) {
-		foreach ( $post_types as $post_type => $value ) {
-			if ( $value ) {
-				$return[] = $post_type;
+if ( ! function_exists( 'vk_the_post_type_check_list_saved_array_convert' ) ) {
+	function vk_the_post_type_check_list_saved_array_convert( $post_types ) {
+		$return = array();
+		if ( is_array( $post_types ) ) {
+			foreach ( $post_types as $post_type => $value ) {
+				if ( $value ) {
+					$return[] = $post_type;
+				}
 			}
 		}
+		return $return;
 	}
-	return$return;
 }
 
 /*
@@ -423,5 +428,26 @@ if ( ! function_exists( 'vk_is_checked' ) ) {
 			$checked = ' checked';
 		}
 		echo $checked;
+	}
+}
+
+/**
+ * Chack block category exist
+ *
+ * @param array  $categories
+ * @param string $slug
+ * @return boolian
+ */
+if ( ! function_exists( 'vk_is_block_category_exist' ) ) {
+	function vk_is_block_category_exist( $categories, $slug ) {
+		$keys = array();
+		foreach ( $categories as $key => $value ) {
+			$keys[] = $value['slug'];
+		}
+		if ( in_array( $slug, $keys ) ) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

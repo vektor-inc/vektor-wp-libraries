@@ -9,4 +9,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 	global $vk_font_selector_textdomain;
 	$vk_font_selector_textdomain = 'XXXX_plugin_text_domain_XXXX';
 
+	global $vk_font_selector_enqueue_handle_style;
+	$vk_font_selector_enqueue_handle_style = 'デザインのcssハンドル名';
+
 }
