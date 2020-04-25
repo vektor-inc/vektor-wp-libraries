@@ -67,3 +67,9 @@ if ( ! function_exists( 'vkExUnit_get_pageDescription' ) ) {
 		return apply_filters( 'vkExUnit_pageDescriptionCustom', $title );
 	}
 }
+
+if ( ! function_exists( 'veu_sanitize_boolean' ) ) {
+	function veu_sanitize_boolean( $input ) {
+		return vk_sanitize_boolean( $input );
+	}
+}
