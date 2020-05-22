@@ -645,7 +645,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				$current_color = '#16354f';
 			}
 			?>
-			<nav class="mobile-fix-nav">
+			<nav class="mobile-fix-nav" style="background-color: <?php echo sanitize_hex_color( $nav_bg_color ); ?>;">
 
 				<?php if ( is_active_sidebar( 'mobile-fix-nav-widget-area' ) ) : ?>
 				<?php
@@ -659,7 +659,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				<?php endif; ?>
 
 				<?php if ( self::is_menu_enable() ) : ?>
-				<ul class="mobile-fix-nav-menu" style="background-color: <?php echo sanitize_hex_color( $nav_bg_color ); ?>;">
+				<ul class="mobile-fix-nav-menu">
 
 						<?php
 						// add_menu_btn
