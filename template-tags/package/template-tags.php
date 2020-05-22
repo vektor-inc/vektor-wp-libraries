@@ -310,8 +310,8 @@ if ( ! function_exists( 'vk_is_plugin_active' ) ) {
 /*
   Sanitize
 /*-------------------------------------------*/
-if ( ! function_exists( 'veu_sanitize_boolean' ) ) {
-	function veu_sanitize_boolean( $input ) {
+if ( ! function_exists( 'vk_sanitize_boolean' ) ) {
+	function vk_sanitize_boolean( $input ) {
 		if ( $input == true ) {
 			return true;
 		} else {

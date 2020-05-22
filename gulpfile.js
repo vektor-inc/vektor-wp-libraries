@@ -82,10 +82,11 @@ gulp.task('parallax', function () {
 /*-------------------------------------*/
 /*	copy
 /*-------------------------------------*/
-gulp.task('copy_post-type-manager', function() {
+gulp.task('copy_post-type-manager', function(done) {
 	gulp.src('./post-type-manager/package/**')
 		.pipe(gulp.dest('../themes/biz-vektor/plugins/post-type-manager/'))
-		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/plugins/post-type-manager/package/'));
+		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/post-type-manager/package/'));
+		done();
 });
 
 // gulp.task('copy_call-to-action', function() {
