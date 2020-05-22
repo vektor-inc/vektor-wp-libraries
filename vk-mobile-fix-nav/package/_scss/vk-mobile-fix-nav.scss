@@ -57,6 +57,13 @@
 	left: 0;
 	width: 100%;
 	z-index: 100;
+	&-top {
+		display: block;
+		overflow: hidden;
+		background-color: #fff;
+		border-top: 1px solid #cfcfcf;
+		border-bottom: 1px solid #cfcfcf;
+	}
 	.mobile-fix-nav-menu {
 		margin: 0 auto;
 		box-sizing: border-box;
@@ -107,7 +114,4 @@
 			}
 		}
 	}
-}
-.mobile-fix-nav-widget {
-	padding: 15px;
 }

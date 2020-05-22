@@ -564,10 +564,12 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			}
 
 			?>
-			  <nav class="mobile-fix-nav">
-			  <?php if ( is_active_sidebar( 'mobile-fix-nav-widget-area' ) ) : ?>
-					<?php dynamic_sidebar( 'mobile-fix-nav-widget-area' ); ?>
-			<?php endif; ?>
+			<nav class="mobile-fix-nav">
+				<?php if ( is_active_sidebar( 'mobile-fix-nav-widget-area' ) ) : ?>
+					<div class="mobile-fix-nav-top">
+						<?php dynamic_sidebar( 'mobile-fix-nav-widget-area' ); ?>
+					</div>
+				<?php endif; ?>
 				<ul class="mobile-fix-nav-menu" style="background-color: <?php echo sanitize_hex_color( $nav_bg_color ); ?>;">
 
 						<?php
