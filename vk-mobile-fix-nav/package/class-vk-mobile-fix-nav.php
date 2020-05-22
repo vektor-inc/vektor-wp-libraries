@@ -92,6 +92,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 		public static function default_options() {
 			$default_options = array(
 				'hidden'       => true,
+				'widget_padding'       => false,
 				'add_menu_btn' => false,
 				'link_text_0'  => 'MENU',
 				'link_text_1'  => 'HOME',
@@ -187,6 +188,49 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					'label'    => __( 'Do not display Mobile Fix Nav', 'vk_mobile_fix_nav_textdomain' ),
 					'section'  => 'vk_mobil_fix_nav_setting',
 					'settings' => 'vk_mobil_fix_nav_options[hidden]',
+					'type'     => 'checkbox',
+				)
+			);
+
+			// nav_title
+			$wp_customize->add_setting(
+				'nav_title_widget',
+				array(
+					'sanitize_callback' => 'sanitize_text_field',
+				)
+			);
+			$wp_customize->add_control(
+				new MobileNav_Custom_Html(
+					$wp_customize,
+					'nav_title_widget',
+					array(
+						'label'            => __( 'Mobile Fix Nav Widget Area', 'vk_mobile_fix_nav_textdomain' ),
+						'section'          => 'vk_mobil_fix_nav_setting',
+						'type'             => 'text',
+						'custom_title_sub' => '',
+						'custom_html'      => '',
+					)
+				)
+			);
+
+			// hidden セッティング
+			$wp_customize->add_setting(
+				'vk_mobil_fix_nav_options[widget_padding]',
+				array(
+					'default'           => $default_options['widget_padding'],
+					'type'              => 'option', // 保存先 option or theme_mod
+					'capability'        => 'edit_theme_options', // サイト編集者
+					'sanitize_callback' => 'veu_sanitize_boolean',
+				)
+			);
+
+			// widget_padding コントロール
+			$wp_customize->add_control(
+				'vk_mobil_fix_nav_options[widget_padding]',
+				array(
+					'label'    => __( 'Add Widget Area Padding', 'vk_mobile_fix_nav_textdomain' ),
+					'section'  => 'vk_mobil_fix_nav_setting',
+					'settings' => 'vk_mobil_fix_nav_options[widget_padding]',
 					'type'     => 'checkbox',
 				)
 			);
@@ -580,26 +624,36 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 			$options = self::get_options();
 
-			// text color
-			if ( isset( $options['color'] ) && $options['color'] ) {
-				$color = $options['color'];
-			// $color = $options['color'];
-			} else {
-				$color = '';
-			}
-
-				// bg color
+			// bg color
 			if ( isset( $options['nav_bg_color'] ) && $options['nav_bg_color'] ) {
 				$nav_bg_color = $options['nav_bg_color'];
 			} else {
 				$nav_bg_color = '#FFF';
 			}
 
+			// color
+			if ( isset( $options['color'] ) && $options['color'] ) {
+				$color = $options['color'];
+			} else {
+				$color = '#2e6da4';
+			}
+
+			// current color
+			if ( isset( $options['current_color'] ) && $options['current_color'] ) {
+				$current_color = $options['current_color'];
+			} else {
+				$current_color = '#16354f';
+			}
 			?>
 			<nav class="mobile-fix-nav">
 
 				<?php if ( is_active_sidebar( 'mobile-fix-nav-widget-area' ) ) : ?>
-					<div class="mobile-fix-nav-top">
+				<?php
+				$padding_class = '';
+				if ( ! empty( $options['widget_padding'] ) ){
+					$padding_class = ' mobile-fix-nav-top-padding-true';
+				} ?>
+					<div class="mobile-fix-nav-top<?php echo $padding_class;?>">
 						<?php dynamic_sidebar( 'mobile-fix-nav-widget-area' ); ?>
 					</div>
 				<?php endif; ?>
@@ -608,21 +662,6 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				<ul class="mobile-fix-nav-menu" style="background-color: <?php echo sanitize_hex_color( $nav_bg_color ); ?>;">
 
 						<?php
-
-						// color
-						if ( isset( $options['color'] ) && $options['color'] ) {
-							$color = $options['color'];
-						} else {
-							$color = '#2e6da4';
-						}
-
-						// current color
-						if ( isset( $options['current_color'] ) && $options['current_color'] ) {
-							$current_color = $options['current_color'];
-						} else {
-							$current_color = '#16354f';
-						}
-
 						// add_menu_btn
 						if ( ! empty( $options['add_menu_btn'] ) ) {
 							echo '<li>';

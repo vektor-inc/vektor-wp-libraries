@@ -59,10 +59,12 @@
 	z-index: 100;
 	&-top {
 		display: block;
-		overflow: hidden;
 		background-color: #fff;
-		border-top: 1px solid #cfcfcf;
-		border-bottom: 1px solid #cfcfcf;
+		border-top: 1px solid rgba(0, 0, 0, 0.1);
+		border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+		&-padding-true {
+			padding: 10px;
+		}
 	}
 	.mobile-fix-nav-menu {
 		margin: 0 auto;
