@@ -538,13 +538,44 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			return $class;
 		}
 
+
+		/**
+		 * ウィジェットとナビゲーション両方非表示にするかどうか
+		 *
+		 * @return bool
+		 */
+		public static function hidden_all() {
+			$hidden_nav = self::hidden_nav();
+			// ナビが非表示指定でウィジュエットも登録されていない場合
+			if ( $hidden_nav && ! is_active_sidebar( 'mobile-fix-nav-widget-area' ) ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * ナビゲーション部分を非表示にするかどうか
+		 *
+		 * @return bool
+		 */
+		public static function hidden_nav() {
+			$options = self::get_options();
+			if ( isset( $options['hidden'] ) && $options['hidden'] ) {
+				$hidden_nav = true;
+			} else {
+				$hidden_nav = false;
+			}
+			return $hidden_nav;
+		}
+
+
 		/*
 		  vk_mobil_fix_nav_html
 		/*-------------------------------------------*/
 		public static function vk_mobil_fix_nav_html() {
 
-			$options = self::get_options();
-			if ( isset( $options['hidden'] ) && $options['hidden'] ) {
+			if ( self::hidden_all() ) {
 				return;
 			}
 
