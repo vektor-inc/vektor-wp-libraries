@@ -273,7 +273,7 @@ gulp.task('watch_term', function () {
 /*-------------------------------------*/
 /*	Font Awesome
 /*-------------------------------------*/
-gulp.task('copy_font-awesome', function (done) {
+gulp.task('copy_fa', function (done) {
     gulp.src('./font-awesome/package/**')
         .pipe(gulp.dest('../themes/lightning/inc/font-awesome/package'))
         .pipe(gulp.dest('../themes/lightning-pro/inc/font-awesome/package'))
@@ -287,7 +287,7 @@ gulp.task('copy_font-awesome', function (done) {
         done();
 });
 gulp.task('watch_fa', function () {
-    gulp.watch('./font-awesome/package/**', gulp.task('copy_font-awesome'));
+    gulp.watch('./font-awesome/package/**', gulp.task('copy_fa'));
 });
 
 /*-------------------------------------*/
