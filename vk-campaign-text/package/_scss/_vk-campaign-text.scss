@@ -1,0 +1,17 @@
+.vk-campaign-text {
+	text-align: center;
+	font-size: 14px;
+	i {
+		margin-right: 0.5em;
+	}
+	&_btn {
+		font-size: 12px;
+		display: inline-block;
+		padding: 0.1em 1em;
+		border-radius: 0.25rem;
+		margin: 0.5em 1em;
+		&:hover {
+			text-decoration: none;
+		}
+	}
+}
