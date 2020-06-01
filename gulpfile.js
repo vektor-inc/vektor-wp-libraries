@@ -139,7 +139,7 @@ gulp.task('c_tags', function(done) {
     done();
 });
 gulp.task('w_tags', function (done) {
-	gulp.watch('./template-tags/package/**', gulp.task('c_tags'))
+	gulp.watch('./template-tags/package/**', gulp.task('c_tags'));
     done();
 });
 
@@ -179,7 +179,8 @@ gulp.task('watch_admin', function (done) {
 /*	Copyright
 /*-------------------------------------*/
 gulp.task('copy_copyright-custom', function () {
-	gulp.src('./copyright-customizer/package/**')
+    gulp.src('./copyright-customizer/package/**')
+        .pipe(gulp.dest('../themes/katawara/inc/copyright-customizer/package/'))
         .pipe(gulp.dest('../plugins/lightning_copyright_customizer/inc/copyright-customizer/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/copyright-customizer/package/'));
 });
@@ -260,10 +261,11 @@ gulp.task('copy_term-color', function(done) {
 	gulp.src('./term-color/package/**')
 		.pipe(gulp.dest('../plugins/vk-post-author-display/inc/term-color/'))
 		.pipe(gulp.dest('../plugins/vk-blocks/inc/term-color/package/'))
-		.pipe(gulp.dest('../plugins/vk-blocks-pro/inc/term-color/package/'))
-		.pipe(gulp.dest('../themes/lightning-child-rerise/inc/term-color/'))
+        .pipe(gulp.dest('../plugins/vk-blocks-pro/inc/term-color/package/'))
+        .pipe(gulp.dest('../themes/katawara/inc/term-color/package/'))
+        .pipe(gulp.dest('../themes/lightning-child-rerise/inc/term-color/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/term-color/package/'))
-		.pipe(gulp.dest('../themes/lightning/inc/term-color/package/'))
+		.pipe(gulp.dest('../themes/lightning/inc/term-color/package/'));
 		done();
 });
 gulp.task('watch_term', function () {
@@ -288,6 +290,33 @@ gulp.task('copy_fa', function (done) {
 });
 gulp.task('watch_fa', function () {
     gulp.watch('./font-awesome/package/**', gulp.task('copy_fa'));
+});
+
+/**
+ * Widget Area Setting.
+ */
+gulp.task('copy_widget-area-setting', function (done) {
+    gulp.src('./widget-area-setting/package/**')
+        .pipe(gulp.dest('../themes/lightning/inc/widget-area-setting/package'))
+        .pipe(gulp.dest('../themes/lightning-pro/inc/widget-area-setting/package'))
+        .pipe(gulp.dest('../themes/katawara/inc/widget-area-setting/package'));
+        done();
+});
+gulp.task('watch_fa', function () {
+    gulp.watch('./widget-area-setting/package/**', gulp.task('copy_widget-area-setting'));
+});
+
+/**
+ * VK Campaign Text
+ */
+gulp.task('copy_vk-campaign-text', function (done) {
+    gulp.src('./vk-campaign-text/package/**')
+        .pipe(gulp.dest('../themes/katawara/inc/vk-campaign-text/package'))
+        .pipe(gulp.dest('../themes/lightning-pro/inc/vk-campaign-text/package'));
+        done();
+});
+gulp.task('watch_fa', function () {
+    gulp.watch('./vk-campaign-text/package/**', gulp.task('copy_vk-campaign-text'));
 });
 
 /*-------------------------------------*/
