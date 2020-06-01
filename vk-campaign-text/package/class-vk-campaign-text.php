@@ -261,11 +261,11 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
             $options = get_option( 'vk_campaign_text' );
 			$default = self::default_option();
             $options = wp_parse_args( $options, $default );
-            
+
 			$main_text_color   = isset( $options['main_text_color'] ) ? $options['main_text_color'] : '#ffffff';
-			$main_bg_color     = isset( $options['main_background_color'] ) ? $options['main_background_color'] : '#337ab7';
-			$button_text_color = isset( $options['button_text_color'] ) ? $options['button_text_color'] : '#ffffff';
-			$button_bg_color   = isset( $options['button_background_color'] ) ? $options['button_background_color'] : '#2e6da4';
+			$main_bg_color     = isset( $options['main_background_color'] ) ? $options['main_background_color'] : '#eab010';
+			$button_text_color = isset( $options['button_text_color'] ) ? $options['button_text_color'] : '#4c4c4c';
+			$button_bg_color   = isset( $options['button_background_color'] ) ? $options['button_background_color'] : '#ffffff';
 
 			$dynamic_css  = '.vk-campaign-text{';
 			$dynamic_css .= 'background:' . $main_bg_color . ';';
