@@ -302,7 +302,7 @@ gulp.task('copy_widget-area-setting', function (done) {
         .pipe(gulp.dest('../themes/katawara/inc/widget-area-setting/package'));
         done();
 });
-gulp.task('watch_fa', function () {
+gulp.task('watch_widget-area-setting', function () {
     gulp.watch('./widget-area-setting/package/**', gulp.task('copy_widget-area-setting'));
 });
 
