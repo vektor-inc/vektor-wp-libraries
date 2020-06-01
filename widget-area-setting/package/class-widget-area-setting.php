@@ -15,7 +15,7 @@ if ( ! class_exists( 'Widget_Area_Setting' ) ) {
 		 */
 		public function __construct() {
 			add_action( 'customize_register', array( __CLASS__, 'resister_customize' ) );
-			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_style' ) );
+			add_action( 'wp_head', array( __CLASS__, 'enqueue_style' ),5 );
 			add_filter( 'lightning_footer_widget_area_count', array( __CLASS__, 'set_footter_widget_area_count' ) );
 		}
 

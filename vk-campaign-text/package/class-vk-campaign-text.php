@@ -17,7 +17,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			global $vk_campaign_text_hook_point;
 			add_action( 'customize_register', array( __CLASS__, 'resister_customize' ) );
 			add_action( $vk_campaign_text_hook_point, array( __CLASS__, 'display_html' ) );
-			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_style' ) );
+			add_action( 'wp_head', array( __CLASS__, 'enqueue_style' ), 5 );
 		}
 
 

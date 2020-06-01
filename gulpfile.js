@@ -180,7 +180,7 @@ gulp.task('watch_admin', function (done) {
 /*-------------------------------------*/
 gulp.task('copy_copyright-custom', function () {
     gulp.src('./copyright-customizer/package/**')
-        .pipe(gulp.dest('../themes/katawara/inc/copyright-customizer/package/'));
+        .pipe(gulp.dest('../themes/katawara/inc/copyright-customizer/package/'))
         .pipe(gulp.dest('../plugins/lightning_copyright_customizer/inc/copyright-customizer/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/copyright-customizer/package/'));
 });
