@@ -20,7 +20,9 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			add_action( 'wp_head', array( __CLASS__, 'enqueue_style' ), 5 );
 		}
 
-
+        /**
+		 * Default Option.
+		 */
 		public static function default_option() {
 			$args = array(
 				'display'                 => false,
@@ -40,7 +42,6 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 		 */
 		public static function resister_customize( $wp_customize ) {
 			global $vk_campaign_text_prefix;
-			global $vk_campaign_text_textdomain;
 			$description = '';
 			if ( class_exists( 'Vk_Font_Awesome_Versions' ) ) {
 				$description = Vk_Font_Awesome_Versions::ex_and_link();
@@ -257,7 +258,10 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			 * Enqueue Style.
 			 */
 		public static function enqueue_style() {
-			$options           = get_option( 'vk_campaign_text' );
+            $options = get_option( 'vk_campaign_text' );
+			$default = self::default_option();
+            $options = wp_parse_args( $options, $default );
+            
 			$main_text_color   = isset( $options['main_text_color'] ) ? $options['main_text_color'] : '#ffffff';
 			$main_bg_color     = isset( $options['main_background_color'] ) ? $options['main_background_color'] : '#337ab7';
 			$button_text_color = isset( $options['button_text_color'] ) ? $options['button_text_color'] : '#ffffff';

@@ -128,10 +128,10 @@ if ( ! class_exists( 'Widget_Area_Setting' ) ) {
 					'settings' => 'lightning_widget_setting[footer_widget_area_count]',
 					'type'     => 'select',
 					'choices'  => array(
-						1 => __( '1 column', 'widget_area_settng_textdomain' ),
-						2 => __( '2 column', 'widget_area_settng_textdomain' ),
-						3 => __( '3 column', 'widget_area_settng_textdomain' ),
-						4 => __( '4 column', 'widget_area_settng_textdomain' ),
+						'1' => __( '1 column', 'widget_area_settng_textdomain' ),
+						'2' => __( '2 column', 'widget_area_settng_textdomain' ),
+						'3' => __( '3 column', 'widget_area_settng_textdomain' ),
+						'4' => __( '4 column', 'widget_area_settng_textdomain' ),
 					),
 					'description' => __( '* If you save and reload after making changes, the number of the widget area setting panels  will increase or decrease.', 'widget_area_settng_textdomain' ),
 				)
@@ -170,13 +170,13 @@ if ( ! class_exists( 'Widget_Area_Setting' ) ) {
 			$footer_widget_area_count = 3;
 			$options                  = get_option( 'lightning_widget_setting' );
 			if ( isset( $options['footer_widget_area_count'] ) ) {
-				if ( 1 === $options['footer_widget_area_count'] ) {
+				if ( '1' === $options['footer_widget_area_count'] ) {
 					$footer_widget_area_count = 1;
-				} elseif ( 2 === $options['footer_widget_area_count'] ) {
+				} elseif ( '2' === $options['footer_widget_area_count'] ) {
 					$footer_widget_area_count = 2;
-				} elseif ( 3 === $options['footer_widget_area_count'] ) {
+				} elseif ( '3' === $options['footer_widget_area_count'] ) {
 					$footer_widget_area_count = 3;
-				} elseif ( 4 === $options['footer_widget_area_count'] ) {
+				} elseif ( '4' === $options['footer_widget_area_count'] ) {
 					$footer_widget_area_count = 4;
 				}
 			}
