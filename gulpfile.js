@@ -353,7 +353,8 @@ gulp.task('copy_vk-mobile-nav', function (done) {
 		.pipe(gulp.dest('../themes/lightning/inc/vk-mobile-nav/package/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-mobile-nav/package/'))
         .pipe(gulp.dest('../themes/katawara/inc/vk-mobile-nav/package/'))
-        .pipe(gulp.dest('../themes/seizen-souzoku/inc/vk-mobile-nav/'));
+        .pipe(gulp.dest('../themes/seizen-souzoku/inc/vk-mobile-nav/'))
+        .pipe(gulp.dest('../themes/souzoku/inc/vk-mobile-nav/package/'));
         done();
 });
 gulp.task('watch_mobile', function () {
