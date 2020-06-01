@@ -315,7 +315,7 @@ gulp.task('copy_vk-campaign-text', function (done) {
         .pipe(gulp.dest('../themes/lightning-pro/inc/vk-campaign-text/package'));
         done();
 });
-gulp.task('watch_fa', function () {
+gulp.task('watch_vk-campaign-text', function () {
     gulp.watch('./vk-campaign-text/package/**', gulp.task('copy_vk-campaign-text'));
 });
 
