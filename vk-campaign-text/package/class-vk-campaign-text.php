@@ -293,8 +293,12 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 				$button_url  = isset( $options['button_url'] ) ? $options['button_url'] : '';
 
 				$campaign_html .= '<div class="vk-campaign-text">';
-				$campaign_html .= '<span>' . $icon . $main_text . '</span>';
-				$campaign_html .= '<a class="vk-campaign-text_btn" href="' . $button_url . '">' . $button_text . '</a>';
+				if ( empty( $button_text ) ) {
+					$campaign_html .= '<a class="vk-campaign-text-link" href="' . $button_url . '"><span>' . $icon . $main_text . '</span></a>';
+				} else {
+					$campaign_html .= '<span>' . $icon . $main_text . '</span>';
+					$campaign_html .= '<a class="vk-campaign-text_btn" href="' . $button_url . '">' . $button_text . '</a>';
+				}
 				$campaign_html .= '</div>';
 			}
 			echo $campaign_html;
