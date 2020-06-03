@@ -269,6 +269,9 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			$button_bg_color   = isset( $options['button_background_color'] ) ? $options['button_background_color'] : '#fff';
 
 			$light_or_dark = lightning_check_color_mode( $main_bg_color );
+			print '<pre style="text-align:left">';
+			print_r( $light_or_dark );
+			print '</pre>';
 
 			if ( 'light' === $light_or_dark ) {
 				$button_hover_color = 'rgba(0,0,0,0.1)';
