@@ -25,12 +25,14 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 		 */
 		public static function default_option() {
 			$args = array(
-				'display'                 => false,
-				'icon'                    => '',
-				'main_text_color'         => '#fff',
-				'main_background_color'   => '#eab010',
-				'button_text_color'       => '#4c4c4c',
-				'button_background_color' => '#fff',
+				'display'						=> false,
+				'icon'							=> '',
+				'main_text_color'				=> '#fff',
+				'main_background_color'   		=> '#eab010',
+				'button_text_color'       		=> '#4c4c4c',
+				'button_background_color' 		=> '#fff',
+				'button_text_hover_color'       => '#fff',
+				'button_background_hover_color' => '#eab010',
 			);
 			return $args;
 		}
@@ -233,6 +235,52 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 				)
 			);
 
+			// Button Text Hover Color.
+			$wp_customize->add_setting(
+				'vk_campaign_text[button_text_hover_hover]',
+				array(
+					'default'           => '#fff',
+					'type'              => 'option',
+					'capability'        => 'edit_theme_options',
+					'sanitize_callback' => 'sanitize_hex_color',
+				)
+			);
+
+			$wp_customize->add_control(
+				new WP_Customize_Color_Control(
+					$wp_customize,
+					'vk_campaign_text[button_text_hover_hover]',
+					array(
+						'label'    => __( 'Button Text Hover Color', 'lightning-pro' ),
+						'section'  => 'vk_campaign_text_setting',
+						'settings' => 'vk_campaign_text[button_text_hover_hover]',
+					)
+				)
+			);
+
+			// Button Background Color.
+			$wp_customize->add_setting(
+				'vk_campaign_text[button_background_hover_color]',
+				array(
+					'default'           => '#fff',
+					'type'              => 'option',
+					'capability'        => 'edit_theme_options',
+					'sanitize_callback' => 'sanitize_hex_color',
+				)
+			);
+
+			$wp_customize->add_control(
+				new WP_Customize_Color_Control(
+					$wp_customize,
+					'vk_campaign_text[button_background_hover_color]',
+					array(
+						'label'    => __( 'Button Background Color', 'lightning-pro' ),
+						'section'  => 'vk_campaign_text_setting',
+						'settings' => 'vk_campaign_text[button_background_hover_color]',
+					)
+				)
+			);
+
 			// Button URL.
 			$wp_customize->add_setting(
 				'vk_campaign_text[button_url]',
@@ -263,18 +311,12 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			$default = self::default_option();
 			$options = wp_parse_args( $options, $default );
 
-			$main_text_color   = isset( $options['main_text_color'] ) ? $options['main_text_color'] : '#ffffff';
-			$main_bg_color     = isset( $options['main_background_color'] ) ? $options['main_background_color'] : '#eab010';
-			$button_text_color = isset( $options['button_text_color'] ) ? $options['button_text_color'] : '#4c4c4c';
-			$button_bg_color   = isset( $options['button_background_color'] ) ? $options['button_background_color'] : '#fff';
-
-			$light_or_dark = lightning_check_color_mode( $main_bg_color );
-
-			if ( 'light' === $light_or_dark ) {
-				$button_hover_color = 'rgba(0,0,0,0.1)';
-			} else {
-				$button_hover_color = 'rgba(255,255,255,0.2)';
-			}
+			$main_text_color   				= esc_html( $options['main_text_color'] );
+			$main_bg_color     				= esc_html( $options['main_background_color'] );
+			$button_text_color 				= esc_html( $options['button_text_color'] );
+			$button_bg_color   				= esc_html( $options['button_background_color'] );
+			$button_text_hover_color 		= esc_html( $options['button_text_hover_color'] );
+			$button_background_hover_color 	= esc_html( $options['button_background_hover_color'] );
 
 			$dynamic_css  = '.vk-campaign-text{';
 			$dynamic_css .= 'background:' . $main_bg_color . ';';
@@ -289,8 +331,8 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			$dynamic_css .= 'color:' . $button_text_color . ';';
 			$dynamic_css .= '}';
 			$dynamic_css .= '.vk-campaign-text_btn:hover{';
-			$dynamic_css .= 'background:' . $main_bg_color . ';';
-			$dynamic_css .= 'color:' . $button_hover_color . ';';
+			$dynamic_css .= 'background:' . $button_background_hover_color . ';';
+			$dynamic_css .= 'color:' . $button_text_hover_color . ';';
 			$dynamic_css .= '}';
 			$dynamic_css .= '.vk-campaign-text_link,';
 			$dynamic_css .= '.vk-campaign-text_link:link,';
