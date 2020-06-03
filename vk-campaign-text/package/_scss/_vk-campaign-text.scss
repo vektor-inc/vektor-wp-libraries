@@ -2,7 +2,7 @@
 	text-align: center;
 	font-size: 14px;
 	line-height: 1.6;
-	padding: 0.5em 5px;
+	padding: 4px 5px;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -14,9 +14,9 @@
 
 	&_btn {
 		font-size: 12px;
-		line-height: 2;
+		line-height: 1;
 		display: inline-block;
-		padding: 0.1em 1em;
+		padding: 4px 1em;
 		border-radius: 0.25rem;
 		margin: 0 1em;
 		border: 1px solid #fff;
