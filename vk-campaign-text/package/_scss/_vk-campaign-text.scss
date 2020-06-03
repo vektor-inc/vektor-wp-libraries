@@ -7,10 +7,11 @@
 	flex-wrap: wrap;
 	align-items: center;
 	justify-content: center;
-	text-align: center;
+
 	i {
 		margin-right: 0.5em;
 	}
+
 	&_btn {
 		font-size: 12px;
 		line-height: 2;
@@ -18,6 +19,16 @@
 		padding: 0.1em 1em;
 		border-radius: 0.25rem;
 		margin: 0 1em;
+
+		&:hover {
+			text-decoration: none;
+			border: 1px solid #fff;
+		}
+	}
+
+	&_link {
+		text-decoration: underline;
+
 		&:hover {
 			text-decoration: none;
 		}
