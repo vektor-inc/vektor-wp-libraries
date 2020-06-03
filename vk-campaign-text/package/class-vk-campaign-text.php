@@ -44,7 +44,6 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 		 */
 		public static function resister_customize( $wp_customize ) {
 			global $vk_campaign_text_prefix;
-			global $vk_campaign_text_textdomain;
 			$description = '';
 			if ( class_exists( 'Vk_Font_Awesome_Versions' ) ) {
 				$description = Vk_Font_Awesome_Versions::ex_and_link();
