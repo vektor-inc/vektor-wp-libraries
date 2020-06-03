@@ -53,7 +53,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			$wp_customize->add_section(
 				'vk_campaign_text_setting',
 				array(
-					'title'    => $vk_campaign_text_prefix . __( 'Campaign Text', 'lightning-pro' ),
+					'title'    => $vk_campaign_text_prefix . __( 'Campaign Text', 'vk_campaign_text_text_domain' ),
 					'priority' => 512,
 				)
 			);
@@ -72,7 +72,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			$wp_customize->add_control(
 				'vk_campaign_text[display]',
 				array(
-					'label'    => __( 'Display Campaign Text', 'lightning-pro' ),
+					'label'    => __( 'Display Campaign Text', 'vk_campaign_text_text_domain' ),
 					'section'  => 'vk_campaign_text_setting',
 					'settings' => 'vk_campaign_text[display]',
 					'type'     => 'checkbox',
@@ -93,11 +93,11 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			$wp_customize->add_control(
 				'vk_campaign_text[icon]',
 				array(
-					'label'       => __( 'Icon', 'lightning-pro' ),
+					'label'       => __( 'Icon', 'vk_campaign_text_text_domain' ),
 					'section'     => 'vk_campaign_text_setting',
 					'settings'    => 'vk_campaign_text[icon]',
 					'type'        => 'text',
-					'description' => __( 'To choose your favorite icon, and enter the class.', 'lightning-pro' ) . '<br>' . $description,
+					'description' => __( 'To choose your favorite icon, and enter the class.', 'vk_campaign_text_text_domain' ) . '<br>' . $description,
 				)
 			);
 
@@ -115,7 +115,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			$wp_customize->add_control(
 				'vk_campaign_text[main_text]',
 				array(
-					'label'    => __( 'Main Text', 'lightning-pro' ),
+					'label'    => __( 'Main Text', 'vk_campaign_text_text_domain' ),
 					'section'  => 'vk_campaign_text_setting',
 					'settings' => 'vk_campaign_text[main_text]',
 					'type'     => 'text',
@@ -138,7 +138,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 					$wp_customize,
 					'vk_campaign_text[main_text_color]',
 					array(
-						'label'    => __( 'Main Text Color', 'lightning-pro' ),
+						'label'    => __( 'Main Text Color', 'vk_campaign_text_text_domain' ),
 						'section'  => 'vk_campaign_text_setting',
 						'settings' => 'vk_campaign_text[main_text_color]',
 					)
@@ -161,7 +161,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 					$wp_customize,
 					'vk_campaign_text[main_background_color]',
 					array(
-						'label'    => __( 'Main Background Color', 'lightning-pro' ),
+						'label'    => __( 'Main Background Color', 'vk_campaign_text_text_domain' ),
 						'section'  => 'vk_campaign_text_setting',
 						'settings' => 'vk_campaign_text[main_background_color]',
 					)
@@ -182,7 +182,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			$wp_customize->add_control(
 				'vk_campaign_text[button_text]',
 				array(
-					'label'    => __( 'Button Text', 'lightning-pro' ),
+					'label'    => __( 'Button Text', 'vk_campaign_text_text_domain' ),
 					'section'  => 'vk_campaign_text_setting',
 					'settings' => 'vk_campaign_text[button_text]',
 					'type'     => 'text',
@@ -205,7 +205,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 					$wp_customize,
 					'vk_campaign_text[button_text_color]',
 					array(
-						'label'    => __( 'Button Text Color', 'lightning-pro' ),
+						'label'    => __( 'Button Text Color', 'vk_campaign_text_text_domain' ),
 						'section'  => 'vk_campaign_text_setting',
 						'settings' => 'vk_campaign_text[button_text_color]',
 					)
@@ -228,7 +228,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 					$wp_customize,
 					'vk_campaign_text[button_background_color]',
 					array(
-						'label'    => __( 'Button Background Color', 'lightning-pro' ),
+						'label'    => __( 'Button Background Color', 'vk_campaign_text_text_domain' ),
 						'section'  => 'vk_campaign_text_setting',
 						'settings' => 'vk_campaign_text[button_background_color]',
 					)
@@ -251,7 +251,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 					$wp_customize,
 					'vk_campaign_text[button_text_hover_hover]',
 					array(
-						'label'    => __( 'Button Text Hover Color', 'lightning-pro' ),
+						'label'    => __( 'Button Text Hover Color', 'vk_campaign_text_text_domain' ),
 						'section'  => 'vk_campaign_text_setting',
 						'settings' => 'vk_campaign_text[button_text_hover_hover]',
 					)
@@ -274,7 +274,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 					$wp_customize,
 					'vk_campaign_text[button_background_hover_color]',
 					array(
-						'label'    => __( 'Button Background Color', 'lightning-pro' ),
+						'label'    => __( 'Button Background Color', 'vk_campaign_text_text_domain' ),
 						'section'  => 'vk_campaign_text_setting',
 						'settings' => 'vk_campaign_text[button_background_hover_color]',
 					)
@@ -295,7 +295,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			$wp_customize->add_control(
 				'vk_campaign_text[button_url]',
 				array(
-					'label'    => __( 'Button URL', 'lightning-pro' ),
+					'label'    => __( 'Button URL', 'vk_campaign_text_text_domain' ),
 					'section'  => 'vk_campaign_text_setting',
 					'settings' => 'vk_campaign_text[button_url]',
 					'type'     => 'text',
@@ -373,4 +373,3 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 	}
 	new VK_Campaign_Text();
 }
-
