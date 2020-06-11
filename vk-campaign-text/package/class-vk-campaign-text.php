@@ -273,7 +273,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 					$wp_customize,
 					'vk_campaign_text[button_background_hover_color]',
 					array(
-						'label'    => __( 'Button Background Color', 'vk_campaign_text_text_domain' ),
+						'label'    => __( 'Button Background Hover Color', 'vk_campaign_text_text_domain' ),
 						'section'  => 'vk_campaign_text_setting',
 						'settings' => 'vk_campaign_text[button_background_hover_color]',
 					)
