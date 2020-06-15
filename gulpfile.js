@@ -68,18 +68,18 @@ gulp.task('copy_jslibs', function (done) {
 
 // parallax
 gulp.task('parallax', function () {
-    gulp.watch('./js-libraries/vk-prlx.js', function () {
-        gulp.src(['./js-libraries/vk-prlx.js'])
-            .pipe(plumber()) // エラーでも監視を続行
-            .pipe(jsmin())
-            .pipe(rename({
-                suffix: '.min'
-            }))
-            .pipe(gulp.dest('./js-libraries/'))
-            .pipe(concat('_vk-prlx.min.js'))
-            .pipe(gulp.dest('../themes/lightning/assets/js/'))
-            .pipe(gulp.dest('../themes/lightning-pro/assets/js/'));
-    });
+  return gulp.src(['./js-libraries/vk-prlx.js'])
+    .pipe(plumber())
+    .pipe(jsmin())
+    .pipe(rename(
+      {
+        suffix: '.min'
+      }
+    ))
+    .pipe(gulp.dest('./js-libraries/'))
+    .pipe(concat('_vk-prlx.min.js'))
+    .pipe(gulp.dest('../themes/lightning/assets/js/'))
+    .pipe(gulp.dest('../themes/lightning-pro/assets/js/'));
 });
 
 /*-------------------------------------*/
@@ -326,44 +326,29 @@ gulp.task('watch_vk-campaign-text', function () {
 /*  vk-mobile-nav
 /*-------------------------------------*/
 gulp.task('sass_vk-mobile-nav', function (done) {
-    // gulp.src( '**/_scss/**/*.scss' )
-    gulp.src('vk-mobile-nav/package/_scss/*.scss')
-        .pipe(plumber())
-        .pipe(sass())
-        .pipe(cmq({
-            log: true
-        }))
-        .pipe(autoprefixer())
-        .pipe(cleanCss())
-        .pipe(gulp.dest('./vk-mobile-nav/package/css/'));
-        done();
+  return gulp.src('vk-mobile-nav/package/_scss/*.scss')
+    .pipe(sass())
+    .pipe(cmq({
+        log: true
+    }))
+    .pipe(autoprefixer())
+    .pipe(cleanCss())
+    .pipe(gulp.dest('./vk-mobile-nav/package/css/'))
+  done();
 });
-// js最小化
-gulp.task('jsmin_vk-mobile-nav', function (done) {
-    gulp.src(['./vk-mobile-nav/package/js/vk-mobile-nav.js'])
-        .pipe(babel({
-          presets: ['@babel/env']
-        }))
-        .pipe(uglify())
-        .pipe(rename({
-            suffix: '.min'
-        }))
-        .pipe(gulp.dest('./vk-mobile-nav/package/js/'));
-        done();
-});
+
 gulp.task('copy_vk-mobile-nav', function (done) {
-  gulp.src('./vk-mobile-nav/package/**')
+  return gulp.src('./vk-mobile-nav/package/**')
     .pipe(gulp.dest('../themes/lightning/inc/vk-mobile-nav/package/'))
     .pipe(gulp.dest('../themes/lightning-pro/inc/vk-mobile-nav/package/'))
-        .pipe(gulp.dest('../themes/katawara/inc/vk-mobile-nav/package/'))
-        .pipe(gulp.dest('../themes/seizen-souzoku/inc/vk-mobile-nav/'))
-        .pipe(gulp.dest('../themes/souzoku/inc/vk-mobile-nav/package/'));
-        done();
+    .pipe(gulp.dest('../themes/katawara/inc/vk-mobile-nav/package/'))
+    .pipe(gulp.dest('../themes/seizen-souzoku/inc/vk-mobile-nav/'))
+    .pipe(gulp.dest('../themes/souzoku/inc/vk-mobile-nav/package/'))
+  done()
 });
+
 gulp.task('watch_mobile', function () {
-    gulp.watch('./vk-mobile-nav/package/_scss/**', gulp.series('sass_vk-mobile-nav','copy_vk-mobile-nav'));
-    gulp.watch('./vk-mobile-nav/package/js/vk-mobile-nav.js', gulp.series('jsmin_vk-mobile-nav','copy_vk-mobile-nav'));
-    // gulp.watch('./vk-mobile-nav/package/**', gulp.series('sass_vk-mobile-nav','jsmin_vk-mobile-nav','copy_vk-mobile-nav'));
+  gulp.watch('./vk-mobile-nav/package/_scss/**', gulp.series('sass_vk-mobile-nav','copy_vk-mobile-nav'));
 });
 
 /*-------------------------------------*/

@@ -4,51 +4,18 @@
 /*  Load modules
 /*-------------------------------------------*/
 if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
-	require_once( 'vk-mobile-nav/class-vk-mobile-nav.php' );
+	require get_parent_theme_file_path( '/inc/vk-mobile-nav/package/class-vk-mobile-nav.php' );
 
 	global $default_nav;
 	$default_nav = 'Header';
 
 	global $library_url;
-	$library_url = plugin_dir_url( __FILE__ ) . 'vk-mobile-nav';
-	// $library_url = get_template_directory_uri() . '/inc/vk-mobile-nav/';
+	$library_url = get_template_directory_uri() . '/inc/vk-mobile-nav/package/';
 
+	// Default Vk Mobile Nav HTML was exported to footer.
+	// But Originally it is desirable to output with a header
+	// remove_action( 'wp_footer', array( 'Vk_Mobile_Nav', 'menu_set_html' ) );
+	// add_action( 'lightning_header_before', array( 'Vk_Mobile_Nav', 'menu_set_html' ) );
+
+	remove_action( 'wp_enqueue_scripts', array( 'Vk_Mobile_Nav', 'add_script' ) );
 }
-
-
-/*-------------------------------------------*/
-/* 初期状態
-/*-------------------------------------------*/
-
-/*
-■ メニューボタン
-.vk-mobile-nav-menu-btn は初期状態ではCSSで非表示にしてある
-.vk-mobile-nav-menu-btn がクリックされる
-	メニューボタン .vk-mobile-nav-menu-btn に .menu-open を付与
-		.vk-mobile-nav-menu-btn.menu-open になったらCSSで見た目をクローズボタンに変更
-	メニュー本体 .vk-mobile-nav に .vk-mobile-nav-open が付与される。
-		.vk-mobile-nav.vk-mobile-nav-open に対してCSSで表示処理
-
-■ body class
-wp_is_mobile でモバイル判定された場合はPHPでフックを使用してbodyタグに .mobile-device を付与している
-
- */
-
-
-/*	 モバイル端末の時
-/*-------------------------------------------*/
-/*
-端末判定でモバイルの場合は強制的にモバイルメニューを利用する
-→ CSSでPC版のメニューを表示しない
-	→ モバイルの場合はbodyタグに対してPHPで識別用のclassを付与し、
-	そのclassがある場合にPC用のナビゲーションをCSSで非表示にする
-	（ メディアクエリで画面サイズが広い時に非表示にすると、タブレットで画面が広い時にモバイルメニューが非表示になってしまう為 ）
-→ php側でPCメニューを表示しない制御をするのが理想
-
-/*	 PC端末の時
-/*-------------------------------------------*/
-/*
-* html上は普通に表示し、CSSでPC版とモバイル版のメニューを切り替える
-* PCでもモバイルの表示が確認しやすくするため
-* CSSで特定の画面サイズでどちらのメニューを表示・非表示にするのか切り替える
- */

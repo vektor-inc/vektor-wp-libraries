@@ -17,10 +17,12 @@
   },
   "homepage": "https://github.com/vektor-inc/vektor-wp-libraries#readme",
   "dependencies": {
-    "gulp-autoprefixer": "^4.0.0",
-    "npm-check-updates": "^3.1.20"
+    "is-mobile": "^2.2.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "babel-loader": "^8.1.0",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^6.1.0",
     "gulp-clean-css": "^4.2.0",
@@ -29,6 +31,9 @@
     "gulp-jsmin": "^0.1.5",
     "gulp-merge-media-queries": "^0.2.1",
     "gulp-plumber": "^1.2.1",
-    "gulp-sass": "^4.0.2"
+    "gulp-sass": "^4.0.2",
+    "npm-check-updates": "^3.1.20",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
   }
 }
