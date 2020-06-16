@@ -4,7 +4,9 @@
   "description": "* WordPress開発環境の wp-content ディレクトリにこの vektor-wp-libraries を置いて gulpを走らせます。",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "gulp": "gulp",
+    "sass_vk-mobile-nav": "gulp sass_vk-mobile-nav",
+    "jsmin_vk-mobile-nav": "webpack --config webpack/vk-mobile-nav.config.js"
   },
   "repository": {
     "type": "git",
@@ -32,6 +34,7 @@
     "gulp-merge-media-queries": "^0.2.1",
     "gulp-plumber": "^1.2.1",
     "gulp-sass": "^4.0.2",
+    "gulp-uglify": "^3.0.2",
     "npm-check-updates": "^3.1.20",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"

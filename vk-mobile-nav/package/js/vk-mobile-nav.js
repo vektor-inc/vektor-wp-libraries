@@ -205,7 +205,7 @@ If you want to change this file that, you have to change original file.
 })(window, document);
 
 const mobile = require('is-mobile');
-((d)=>{
+((document)=>{
 	window.addEventListener('DOMContentLoaded', ()=>{
 		const isMobile = mobile.isMobile({tablet:true})
 		;['device-mobile', 'device-pc'].forEach((m)=>document.body.classList.remove(m))
