@@ -34,12 +34,12 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			global $vk_campaign_text_display_position_array;
 			if ( ! $vk_campaign_text_hook_point ) {
 				if ( 'show_in_front_page' === $options['display'] && is_front_page() || 'show_in_full_page' === $options['display'] ) {
-					foreach ( $vk_campaign_text_display_position_array[ $position ]['hookpoint'] as $hook_point ) {
+					foreach ( (array) $vk_campaign_text_display_position_array[ $position ]['hookpoint'] as $hook_point ) {
 						add_action( $hook_point, array( __CLASS__, 'display_html' ) );
 					}
 				}
 			} else {
-				foreach ( $vk_campaign_text_hook_point as $hook_point ) {
+				foreach ( (array) $vk_campaign_text_hook_point as $hook_point ) {
 					add_action( $hook_point, array( __CLASS__, 'display_html' ) );
 				}
 			}
@@ -68,7 +68,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 		public static function default_option() {
 			$args = array(
 				'display'                       => 'hide',
-				'display_position'              => 'header_append',
+				'display_position'              => '',
 				'icon'                          => '',
 				'main_text_color'               => '#fff',
 				'main_background_color'         => '#eab010',
