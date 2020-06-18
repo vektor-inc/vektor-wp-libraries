@@ -79,7 +79,7 @@ if ( ! class_exists( 'VK_Component_Mini_Contents' ) ) {
 					$caption_class = ' class="' . esc_attr( $options['caption_class'] ) . '"';
 				}
 				$html .= '<' . esc_html( $options['caption_tag'] ) . $caption_class . $font_style . '>';
-				$html .= nl2br( esc_textarea( $options['caption_text'] ) );
+				$html .= nl2br( wp_kses_post( $options['caption_text'] ) );
 				$html .= '</' . esc_html( $options['caption_tag'] ) . '>';
 
 			}
