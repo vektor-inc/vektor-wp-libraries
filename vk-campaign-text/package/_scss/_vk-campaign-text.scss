@@ -7,7 +7,9 @@
 	flex-wrap: wrap;
 	align-items: center;
 	justify-content: center;
-
+	position: relative;
+	// グローバルメニューのドロップダウンの上にならないように注意
+	// z-index: 100;
 	i {
 		margin-right: 0.5em;
 	}

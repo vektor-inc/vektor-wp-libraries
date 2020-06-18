@@ -14,10 +14,52 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 		 * Constructor.
 		 */
 		public function __construct() {
-			global $vk_campaign_text_hook_point;
 			add_action( 'customize_register', array( __CLASS__, 'resister_customize' ) );
-			add_action( $vk_campaign_text_hook_point, array( __CLASS__, 'display_html' ) );
 			add_action( 'wp_head', array( __CLASS__, 'enqueue_style' ), 5 );
+			add_action( 'after_setup_theme', array( __CLASS__, 'change_old_option' ) );
+			add_action( 'wp', array( __CLASS__, 'launch_action' ) );
+		}
+
+		/**
+		 * Launch Action
+		 */
+		public static function launch_action() {
+			global $vk_campaign_text_hook_point;
+			global $vk_campaign_text_display_position_array;
+			$options = get_option( 'vk_campaign_text' );
+			$default = self::default_option();
+			$options = wp_parse_args( $options, $default );
+
+			$position = $options['display_position'];
+			global $vk_campaign_text_display_position_array;
+			if ( ! $vk_campaign_text_hook_point ) {
+				if ( 'show_in_front_page' === $options['display'] && is_front_page() || 'show_in_full_page' === $options['display'] ) {
+					foreach ( $vk_campaign_text_display_position_array[ $position ]['hookpoint'] as $hook_point ) {
+						add_action( $hook_point, array( __CLASS__, 'display_html' ) );
+					}
+				}
+			} else {
+				foreach ( $vk_campaign_text_hook_point as $hook_point ) {
+					add_action( $hook_point, array( __CLASS__, 'display_html' ) );
+				}
+			}
+		}
+
+		/**
+		 * Change Old Option.
+		 */
+		public static function change_old_option() {
+			$options = get_option( 'vk_campaign_text' );
+			$default = self::default_option();
+			$options = wp_parse_args( $options, $default );
+
+			if ( true === $options['display'] ) {
+				$options['display'] = 'show_in_full_page';
+				update_option( 'vk_campaign_text', $options );
+			} elseif ( false === $options['display'] ) {
+				$options['display'] = 'hide';
+				update_option( 'vk_campaign_text', $options );
+			}
 		}
 
 		/**
@@ -25,14 +67,16 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 		 */
 		public static function default_option() {
 			$args = array(
-				'display'						=> false,
-				'icon'							=> '',
-				'main_text_color'				=> '#fff',
-				'main_background_color'   		=> '#eab010',
-				'button_text_color'       		=> '#4c4c4c',
-				'button_background_color' 		=> '#fff',
+				'display'                       => 'hide',
+				'display_position'              => 'header_append',
+				'icon'                          => '',
+				'main_text_color'               => '#fff',
+				'main_background_color'         => '#eab010',
+				'button_text_color'             => '#4c4c4c',
+				'button_background_color'       => '#fff',
 				'button_text_hover_color'       => '#fff',
 				'button_background_hover_color' => '#eab010',
+				'link_target'                   => false,
 			);
 			return $args;
 		}
@@ -44,6 +88,8 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 		 */
 		public static function resister_customize( $wp_customize ) {
 			global $vk_campaign_text_prefix;
+			$skin = get_option( 'lightning_design_skin' );
+
 			$description = '';
 			if ( class_exists( 'Vk_Font_Awesome_Versions' ) ) {
 				$description = Vk_Font_Awesome_Versions::ex_and_link();
@@ -52,7 +98,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			$wp_customize->add_section(
 				'vk_campaign_text_setting',
 				array(
-					'title'    => $vk_campaign_text_prefix . __( 'Campaign Text', 'vk_campaign_text_text_domain' ),
+					'title'    => $vk_campaign_text_prefix . __( 'Campaign Text', 'vk_campaign_text_text_domain'),
 					'priority' => 512,
 				)
 			);
@@ -61,20 +107,52 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			$wp_customize->add_setting(
 				'vk_campaign_text[display]',
 				array(
-					'default'           => false,
+					'default'           => 'hide',
 					'type'              => 'option',
 					'capability'        => 'edit_theme_options',
-					'sanitize_callback' => 'veu_sanitize_boolean',
+					'sanitize_callback' => '',
 				)
 			);
 
 			$wp_customize->add_control(
 				'vk_campaign_text[display]',
 				array(
-					'label'    => __( 'Display Campaign Text', 'vk_campaign_text_text_domain' ),
+					'label'    => __( 'Display Campaign Text', 'vk_campaign_text_text_domain'),
 					'section'  => 'vk_campaign_text_setting',
 					'settings' => 'vk_campaign_text[display]',
-					'type'     => 'checkbox',
+					'type'     => 'select',
+					'choices'  => array(
+						'hide'               => __( 'Hide', 'vk_campaign_text_text_domain'),
+						'show_in_front_page' => __( 'Show in Front Page', 'vk_campaign_text_text_domain'),
+						'show_in_full_page'  => __( 'Show in Full Page', 'vk_campaign_text_text_domain'),
+					),
+				)
+			);
+
+			$wp_customize->add_setting(
+				'vk_campaign_text[display_position]',
+				array(
+					'default'           => 'header_append',
+					'type'              => 'option',
+					'capability'        => 'edit_theme_options',
+					'sanitize_callback' => '',
+				)
+			);
+
+			global $vk_campaign_text_display_position_array;
+			foreach ( $vk_campaign_text_display_position_array as $key => $value ) {
+				$choices[ $key ] = $value['label'];
+			}
+
+			$wp_customize->add_control(
+				'vk_campaign_text[display_position]',
+				array(
+					'label'       => __( 'Display Position', 'vk_campaign_text_text_domain'),
+					'section'     => 'vk_campaign_text_setting',
+					'settings'    => 'vk_campaign_text[display_position]',
+					'type'        => 'select',
+					'choices'     => $choices,
+					'description' => __( '* If you save and reload after making changes, the position of campaign text will change.', 'vk_campaign_text_text_domain'),
 				)
 			);
 
@@ -92,11 +170,11 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			$wp_customize->add_control(
 				'vk_campaign_text[icon]',
 				array(
-					'label'       => __( 'Icon', 'vk_campaign_text_text_domain' ),
+					'label'       => __( 'Icon', 'vk_campaign_text_text_domain'),
 					'section'     => 'vk_campaign_text_setting',
 					'settings'    => 'vk_campaign_text[icon]',
 					'type'        => 'text',
-					'description' => __( 'To choose your favorite icon, and enter the class.', 'vk_campaign_text_text_domain' ) . '<br>' . $description,
+					'description' => __( 'To choose your favorite icon, and enter the class.', 'vk_campaign_text_text_domain') . '<br>' . $description,
 				)
 			);
 
@@ -107,17 +185,25 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 					'default'           => '',
 					'type'              => 'option',
 					'capability'        => 'edit_theme_options',
-					'sanitize_callback' => 'sanitize_text_field',
+					'sanitize_callback' => 'wp_kses_post',
 				)
 			);
 
 			$wp_customize->add_control(
 				'vk_campaign_text[main_text]',
 				array(
-					'label'    => __( 'Main Text', 'vk_campaign_text_text_domain' ),
+					'label'    => _x( 'Text', 'campaign text', 'vk_campaign_text_text_domain'),
 					'section'  => 'vk_campaign_text_setting',
 					'settings' => 'vk_campaign_text[main_text]',
 					'type'     => 'text',
+				)
+			);
+
+			$wp_customize->selective_refresh->add_partial(
+				'vk_campaign_text[main_text]',
+				array(
+					'selector'        => '.vk-campaign-text .vk-campaign-text_text',
+					'render_callback' => '',
 				)
 			);
 
@@ -137,7 +223,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 					$wp_customize,
 					'vk_campaign_text[main_text_color]',
 					array(
-						'label'    => __( 'Main Text Color', 'vk_campaign_text_text_domain' ),
+						'label'    => __( 'Text Color', 'vk_campaign_text_text_domain'),
 						'section'  => 'vk_campaign_text_setting',
 						'settings' => 'vk_campaign_text[main_text_color]',
 					)
@@ -160,7 +246,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 					$wp_customize,
 					'vk_campaign_text[main_background_color]',
 					array(
-						'label'    => __( 'Main Background Color', 'vk_campaign_text_text_domain' ),
+						'label'    => __( 'Background Color', 'vk_campaign_text_text_domain'),
 						'section'  => 'vk_campaign_text_setting',
 						'settings' => 'vk_campaign_text[main_background_color]',
 					)
@@ -174,14 +260,14 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 					'default'           => '',
 					'type'              => 'option',
 					'capability'        => 'edit_theme_options',
-					'sanitize_callback' => 'sanitize_text_field',
+					'sanitize_callback' => 'wp_kses_post',
 				)
 			);
 
 			$wp_customize->add_control(
 				'vk_campaign_text[button_text]',
 				array(
-					'label'    => __( 'Button Text', 'vk_campaign_text_text_domain' ),
+					'label'    => __( 'Button Text', 'vk_campaign_text_text_domain'),
 					'section'  => 'vk_campaign_text_setting',
 					'settings' => 'vk_campaign_text[button_text]',
 					'type'     => 'text',
@@ -204,7 +290,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 					$wp_customize,
 					'vk_campaign_text[button_text_color]',
 					array(
-						'label'    => __( 'Button Text Color', 'vk_campaign_text_text_domain' ),
+						'label'    => __( 'Button Text Color', 'vk_campaign_text_text_domain'),
 						'section'  => 'vk_campaign_text_setting',
 						'settings' => 'vk_campaign_text[button_text_color]',
 					)
@@ -227,7 +313,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 					$wp_customize,
 					'vk_campaign_text[button_background_color]',
 					array(
-						'label'    => __( 'Button Background Color', 'vk_campaign_text_text_domain' ),
+						'label'    => __( 'Button Background Color', 'vk_campaign_text_text_domain'),
 						'section'  => 'vk_campaign_text_setting',
 						'settings' => 'vk_campaign_text[button_background_color]',
 					)
@@ -250,7 +336,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 					$wp_customize,
 					'vk_campaign_text[button_text_hover_hover]',
 					array(
-						'label'    => __( 'Button Text Hover Color', 'vk_campaign_text_text_domain' ),
+						'label'    => __( 'Button Text Hover Color', 'vk_campaign_text_text_domain'),
 						'section'  => 'vk_campaign_text_setting',
 						'settings' => 'vk_campaign_text[button_text_hover_hover]',
 					)
@@ -273,14 +359,14 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 					$wp_customize,
 					'vk_campaign_text[button_background_hover_color]',
 					array(
-						'label'    => __( 'Button Background Hover Color', 'vk_campaign_text_text_domain' ),
+						'label'    => __( 'Button Background Hover Color', 'vk_campaign_text_text_domain'),
 						'section'  => 'vk_campaign_text_setting',
 						'settings' => 'vk_campaign_text[button_background_hover_color]',
 					)
 				)
 			);
 
-			// Button URL.
+			// Link URL.
 			$wp_customize->add_setting(
 				'vk_campaign_text[button_url]',
 				array(
@@ -294,28 +380,52 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			$wp_customize->add_control(
 				'vk_campaign_text[button_url]',
 				array(
-					'label'    => __( 'Button URL', 'vk_campaign_text_text_domain' ),
+					'label'    => __( 'Link URL', 'vk_campaign_text_text_domain'),
 					'section'  => 'vk_campaign_text_setting',
 					'settings' => 'vk_campaign_text[button_url]',
 					'type'     => 'text',
 				)
 			);
+
+			// Link Target.
+			$wp_customize->add_setting(
+				'vk_campaign_text[link_target]',
+				array(
+					'default'           => false,
+					'type'              => 'option',
+					'capability'        => 'edit_theme_options',
+					'sanitize_callback' => 'veu_sanitize_boolean',
+				)
+			);
+
+			$wp_customize->add_control(
+				'vk_campaign_text[link_target]',
+				array(
+					'label'    => __( 'Open in New Tab', 'vk_campaign_text_text_domain'),
+					'section'  => 'vk_campaign_text_setting',
+					'settings' => 'vk_campaign_text[link_target]',
+					'type'     => 'checkbox',
+				)
+			);
+
 		}
 
-			/**
-			 * Enqueue Style.
-			 */
+		/**
+		 * Enqueue Style.
+		 */
 		public static function enqueue_style() {
+			global $vk_campaign_text_hook_style;
+
 			$options = get_option( 'vk_campaign_text' );
 			$default = self::default_option();
 			$options = wp_parse_args( $options, $default );
 
-			$main_text_color   				= esc_html( $options['main_text_color'] );
-			$main_bg_color     				= esc_html( $options['main_background_color'] );
-			$button_text_color 				= esc_html( $options['button_text_color'] );
-			$button_bg_color   				= esc_html( $options['button_background_color'] );
-			$button_text_hover_color 		= esc_html( $options['button_text_hover_color'] );
-			$button_background_hover_color 	= esc_html( $options['button_background_hover_color'] );
+			$main_text_color               = $options['main_text_color'];
+			$main_bg_color                 = $options['main_background_color'];
+			$button_text_color             = $options['button_text_color'];
+			$button_bg_color               = $options['button_background_color'];
+			$button_text_hover_color       = $options['button_text_hover_color'];
+			$button_background_hover_color = $options['button_background_hover_color'];
 
 			$dynamic_css  = '.vk-campaign-text{';
 			$dynamic_css .= 'background:' . $main_bg_color . ';';
@@ -341,7 +451,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			$dynamic_css .= '.vk-campaign-text_link:focus{';
 			$dynamic_css .= 'color:' . $main_text_color . ';';
 			$dynamic_css .= '}';
-			wp_add_inline_style( 'lightning-design-style', $dynamic_css );
+			wp_add_inline_style( $vk_campaign_text_hook_style, $dynamic_css );
 		}
 
 		/**
@@ -349,26 +459,49 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 		 */
 		public static function display_html() {
 			$campaign_html = '';
-			$options       = get_option( 'vk_campaign_text' );
-			$default       = self::default_option();
-			$options       = wp_parse_args( $options, $default );
-			if ( isset( $options['display'] ) && true === $options['display'] ) {
-				$icon        = isset( $options['icon'] ) ? '<i class="' . $options['icon'] . '"></i>' : '';
-				$main_text   = isset( $options['main_text'] ) ? $options['main_text'] : '';
-				$button_text = isset( $options['button_text'] ) ? $options['button_text'] : '';
-				$button_url  = isset( $options['button_url'] ) ? $options['button_url'] : '';
+
+			$allowed_html = array(
+				'div'  => array(
+					'class' => array(),
+				),
+				'a'    => array(
+					'class'  => array(),
+					'href'   => array(),
+					'target' => array(),
+				),
+				'span' => array(
+					'class' => array(),
+				),
+				'i'    => array(
+					'class' => array(),
+				),
+
+			);
+
+			$options = get_option( 'vk_campaign_text' );
+			$default = self::default_option();
+			$options = wp_parse_args( $options, $default );
+
+			if ( isset( $options['display'] ) && 'hide' !== $options['display'] ) {
+				$icon        = ! empty( $options['icon'] ) ? '<i class="' . $options['icon'] . '"></i>' : '';
+				$main_text   = ! empty( $options['main_text'] ) ? $options['main_text'] : '';
+				$button_text = ! empty( $options['button_text'] ) ? $options['button_text'] : '';
+				$button_url  = ! empty( $options['button_url'] ) ? $options['button_url'] : '';
+				$link_target = ! empty( $options['link_target'] ) ? ' target="_blank"' : '';
 
 				$campaign_html .= '<div class="vk-campaign-text">';
 				if ( empty( $button_text ) ) {
-					$campaign_html .= '<a class="vk-campaign-text_link" href="' . $button_url . '"><span>' . $icon . $main_text . '</span></a>';
+					$campaign_html .= '<a class="vk-campaign-text_link" href="' . $button_url . '"' . $link_target . '><span class="vk-campaign-text_text">' . $icon . $main_text . '</span></a>';
 				} else {
-					$campaign_html .= '<span>' . $icon . $main_text . '</span>';
-					$campaign_html .= '<a class="vk-campaign-text_btn" href="' . $button_url . '">' . $button_text . '</a>';
+					$campaign_html .= '<span class="vk-campaign-text_text">' . $icon . $main_text . '</span>';
+					$campaign_html .= '<a class="vk-campaign-text_btn" href="' . $button_url . '"' . $link_target . '>' . $button_text . '</a>';
 				}
 				$campaign_html .= '</div>';
 			}
-			echo $campaign_html;
+
+			echo wp_kses( $campaign_html, $allowed_html );
 		}
 	}
 	new VK_Campaign_Text();
+
 }
