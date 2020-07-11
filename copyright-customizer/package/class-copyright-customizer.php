@@ -42,10 +42,14 @@ class Lightning_Copyright_Custom {
 	}
 	public function customize_register( $wp_customize ) {
 		global $vk_copyright_customizer_prefix;
+		global $vk_copyright_customizer_priority;
+		if ( ! $vk_copyright_customizer_priority ){
+			$vk_copyright_customizer_priority = 900;
+		}
 		$wp_customize->add_section(
 			'lightning_copyright_section', array(
-				'title'    => $vk_copyright_customizer_prefix . __( 'Copyright Setting', 'lightning_footerPowerCustom' ),
-				'priority' => 900,
+				'title'    => $vk_copyright_customizer_prefix . __( 'Copyright Setting', 'lightning-pro' ),
+				'priority' => $vk_copyright_customizer_priority,
 			)
 		);
 
