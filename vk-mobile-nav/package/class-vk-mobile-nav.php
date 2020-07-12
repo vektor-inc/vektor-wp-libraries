@@ -17,6 +17,7 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 				add_action( 'widgets_init', array( get_called_class(), 'setup_widget' ) );
 				add_action( 'wp_footer', array( get_called_class(), 'menu_set_html' ) );
 				add_action( 'wp_enqueue_scripts', array( get_called_class(), 'add_script' ) );
+				add_action( 'wp_enqueue_scripts', array( get_called_class(), 'add_css' ) );
 			}
 			add_filter( 'body_class', array( $this, 'add_body_class_mobile_device' ) );
 		}
@@ -156,6 +157,10 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 			global $library_url;
 			wp_register_script( 'vk-mobile-nav-js', $library_url . 'js/vk-mobile-nav.min.js', array( 'jquery' ), self::$version );
 			wp_enqueue_script( 'vk-mobile-nav-js' );
+		}
+
+		public static function add_css() {
+			global $library_url;
 			wp_enqueue_style( 'vk-mobile-nav-css', $library_url . 'css/vk-mobile-nav-bright.css', array(), self::$version, 'all' );
 		}
 
