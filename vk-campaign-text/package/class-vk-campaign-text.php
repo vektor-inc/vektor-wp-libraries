@@ -72,7 +72,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			$options = get_option( 'vk_campaign_text' );
 
 			$display_position_array = array_keys( $vk_campaign_text_display_position_array );
-			if ( ! in_array( $options['display_position'], $display_position_array, true ) ) {
+			if ( ! empty( $options['display_position'] ) && ! in_array( $options['display_position'], $display_position_array, true ) ) {
 				$options['display_position'] = $display_position;
 				update_option( 'vk_campaign_text', $options );
 			}
