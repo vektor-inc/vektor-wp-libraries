@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/vektor-inc/vektor-wp-libraries#readme",
   "dependencies": {
+    "gulp-babel": "^8.0.0",
     "is-mobile": "^2.2.1"
   },
   "devDependencies": {

@@ -449,13 +449,18 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 			// セクション、テーマ設定、コントロールを追加
 
 			global $vk_font_selector_prefix;
+			global $vk_font_selector_priority;
+
+			if ( ! $vk_font_selector_priority ){
+				$vk_font_selector_priority = 900;
+			}
 
 			// セクション追加
 			$wp_customize->add_section(
 				'vk_font_selector_related_setting',
 				array(
-					'title'    => $vk_font_selector_prefix . __( 'Font Setting', 'vk_font_selector_textdomain' ),
-					'priority' => 900,
+					'title'    => $vk_font_selector_prefix . __( 'Font Setting', 'lightning-pro' ),
+					'priority' => $vk_font_selector_priority,
 				)
 			);
 

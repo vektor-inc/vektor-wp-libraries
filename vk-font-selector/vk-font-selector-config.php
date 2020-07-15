@@ -12,4 +12,8 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 	global $vk_font_selector_enqueue_handle_style;
 	$vk_font_selector_enqueue_handle_style = 'デザインのcssハンドル名';
 
+	// カスタマイズ画面でのプライオリティ
+	global $vk_font_selector_priority;
+	$vk_font_selector_priority = 900;
+
 }

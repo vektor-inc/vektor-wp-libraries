@@ -158,6 +158,10 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 			// セクション、テーマ設定、コントロールを追加
 			global $vk_mobile_fix_nav_prefix;
+			global $vk_mobile_fix_nav_priority;
+			if ( ! $vk_mobile_fix_nav_priority ){
+				$vk_mobile_fix_nav_priority = 900;
+			}
 
 			$default_options = $this->default_options();
 
@@ -165,8 +169,8 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			$wp_customize->add_section(
 				'vk_mobil_fix_nav_setting',
 				array(
-					'title'    => $vk_mobile_fix_nav_prefix . __( 'Mobile Fix Nav', 'vk_mobile_fix_nav_textdomain' ),
-					'priority' => 900,
+					'title'    => $vk_mobile_fix_nav_prefix . __( 'Mobile Fix Nav', 'lightning-pro' ),
+					'priority' => $vk_mobile_fix_nav_priority,
 				)
 			);
 
