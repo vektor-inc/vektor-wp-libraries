@@ -173,6 +173,7 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 				--vk-mobile-nav-menu-btn-close-bg-src: url("'.esc_url( $library_url.'/images/vk-menu-close-black.svg').'");
 				--vk-menu-acc-icon-open-black-bg-src: url("'.esc_url( $library_url.'/images/vk-menu-acc-icon-open-black.svg').'");
 				--vk-menu-acc-icon-close-black-bg-src: url("'.esc_url( $library_url.'/images/vk-menu-close-black.svg').'");
+				--vk-menu-acc-icon-close-white-bg-src: url("'.esc_url( $library_url.'/images/vk-menu-close-white.svg').'");
 			}
 			';
 			// delete before after space
