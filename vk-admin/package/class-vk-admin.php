@@ -394,7 +394,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 				<div class="adminMain <?php echo $get_layout; ?>">
 
 					<?php if ( $get_layout == 'column_3' ) : ?>
-				<div id="adminContent_sub" class="scrTracking">
+				<div id="adminContent_sub" class="scrTracking adminMain_sub">
 					<div class="pageLogo"><?php echo $get_logo_html; ?></div>
 						<?php if ( $get_page_title ) : ?>
 					<h2 class="page_title"><?php echo $get_page_title; ?></h2>
@@ -414,7 +414,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 					<?php endif; ?>
 				<?php endif; ?>
 
-					<div id="adminContent_main">
+					<div id="adminContent_main" class="adminMain_main">
 					<?php call_user_func_array( $the_body_callback, array() ); ?>
 					</div><!-- [ /#adminContent_main ] -->
 
