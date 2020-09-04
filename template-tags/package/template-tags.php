@@ -144,13 +144,13 @@ if ( ! function_exists( 'vk_get_the_archive_title' ) ) {
 		} elseif ( is_tag() ) {
 			$title = single_tag_title( '', false );
 		} elseif ( is_author() ) {
-			$title = sprintf( __( 'Author: %s', 'template-tags-textdomain' ), '<span class="vcard">' . get_the_author() . '</span>' );
+			$title = sprintf( __( 'Author: %s', 'template_tags_textdomain' ), '<span class="vcard">' . get_the_author() . '</span>' );
 		} elseif ( is_year() ) {
-			$title = get_the_date( _x( 'Y', 'yearly archives date format', 'template-tags-textdomain' ) );
+			$title = get_the_date( _x( 'Y', 'yearly archives date format', 'template_tags_textdomain' ) );
 		} elseif ( is_month() ) {
-			$title = get_the_date( _x( 'F Y', 'monthly archives date format', 'template-tags-textdomain' ) );
+			$title = get_the_date( _x( 'F Y', 'monthly archives date format', 'template_tags_textdomain' ) );
 		} elseif ( is_day() ) {
-			$title = get_the_date( _x( 'F j, Y', 'daily archives date format', 'template-tags-textdomain' ) );
+			$title = get_the_date( _x( 'F j, Y', 'daily archives date format', 'template_tags_textdomain' ) );
 		} elseif ( is_tax( 'post_format' ) ) {
 			if ( is_tax( 'post_format', 'post-format-aside' ) ) {
 				$title = _x( 'Asides', 'post format archive title' );
@@ -185,7 +185,7 @@ if ( ! function_exists( 'vk_get_the_archive_title' ) ) {
 			if ( $postType ) {
 				$title = get_post_type_object( $postType )->labels->name;
 			} else {
-				$title = __( 'Archives', 'template-tags-textdomain' );
+				$title = __( 'Archives', 'template_tags_textdomain' );
 			}
 		}
 		return apply_filters( 'vk_get_the_archive_title', $title );
@@ -216,7 +216,7 @@ if ( ! function_exists( 'vk_get_page_description' ) ) {
 			}
 		} elseif ( is_category() || is_tax() ) {
 			if ( ! $post->description ) {
-				$page_description = sprintf( __( 'About %s', 'template-tags-textdomain' ), single_cat_title( '', false ) ) . ' ' . get_bloginfo( 'name' ) . ' ' . get_bloginfo( 'description' );
+				$page_description = sprintf( __( 'About %s', 'template_tags_textdomain' ), single_cat_title( '', false ) ) . ' ' . get_bloginfo( 'name' ) . ' ' . get_bloginfo( 'description' );
 			} else {
 				$page_description = $post->description;
 			}
@@ -224,25 +224,25 @@ if ( ! function_exists( 'vk_get_page_description' ) ) {
 			$page_description = strip_tags( tag_description() );
 			$page_description = str_replace( array( "\r\n", "\r", "\n" ), '', $page_description );  // delete br
 			if ( ! $page_description ) {
-				$page_description = sprintf( __( 'About %s', 'template-tags-textdomain' ), single_tag_title( '', false ) ) . ' ' . get_bloginfo( 'name' ) . ' ' . get_bloginfo( 'description' );
+				$page_description = sprintf( __( 'About %s', 'template_tags_textdomain' ), single_tag_title( '', false ) ) . ' ' . get_bloginfo( 'name' ) . ' ' . get_bloginfo( 'description' );
 			}
 		} elseif ( is_archive() ) {
 			if ( is_year() ) {
-				$description_date  = get_the_date( _x( 'Y', 'yearly archives date format', 'template-tags-textdomain' ) );
-				$page_description  = sprintf( _x( 'Article of %s.', 'Yearly archive description', 'template-tags-textdomain' ), $description_date );
+				$description_date  = get_the_date( _x( 'Y', 'yearly archives date format', 'template_tags_textdomain' ) );
+				$page_description  = sprintf( _x( 'Article of %s.', 'Yearly archive description', 'template_tags_textdomain' ), $description_date );
 				$page_description .= ' ' . get_bloginfo( 'name' ) . ' ' . get_bloginfo( 'description' );
 			} elseif ( is_month() ) {
-				$description_date  = get_the_date( _x( 'F Y', 'monthly archives date format', 'template-tags-textdomain' ) );
-				$page_description  = sprintf( _x( 'Article of %s.', 'Archive description', 'template-tags-textdomain' ), $description_date );
+				$description_date  = get_the_date( _x( 'F Y', 'monthly archives date format', 'template_tags_textdomain' ) );
+				$page_description  = sprintf( _x( 'Article of %s.', 'Archive description', 'template_tags_textdomain' ), $description_date );
 				$page_description .= ' ' . get_bloginfo( 'name' ) . ' ' . get_bloginfo( 'description' );
 			} elseif ( is_author() ) {
 				$userObj           = get_queried_object();
-				$page_description  = sprintf( _x( 'Article of %s.', 'Archive description', 'template-tags-textdomain' ), esc_html( $userObj->display_name ) );
+				$page_description  = sprintf( _x( 'Article of %s.', 'Archive description', 'template_tags_textdomain' ), esc_html( $userObj->display_name ) );
 				$page_description .= ' ' . get_bloginfo( 'name' ) . ' ' . get_bloginfo( 'description' );
 			} else {
 				$postType = get_post_type();
 				if ( $postType ) {
-					$page_description  = sprintf( _x( 'Article of %s.', 'Archive description', 'template-tags-textdomain' ), esc_html( get_post_type_object( $postType )->label ) );
+					$page_description  = sprintf( _x( 'Article of %s.', 'Archive description', 'template_tags_textdomain' ), esc_html( get_post_type_object( $postType )->label ) );
 					$page_description .= ' ' . get_bloginfo( 'name' ) . ' ' . get_bloginfo( 'description' );
 				} else {
 					$page_description = get_bloginfo( 'description' );
@@ -259,7 +259,7 @@ if ( ! function_exists( 'vk_get_page_description' ) ) {
 		}
 		global $paged;
 		if ( $paged != '0' ) {
-			$page_description = '[' . sprintf( __( 'Page of %s', 'template-tags-textdomain' ), $paged ) . '] ' . $page_description;
+			$page_description = '[' . sprintf( __( 'Page of %s', 'template_tags_textdomain' ), $paged ) . '] ' . $page_description;
 		}
 		// This filter (vkExUnit_pageDescriptionCustom) is deprecated.
 		$page_description = apply_filters( 'vkExUnit_pageDescriptionCustom', $page_description );
