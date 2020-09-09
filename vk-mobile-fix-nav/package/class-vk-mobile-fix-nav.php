@@ -65,9 +65,6 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			add_filter( 'body_class', array( __CLASS__, 'add_body_class' ) );
 			add_action( 'wp_footer', array( __CLASS__, 'vk_mobil_fix_nav_html' ) );
 			add_action( 'widgets_init', array( __CLASS__, 'widgets_init' ) );
-			if ( wp_is_mobile() ) {
-				remove_action( 'wp_footer', 'veu_add_pagetop' );
-			}
 		}
 
 		public static function widgets_init() {
