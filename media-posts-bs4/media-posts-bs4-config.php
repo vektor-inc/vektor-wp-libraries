@@ -31,11 +31,11 @@ if ( ! class_exists( 'VK_MEDIA_POSTS_BS4' ) ) {
 	 */
 	function lightning_media_post_bs4_size( $sizes ) {
 		$sizes = array(
-			'xs' => array( 'label' => __( 'Extra small', 'lightning-pro' ) ),
-			'sm' => array( 'label' => __( 'Small', 'lightning-pro' ) ),
-			'md' => array( 'label' => __( 'Medium', 'lightning-pro' ) ),
-			'lg' => array( 'label' => __( 'Large', 'lightning-pro' ) ),
-			'xl' => array( 'label' => __( 'Extra large', 'lightning-pro' ) ),
+			'xs' => array( 'label' => __( 'Extra small', 'media-post-bs4-textdomain' ) ),
+			'sm' => array( 'label' => __( 'Small', 'media-post-bs4-textdomain' ) ),
+			'md' => array( 'label' => __( 'Medium', 'media-post-bs4-textdomain' ) ),
+			'lg' => array( 'label' => __( 'Large', 'media-post-bs4-textdomain' ) ),
+			'xl' => array( 'label' => __( 'Extra large', 'media-post-bs4-textdomain' ) ),
 		);
 		return $sizes;
 	}
@@ -56,10 +56,10 @@ if ( ! class_exists( 'VK_MEDIA_POSTS_BS4' ) ) {
 			'display_new'                => true,
 			'display_btn'                => false,
 			'image_default_url'          => VK_MEDIA_POSTS_BS4_URL . '/images/no-image.png',
-			'btn_text'                   => __( 'Read more', 'lightning-pro' ),
+			'btn_text'                   => __( 'Read more', 'media-post-bs4-textdomain' ),
 			'btn_align'                  => 'text-right',
 			'overlay'                    => false,
-			'new_text'                   => __( 'New!!', 'lightning-pro' ),
+			'new_text'                   => __( 'New!!', 'media-post-bs4-textdomain' ),
 			'new_date'                   => 7,
 			'class_title'                => '',
 			'body_prepend'               => '',
@@ -84,7 +84,7 @@ if ( ! class_exists( 'VK_MEDIA_POSTS_BS4' ) ) {
 		$default_options = array(
 			'count'                      => 6,
 			'offset'                     => '',
-			'title'                      => __( 'Recent Posts', 'lightning-pro' ),
+			'title'                      => __( 'Recent Posts', 'media-post-bs4-textdomain' ),
 			'post_type'                  => array( 'post' => 1 ), // クエリに投げる形式は違うので要変換.
 			'terms'                      => '',
 			'layout'                     => 'media',
@@ -100,7 +100,7 @@ if ( ! class_exists( 'VK_MEDIA_POSTS_BS4' ) ) {
 			'display_new'                => true,
 			'new_date'                   => 7,
 			'new_text'                   => 'New!!',
-			'btn_text'                   => __( 'Read more', 'lightning-pro' ),
+			'btn_text'                   => __( 'Read more', 'media-post-bs4-textdomain' ),
 			'btn_align'                  => 'text-right',
 		);
 		return $default_options;
