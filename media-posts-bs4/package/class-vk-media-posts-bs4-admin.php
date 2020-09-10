@@ -33,7 +33,7 @@ class VK_Media_Posts_BS4_Admin {
 		self::$post_types = VK_Media_Posts_BS4::get_custom_types() + self::$post_types;
 
 		// all labels.
-		self::$post_types_labels = VK_Media_Posts_BS4::labelNames() + VK_Media_Posts_BS4::get_custom_types_labels();
+		self::$post_types_labels = VK_Media_Posts_BS4::label_names() + VK_Media_Posts_BS4::get_custom_types_labels();
 
 		add_action( 'customize_register', array( __CLASS__, 'archive_layout_customize_register' ) );
 
@@ -65,7 +65,7 @@ class VK_Media_Posts_BS4_Admin {
 		$post_types           = VK_Media_Posts_BS4::get_custom_types() + $post_types;
 		$post_types['author'] = 'author';
 
-		$post_types_labels           = VK_Media_Posts_BS4::labelNames() + VK_Media_Posts_BS4::get_custom_types_labels();
+		$post_types_labels           = VK_Media_Posts_BS4::label_names() + VK_Media_Posts_BS4::get_custom_types_labels();
 		$post_types_labels['author'] = __( 'Author', 'lightning-pro' );
 
 		$patterns['default']['label'] = $system_name . ' ' . __( 'default', 'lightning-pro' );

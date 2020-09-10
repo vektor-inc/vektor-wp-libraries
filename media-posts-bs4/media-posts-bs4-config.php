@@ -1,22 +1,30 @@
 <?php
-/*-------------------------------------------*/
-/*  Load modules
-/*-------------------------------------------*/
+/**
+ * VK Media Posts BS4 Config
+ *
+ * @package VK Media Posts BS4
+ */
+
 if ( ! class_exists( 'Lightning_Media_Posts_BS4' ) ) {
 
-	require_once( 'package/class-media-posts-bs4.php' );
+	require_once 'package/class-media-posts-bs4.php';
 
 	global $system_name;
 	$system_name = lightning_get_theme_name();
 
 	global $customize_section_name;
 	if ( function_exists( 'lightning_get_prefix_customize_panel' ) ) {
-		// 空のパネル名を設定出来るように最後に空白は入れない
+		// 空のパネル名を設定出来るように最後に空白は入れない.
 		$customize_section_name = lightning_get_prefix_customize_panel();
 	} else {
 		$customize_section_name = 'Lightning ';
 	}
 
+	/**
+	 * Column size setting
+	 *
+	 * @param array $sizes size of using on media post bs4.
+	 */
 	function lightning_media_post_bs4_size( $sizes ) {
 		$sizes = array(
 			'xs' => array( 'label' => __( 'Extra small', 'lightning-pro' ) ),
@@ -29,7 +37,169 @@ if ( ! class_exists( 'Lightning_Media_Posts_BS4' ) ) {
 	}
 	add_filter( 'vk_media_post_bs4_size', 'lightning_media_post_bs4_size' );
 
-	// プリフィックス
+	/**
+	 * Default Options
+	 *
+	 * @param array $default_options default options of using on media post bs4.
+	 */
+	function lightning_media_post_bs4_default_options( $default_options ) {
+		$default_options = array(
+			'layout'                     => 'card',
+			'display_image'              => true,
+			'display_image_overlay_term' => true,
+			'display_excerpt'            => false,
+			'display_date'               => true,
+			'display_new'                => true,
+			'display_btn'                => false,
+			'image_default_url'          => VK_MEDIA_POSTS_BS4_URL . '/images/no-image.png',
+			'btn_text'                   => __( 'Read more', 'lightning-pro' ),
+			'btn_align'                  => 'text-right',
+			'overlay'                    => false,
+			'new_text'                   => __( 'New!!', 'lightning-pro' ),
+			'new_date'                   => 7,
+			'class_title'                => '',
+			'body_prepend'               => '',
+			'body_append'                => '',
+			'count'                      => 6,
+			'col_xs'                     => 1,
+			'col_sm'                     => 2,
+			'col_md'                     => 2,
+			'col_lg'                     => 2,
+			'col_xl'                     => 3,
+		);
+		return $default_options;
+	}
+	add_filter( 'vk_media_post_bs4_default_options', 'lightning_media_post_bs4_default_options' );
+
+	/**
+	 * Archive Loop change
+	 * アーカイブループのレイアウトを改変するかどうかの判定
+	 *
+	 * @param array   $post_type post type.
+	 * @param boolean $flag Change layout or not.
+	 */
+	function lightning_is_loop_layout_change_bs4_flag_bs4( $post_type = 'post', $flag = false ) {
+		$vk_post_type_archive = get_option( 'vk_post_type_archive' );
+		// 指定の投稿タイプアーカイブのレイアウトに値が存在する場合.
+		if ( ! empty( $vk_post_type_archive[ $post_type ]['layout'] ) ) {
+			// デフォルトじゃない場合.
+			if ( 'default' === $vk_post_type_archive[ $post_type ]['layout'] ) {
+				$flag = true;
+			}
+		}
+		return $flag;
+	}
+
+	/**
+	 * アーカイブループを改変するかどうかの指定
+	 *
+	 * @param boolean $flag Change archive loop or not.
+	 */
+	function lightning_is_loop_layout_change_bs4( $flag ) {
+		$post_type_info = lightning_get_post_type();
+		$post_type      = $post_type_info['slug'];
+
+		if ( is_author() ) {
+			$post_type = 'author';
+		}
+
+		$flag = lightning_is_loop_layout_change_bs4_flag_bs4( $post_type, $flag );
+		return $flag;
+	}
+	add_filter( 'is_lightning_extend_loop', 'lightning_is_loop_layout_change_bs4' );
+
+	/**
+	 * ループ改変実行
+	 */
+	function lightning_do_loop_layout_change_bs4() {
+
+		$vk_post_type_archive = get_option( 'vk_post_type_archive' );
+
+		$post_type      = lightning_get_post_type();
+		$post_type_slug = $post_type['slug'];
+		$post_type_slug = ( is_author() ) ? 'author' : $post_type['slug'];
+
+		$flag = lightning_is_loop_layout_change_bs4_flag_bs4( $post_type_slug );
+		if ( $flag ) {
+
+			$customize_options = $vk_post_type_archive[ $post_type_slug ];
+			// Get default option.
+			$customize_options_default = VK_Media_Posts_BS4::options_default_post_type();
+			// Markge options.
+			$options = wp_parse_args( $customize_options, $customize_options_default );
+
+			global $wp_query;
+
+			/*
+			Lightning Pro のみ
+			おそらくこの値が保存されている事はないので不具合報告がこない場合は2020年12月で削除可
+			unset($options['col_xxl']);
+			*/
+
+			VK_Component_Posts::the_loop( $wp_query, $options );
+		}
+	}
+	add_action( 'lightning_extend_loop', 'lightning_do_loop_layout_change_bs4' );
+
+	/**
+	 * アーカイブページレイアウト
+	 *
+	 * @param object $query WP_Query.
+	 */
+	function lightning_posts_per_page_custom_bs4( $query ) {
+
+		if ( is_admin() || ! $query->is_main_query() ) {
+			return;
+		}
+
+		// アーカイブの時以外は関係ないので return.
+		if ( ! $query->is_archive() && ! $query->is_home() ) {
+			return;
+		}
+
+		// アーカイブページの表示件数情報を取得.
+		$vk_post_type_archive = get_option( 'vk_post_type_archive' );
+
+		if ( $query->is_home() && ! $query->is_front_page() && ! empty( $vk_post_type_archive['post']['count'] ) ) {
+				return $query->set( 'posts_per_page', $vk_post_type_archive['post']['count'] );
+		}
+
+		// authhor archive.
+		if ( $query->is_author() && ! empty( $vk_post_type_archive['author']['count'] ) ) {
+			return $query->set( 'posts_per_page', $vk_post_type_archive['author']['count'] );
+		}
+
+		if ( $query->is_archive() ) {
+
+			$page_for_posts['post_top_id'] = get_option( 'page_for_posts' );
+
+			// post_type_archive & is_date and other.
+			if ( ! empty( $query->query_vars['post_type'] ) ) {
+				$post_type = $query->query_vars['post_type'];
+				if ( is_array( $post_type ) ) {
+					$post_type = current( $post_type );
+				}
+				if ( isset( $vk_post_type_archive[ $post_type ]['count'] ) ) {
+					return $query->set( 'posts_per_page', $vk_post_type_archive[ $post_type ]['count'] );
+				}
+			}
+
+			// カスタム分類アーカイブ.
+			if ( ! empty( $query->tax_query->queries ) ) {
+				$taxonomy  = $query->tax_query->queries[0]['taxonomy'];
+				$post_type = get_taxonomy( $taxonomy )->object_type[0];
+				if ( ! empty( $vk_post_type_archive[ $post_type ]['count'] ) ) {
+					return $query->set( 'posts_per_page', $vk_post_type_archive[ $post_type ]['count'] );
+				}
+			}
+		}
+
+		return $query;
+
+	}
+	add_action( 'pre_get_posts', 'lightning_posts_per_page_custom_bs4' );
+
+	// プリフィックス.
 	global $vk_media_post_prefix;
 	$vk_media_post_prefix = lightning_get_prefix();
 
