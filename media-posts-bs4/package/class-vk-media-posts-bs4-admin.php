@@ -1,126 +1,55 @@
 <?php
-/*
-  カスタマイズ画面で標準レイアウトを選択された時に不要入力欄を非表示にする
-/*-------------------------------------------*/
-add_action( 'customize_register', 'lmu_add_customize_class_bs4', 1 );
-function lmu_add_customize_class_bs4( $wp_customize ) {
-	class Lightning_Default_Layout_Form_Hider extends WP_Customize_Control {
-		public function render_content() {
+/**
+ * VK Media Posts BS4 Admin
+ *
+ * @package VK Media Posts BS4
+ */
 
-			// アーカイブページのある投稿タイプを取得
-			$post_types           = array( 'post' => 0 );
-			$post_types           = Lightning_Media_Posts_BS4::get_custom_types() + $post_types;
-			$post_types['author'] = 'author';
+/**
+ * VK Media Posts BS4 Admin
+ */
+class VK_Media_Posts_BS4_Admin {
 
-			// ページを開いた状態のoption値を取得
-			$option = get_option( 'vk_post_type_archive' );
+	/**
+	 * Controls post types that can be displayed with grid layout on front-end (archives list pages)
+	 *
+	 * @var array $post_types
+	 */
+	private static $post_types = array( 'post' => 0 );
 
-			// 投稿タイプでループ
-			foreach ( $post_types as $post_type => $value ) {
-				?>
-				<script type="text/javascript">
-				;
-				(function($) {
-
-				// 投稿タイプslugのついたセレクタ
-				var target_select = '#customize-control-vk_post_type_archive-<?php echo $post_type; ?>-layout select';
-
-				// カラム項目
-				var hidden_item_col = ['-col_xs', '-col_sm', '-col_md', '-col_lg', '-col_xl', '-col_xxl'];
-
-				// その他の非表示要素（テキスト）
-				var hidden_item_element_text = ['-display_image', '-display_excerpt', '-display_btn','-new_mark_title', '-btn_setting_title','-btn_text','-btn_align'];
-
-				// その他の非表示要素
-				var hidden_item_element_all = ['-display_item_title', '-display_image','-display_image_overlay_term', '-display_excerpt', '-display_date', '-display_new', '-display_btn','-new_mark_title', '-new_date', '-new_text','-btn_setting_title','-btn_text','-btn_align'];
-
-				function setOptionHidden( value, control_target_array ){
-					control_target_array.forEach(function( value ) {
-						// デフォルトの場合に設定項目を非表示に
-						$('#customize-control-vk_post_type_archive-<?php echo $post_type; ?>' + value).css({"display":"none"});
-					});
-				}
-				function setOptionDisplay( value, control_target_array ){
-					control_target_array.forEach(function( value ) {
-						// デフォルトの場合に設定項目を非表示に
-						$('#customize-control-vk_post_type_archive-<?php echo $post_type; ?>' + value).css({"display":"list-item"});
-					});
-				}
-
-				<?php
-				// ページを開いた時点で 標準 が選択してあった場合 不要項目を非表示に
-				if ( empty( $option[ $post_type ]['layout'] ) || $option[ $post_type ]['layout'] == 'default' ) {
-					?>
-				$(document).ready(function() {
-					setOptionHidden( 'default', hidden_item_col );
-					setOptionHidden( 'default', hidden_item_element_all );
-				});
-				<?php } ?>
-
-				<?php
-				// ページを開いた時点で テキスト が選択してあった場合 不要項目を非表示に
-				if ( ! empty( $option[ $post_type ]['layout'] ) && $option[ $post_type ]['layout'] == 'postListText' ) {
-					?>
-				$(document).ready(function() {
-					// Display all item
-					setOptionDisplay( 'postListText', hidden_item_element_all );
-					// Hide item
-					setOptionHidden( 'postListText', hidden_item_col );
-					setOptionHidden( 'postListText', hidden_item_element_text );
-				});
-				<?php } ?>
-
-				// // レイアウトが変更された時
-				$(target_select).change(function() {
-					var val = $(this).val();
-					// レイアウト選択が 標準 になったら
-					if ( val === 'default' ){
-						setOptionHidden( val, hidden_item_col );
-						setOptionHidden( val, hidden_item_element_all );
-					} else if ( val === 'postListText' ){
-						// Display all item
-						setOptionDisplay( val, hidden_item_element_all );
-						// Hide item
-						setOptionHidden( val, hidden_item_col );
-						setOptionHidden( val, hidden_item_element_text );
-					// レイアウト選択が 標準 以外の時
-					} else {
-						setOptionDisplay( val, hidden_item_col );
-						setOptionDisplay( val, hidden_item_element_all );
-					}
-
-				});
-				})(jQuery);
-				</script>
-				<?php
-			} // foreach ( $post_types as $post_type => $value ) {
-		} // public function render_content() {
-	} // class Lightning_Default_Layout_form_hide extends WP_Customize_Control {
-}
-
-
-class Lightning_Media_Admin_BS4 {
-
-	// controls post types that can be displayed with grid layout on front-end (archives list pages)
-	private static $post_types        = array( 'post' => 0 );
+	/**
+	 * Label of the post type.
+	 *
+	 * @var array $post_types_labels
+	 */
 	private static $post_types_labels = array();
 
+	/**
+	 * Init Action
+	 */
 	public static function init() {
 
-		// gets custom post types too
-		self::$post_types = Lightning_Media_Posts_BS4::get_custom_types() + self::$post_types;
+		// gets custom post types too.
+		self::$post_types = VK_Media_Posts_BS4::get_custom_types() + self::$post_types;
 
-		// all labels
-		self::$post_types_labels = Lightning_Media_Posts_BS4::labelNames() + Lightning_Media_Posts_BS4::get_custom_types_labels();
+		// all labels.
+		self::$post_types_labels = VK_Media_Posts_BS4::labelNames() + VK_Media_Posts_BS4::get_custom_types_labels();
 
 		add_action( 'customize_register', array( __CLASS__, 'archive_layout_customize_register' ) );
 
 	}
 
+	/**
+	 * Customize Register
+	 *
+	 * @param object $wp_customize WP Customize Object.
+	 */
 	public static function archive_layout_customize_register( $wp_customize ) {
 
 		global $customize_section_name;
 		global $system_name;
+
+		require_once dirname( __FILE__ ) . '/class-vk-default-layout-form-hider.php';
 
 		$wp_customize->add_panel(
 			'vk_post_type_archive_setting',
@@ -133,23 +62,26 @@ class Lightning_Media_Admin_BS4 {
 		);
 
 		$post_types           = array( 'post' => 0 );
-		$post_types           = Lightning_Media_Posts_BS4::get_custom_types() + $post_types;
+		$post_types           = VK_Media_Posts_BS4::get_custom_types() + $post_types;
 		$post_types['author'] = 'author';
 
-		$post_types_labels           = Lightning_Media_Posts_BS4::labelNames() + Lightning_Media_Posts_BS4::get_custom_types_labels();
+		$post_types_labels           = VK_Media_Posts_BS4::labelNames() + VK_Media_Posts_BS4::get_custom_types_labels();
 		$post_types_labels['author'] = __( 'Author', 'lightning-pro' );
 
 		$patterns['default']['label'] = $system_name . ' ' . __( 'default', 'lightning-pro' );
 
-		// Cope with old vk-component version at VK Blocks Pro
-		// $patterns                     = $patterns + VK_Component_Posts::get_patterns();
-		$patterns = $patterns + Lightning_Media_Posts_BS4::patterns();
+		/*
+		Cope with old vk-component version at VK Blocks Pro
+		$patterns = $patterns + VK_Component_Posts::get_patterns();
+		*/
+
+		$patterns = $patterns + VK_Media_Posts_BS4::patterns();
 
 		foreach ( $patterns as $key => $value ) {
 			$layouts[ $key ] = $value['label'];
 		}
 
-		// Works Unit のカスタム投稿タイプがある場合は除外する
+		// Works Unit のカスタム投稿タイプがある場合は除外する.
 		include_once ABSPATH . 'wp-admin/includes/plugin.php';
 		if ( is_plugin_active( 'lightning-works-unit/lightning-works-unit.php' ) ) {
 			$works_unit = get_option( 'lightning_works_unit' );
@@ -159,8 +91,8 @@ class Lightning_Media_Admin_BS4 {
 			}
 		}
 
-		// Get default option
-		$customize_options_default = Lightning_Media_Posts_BS4::options_default_post_type();
+		// Get default option.
+		$customize_options_default = VK_Media_Posts_BS4::options_default_post_type();
 
 		foreach ( $post_types as $type => $value ) {
 
@@ -174,9 +106,7 @@ class Lightning_Media_Admin_BS4 {
 				)
 			);
 
-			/*
-			  Display conditions
-			/*-------------------------------------------*/
+			// Display conditions.
 			$wp_customize->add_setting(
 				'vk_post_type_archive[' . $type . '][display_conditions_title]',
 				array(
@@ -216,10 +146,7 @@ class Lightning_Media_Admin_BS4 {
 				)
 			);
 
-			/*
-			  Layout
-			/*-------------------------------------------*/
-
+			// Layout.
 			$wp_customize->add_setting(
 				'post_type_title_' . $type,
 				array(
@@ -231,6 +158,7 @@ class Lightning_Media_Admin_BS4 {
 					$wp_customize,
 					'post_type_title_' . $type,
 					array(
+						// translators: Display type and columns of posttype.
 						'label'            => sprintf( __( 'Display type and columns [ %s ]', 'lightning-pro' ), $post_type_label ),
 						'section'          => 'vk_post_type_archive_setting_' . $type,
 						'type'             => 'text',
@@ -284,19 +212,16 @@ class Lightning_Media_Admin_BS4 {
 				)
 			);
 
-			/*
-			/*	Columns
-			/*-------------------------------------------*/
-
+			// Columns.
 			$sizes = array(
 				'xs'  => array( 'label' => __( 'Extra small', 'lightning-pro' ) ),
 				'sm'  => array( 'label' => __( 'Small', 'lightning-pro' ) ),
 				'md'  => array( 'label' => __( 'Medium', 'lightning-pro' ) ),
 				'lg'  => array( 'label' => __( 'Large', 'lightning-pro' ) ),
 				'xl'  => array( 'label' => __( 'Extra large', 'lightning-pro' ) ),
-				// Lightning は max 1140 なのでコメントアウト
-				// 'xxl' => array( 'label' => __( 'XX large', 'lightning-pro' ) ),
+				'xxl' => array( 'label' => __( 'XX large', 'lightning-pro' ) ),
 			);
+			$sizes = apply_filters( 'vk_media_post_bs4_size', $sizes );
 
 			foreach ( $sizes as $key => $value ) {
 				$wp_customize->add_setting(
@@ -311,6 +236,7 @@ class Lightning_Media_Admin_BS4 {
 				$wp_customize->add_control(
 					'vk_post_type_archive[' . $type . '][col_' . $key . ']',
 					array(
+						// translators: Column of Screen sizes of xs, sm, md, lg, xl, xxl.
 						'label'    => sprintf( __( 'Column ( Screen size : %s )', 'lightning-pro' ), $value['label'] ),
 						'section'  => 'vk_post_type_archive_setting_' . $type,
 						'settings' => 'vk_post_type_archive[' . $type . '][col_' . $key . ']',
@@ -319,9 +245,7 @@ class Lightning_Media_Admin_BS4 {
 				);
 			}
 
-			/*
-			  Display item
-			/*-------------------------------------------*/
+			// Display item.
 			$wp_customize->add_setting(
 				'vk_post_type_archive[' . $type . '][display_item_title]',
 				array(
@@ -333,6 +257,7 @@ class Lightning_Media_Admin_BS4 {
 					$wp_customize,
 					'vk_post_type_archive[' . $type . '][display_item_title]',
 					array(
+						// translators: Display item of each post type.
 						'label'            => sprintf( __( 'Display item [ %s ]', 'lightning-pro' ), $post_type_label ),
 						'section'          => 'vk_post_type_archive_setting_' . $type,
 						'type'             => 'text',
@@ -389,9 +314,7 @@ class Lightning_Media_Admin_BS4 {
 				);
 			}
 
-			/*
-			  new mark setting
-			/*-------------------------------------------*/
+			// new mark setting.
 			$wp_customize->add_setting(
 				'vk_post_type_archive[' . $type . '][new_mark_title]',
 				array(
@@ -406,6 +329,7 @@ class Lightning_Media_Admin_BS4 {
 						'label'            => '',
 						'section'          => 'vk_post_type_archive_setting_' . $type,
 						'type'             => 'text',
+						// translators: New mark options of each post type.
 						'custom_title_sub' => sprintf( __( 'New mark option [ %s ]', 'lightning-pro' ), $post_type_label ),
 						'custom_html'      => '',
 					)
@@ -450,9 +374,7 @@ class Lightning_Media_Admin_BS4 {
 				)
 			);
 
-			/*
-			  new mark setting
-			/*-------------------------------------------*/
+			// new mark setting.
 			$wp_customize->add_setting(
 				'vk_post_type_archive[' . $type . '][btn_setting_title]',
 				array(
@@ -467,6 +389,7 @@ class Lightning_Media_Admin_BS4 {
 						'label'            => '',
 						'section'          => 'vk_post_type_archive_setting_' . $type,
 						'type'             => 'text',
+						// translators: Button option of each post type.
 						'custom_title_sub' => sprintf( __( 'Button option [ %s ]', 'lightning-pro' ), $post_type_label ),
 						'custom_html'      => '',
 					)
@@ -524,4 +447,4 @@ class Lightning_Media_Admin_BS4 {
 	}
 
 }
-Lightning_Media_Admin_BS4::init();
+VK_Media_Posts_Admin_BS4::init();
