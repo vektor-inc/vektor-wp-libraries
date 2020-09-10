@@ -13,12 +13,13 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 	class VK_Media_Posts_BS4 {
 
 		/**
-		 * Init Action
+		 * 実行
 		 */
-		public static function init() {
-			define( 'VK_MEDIA_POSTS_BS4_URL', get_template_directory_uri() . '/inc/media-posts-bs4/package/' );
-			define( 'VK_MEDIA_POSTS_BS4_DIR', dirname( __FILE__ ) );
-			define( 'VK_MEDIA_POSTS_BS4_VERSION', '1.0' );
+		public function __construct() {
+
+			require_once dirname( __FILE__ ) . '/class-vk-media-posts-bs4-admin.php';
+			add_action( 'widgets_init', array( __CLASS__, 'register_widget' ) );
+
 		}
 
 		/**
@@ -31,19 +32,19 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 			*/
 			$patterns = array(
 				'card'            => array(
-					'label'             => __( 'Card', 'lightning-pro' ),
+					'label'             => __( 'Card', 'media-post-bs4-textdomain' ),
 					'class_posts_outer' => '',
 				),
 				'card-horizontal' => array(
-					'label'             => __( 'Card Horizontal', 'lightning-pro' ),
+					'label'             => __( 'Card Horizontal', 'media-post-bs4-textdomain' ),
 					'class_posts_outer' => '',
 				),
 				'media'           => array(
-					'label'             => __( 'Media', 'lightning-pro' ),
+					'label'             => __( 'Media', 'media-post-bs4-textdomain' ),
 					'class_posts_outer' => 'media-outer',
 				),
 				'postListText'    => array(
-					'label'             => _x( 'Text 1 Column', 'post list type', 'lightning-pro' ),
+					'label'             => _x( 'Text 1 Column', 'post list type', 'media-post-bs4-textdomain' ),
 					'class_posts_outer' => 'postListText-outer',
 				),
 			);
@@ -64,10 +65,10 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 				'display_new'                => true,
 				'display_btn'                => false,
 				'image_default_url'          => VK_MEDIA_POSTS_BS4_URL . '/images/no-image.png',
-				'btn_text'                   => __( 'Read more', 'lightning-pro' ),
+				'btn_text'                   => __( 'Read more', 'media-post-bs4-textdomain' ),
 				'btn_align'                  => 'text-right',
 				'overlay'                    => false,
-				'new_text'                   => __( 'New!!', 'lightning-pro' ),
+				'new_text'                   => __( 'New!!', 'media-post-bs4-textdomain' ),
 				'new_date'                   => 7,
 				'class_title'                => '',
 				'body_prepend'               => '',
@@ -99,7 +100,7 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 			}
 
 			$selected_html = ( isset( $selected ) && ( 'default' === $selected ) ) ? ' selected' : '';
-			$select_html   = '<option value="default">' . $system_name . __( 'default', 'lightning-pro' ) . '</option>';
+			$select_html   = '<option value="default">' . $system_name . __( 'default', 'media-post-bs4-textdomain' ) . '</option>';
 
 			foreach ( $patterns as $key => $value ) {
 				$selected_html = ( isset( $selected ) && ( $selected === $key ) ) ? ' selected' : '';
@@ -120,8 +121,8 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 		public static function label_names() {
 
 			$post_types_labels = array(
-				'post' => __( 'Posts', 'lightning-pro' ),
-				'page' => __( 'Pages', 'lightning-pro' ),
+				'post' => __( 'Posts', 'media-post-bs4-textdomain' ),
+				'page' => __( 'Pages', 'media-post-bs4-textdomain' ),
 			);
 
 			return $post_types_labels;
@@ -170,18 +171,15 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 		}
 
 		/**
-		 * 実行
+		 * Register Widget
 		 */
-		public function __construct() {
-
-			require_once dirname( __FILE__ ) . '/class-media-posts-admin.php';
-			require_once dirname( __FILE__ ) . '/class-media-posts-widget.php';
-
+		public static function register_widget() {
+			require_once dirname( __FILE__ ) . '/class-vk-media-posts-bs4-widget.php';
+			register_widget( 'VK_Media_Posts_BS4_Widget' );
 		}
 
-	} // class VK_Media_Posts_BS4
+	}
 
 	new VK_Media_Posts_BS4();
-	VK_Media_Posts_BS4::init();
 
-} // if ( ! class_exists( 'VK_Media_Posts_BS4' ) )
+}
