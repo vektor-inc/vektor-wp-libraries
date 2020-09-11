@@ -133,7 +133,7 @@ class VK_Media_Posts_BS4_Admin {
 					'default'           => $customize_options_default['count'],
 					'type'              => 'option',
 					'capability'        => 'edit_theme_options',
-					'sanitize_callback' => 'lightning_sanitize_number',
+					'sanitize_callback' => array( 'VK_Helpers', 'sanitize_number' ),
 				)
 			);
 			$wp_customize->add_control(
@@ -230,7 +230,7 @@ class VK_Media_Posts_BS4_Admin {
 						'default'           => $customize_options_default[ 'col_' . $key ],
 						'type'              => 'option',
 						'capability'        => 'edit_theme_options',
-						'sanitize_callback' => 'lightning_sanitize_number',
+						'sanitize_callback' => array( 'VK_Helpers', 'sanitize_number' ),
 					)
 				);
 				$wp_customize->add_control(
@@ -300,7 +300,7 @@ class VK_Media_Posts_BS4_Admin {
 						'default'           => $customize_options_default[ $key ],
 						'type'              => 'option',
 						'capability'        => 'edit_theme_options',
-						'sanitize_callback' => 'lightning_sanitize_checkbox',
+						'sanitize_callback' => array( 'VK_Helpers', 'sanitize_checkbox' ),
 					)
 				);
 				$wp_customize->add_control(
@@ -342,7 +342,7 @@ class VK_Media_Posts_BS4_Admin {
 					'default'           => $customize_options_default['new_date'],
 					'type'              => 'option',
 					'capability'        => 'edit_theme_options',
-					'sanitize_callback' => 'lightning_sanitize_number',
+					'sanitize_callback' => array( 'VK_Helpers', 'sanitize_number' ),
 				)
 			);
 			$wp_customize->add_control(
