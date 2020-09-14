@@ -32,8 +32,8 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 				position: relative;
 				border:none;
 				padding:unset;
-				margin-left: unset;
-				margin-right: unset;
+				margin-left: auto;
+				margin-right: auto;
 				border-radius:unset;
 				outline: unset;
 				outline-offset: unset;
