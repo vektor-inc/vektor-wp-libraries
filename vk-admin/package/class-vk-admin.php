@@ -50,7 +50,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 		 * @param string $plugin '${plugin_dir}/${plugin_file}.php'.
 		 */
 		public static function plugin_exists( $plugin ) {
-			return file_exists( WP_Filesystem_Base::wp_plugins_dir() . '/' . $plugin );
+			return file_exists( WP_PLUGIN_DIR . '/' . $plugin );
 		}
 
 		/**
@@ -59,7 +59,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 		 * @param string $theme '${theme_dir}/style.css'.
 		 */
 		public static function theme_exists( $theme ) {
-			return file_exists( WP_Filesystem_Base::wp_themes_dir() . '/' . $theme );
+			return file_exists( WP_CONTENT_DIR . 'themes/' . $theme );
 		}
 
 		/*
