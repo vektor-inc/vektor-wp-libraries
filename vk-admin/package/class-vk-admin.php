@@ -56,10 +56,10 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 		/**
 		 * Theme Exists
 		 * 
-		 * @param string $plugin '${theme_dir}/style.css'.
+		 * @param string $theme '${theme_dir}/style.css'.
 		 */
 		public static function theme_exists( $theme ) {
-			return file_exists( WP_Filesystem_Base::wp_themes_dir() . '/' .$theme );
+			return file_exists( WP_Filesystem_Base::wp_themes_dir() . '/' . $theme );
 		}
 
 		/*
