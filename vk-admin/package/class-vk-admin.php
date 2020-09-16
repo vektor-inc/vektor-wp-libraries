@@ -59,7 +59,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 		 * @param string $theme '${theme_dir}/style.css'.
 		 */
 		public static function theme_exists( $theme ) {
-			return file_exists( WP_CONTENT_DIR . 'themes/' . $theme );
+			return file_exists( WP_CONTENT_DIR . '/themes/' . $theme );
 		}
 
 		/*
@@ -140,7 +140,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 			}
 
 			// テーマがLightningじゃない場合にLighntingのバナーを表示
-			if ( !  self::theme_exists( 'lightning_get_theme_name' ) ) {
+			if ( !  self::theme_exists( 'lightning/style.css' ) ) {
 				if ( $lang == 'ja' ) {
 					$banner .= '<a href="//lightning.nagoya/ja/" target="_blank" class="admin_banner"><img src="' . $dir_url . 'images/lightning_bnr_ja.jpg" alt="lightning_bnr_ja" /></a>';
 				} else {
@@ -168,7 +168,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 					$banner .= '<a href="https://lightning.nagoya/ja/expansion/ex_plugin/lightning-pale/?rel=vkadmin" target="_blank" class="admin_banner"><img src="' . $dir_url . 'images/pale-bnr.jpg" alt="" /></a>';
 			}
 
-			if ( $lang == 'ja' && ! self::plugin_exists( 'lightning-skin-pale/lightning-skin-variety.php' ) ) {
+			if ( $lang == 'ja' && ! self::plugin_exists( 'lightning-skin-variety/lightning_skin_variety.php' ) ) {
 					$banner .= '<a href="https://lightning.nagoya/ja/expansion/ex_plugin/lightning-variety/?rel=vkadmin" target="_blank" class="admin_banner"><img src="' . $dir_url . 'images/variety-bnr.jpg" alt="" /></a>';
 			}
 
