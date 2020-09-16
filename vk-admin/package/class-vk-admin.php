@@ -72,6 +72,13 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 
 			$banner .= '<div class="vk-admin-banner-grid">';
 
+			// テーマが Katawara じゃない場合にLighntingのバナーを表示
+			if ( ! function_exists( 'katawara_get_theme_name' ) ) {
+				if ( $lang == 'ja' ) {
+					$banner .= '<a href="https://www.vektor-inc.co.jp/service/wordpress-theme/katawara/?rel=vkadmin" target="_blank" class="admin_banner"><img src="' . $dir_url . 'images/katawara_bnr.jpg" alt="katawara_bnr_ja" /></a>';
+				}
+			} // if ( $theme != 'lightning' ) {
+
 			// プラグイン VK Block Patterns を有効化していない人にバナーを表示
 			if ( ! is_plugin_active( 'vk-block-patterns/vk-block-patterns.php' ) ) {
 				if ( $lang == 'ja' ) {
