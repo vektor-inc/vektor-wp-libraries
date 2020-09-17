@@ -458,6 +458,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 						left: 50%;
 						margin-left: -19px;
 						bottom: -24px;
+						top: unset;
 						width: 38px;
 						border-top: solid 2px ' . $color_key . ';
 					',
