@@ -27,13 +27,14 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 		 * @param string $color_key Color Key.
 		 */
 		public static function get_headding_style_array( $color_key = '#c00' ) {
+			// ※ margin:unset; にすると編集画面で左ベタ付きになるので注意
 			$reset                        = '
 				background-color:unset;
 				position: relative;
 				border:none;
 				padding:unset;
-				margin-left: unset;
-				margin-right: unset;
+				margin-left: auto;
+				margin-right: auto;
 				border-radius:unset;
 				outline: unset;
 				outline-offset: unset;
