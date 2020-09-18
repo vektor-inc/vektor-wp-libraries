@@ -484,7 +484,6 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 				'vk_headding_design',
 				array(
 					'default' => false,
-					// 'sanitize_callback' => 'sanitize_text_field',
 				)
 			);
 			$wp_customize->add_control(
@@ -492,7 +491,6 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					$wp_customize,
 					'vk_headding_design',
 					array(
-						// 'title'            => 'lightning-pro Headding Design',
 						'label'            => __( 'Headding Design', 'headding_design_textdomain' ),
 						'section'          => $headding_customize_section,
 						'type'             => 'text',
