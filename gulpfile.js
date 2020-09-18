@@ -244,6 +244,16 @@ gulp.task('copy_media-posts-bs4', function (done) {
         done();
 });
 
+/**
+ * Media Posts Bs4
+ */
+gulp.task('copy_headding-design', function (done) {
+    gulp.src('./headding-design/package/**')
+		.pipe(gulp.dest('../themes/katawara/inc/headding-design/package/'))
+		.pipe(gulp.dest('../themes/lightning-pro/inc/headding-design/package/'))
+        done();
+});
+
 /*-------------------------------------*/
 /*  Font
 /*-------------------------------------*/
