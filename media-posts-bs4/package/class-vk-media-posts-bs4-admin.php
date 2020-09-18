@@ -57,7 +57,7 @@ class VK_Media_Posts_BS4_Admin {
 				'priority'       => 535,
 				'capability'     => 'edit_theme_options',
 				'theme_supports' => '',
-				'title'          => $customize_section_name . __( 'Archive Page Setting', 'lightning-pro' ),
+				'title'          => $customize_section_name . __( 'Archive Page Setting', 'media-posts-bs4-textdomain' ),
 			)
 		);
 
@@ -66,9 +66,9 @@ class VK_Media_Posts_BS4_Admin {
 		$post_types['author'] = 'author';
 
 		$post_types_labels           = VK_Media_Posts_BS4::label_names() + VK_Media_Posts_BS4::get_custom_types_labels();
-		$post_types_labels['author'] = __( 'Author', 'lightning-pro' );
+		$post_types_labels['author'] = __( 'Author', 'media-posts-bs4-textdomain' );
 
-		$patterns['default']['label'] = $system_name . ' ' . __( 'default', 'lightning-pro' );
+		$patterns['default']['label'] = $system_name . ' ' . __( 'default', 'media-posts-bs4-textdomain' );
 
 		/*
 		Cope with old vk-component version at VK Blocks Pro
@@ -118,10 +118,10 @@ class VK_Media_Posts_BS4_Admin {
 					$wp_customize,
 					'vk_post_type_archive[' . $type . '][display_conditions_title]',
 					array(
-						'label'            => __( 'Display conditions', 'lightning-pro' ) . ' [ ' . $post_type_label . ' ]',
+						'label'            => __( 'Display conditions', 'media-posts-bs4-textdomain' ) . ' [ ' . $post_type_label . ' ]',
 						'section'          => 'vk_post_type_archive_setting_' . $type,
 						'type'             => 'text',
-						'custom_title_sub' => __( 'Number of posts per page', 'lightning-pro' ),
+						'custom_title_sub' => __( 'Number of posts per page', 'media-posts-bs4-textdomain' ),
 						'custom_html'      => '',
 					)
 				)
@@ -159,7 +159,7 @@ class VK_Media_Posts_BS4_Admin {
 					'post_type_title_' . $type,
 					array(
 						// translators: Display type and columns of posttype.
-						'label'            => sprintf( __( 'Display type and columns [ %s ]', 'lightning-pro' ), $post_type_label ),
+						'label'            => sprintf( __( 'Display type and columns [ %s ]', 'media-posts-bs4-textdomain' ), $post_type_label ),
 						'section'          => 'vk_post_type_archive_setting_' . $type,
 						'type'             => 'text',
 						'custom_title_sub' => '',
@@ -187,7 +187,7 @@ class VK_Media_Posts_BS4_Admin {
 			$wp_customize->add_control(
 				'vk_post_type_archive[' . $type . '][layout]',
 				array(
-					'label'    => __( 'Display type', 'lightning-pro' ),
+					'label'    => __( 'Display type', 'media-posts-bs4-textdomain' ),
 					'section'  => 'vk_post_type_archive_setting_' . $type,
 					'settings' => 'vk_post_type_archive[' . $type . '][layout]',
 					'type'     => 'select',
@@ -214,12 +214,12 @@ class VK_Media_Posts_BS4_Admin {
 
 			// Columns.
 			$sizes = array(
-				'xs'  => array( 'label' => __( 'Extra small', 'lightning-pro' ) ),
-				'sm'  => array( 'label' => __( 'Small', 'lightning-pro' ) ),
-				'md'  => array( 'label' => __( 'Medium', 'lightning-pro' ) ),
-				'lg'  => array( 'label' => __( 'Large', 'lightning-pro' ) ),
-				'xl'  => array( 'label' => __( 'Extra large', 'lightning-pro' ) ),
-				'xxl' => array( 'label' => __( 'XX large', 'lightning-pro' ) ),
+				'xs'  => array( 'label' => __( 'Extra small', 'media-posts-bs4-textdomain' ) ),
+				'sm'  => array( 'label' => __( 'Small', 'media-posts-bs4-textdomain' ) ),
+				'md'  => array( 'label' => __( 'Medium', 'media-posts-bs4-textdomain' ) ),
+				'lg'  => array( 'label' => __( 'Large', 'media-posts-bs4-textdomain' ) ),
+				'xl'  => array( 'label' => __( 'Extra large', 'media-posts-bs4-textdomain' ) ),
+				'xxl' => array( 'label' => __( 'XX large', 'media-posts-bs4-textdomain' ) ),
 			);
 			$sizes = apply_filters( 'vk_media_post_bs4_size', $sizes );
 
@@ -237,7 +237,7 @@ class VK_Media_Posts_BS4_Admin {
 					'vk_post_type_archive[' . $type . '][col_' . $key . ']',
 					array(
 						// translators: Column of Screen sizes of xs, sm, md, lg, xl, xxl.
-						'label'    => sprintf( __( 'Column ( Screen size : %s )', 'lightning-pro' ), $value['label'] ),
+						'label'    => sprintf( __( 'Column ( Screen size : %s )', 'media-posts-bs4-textdomain' ), $value['label'] ),
 						'section'  => 'vk_post_type_archive_setting_' . $type,
 						'settings' => 'vk_post_type_archive[' . $type . '][col_' . $key . ']',
 						'type'     => 'number',
@@ -258,7 +258,7 @@ class VK_Media_Posts_BS4_Admin {
 					'vk_post_type_archive[' . $type . '][display_item_title]',
 					array(
 						// translators: Display item of each post type.
-						'label'            => sprintf( __( 'Display item [ %s ]', 'lightning-pro' ), $post_type_label ),
+						'label'            => sprintf( __( 'Display item [ %s ]', 'media-posts-bs4-textdomain' ), $post_type_label ),
 						'section'          => 'vk_post_type_archive_setting_' . $type,
 						'type'             => 'text',
 						'custom_title_sub' => '',
@@ -269,27 +269,27 @@ class VK_Media_Posts_BS4_Admin {
 
 			$items = array(
 				'display_image'              => array(
-					'label'   => __( 'Image', 'lightning-pro' ),
+					'label'   => __( 'Image', 'media-posts-bs4-textdomain' ),
 					'default' => true,
 				),
 				'display_image_overlay_term' => array(
-					'label' => __( 'Term name', 'lightning-pro' ),
+					'label' => __( 'Term name', 'media-posts-bs4-textdomain' ),
 					// 'default' => true,
 				),
 				'display_excerpt'            => array(
-					'label' => __( 'Excerpt', 'lightning-pro' ),
+					'label' => __( 'Excerpt', 'media-posts-bs4-textdomain' ),
 					// 'default' => false,
 				),
 				'display_date'               => array(
-					'label' => __( 'Date', 'lightning-pro' ),
+					'label' => __( 'Date', 'media-posts-bs4-textdomain' ),
 					// 'default' => true,
 				),
 				'display_new'                => array(
-					'label' => __( 'New mark', 'lightning-pro' ),
+					'label' => __( 'New mark', 'media-posts-bs4-textdomain' ),
 					// 'default' => true,
 				),
 				'display_btn'                => array(
-					'label' => __( 'Button', 'lightning-pro' ),
+					'label' => __( 'Button', 'media-posts-bs4-textdomain' ),
 					// 'default' => false,
 				),
 			);
@@ -330,7 +330,7 @@ class VK_Media_Posts_BS4_Admin {
 						'section'          => 'vk_post_type_archive_setting_' . $type,
 						'type'             => 'text',
 						// translators: New mark options of each post type.
-						'custom_title_sub' => sprintf( __( 'New mark option [ %s ]', 'lightning-pro' ), $post_type_label ),
+						'custom_title_sub' => sprintf( __( 'New mark option [ %s ]', 'media-posts-bs4-textdomain' ), $post_type_label ),
 						'custom_html'      => '',
 					)
 				)
@@ -348,7 +348,7 @@ class VK_Media_Posts_BS4_Admin {
 			$wp_customize->add_control(
 				'vk_post_type_archive[' . $type . '][new_date]',
 				array(
-					'label'    => __( 'Number of days to display the new post mark', 'lightning-pro' ),
+					'label'    => __( 'Number of days to display the new post mark', 'media-posts-bs4-textdomain' ),
 					'section'  => 'vk_post_type_archive_setting_' . $type,
 					'settings' => 'vk_post_type_archive[' . $type . '][new_date]',
 					'type'     => 'text',
@@ -367,7 +367,7 @@ class VK_Media_Posts_BS4_Admin {
 			$wp_customize->add_control(
 				'vk_post_type_archive[' . $type . '][new_text]',
 				array(
-					'label'    => __( 'New mark text', 'lightning-pro' ),
+					'label'    => __( 'New mark text', 'media-posts-bs4-textdomain' ),
 					'section'  => 'vk_post_type_archive_setting_' . $type,
 					'settings' => 'vk_post_type_archive[' . $type . '][new_text]',
 					'type'     => 'text',
@@ -390,7 +390,7 @@ class VK_Media_Posts_BS4_Admin {
 						'section'          => 'vk_post_type_archive_setting_' . $type,
 						'type'             => 'text',
 						// translators: Button option of each post type.
-						'custom_title_sub' => sprintf( __( 'Button option [ %s ]', 'lightning-pro' ), $post_type_label ),
+						'custom_title_sub' => sprintf( __( 'Button option [ %s ]', 'media-posts-bs4-textdomain' ), $post_type_label ),
 						'custom_html'      => '',
 					)
 				)
@@ -408,7 +408,7 @@ class VK_Media_Posts_BS4_Admin {
 			$wp_customize->add_control(
 				'vk_post_type_archive[' . $type . '][btn_text]',
 				array(
-					'label'    => __( 'Button text', 'lightning-pro' ),
+					'label'    => __( 'Button text', 'media-posts-bs4-textdomain' ),
 					'section'  => 'vk_post_type_archive_setting_' . $type,
 					'settings' => 'vk_post_type_archive[' . $type . '][btn_text]',
 					'type'     => 'text',
@@ -416,9 +416,9 @@ class VK_Media_Posts_BS4_Admin {
 			);
 
 			$text_aligns = array(
-				'text-left'   => __( 'Left', 'lightning-pro' ),
-				'text-center' => __( 'Center', 'lightning-pro' ),
-				'text-right'  => __( 'Right', 'lightning-pro' ),
+				'text-left'   => __( 'Left', 'media-posts-bs4-textdomain' ),
+				'text-center' => __( 'Center', 'media-posts-bs4-textdomain' ),
+				'text-right'  => __( 'Right', 'media-posts-bs4-textdomain' ),
 			);
 
 			$wp_customize->add_setting(
@@ -433,7 +433,7 @@ class VK_Media_Posts_BS4_Admin {
 			$wp_customize->add_control(
 				'vk_post_type_archive[' . $type . '][btn_align]',
 				array(
-					'label'    => __( 'Text align', 'lightning-pro' ),
+					'label'    => __( 'Text align', 'media-posts-bs4-textdomain' ),
 					'section'  => 'vk_post_type_archive_setting_' . $type,
 					'settings' => 'vk_post_type_archive[' . $type . '][btn_align]',
 					'type'     => 'select',
