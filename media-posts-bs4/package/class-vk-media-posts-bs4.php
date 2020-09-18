@@ -32,19 +32,19 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 			*/
 			$patterns = array(
 				'card'            => array(
-					'label'             => __( 'Card', 'media-post-bs4-textdomain' ),
+					'label'             => __( 'Card', 'lightning-pro' ),
 					'class_posts_outer' => '',
 				),
 				'card-horizontal' => array(
-					'label'             => __( 'Card Horizontal', 'media-post-bs4-textdomain' ),
+					'label'             => __( 'Card Horizontal', 'lightning-pro' ),
 					'class_posts_outer' => '',
 				),
 				'media'           => array(
-					'label'             => __( 'Media', 'media-post-bs4-textdomain' ),
+					'label'             => __( 'Media', 'lightning-pro' ),
 					'class_posts_outer' => 'media-outer',
 				),
 				'postListText'    => array(
-					'label'             => _x( 'Text 1 Column', 'post list type', 'media-post-bs4-textdomain' ),
+					'label'             => _x( 'Text 1 Column', 'post list type', 'lightning-pro' ),
 					'class_posts_outer' => 'postListText-outer',
 				),
 			);
@@ -54,7 +54,7 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 		/**
 		 * Default Options
 		 */
-		public static function options_default_post_type() {
+		public static function options_default() {
 
 			$default_options = array(
 				'layout'                     => 'card',
@@ -65,10 +65,10 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 				'display_new'                => true,
 				'display_btn'                => false,
 				'image_default_url'          => VK_MEDIA_POSTS_BS4_URL . '/images/no-image.png',
-				'btn_text'                   => __( 'Read more', 'media-post-bs4-textdomain' ),
+				'btn_text'                   => __( 'Read more', 'lightning-pro' ),
 				'btn_align'                  => 'text-right',
 				'overlay'                    => false,
-				'new_text'                   => __( 'New!!', 'media-post-bs4-textdomain' ),
+				'new_text'                   => __( 'New!!', 'lightning-pro' ),
 				'new_date'                   => 7,
 				'class_title'                => '',
 				'body_prepend'               => '',
@@ -81,7 +81,7 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 				'col_xl'                     => 3,
 				'col_xxl'                    => 3,
 			);
-			$default_options = apply_filters( 'vk_media_post_bs4_default_options', $default_options );
+			$default_options = apply_filters( 'vk_media_posts_bs4_default_options', $default_options );
 			return $default_options;
 		}
 
@@ -100,7 +100,7 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 			}
 
 			$selected_html = ( isset( $selected ) && ( 'default' === $selected ) ) ? ' selected' : '';
-			$select_html   = '<option value="default">' . $system_name . __( 'default', 'media-post-bs4-textdomain' ) . '</option>';
+			$select_html   = '<option value="default">' . $system_name . __( 'default', 'lightning-pro' ) . '</option>';
 
 			foreach ( $patterns as $key => $value ) {
 				$selected_html = ( isset( $selected ) && ( $selected === $key ) ) ? ' selected' : '';
@@ -121,8 +121,8 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 		public static function label_names() {
 
 			$post_types_labels = array(
-				'post' => __( 'Posts', 'media-post-bs4-textdomain' ),
-				'page' => __( 'Pages', 'media-post-bs4-textdomain' ),
+				'post' => __( 'Posts', 'lightning-pro' ),
+				'page' => __( 'Pages', 'lightning-pro' ),
 			);
 
 			return $post_types_labels;
