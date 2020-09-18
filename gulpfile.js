@@ -235,7 +235,7 @@ gulp.task('w_mp', function (done) {
 });
 
 /**
- * Media Posts Bs4
+ * Media Posts BS4
  */
 gulp.task('copy_media-posts-bs4', function (done) {
     gulp.src('./media-posts-bs4/package/**')
@@ -245,7 +245,7 @@ gulp.task('copy_media-posts-bs4', function (done) {
 });
 
 /**
- * Media Posts Bs4
+ * Headding Design
  */
 gulp.task('copy_headding-design', function (done) {
     gulp.src('./headding-design/package/**')
