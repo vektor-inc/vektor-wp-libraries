@@ -100,11 +100,11 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 			// プラグイン VK Block Patterns を有効化していない人にバナーを表示
 			if ( ! self::plugin_exists( 'vk-block-patterns/vk-block-patterns.php' ) ) {
 				if ( $lang == 'ja' ) {
-					$bnr_file_name = 'vk-block-patterns_bnr.jpg';
+					$bnr_file_name = 'vk-block-patterns_bnr_ja.jpg';
 				} else {
-					$bnr_file_name = 'vk-block-patterns_bnr.jpg';
+					$bnr_file_name = 'vk-block-patterns_bnr_en.jpg';
 				}
-				$banner .= '<a href="//wordpress.org/plugins/vk-block-patterns/" target="_blank" class="admin_banner"><img src="' . $dir_url . 'images/' . $bnr_file_name . '" alt="VK Block Patterns" /></a>';
+				$banner .= '<a href="'.admin_url('plugin-install.php?s=vk+block+patterns&tab=search&type=term').'" target="_blank" class="admin_banner"><img src="' . $dir_url . 'images/' . $bnr_file_name . '" alt="VK Block Patterns" /></a>';
 			}
 
 			// プラグイン Link Target Controller を有効化していない人にバナーを表示
