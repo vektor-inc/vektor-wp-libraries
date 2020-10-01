@@ -32,19 +32,19 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 			*/
 			$patterns = array(
 				'card'            => array(
-					'label'             => __( 'Card', 'media-posts-bs4-textdomain' ),
+					'label'             => __( 'Card', 'media-post-bs4-textdomain' ),
 					'class_posts_outer' => '',
 				),
 				'card-horizontal' => array(
-					'label'             => __( 'Card Horizontal', 'media-posts-bs4-textdomain' ),
+					'label'             => __( 'Card Horizontal', 'media-post-bs4-textdomain' ),
 					'class_posts_outer' => '',
 				),
 				'media'           => array(
-					'label'             => __( 'Media', 'media-posts-bs4-textdomain' ),
+					'label'             => __( 'Media', 'media-post-bs4-textdomain' ),
 					'class_posts_outer' => 'media-outer',
 				),
 				'postListText'    => array(
-					'label'             => _x( 'Text 1 Column', 'post list type', 'media-posts-bs4-textdomain' ),
+					'label'             => _x( 'Text 1 Column', 'post list type', 'media-post-bs4-textdomain' ),
 					'class_posts_outer' => 'postListText-outer',
 				),
 			);
@@ -57,6 +57,8 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 		public static function options_default() {
 
 			$default_options = array(
+				'order'                      => 'DESC',
+				'orderby'                    => 'date',
 				'layout'                     => 'card',
 				'display_image'              => true,
 				'display_image_overlay_term' => true,
@@ -65,10 +67,10 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 				'display_new'                => true,
 				'display_btn'                => false,
 				'image_default_url'          => VK_MEDIA_POSTS_BS4_URL . '/images/no-image.png',
-				'btn_text'                   => __( 'Read more', 'media-posts-bs4-textdomain' ),
+				'btn_text'                   => __( 'Read more', 'media-post-bs4-textdomain' ),
 				'btn_align'                  => 'text-right',
 				'overlay'                    => false,
-				'new_text'                   => __( 'New!!', 'media-posts-bs4-textdomain' ),
+				'new_text'                   => __( 'New!!', 'media-post-bs4-textdomain' ),
 				'new_date'                   => 7,
 				'class_title'                => '',
 				'body_prepend'               => '',
@@ -100,7 +102,7 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 			}
 
 			$selected_html = ( isset( $selected ) && ( 'default' === $selected ) ) ? ' selected' : '';
-			$select_html   = '<option value="default">' . $system_name . __( 'default', 'media-posts-bs4-textdomain' ) . '</option>';
+			$select_html   = '<option value="default">' . $system_name . __( 'default', 'media-post-bs4-textdomain' ) . '</option>';
 
 			foreach ( $patterns as $key => $value ) {
 				$selected_html = ( isset( $selected ) && ( $selected === $key ) ) ? ' selected' : '';
@@ -121,8 +123,8 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 		public static function label_names() {
 
 			$post_types_labels = array(
-				'post' => __( 'Posts', 'media-posts-bs4-textdomain' ),
-				'page' => __( 'Pages', 'media-posts-bs4-textdomain' ),
+				'post' => __( 'Posts', 'media-post-bs4-textdomain' ),
+				'page' => __( 'Pages', 'media-post-bs4-textdomain' ),
 			);
 
 			return $post_types_labels;
