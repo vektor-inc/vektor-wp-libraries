@@ -177,8 +177,12 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 		if ( ! empty( $instance['offset'] ) ) {
 			$q_args['offset'] = mb_convert_kana( $instance['offset'], 'n' );
 		}
-		$q_args['order']   = $instance['order'];
-		$q_args['orderby'] = $instance['orderby'];
+		if ( ! empty( $instance['order'] ) ) {
+			$q_args['order'] = $instance['order'];
+		}
+		if ( ! empty( $instance['orderby'] ) ) {
+			$q_args['orderby'] = $instance['orderby'];
+		}
 
 		global $media_posts_query;
 		$media_posts_query            = new WP_Query( $q_args );
