@@ -609,7 +609,10 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 							$font_weight = 'font-weight:' . $fonts_array[ $font_key ]['font-weight'] . ';';
 						}
 						// 出力するCSSに登録
-						$dynamic_css .= $target_value['selector'] . '{ ' . $font_family . $font_weight . '}';
+						$dynamic_css .= $target_value['selector'] . '{ '; 
+						$dynamic_css .= $font_family . $font_weight;
+						$dynamic_css .= 'font-display: swap;';
+						$dynamic_css .= '}';
 					}
 
 					// ウェブフォントを使用していたらウェブフォント情報を取得
