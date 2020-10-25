@@ -34,8 +34,11 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 				)
 			);
 		
+			// Tree shaking
+			////////////////////////////////////////////////////////////////
+
 			$wp_customize->add_setting(
-				'speedinc_title',
+				'tree_shaking_title',
 				array(
 					'sanitize_callback' => 'sanitize_text_field',
 				)
@@ -43,9 +46,9 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 			$wp_customize->add_control(
 				new Custom_Html_Control(
 					$wp_customize,
-					'speedinc_title',
+					'tree_shaking_title',
 					array(
-						'label'            => __( 'Speed setting', 'css_optimize_textdomain' ),
+						'label'            => __( 'Tree shaking', 'css_optimize_textdomain' ),
 						'section'          => 'css_optimize',
 						'type'             => 'text',
 						'custom_title_sub' => '',
@@ -55,25 +58,24 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 			);
 		
 			$wp_customize->add_setting(
-				'vk_css_optimize_options[optimize_css]',
+				'vk_css_optimize_options[tree_shaking]',
 				array(
-					'default'           => 'default',
+					'default'           => '',
 					'type'              => 'option',
 					'capability'        => 'edit_theme_options',
 					'sanitize_callback' => array( 'VK_Helpers', 'sanitize_choice' ),
 				)
 			);
 			$wp_customize->add_control(
-				'vk_css_optimize_options[optimize_css]',
+				'vk_css_optimize_options[tree_shaking]',
 				array(
-					'label'    => __( 'Optimize CSS', 'css_optimize_textdomain' ),
+					'label'    => __( 'Active tree shaking (Beta)', 'css_optimize_textdomain' ),
 					'section'  => 'css_optimize',
-					'settings' => 'vk_css_optimize_options[optimize_css]',
+					'settings' => 'vk_css_optimize_options[tree_shaking]',
 					'type'     => 'select',
 					'choices'  => array(
-						'default'    => __( 'Nothing to do', 'css_optimize_textdomain' ),
-						'tree-shaking'      => __( 'Optimize CSS ( Tree Shaking ) (Beta)', 'css_optimize_textdomain' ),
-						'optomize-all-css'  => __( 'Optimize All CSS ( Tree Shaking + Preload ) (Beta)', 'css_optimize_textdomain' ),
+						''			=> __( 'Nothing to do', 'css_optimize_textdomain' ),
+						'active'	=> __( 'Active Tree shaking', 'css_optimize_textdomain' ),
 					),
 				)
 			);
@@ -97,6 +99,52 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 					'description' => __( 'If you choose "Optimize All CSS" that delete the useless css.If you using active css class that please fill in class name. Ex) btn-active,slide-active,scrolled', 'css_optimize_textdomain' ),
 				)
 			);
+
+			// Preload
+			////////////////////////////////////////////////////////////////
+			$wp_customize->add_setting(
+				'css_preload_title',
+				array(
+					'sanitize_callback' => 'sanitize_text_field',
+				)
+			);
+			$wp_customize->add_control(
+				new Custom_Html_Control(
+					$wp_customize,
+					'css_preload_title',
+					array(
+						'label'            => __( 'CSS Preload', 'css_optimize_textdomain' ),
+						'section'          => 'css_optimize',
+						'type'             => 'text',
+						'custom_title_sub' => '',
+						// 'custom_html'      => __( 'Move part of CSS and JS to the footer to improve display speed.', 'css_optimize_textdomain' ),
+					)
+				)
+			);
+
+			$wp_customize->add_setting(
+				'vk_css_optimize_options[preload]',
+				array(
+					'default'           => '',
+					'type'              => 'option',
+					'capability'        => 'edit_theme_options',
+					'sanitize_callback' => 'sanitize_text_field',
+				)
+			);
+			$wp_customize->add_control(
+				'vk_css_optimize_options[preload]',
+				array(
+					'label'       => __( 'Active preload', 'css_optimize_textdomain' ),
+					'section'     => 'css_optimize',
+					'settings'    => 'vk_css_optimize_options[preload]',
+					'type'        => 'select',
+					'choices'  => array(
+						''   	 	=> __( 'Nothing to do', 'css_optimize_textdomain' ),
+						'active'    => __( 'All preload css', 'css_optimize_textdomain' ),
+					),
+				)
+			);
+
 		}
 
 		public static function get_css_optimize_options(){
@@ -131,7 +179,7 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 
 		public static function is_preload(){
 			$options = VK_CSS_Optimize::get_css_optimize_options();
-			if ( ! empty( $options['optimize_css'] ) && 'optomize-all-css' === $options['optimize_css'] ) {
+			if ( ! empty( $options['preload'] ) && 'preload-all' === $options['preload'] ) {
 				return true;
 			}
 		}
