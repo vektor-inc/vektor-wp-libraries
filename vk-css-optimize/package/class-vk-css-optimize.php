@@ -19,11 +19,85 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 		public function __construct() {
 			add_action( 'get_header', array( __CLASS__, 'get_html_start' ), 2147483647 );
 			add_action( 'shutdown', array( __CLASS__, 'get_html_end' ), 0 );
+			add_action( 'customize_register', array( __CLASS__, 'customize_register' ) );
 			if ( VK_CSS_Optimize::is_preload() ){
 				add_filter( 'style_loader_tag', array( __CLASS__, 'css_preload' ), 10, 4 );
 			}
 		}
 
+		public static function customize_register( $wp_customize ){
+			global $prefix_customize_panel;
+			$wp_customize->add_section(
+				'css_optimize', array(
+					'title'    => $prefix_customize_panel . __( 'CSS Optimize ( Speed up ) Settings', 'css_optimize_textdomain' ),
+					'priority' => 450,
+				)
+			);
+		
+			$wp_customize->add_setting(
+				'speedinc_title',
+				array(
+					'sanitize_callback' => 'sanitize_text_field',
+				)
+			);
+			$wp_customize->add_control(
+				new Custom_Html_Control(
+					$wp_customize,
+					'speedinc_title',
+					array(
+						'label'            => __( 'Speed setting', 'css_optimize_textdomain' ),
+						'section'          => 'css_optimize',
+						'type'             => 'text',
+						'custom_title_sub' => '',
+						// 'custom_html'      => __( 'Move part of CSS and JS to the footer to improve display speed.', 'css_optimize_textdomain' ),
+					)
+				)
+			);
+		
+			$wp_customize->add_setting(
+				'vk_css_optimize_options[optimize_css]',
+				array(
+					'default'           => 'default',
+					'type'              => 'option',
+					'capability'        => 'edit_theme_options',
+					'sanitize_callback' => array( 'VK_Helpers', 'sanitize_choice' ),
+				)
+			);
+			$wp_customize->add_control(
+				'vk_css_optimize_options[optimize_css]',
+				array(
+					'label'    => __( 'Optimize CSS', 'css_optimize_textdomain' ),
+					'section'  => 'css_optimize',
+					'settings' => 'vk_css_optimize_options[optimize_css]',
+					'type'     => 'select',
+					'choices'  => array(
+						'default'    => __( 'Nothing to do', 'css_optimize_textdomain' ),
+						'tree-shaking'      => __( 'Optimize CSS ( Tree Shaking ) (Beta)', 'css_optimize_textdomain' ),
+						'optomize-all-css'  => __( 'Optimize All CSS ( Tree Shaking + Preload ) (Beta)', 'css_optimize_textdomain' ),
+					),
+				)
+			);
+		
+			$wp_customize->add_setting(
+				'vk_css_optimize_options[tree_shaking_class_exclude]',
+				array(
+					'default'           => '',
+					'type'              => 'option',
+					'capability'        => 'edit_theme_options',
+					'sanitize_callback' => 'sanitize_text_field',
+				)
+			);
+			$wp_customize->add_control(
+				'vk_css_optimize_options[tree_shaking_class_exclude]',
+				array(
+					'label'       => __( 'Exclude class of tree shaking', 'css_optimize_textdomain' ),
+					'section'     => 'css_optimize',
+					'settings'    => 'vk_css_optimize_options[tree_shaking_class_exclude]',
+					'type'        => 'textarea',
+					'description' => __( 'If you choose "Optimize All CSS" that delete the useless css.If you using active css class that please fill in class name. Ex) btn-active,slide-active,scrolled', 'css_optimize_textdomain' ),
+				)
+			);
+		}
 
 		public static function get_css_optimize_options(){
 
