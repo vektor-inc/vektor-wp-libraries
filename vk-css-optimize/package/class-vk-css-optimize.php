@@ -17,10 +17,17 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 	class VK_CSS_Optimize {
 
 		public function __construct() {
-			add_action( 'get_header', array( __CLASS__, 'get_html_start' ), 2147483647 );
-			add_action( 'shutdown', array( __CLASS__, 'get_html_end' ), 0 );
 			add_action( 'customize_register', array( __CLASS__, 'customize_register' ) );
-			if ( VK_CSS_Optimize::is_preload() ){
+			add_filter( 'css_tree_shaking_exclude', array( __CLASS__, 'tree_shaking_exclude' ) );
+
+			$options = VK_CSS_Optimize::get_css_optimize_options();
+
+			if ( ! empty( $options['tree_shaking'] ) ) {
+				add_action( 'get_header', array( __CLASS__, 'get_html_start' ), 2147483647 );
+				add_action( 'shutdown', array( __CLASS__, 'get_html_end' ), 0 );
+			}			
+			
+			if ( ! empty( $options['preload'] ) ) {
 				add_filter( 'style_loader_tag', array( __CLASS__, 'css_preload' ), 10, 4 );
 			}
 		}
@@ -147,45 +154,71 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 
 		}
 
+		/**
+		 * 
+		 */
 		public static function get_css_optimize_options(){
 
+			$theme_textdomain = wp_get_theme()->get( 'TextDomain' );
+			if ( 'lightning' === $theme_textdomain || 'lightning-pro' === $theme_textdomain ){
+				$old_options = get_option( 'lightning_theme_options' );
+			} else if ( 'katawara' === $theme_textdomain ){
+				$old_options = get_option( 'katawara_theme_options' );
+			} else {
+				$old_options = get_option( 'vk_blocks_options' );
+			}
+
 			$vk_css_optimize_options = get_option( 'vk_css_optimize_options' );
+			$vk_css_optimize_options_default = array(
+				'tree_shaking'	=> 'active',
+				'preload' 		=> 'active',
+			);
 
 			// fall back function
 			// Actualy other array exist but optimize_css is most important
-			if ( ! isset( $vk_css_optimize_options['optimize_css'] ) ) {
+			if ( ! isset( $vk_css_optimize_options['tree_shaking'] ) ) {
 
-				$theme_textdomain = wp_get_theme()->get( 'TextDomain' );
+				if ( isset( $old_options['optimize_css'] ) ){
+					if ( $old_options['optimize_css'] === 'optomize-all-css' || $old_options['optimize_css'] === 'tree-shaking' ){
+						$vk_css_optimize_options['tree_shaking'] 	= 'active';
+					} else {
+						$vk_css_optimize_options['tree_shaking'] 	= '';
+					}
+				}
+			}
 
-				if ( 'lightning' === $theme_textdomain || 'lightning-pro' === $theme_textdomain ){
-					$options = get_option( 'lightning_theme_options' );
-				} else if ( 'katawara' === $theme_textdomain ){
-					$options = get_option( 'katawara_theme_options' );
-				} else {
-					$options = get_option( 'vk_blocks_options' );
+			if ( ! isset( $vk_css_optimize_options['tree_shaking_class_exclude'] ) ) {
+				if ( ! empty( $old_options['tree_shaking_class_exclude'] ) ){
+					$vk_css_optimize_options['tree_shaking_class_exclude'] = esc_html( $old_options['tree_shaking_class_exclude'] );
 				}
-				if ( isset( $options['optimize_css'] ) ){
-					$vk_css_optimize_options['optimize_css'] = $options['optimize_css'];
+			}
+
+			if ( ! isset( $vk_css_optimize_options['preload'] ) ) {
+
+				if ( isset( $old_options['optimize_css'] ) ){
+					if ( $old_options['optimize_css'] === 'optomize-all-css'){
+						$vk_css_optimize_options['preload'] 		='active';
+					} else {
+						$vk_css_optimize_options['preload'] 		= '';
+					}
+
 				}
-				if ( isset( $options['tree_shaking_class_exclude'] ) ){
-					$vk_css_optimize_options['tree_shaking_class_exclude'] = $options['tree_shaking_class_exclude'];
-				}
+				
+			}
+			$vk_css_optimize_options = wp_parse_args( $vk_css_optimize_options, $vk_css_optimize_options_default );
+			if (
+				! isset( $vk_css_optimize_options['tree_shaking'] ) || 
+				! isset( $vk_css_optimize_options['tree_shaking_class_exclude'] ) || 
+				! isset( $vk_css_optimize_options['preload'] ) 
+			){
 				update_option( 'vk_css_optimize_options', $vk_css_optimize_options );
 			}
 
 			return $vk_css_optimize_options;
 		}
 
-
-		public static function is_preload(){
-			$options = VK_CSS_Optimize::get_css_optimize_options();
-			if ( ! empty( $options['preload'] ) && 'preload-all' === $options['preload'] ) {
-				return true;
-			}
-		}
-
 		public static function get_html_start() {
-			ob_start( 'VK_CSS_Optimize::css_optimize' );
+			ob_start( 'VK_CSS_Optimize::css_tree_shaking_buffer' );
 		}
 
 		public static function get_html_end() {
@@ -194,7 +227,7 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 			}
 		}
 
-		public static function css_optimize( $buffer ) {
+		public static function css_tree_shaking_buffer( $buffer ) {
 
 			$options = VK_CSS_Optimize::get_css_optimize_options();
 
@@ -230,9 +263,58 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 		}
 
 		public static function css_preload( $tag, $handle, $href, $media ) {
-			$tag = "<link rel='preload' id='".$handle."-css' href='".$href."' as='style' onload=\"this.onload=null;this.rel='stylesheet'\"/>\n";
-			$tag .= "<link rel='stylesheet' id='".$handle."-css' href='".$href."' media='print' onload=\"this.media='all'; this.onload=null;\">\n";
+			global $vk_css_tree_shaking_array;
+			$tree_shaking_handles = array();
+
+			$options = VK_CSS_Optimize::get_css_optimize_options();
+			if ( 'active' === $options['tree_shaking'] ){
+				// tree shaking がかかっているものはpreloadから除外する
+				foreach ( $vk_css_tree_shaking_array as $vk_css_array ) {
+					$tree_shaking_handles[] = $vk_css_array['id'];
+				}
+				// tree shaking 以下のものをpreload
+				if ( ! in_array( $handle, $tree_shaking_handles ) ){
+					$tag = "<link rel='preload' id='".$handle."-css' href='".$href."' as='style' onload=\"this.onload=null;this.rel='stylesheet'\"/>\n";
+					$tag .= "<link rel='stylesheet' id='".$handle."-css' href='".$href."' media='print' onload=\"this.media='all'; this.onload=null;\">\n";
+				}
+			} else {
+				$tag = "<link rel='preload' id='".$handle."-css' href='".$href."' as='style' onload=\"this.onload=null;this.rel='stylesheet'\"/>\n";
+				$tag .= "<link rel='stylesheet' id='".$handle."-css' href='".$href."' media='print' onload=\"this.media='all'; this.onload=null;\">\n";				
+			}
+
 			return $tag;
+		}
+
+
+		/**
+		 * Exclude CSS.
+		 *
+		 * @param string $inidata exclude css class.
+		 */
+		public static function tree_shaking_exclude( $inidata ) {
+			$options = VK_CSS_Optimize::get_css_optimize_options();
+
+			$exclude_classes_array = array();
+
+			if ( ! empty( $options['tree_shaking_class_exclude'] ) ) {
+
+				// delete before after space.
+				$exclude_clssses = trim( $options['tree_shaking_class_exclude'] );
+
+				// convert tab and br to space.
+				$exclude_clssses = preg_replace( '/[\n\r\t]/', '', $exclude_clssses );
+
+				// Change multiple spaces to single space.
+				$exclude_clssses       = preg_replace( '/\s/', '', $exclude_clssses );
+				$exclude_clssses       = str_replace( '，', ',', $exclude_clssses );
+				$exclude_clssses       = str_replace( '、', ',', $exclude_clssses );
+				$exclude_classes_array = explode( ',', $exclude_clssses );
+
+			}
+
+			$inidata['class'] = array_merge( $inidata['class'], $exclude_classes_array );
+
+			return $inidata;
 		}
 		
 	}
