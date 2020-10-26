@@ -76,13 +76,14 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 			$wp_customize->add_control(
 				'vk_css_optimize_options[tree_shaking]',
 				array(
-					'label'    => __( 'Active tree shaking (Beta)', 'css_optimize_textdomain' ),
-					'section'  => 'css_optimize',
-					'settings' => 'vk_css_optimize_options[tree_shaking]',
-					'type'     => 'select',
+					'label'    		=> __( 'Active tree shaking', 'css_optimize_textdomain' ),
+					'section'  		=> 'css_optimize',
+					'settings' 		=> 'vk_css_optimize_options[tree_shaking]',
+					'type'     		=> 'select',
+					'description'	=> __( 'Output only the main CSS of the page inline', 'css_optimize_textdomain' ),
 					'choices'  => array(
 						''			=> __( 'Nothing to do', 'css_optimize_textdomain' ),
-						'active'	=> __( 'Active Tree shaking', 'css_optimize_textdomain' ),
+						'active'	=> __( 'Active Tree shaking (Recomend)', 'css_optimize_textdomain' ),
 					),
 				)
 			);
@@ -144,10 +145,11 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 					'label'       => __( 'Active preload', 'css_optimize_textdomain' ),
 					'section'     => 'css_optimize',
 					'settings'    => 'vk_css_optimize_options[preload]',
+					'description' => __( 'Preload css except for critical css', 'css_optimize_textdomain' ),
 					'type'        => 'select',
 					'choices'  => array(
 						''   	 	=> __( 'Nothing to do', 'css_optimize_textdomain' ),
-						'active'    => __( 'All preload css', 'css_optimize_textdomain' ),
+						'active'    => __( 'Active preload css', 'css_optimize_textdomain' ),
 					),
 				)
 			);
@@ -263,23 +265,24 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 		}
 
 		public static function css_preload( $tag, $handle, $href, $media ) {
-			global $vk_css_tree_shaking_array;
+
+			$vk_css_tree_shaking_array = array();
+
+			$vk_css_tree_shaking_array = apply_filters( 'vk_css_tree_shaking_array', $vk_css_tree_shaking_array );
+
 			$tree_shaking_handles = array();
 
 			$options = VK_CSS_Optimize::get_css_optimize_options();
-			if ( 'active' === $options['tree_shaking'] ){
-				// tree shaking がかかっているものはpreloadから除外する
-				foreach ( $vk_css_tree_shaking_array as $vk_css_array ) {
-					$tree_shaking_handles[] = $vk_css_array['id'];
-				}
-				// tree shaking 以下のものをpreload
-				if ( ! in_array( $handle, $tree_shaking_handles ) ){
-					$tag = "<link rel='preload' id='".$handle."-css' href='".$href."' as='style' onload=\"this.onload=null;this.rel='stylesheet'\"/>\n";
-					$tag .= "<link rel='stylesheet' id='".$handle."-css' href='".$href."' media='print' onload=\"this.media='all'; this.onload=null;\">\n";
-				}
-			} else {
+
+			// tree shaking がかかっているものはpreloadから除外する
+			// でないと表示時に一瞬崩れて結局実用性に問題があるため
+			foreach ( $vk_css_tree_shaking_array as $vk_css_array ) {
+				$tree_shaking_handles[] = $vk_css_array['id'];
+			}
+			// クリティカルじゃないCSS（tree shakingにかけているもの以外）をpreload
+			if ( ! in_array( $handle, $tree_shaking_handles ) ){
 				$tag = "<link rel='preload' id='".$handle."-css' href='".$href."' as='style' onload=\"this.onload=null;this.rel='stylesheet'\"/>\n";
-				$tag .= "<link rel='stylesheet' id='".$handle."-css' href='".$href."' media='print' onload=\"this.media='all'; this.onload=null;\">\n";				
+				$tag .= "<link rel='stylesheet' id='".$handle."-css' href='".$href."' media='print' onload=\"this.media='all'; this.onload=null;\">\n";
 			}
 
 			return $tag;
