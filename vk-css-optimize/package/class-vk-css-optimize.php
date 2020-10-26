@@ -229,13 +229,20 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 			}
 		}
 
+		public static function css_tree_shaking_array() {
+			$vk_css_tree_shaking_array = array();
+			$vk_css_tree_shaking_array = apply_filters( 'vk_css_tree_shaking_array', $vk_css_tree_shaking_array );
+			return $vk_css_tree_shaking_array;
+		}
+
 		public static function css_tree_shaking_buffer( $buffer ) {
 
 			$options = VK_CSS_Optimize::get_css_optimize_options();
 
 			// CSS Tree Shaking.
 			require_once dirname( __FILE__ ) . '/class-css-tree-shaking.php';
-			global $vk_css_tree_shaking_array;
+			$vk_css_tree_shaking_array = VK_CSS_Optimize::css_tree_shaking_array();
+
 			foreach ( $vk_css_tree_shaking_array as $vk_css_array ) {
 				$options['ssl']['verify_peer']      = false;
 				$options['ssl']['verify_peer_name'] = false;
@@ -266,9 +273,7 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 
 		public static function css_preload( $tag, $handle, $href, $media ) {
 
-			$vk_css_tree_shaking_array = array();
-
-			$vk_css_tree_shaking_array = apply_filters( 'vk_css_tree_shaking_array', $vk_css_tree_shaking_array );
+			$vk_css_tree_shaking_array = VK_CSS_Optimize::css_tree_shaking_array();
 
 			$tree_shaking_handles = array();
 
