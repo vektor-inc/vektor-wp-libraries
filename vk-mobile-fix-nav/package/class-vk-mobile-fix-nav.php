@@ -135,7 +135,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			$options         = get_option( 'vk_mobil_fix_nav_options' );
 			$default_options = self::default_options();
 			$options         = wp_parse_args( $options, $default_options );
-			return $options;
+			return apply_filters( 'vk_mobil_fix_nav_options', $options );
 		}
 
 		public static function is_fix_nav_enable() {

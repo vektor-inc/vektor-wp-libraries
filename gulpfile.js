@@ -165,7 +165,7 @@ gulp.task('sass_vk-admin', function(done) {
 gulp.task('copy_vk-admin', function(done) {
   gulp.src('./vk-admin/package/**')
     .pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/admin/vk-admin/package/'))
-    .pipe(gulp.dest('../plugins/vk-post-author-display/inc/vk-admin/'))
+    .pipe(gulp.dest('../plugins/vk-post-author-display/inc/vk-admin/package/'))
     .pipe(gulp.dest('../plugins/vk-legacy-notice/inc/vk-admin/package/'))
     .pipe(gulp.dest('../plugins/vk-blocks-pro/inc/vk-admin/package/'))
     // .pipe(gulp.dest('../plugins/vk-call-to-action/inc/vk-admin/'))
@@ -191,6 +191,22 @@ gulp.task('copy_copyright-custom', function () {
 });
 gulp.task('watch_copyright', function () {
     gulp.watch('./copyright-customizer/package/**', gulp.task('copy_copyright-custom'));
+});
+
+
+/*-------------------------------------*/
+/*  css optimize
+/*-------------------------------------*/
+gulp.task('copy_css-optimize', function (done) {
+  gulp.src('./vk-css-optimize/package/**')
+      // .pipe(gulp.dest('../themes/lightning/inc/vk-css-optimize/package/'))
+      // .pipe(gulp.dest('../themes/lightning-pro/inc/vk-css-optimize/package/'))
+      .pipe(gulp.dest('../themes/katawara/inc/vk-css-optimize/package/'))
+      .pipe(gulp.dest('../plugins/vk-blocks-pro/inc/vk-css-optimize/package/'));
+      done();
+});
+gulp.task('watch_css', function () {
+  gulp.watch('./vk-css-optimize/package/**', gulp.task('copy_css-optimize'));
 });
 
 /*-------------------------------------*/
