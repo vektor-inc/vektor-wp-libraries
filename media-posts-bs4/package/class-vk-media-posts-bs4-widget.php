@@ -22,11 +22,11 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 	public function __construct() {
 		global $vk_media_post_prefix;
 
-		$widget_name = $vk_media_post_prefix . __( 'Media Posts BS4', 'media-post-bs4-textdomain' );
+		$widget_name = $vk_media_post_prefix . __( 'Media Posts BS4', 'media-posts-bs4-textdomain' );
 		parent::__construct(
 			'media_posts_bs4',
 			$widget_name,
-			array( 'description' => __( 'It is a widget that displays the post list. Various shapes can be selected.', 'media-post-bs4-textdomain' ) )
+			array( 'description' => __( 'It is a widget that displays the post list. Various shapes can be selected.', 'media-posts-bs4-textdomain' ) )
 		);
 	}
 
@@ -41,7 +41,7 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 		} elseif ( isset( $instance['label'] ) ) {
 			$title = $instance['label'];
 		} else {
-			$title = __( 'Recent Posts', 'media-post-bs4-textdomain' );
+			$title = __( 'Recent Posts', 'media-posts-bs4-textdomain' );
 		}
 		return $title;
 	}
@@ -90,7 +90,7 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 			'orderby'                    => 'DESC',
 			'count'                      => 6,
 			'offset'                     => '',
-			'title'                      => __( 'Recent Posts', 'media-post-bs4-textdomain' ),
+			'title'                      => __( 'Recent Posts', 'media-posts-bs4-textdomain' ),
 			'post_type'                  => array( 'post' => 1 ), // クエリに投げる形式は違うので要変換.
 			'terms'                      => '',
 			'layout'                     => 'media',
@@ -107,7 +107,7 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 			'display_new'                => true,
 			'new_date'                   => 7,
 			'new_text'                   => 'New!!',
-			'btn_text'                   => __( 'Read more', 'media-post-bs4-textdomain' ),
+			'btn_text'                   => __( 'Read more', 'media-posts-bs4-textdomain' ),
 			'btn_align'                  => 'text-right',
 		);
 		$default_option = apply_filters( 'vk_media_posts_bs4_widget_default_options', $default_option );
@@ -222,9 +222,9 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 		?>
 
 		<div class="admin-custom-section">
-			<h2 class="admin-custom-h2"><?php esc_html_e( 'Display conditions', 'media-post-bs4-textdomain' ); ?></h2>
+			<h2 class="admin-custom-h2"><?php esc_html_e( 'Display conditions', 'media-posts-bs4-textdomain' ); ?></h2>
 
-			<h3 class="admin-custom-h3"><?php esc_html_e( 'Display post types', 'media-post-bs4-textdomain' ); ?></h3>
+			<h3 class="admin-custom-h3"><?php esc_html_e( 'Display post types', 'media-posts-bs4-textdomain' ); ?></h3>
 			<?php
 			// Post Type Check Box.
 			$args = array(
@@ -262,15 +262,15 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 			?>
 
 			<h3 class="admin-custom-h3">
-				<label for="<?php echo esc_attr( $this->get_field_id( 'terms' ) ); ?>"><?php esc_html_e( 'Category(Term) ID', 'media-post-bs4-textdomain' ); ?></label>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'terms' ) ); ?>"><?php esc_html_e( 'Category(Term) ID', 'media-posts-bs4-textdomain' ); ?></label>
 			</h3>
 
 			<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'terms' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'terms' ) ); ?>" value="<?php echo esc_attr( $instance['terms'] ); ?>" class="admin-custom-input" />
 			<br />
 			<?php
-			esc_html_e( 'If you need filtering by category(term), add the category ID separate by ",".', 'media-post-bs4-textdomain' );
+			esc_html_e( 'If you need filtering by category(term), add the category ID separate by ",".', 'media-posts-bs4-textdomain' );
 			echo '<br/>';
-			esc_html_e( 'If empty this area, I will do not filtering.', 'media-post-bs4-textdomain' );
+			esc_html_e( 'If empty this area, I will do not filtering.', 'media-posts-bs4-textdomain' );
 			echo '<br/><br/>';
 			?>
 
@@ -278,7 +278,7 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 			// Form _ 表示件数.
 			?>
 			<h3 class="admin-custom-h3">
-				<label for="<?php echo esc_attr( $this->get_field_id( 'count' ) ); ?>"><?php esc_html_e( 'Display count', 'media-post-bs4-textdomain' ); ?></label>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'count' ) ); ?>"><?php esc_html_e( 'Display count', 'media-posts-bs4-textdomain' ); ?></label>
 			</h3>
 			<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'count' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'count' ) ); ?>" value="<?php echo esc_attr( $instance['count'] ); ?>" class="admin-custom-input" />
 
@@ -286,7 +286,7 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 			// Form _ オフセット.
 			?>
 			<h3 class="admin-custom-h3">
-				<label for="<?php echo esc_attr( $this->get_field_id( 'offset' ) ); ?>"><?php esc_html_e( 'Offset count', 'media-post-bs4-textdomain' ); ?></label>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'offset' ) ); ?>"><?php esc_html_e( 'Offset count', 'media-posts-bs4-textdomain' ); ?></label>
 			</h3>
 			<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'offset' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'offset' ) ); ?>" value="<?php echo esc_attr( $instance['offset'] ); ?>" class="admin-custom-input" />
 
@@ -298,10 +298,10 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 
 		<div class="admin-custom-section">
 
-			<h2 class="admin-custom-h2"><?php esc_html_e( 'Display type and columns', 'media-post-bs4-textdomain' ); ?></h2>
+			<h2 class="admin-custom-h2"><?php esc_html_e( 'Display type and columns', 'media-posts-bs4-textdomain' ); ?></h2>
 
 			<h3 class="admin-custom-h3">
-				<?php echo esc_html_e( 'Display type', 'media-post-bs4-textdomain' ); ?>
+				<?php echo esc_html_e( 'Display type', 'media-posts-bs4-textdomain' ); ?>
 			</h3>
 
 			<?php
@@ -329,27 +329,27 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 
 
 			<h3 class="admin-custom-h3">
-				<?php esc_html_e( 'Columns', 'media-post-bs4-textdomain' ); ?>
+				<?php esc_html_e( 'Columns', 'media-posts-bs4-textdomain' ); ?>
 			</h3>
 
-			<p><?php esc_html_e( 'Please input column count to under the range of 1 to 4.', 'media-post-bs4-textdomain' ); ?></p>
+			<p><?php esc_html_e( 'Please input column count to under the range of 1 to 4.', 'media-posts-bs4-textdomain' ); ?></p>
 
 			<?php
 
 			$sizes = array(
-				'xs'  => array( 'label' => __( 'Extra small', 'media-post-bs4-textdomain' ) ),
-				'sm'  => array( 'label' => __( 'Small', 'media-post-bs4-textdomain' ) ),
-				'md'  => array( 'label' => __( 'Medium', 'media-post-bs4-textdomain' ) ),
-				'lg'  => array( 'label' => __( 'Large', 'media-post-bs4-textdomain' ) ),
-				'xl'  => array( 'label' => __( 'Extra large', 'media-post-bs4-textdomain' ) ),
-				'xxl' => array( 'label' => __( 'XX large', 'media-post-bs4-textdomain' ) ),
+				'xs'  => array( 'label' => __( 'Extra small', 'media-posts-bs4-textdomain' ) ),
+				'sm'  => array( 'label' => __( 'Small', 'media-posts-bs4-textdomain' ) ),
+				'md'  => array( 'label' => __( 'Medium', 'media-posts-bs4-textdomain' ) ),
+				'lg'  => array( 'label' => __( 'Large', 'media-posts-bs4-textdomain' ) ),
+				'xl'  => array( 'label' => __( 'Extra large', 'media-posts-bs4-textdomain' ) ),
+				'xxl' => array( 'label' => __( 'XX large', 'media-posts-bs4-textdomain' ) ),
 			);
 			$sizes = apply_filters( 'vk_media_post_bs4_size', $sizes );
 
 			foreach ( $sizes as $key => $value ) {
 				$field = 'col_' . $key;
 				// translators: column of each screnn size of xs, sm, md, lg, xl and xxl.
-				echo '<label for="' . esc_attr( $this->get_field_id( $field ) ) . '">' . esc_html( sprintf( __( 'Column ( Screen size : %s )', 'media-post-bs4-textdomain' ), $value['label'] ) ) . '</label>';
+				echo '<label for="' . esc_attr( $this->get_field_id( $field ) ) . '">' . esc_html( sprintf( __( 'Column ( Screen size : %s )', 'media-posts-bs4-textdomain' ), $value['label'] ) ) . '</label>';
 				echo '<input type="number" max="4" min="1" id="' . esc_attr( $this->get_field_id( $field ) ) . '" name="' . esc_attr( $this->get_field_name( $field ) ) . '" value="' . esc_attr( $instance[ $field ] ) . '" class="admin-custom-input" />';
 			}
 
@@ -361,15 +361,15 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 		// 並び順.
 		?>
 		<div class="admin-custom-section">
-			<h2 class="admin-custom-h2"><?php esc_html_e( 'Order Option', 'media-post-bs4-textdomain' ); ?></h2>
-			<h3 class="admin-custom-h3"><?php esc_html_e( 'Order by', 'media-post-bs4-textdomain' ); ?></h3>
+			<h2 class="admin-custom-h2"><?php esc_html_e( 'Order Option', 'media-posts-bs4-textdomain' ); ?></h2>
+			<h3 class="admin-custom-h3"><?php esc_html_e( 'Order by', 'media-posts-bs4-textdomain' ); ?></h3>
 			<select id="<?php echo esc_attr( $this->get_field_name( 'orderby' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'orderby' ) ); ?>" class="admin-custom-input">
 				<?php
 				$orderby_patterns = array(
-					'date'     => __( 'Published Day', 'media-post-bs4-textdomain' ),
-					'modefied' => __( 'Modefied Day', 'media-post-bs4-textdomain' ),
-					'title'    => __( 'Title', 'media-post-bs4-textdomain' ),
-					'rand'     => __( 'Random', 'media-post-bs4-textdomain' ),
+					'date'     => __( 'Published Day', 'media-posts-bs4-textdomain' ),
+					'modefied' => __( 'Modefied Day', 'media-posts-bs4-textdomain' ),
+					'title'    => __( 'Title', 'media-posts-bs4-textdomain' ),
+					'rand'     => __( 'Random', 'media-posts-bs4-textdomain' ),
 				);
 
 				foreach ( $orderby_patterns as $key => $value ) {
@@ -384,12 +384,12 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 				?>
 			</select>
 
-			<h3 class="admin-custom-h3"><?php esc_html_e( 'Order', 'media-post-bs4-textdomain' ); ?></h3>
+			<h3 class="admin-custom-h3"><?php esc_html_e( 'Order', 'media-posts-bs4-textdomain' ); ?></h3>
 			<select id="<?php echo esc_attr( $this->get_field_name( 'order' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'order' ) ); ?>" class="admin-custom-input">
 				<?php
 				$order_patterns = array(
-					'DESC' => __( 'DESC', 'media-post-bs4-textdomain' ),
-					'ASC'  => __( 'ASC', 'media-post-bs4-textdomain' ),
+					'DESC' => __( 'DESC', 'media-posts-bs4-textdomain' ),
+					'ASC'  => __( 'ASC', 'media-posts-bs4-textdomain' ),
 				);
 
 				foreach ( $order_patterns as $key => $value ) {
@@ -412,16 +412,16 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 
 		<div class="admin-custom-section">
 
-			<h2 class="admin-custom-h2"><?php esc_html_e( 'Display item', 'media-post-bs4-textdomain' ); ?></h2>
+			<h2 class="admin-custom-h2"><?php esc_html_e( 'Display item', 'media-posts-bs4-textdomain' ); ?></h2>
 
 			<?php
 			$items = array(
-				'display_image'              => __( 'Image', 'media-post-bs4-textdomain' ),
-				'display_image_overlay_term' => __( 'Term name', 'media-post-bs4-textdomain' ),
-				'display_excerpt'            => __( 'Excerpt', 'media-post-bs4-textdomain' ),
-				'display_date'               => __( 'Date', 'media-post-bs4-textdomain' ),
-				'display_new'                => __( 'New mark', 'media-post-bs4-textdomain' ),
-				'display_btn'                => __( 'Button', 'media-post-bs4-textdomain' ),
+				'display_image'              => __( 'Image', 'media-posts-bs4-textdomain' ),
+				'display_image_overlay_term' => __( 'Term name', 'media-posts-bs4-textdomain' ),
+				'display_excerpt'            => __( 'Excerpt', 'media-posts-bs4-textdomain' ),
+				'display_date'               => __( 'Date', 'media-posts-bs4-textdomain' ),
+				'display_new'                => __( 'New mark', 'media-posts-bs4-textdomain' ),
+				'display_btn'                => __( 'Button', 'media-posts-bs4-textdomain' ),
 			);
 			foreach ( $items as $key => $value ) {
 				$checked = ( isset( $instance[ $key ] ) && $instance[ $key ] ) ? ' checked' : '';
@@ -433,47 +433,47 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 			?>
 
 
-			<h3 class="admin-custom-h3"><?php esc_html_e( 'New mark option', 'media-post-bs4-textdomain' ); ?></h3>
+			<h3 class="admin-custom-h3"><?php esc_html_e( 'New mark option', 'media-posts-bs4-textdomain' ); ?></h3>
 
 			<?php
 			// NEWアイコン表示期間.
 			$new_date = ( isset( $instance['new_date'] ) ) ? $instance['new_date'] : 7;
 			?>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'new_date' ) ); ?>">
-				<?php esc_html_e( 'Number of days to display the new post mark', 'media-post-bs4-textdomain' ); ?>
+				<?php esc_html_e( 'Number of days to display the new post mark', 'media-posts-bs4-textdomain' ); ?>
 			</label>
 
 			<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'new_date' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'new_date' ) ); ?>" value="<?php echo esc_attr( $instance['new_date'] ); ?>" class="admin-custom-input" />
 
 			<label for="<?php echo esc_attr( $this->get_field_id( 'new_text' ) ); ?>">
-				<?php esc_html_e( 'New mark text', 'media-post-bs4-textdomain' ); ?>
+				<?php esc_html_e( 'New mark text', 'media-posts-bs4-textdomain' ); ?>
 			</label>
 			<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'new_text' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'new_text' ) ); ?>" value="<?php echo esc_attr( $instance['new_text'] ); ?>" class="admin-custom-input" />
 
 
 			<h3 class="admin-custom-h3">
-					<?php esc_html_e( 'Button option', 'media-post-bs4-textdomain' ); ?>
+					<?php esc_html_e( 'Button option', 'media-posts-bs4-textdomain' ); ?>
 			</h3>
 
 			<label for="<?php echo esc_attr( $this->get_field_id( 'btn_text' ) ); ?>">
-				<?php esc_html_e( 'Button text', 'media-post-bs4-textdomain' ); ?>
+				<?php esc_html_e( 'Button text', 'media-posts-bs4-textdomain' ); ?>
 			</label>
 			<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'btn_text' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'btn_text' ) ); ?>" value="<?php echo esc_attr( $instance['btn_text'] ); ?>" class="admin-custom-input" />
 
 			<label for="<?php echo esc_attr( $this->get_field_id( 'btn_align' ) ); ?>">
-				<?php esc_html_e( 'Button align', 'media-post-bs4-textdomain' ); ?>
+				<?php esc_html_e( 'Button align', 'media-posts-bs4-textdomain' ); ?>
 			</label>
 			<select id="<?php echo esc_attr( $this->get_field_name( 'btn_align' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'btn_align' ) ); ?>" class="admin-custom-input">
 				<?php
 				$btn_aligns = array(
 					'text-left'   => array(
-						'label' => __( 'Left', 'media-post-bs4-textdomain' ),
+						'label' => __( 'Left', 'media-posts-bs4-textdomain' ),
 					),
 					'text-center' => array(
-						'label' => __( 'Center', 'media-post-bs4-textdomain' ),
+						'label' => __( 'Center', 'media-posts-bs4-textdomain' ),
 					),
 					'text-right'  => array(
-						'label' => __( 'Right', 'media-post-bs4-textdomain' ),
+						'label' => __( 'Right', 'media-posts-bs4-textdomain' ),
 					),
 				);
 				foreach ( $btn_aligns as $key => $value ) {
