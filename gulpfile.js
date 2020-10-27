@@ -193,16 +193,16 @@ gulp.task('watch_copyright', function () {
     gulp.watch('./copyright-customizer/package/**', gulp.task('copy_copyright-custom'));
 });
 
-
 /*-------------------------------------*/
 /*  css optimize
 /*-------------------------------------*/
 gulp.task('copy_css-optimize', function (done) {
   gulp.src('./vk-css-optimize/package/**')
-      // .pipe(gulp.dest('../themes/lightning/inc/vk-css-optimize/package/'))
+      .pipe(gulp.dest('../themes/lightning/inc/vk-css-optimize/package/'))
       // .pipe(gulp.dest('../themes/lightning-pro/inc/vk-css-optimize/package/'))
       .pipe(gulp.dest('../themes/katawara/inc/vk-css-optimize/package/'))
-      .pipe(gulp.dest('../plugins/vk-blocks-pro/inc/vk-css-optimize/package/'));
+      .pipe(gulp.dest('../plugins/vk-blocks-pro/inc/vk-css-optimize/package/'))
+      .pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/vk-css-optimize/package/'));
       done();
 });
 gulp.task('watch_css', function () {
