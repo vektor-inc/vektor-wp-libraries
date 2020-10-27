@@ -300,7 +300,7 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 
 			$vk_css_tree_shaking_array = VK_CSS_Optimize::css_tree_shaking_array();
 
-			$exclude_handles = array( 'woocommerce-layout', 'woocommerce-smallscreen-css', 'woocommerce-general-css' );
+			$exclude_handles = array( 'woocommerce-layout', 'woocommerce-smallscreen', 'woocommerce-general' );
 
 			$options = VK_CSS_Optimize::get_css_optimize_options();
 
@@ -317,6 +317,7 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 			
 			$exclude_handles = apply_filters( 'vk_css_preload_exclude_handles', $exclude_handles );
 			// クリティカルじゃないCSS（tree shakingにかけているもの以外）をpreload
+			// print '<pre style="text-align:left">';print_r($handle);print '</pre>';
 			if ( ! in_array( $handle, $exclude_handles ) ){
 				$tag = "<link rel='preload' id='".$handle."-css' href='".$href."' as='style' onload=\"this.onload=null;this.rel='stylesheet'\"/>\n";
 				$tag .= "<link rel='stylesheet' id='".$handle."-css' href='".$href."' media='print' onload=\"this.media='all'; this.onload=null;\">\n";
