@@ -176,6 +176,14 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 
 		}
 
+		public static function get_css_optimize_options_default(){
+			$vk_css_optimize_options_default = array(
+				'tree_shaking'	=> '',
+				'preload' 		=> '',
+			);
+			return apply_filters( 'vk_css_optimize_options_default', $vk_css_optimize_options_default );
+		}
+
 		/**
 		 * 
 		 */
@@ -191,10 +199,7 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 			}
 
 			$vk_css_optimize_options = get_option( 'vk_css_optimize_options' );
-			$vk_css_optimize_options_default = array(
-				'tree_shaking'	=> 'active',
-				'preload' 		=> 'active',
-			);
+			$vk_css_optimize_options_default = VK_CSS_Optimize::get_css_optimize_options_default();
 
 			// fall back function
 			// Actualy other array exist but optimize_css is most important
