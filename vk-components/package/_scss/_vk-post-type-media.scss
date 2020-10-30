@@ -27,9 +27,6 @@ https://github.com/vektor-inc/vektor-wp-libraries
 /* .media new type
 /*-------------------------------------------*/
 .media {
-	&:first-child {
-		border-top: $border_primary;
-	}
 	&-img {
 		border: $border_primary;
 		padding: 1px;
@@ -43,9 +40,20 @@ https://github.com/vektor-inc/vektor-wp-libraries
 	}
 }
 /* border-top control */
+
 .media.vk_post {
-	border-top: $border_primary;
+	/* 
+	もともと1カラムでの運用想定で最初は見出し直下なので上線は不要という理屈で上線無し下線デフォルトとなっている。
+	しかしながら複数カラムでの使用が後からできるようになったので、
+	基本 border-top にして :last-child にだけ追加した方がスマートなので変更したいが
+	既存ユーザーへの影響が読めないので現状ママという状況。
+	どこかのタイミングで要検討
+	*/
+	&:first-child {
+		border-top: $border_primary;
+	}
 }
+
 .media.vk_post-col {
 	@media  (max-width: $xs-max) {
 		&-xs-6:nth-child(2) {
