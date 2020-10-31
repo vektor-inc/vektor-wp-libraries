@@ -35,6 +35,10 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 					'label'             => __( 'Card', 'media-posts-bs4-textdomain' ),
 					'class_posts_outer' => '',
 				),
+				'card-noborder'            => array(
+					'label'             => __( 'Card Noborder', 'media-posts-bs4-textdomain' ),
+					'class_posts_outer' => '',
+				),
 				'card-horizontal' => array(
 					'label'             => __( 'Card Horizontal', 'media-posts-bs4-textdomain' ),
 					'class_posts_outer' => '',

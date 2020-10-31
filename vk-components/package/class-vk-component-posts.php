@@ -180,6 +180,8 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 			// Add layout Class
 			if ( $options['layout'] == 'card-horizontal' ) {
 				$class_outer = 'card card-post card-horizontal';
+			} elseif ( $options['layout'] == 'card-noborder' ) {
+				$class_outer = 'card card-noborder';
 			} elseif ( $options['layout'] == 'media' ) {
 				$class_outer = 'media';
 			} elseif ( $options['layout'] == 'postListText' ) {
@@ -282,7 +284,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 			// $attr = wp_parse_args( $attr, $default );
 
 			$layout_type = $options['layout'];
-			if ( $layout_type == 'card-horizontal' ) {
+			if ( $layout_type == 'card-horizontal' || $layout_type == 'card-noborder' ) {
 				$layout_type = 'card';
 			}
 

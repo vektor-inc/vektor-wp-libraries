@@ -253,6 +253,10 @@ gulp.task('w_mp', function (done) {
 /**
  * Media Posts BS4
  */
+gulp.task('w_mp4', function (done) {
+  gulp.watch('media-posts-bs4/package/**', gulp.task('copy_media-posts-bs4'));
+  done();
+});
 gulp.task('copy_media-posts-bs4', function (done) {
     gulp.src('./media-posts-bs4/package/**')
 		.pipe(gulp.dest('../themes/katawara/inc/media-posts-bs4/package/'))
