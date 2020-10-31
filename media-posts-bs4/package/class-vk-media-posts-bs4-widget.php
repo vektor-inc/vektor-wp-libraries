@@ -105,6 +105,7 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 			'display_excerpt'            => false,
 			'display_date'               => true,
 			'display_new'                => true,
+			'display_taxonomies'         => false,
 			'new_date'                   => 7,
 			'new_text'                   => 'New!!',
 			'btn_text'                   => __( 'Read more', 'media-posts-bs4-textdomain' ),
@@ -421,6 +422,7 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 				'display_excerpt'            => __( 'Excerpt', 'media-posts-bs4-textdomain' ),
 				'display_date'               => __( 'Date', 'media-posts-bs4-textdomain' ),
 				'display_new'                => __( 'New mark', 'media-posts-bs4-textdomain' ),
+				'display_taxonomies'         => __( 'Taxonomies', 'media-posts-bs4-textdomain' ),
 				'display_btn'                => __( 'Button', 'media-posts-bs4-textdomain' ),
 			);
 			foreach ( $items as $key => $value ) {

@@ -27,6 +27,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				'display_excerpt'            => false,
 				'display_date'               => true,
 				'display_new'                => true,
+				'display_taxonomies'         => false,
 				'display_btn'                => false,
 				'image_default_url'          => false,
 				'overlay'                    => false,
@@ -329,6 +330,30 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				$html .= '<p class="vk_post_excerpt ' . $layout_type . '-text">';
 				$html .= wp_kses_post( get_the_excerpt( $post->ID ) );
 				$html .= '</p>';
+			}
+
+			if ( $options['display_taxonomies'] ) {
+				$args          = array(
+					'template'      => __( '<dt class="vk_post_taxonomy_title">%s</dt><dd class="vk_post_taxonomy_terms">%l</dd>', 'vk_components_textdomain' ),
+					'term_template' => '<a href="%1$s">%2$s</a>',
+				);
+				$taxonomies	= get_the_taxonomies( $post->ID, $args );
+				$exclusion	= array( 'product_type' );
+				// このフィルター名は投稿詳細でも使っているので注意
+				$exclusion	= apply_filters( 'vk_get_display_taxonomies_exclusion', $exclusion );
+
+				if ( is_array( $exclusion ) ){
+					foreach ( $exclusion as $key => $value ){
+						unset( $taxonomies[$value] );
+					}
+				}
+				if ( $taxonomies ) {
+					$html .= '<div class="vk_post_taxonomies">';
+					foreach ( $taxonomies as $key => $value ) {
+						$html .= '<dl class="vk_post_taxonomy vk_post_taxonomy-' . $key . '">' . $value . '</dl>';
+					} // foreach
+					$html .= '</div>';
+				} // if ($taxonomies)
 			}
 
 			if ( $options['display_btn'] ) {

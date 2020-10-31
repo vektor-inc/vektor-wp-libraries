@@ -358,6 +358,10 @@ class VK_Media_Posts_BS4_Admin {
 					'label' => __( 'New mark', 'media-posts-bs4-textdomain' ),
 					// 'default' => true,
 				),
+				'display_taxonomies'                => array(
+					'label' => __( 'Taxonomies', 'media-posts-bs4-textdomain' ),
+					// 'default' => false,
+				),
 				'display_btn'                => array(
 					'label' => __( 'Button', 'media-posts-bs4-textdomain' ),
 					// 'default' => false,

@@ -69,6 +69,7 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 				'display_excerpt'            => false,
 				'display_date'               => true,
 				'display_new'                => true,
+				'display_taxonomies'         => false,
 				'display_btn'                => false,
 				'image_default_url'          => VK_MEDIA_POSTS_BS4_URL . '/images/no-image.png',
 				'btn_text'                   => __( 'Read more', 'media-posts-bs4-textdomain' ),
