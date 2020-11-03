@@ -40,6 +40,9 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			public $description  = ''; // we add this for the extra description
 			public $input_before = '';
 			public $input_after  = '';
+			public $num_step  = '';
+			public $num_min  = '';
+			public $num_max  = '';
 			public function render_content() {
 			?>
 			<label>
@@ -48,13 +51,27 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				<div>
 				<?php echo wp_kses_post( $this->input_before ); ?>
 				<?php
-				if ( $this->type == 'test' ) {
+				$step = '';
+				$min = '';
+				$max = '';
+				if ( $this->type == 'text' ) {
 					$type = 'text';
 				} elseif ( $this->type == 'number' ) {
 					$type = 'number';
+					if ( $this->num_step ){
+						$step = ' step="' . esc_attr(  $this->num_step ) . '"';
+					}
+					if ( $this->num_min ){
+						$min = ' min="' . esc_attr( $this->num_min ) . '"';
+					} else {
+						$min = ' min="0"';
+					}
+					if ( $this->num_max ){
+						$max = ' max="' . esc_attr(  $this->num_max ) . '"';
+					}
 				}
-					?>
-				<input type="<?php echo $type; ?>" value="<?php echo esc_attr( $this->value() ); ?>"<?php echo $style; ?> <?php $this->link(); ?> />
+				?>
+				<input type="<?php echo $type; ?>"<?php echo $step.$min.$max; ?> value="<?php echo esc_attr( $this->value() ); ?>"<?php echo $style; ?> <?php $this->link(); ?> />
 				<?php echo wp_kses_post( $this->input_after ); ?>
 				</div>
 				<div><?php echo $this->description; ?></div>
@@ -331,6 +348,52 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					)
 				)
 			);
+
+			// cover color
+			$wp_customize->add_setting(
+				'vk_page_header[cover_color]', array(
+					'default'           => '',
+					'type'              => 'option',
+					'capability'        => 'edit_theme_options',
+					'sanitize_callback' => 'sanitize_hex_color',
+				)
+			);
+			$wp_customize->add_control(
+				new WP_Customize_Color_Control(
+					$wp_customize, 'cover_color', array(
+						'label'    => __( 'Cover color', 'vk_page_header_textdomain' ),
+						'section'  => 'vk_page_header_setting',
+						'settings' => 'vk_page_header[cover_color]',
+					// 'priority' => $priority,
+					)
+				)
+			);
+
+			// text position
+			$wp_customize->add_setting(
+				'vk_page_header[cover_opacity]', array(
+					'default'           => '',
+					'type'              => 'option',
+					'capability'        => 'edit_theme_options',
+					'sanitize_callback' => 'esc_attr',
+				)
+			);
+
+			$wp_customize->add_control(
+				new Vk_Page_Header_Custom_Text_Control(
+					$wp_customize, 'cover_opacity', array(
+						'label'       	=> __( 'Cover opacity', 'vk_page_header_textdomain' ),
+						'section'     	=> 'vk_page_header_setting',
+						'settings'    	=> 'vk_page_header[cover_opacity]',
+						'type'        	=> 'number',
+						'num_step'		=> 0.05,
+						'num_min'		=> 0,
+						'num_max'		=> 1,
+						'description' 	=> __( 'Please enter a number from 0 to 1', 'vk_page_header_textdomain' ),
+					)
+				)
+			);
+
 
 			// color
 			$wp_customize->add_setting(
@@ -663,7 +726,22 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				if ( $title_outer_dynamic_css ) {
 					// 対象とするclass名を取得
 					global $vk_page_header_output_class;					
-					$title_outer_dynamic_css = $vk_page_header_output_class . '{' . $title_outer_dynamic_css . '}';
+					$title_outer_dynamic_css = $vk_page_header_output_class . '{ position:relative;' . $title_outer_dynamic_css . '}';
+
+				}
+
+				// カバー部分
+				if ( ! empty( $options['cover_color'] ) && ! empty( $options['cover_opacity'] ) ) {
+					$title_outer_dynamic_css .= $vk_page_header_output_class . ':before{
+						content:"";
+						position:absolute;
+						top:0;
+						left:0;
+						background-color:' . $options['cover_color'] . ';
+						opacity:' . $options['cover_opacity'] . ';
+						width:100%;
+						height:100%;
+					}';
 				}
 
 				/*
