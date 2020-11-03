@@ -212,7 +212,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		/*
 			  header_image_url()
 		/*-------------------------------------------*/
-		public static function header_image_url() {
+		public static function header_image_url( $size = '' ) {
 
 			$options   = get_option( 'vk_page_header' );
 			$post_type = self::get_post_type();
@@ -232,8 +232,18 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				$image_url = '';
 			}
 
+			if ( ! empty( $options['image_basic_sp'] ) && $size === 'sp' ) {
+				$image_url = $options['image_basic_sp'];
+			}
+
+			// 投稿タイプ別の場合
 			$image_url_field = 'image_' . $post_type['slug'];
 			if ( isset( $options[ $image_url_field ] ) && $options[ $image_url_field ] ) {
+				$image_url = $options[ $image_url_field ];
+			}
+
+			$image_url_field = 'image_' . $post_type['slug'] . '_sp';
+			if ( ! empty( $options[ $image_url_field ] ) && $size === 'sp' ) {
 				$image_url = $options[ $image_url_field ];
 			}
 
@@ -277,12 +287,13 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		public function customize_register( $wp_customize ) {
 
 			global $customize_setting_prefix;
+			global $customize_section_priority;
 			global $vk_page_header_default;
 
 			$wp_customize->add_section(
 				'vk_page_header_setting', array(
 					'title'    => $customize_setting_prefix . __( 'Page Header Setting', 'vk_page_header_textdomain' ),
-					'priority' => 700,
+					'priority' => $customize_section_priority,
 				)
 			);
 
@@ -400,9 +411,32 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				)
 			);
 
+
 			/*
-			  background common image
+			  Basic
 			--------------------------------------------- */
+
+			// title
+			$wp_customize->add_setting(
+				'vk_page_header_title_common',
+				array(
+					'sanitize_callback' => 'sanitize_text_field',
+				)
+			);
+			$wp_customize->add_control(
+				new Custom_Html_Control(
+					$wp_customize,
+					'vk_page_header_title_common',
+					array(
+						'label'            => __( 'Page header bg image', 'vk_page_header_textdomain' ) . ' [ ' . __( 'Basic', 'vk_page_header_textdomain' ) . ' ]',
+						'section'          => 'vk_page_header_setting',
+						'type'             => 'text',
+						'custom_title_sub' => '',
+						'custom_html'      => '<p>' . __( 'You can set the original image in the background of the page header part.', 'vk_page_header_textdomain' ) . '</p>',
+					)
+				)
+			);
+
 			$wp_customize->add_setting(
 				'vk_page_header[image_basic]', array(
 					'default'           => $vk_page_header_default['image_basic'],
@@ -414,19 +448,66 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			$wp_customize->add_control(
 				new WP_Customize_Image_Control(
 					$wp_customize, 'page_header_image_basic', array(
-						'label'       => __( 'Page header bg image', 'vk_page_header_textdomain' ) . ' [ ' . __( 'Basic', 'vk_page_header_textdomain' ) . ' ]',
+						'label'       => __( 'PC', 'vk_page_header_textdomain' ),
 						'section'     => 'vk_page_header_setting',
 						'settings'    => 'vk_page_header[image_basic]',
-						'description' => __( 'You can set the original image in the background of the page header part.', 'vk_page_header_textdomain' ),
+						'description' => '',
+					)
+				)
+			);
+
+			$wp_customize->add_setting(
+				'vk_page_header[image_basic_sp]', array(
+					'default'           => '',
+					'type'              => 'option',
+					'capability'        => 'edit_theme_options',
+					'sanitize_callback' => 'esc_url',
+				)
+			);
+			$wp_customize->add_control(
+				new WP_Customize_Image_Control(
+					$wp_customize, 'page_header_image_basic_sp', array(
+						'label'       => __( 'Mobile', 'vk_page_header_textdomain' ),
+						'section'     => 'vk_page_header_setting',
+						'settings'    => 'vk_page_header[image_basic_sp]',
 					)
 				)
 			);
 
 			/*
-			  background post type image
+			  Post Type
 			--------------------------------------------- */
 			$custom_types = Vk_Page_Header::get_all_post_types_info();
+
 			foreach ( $custom_types as $name => $label ) {
+
+				if ( $name == 'page' ) {
+					$description = __( 'If you want to change the image of a specific page, you can set it from the editing screen of each fixed page.', 'vk_page_header_textdomain' ) . '<br>';
+				} else {
+					$description = '';
+				}
+				$description .= __( 'When not set, the image of [ Basic ] is applied.', 'vk_page_header_textdomain' );
+
+				// title
+				$wp_customize->add_setting(
+					'vk_page_header_title_' . $label,
+					array(
+						'sanitize_callback' => 'sanitize_text_field',
+					)
+				);
+				$wp_customize->add_control(
+					new Custom_Html_Control(
+						$wp_customize,
+						'vk_page_header_title_' . $label,
+						array(
+							'label'            => __( 'Page header bg image', 'vk_page_header_textdomain' ) . ' [ ' . $label . ' ]',
+							'section'          => 'vk_page_header_setting',
+							'type'             => 'text',
+							'custom_title_sub' => '',
+							'custom_html'      => $description,
+						)
+					)
+				);
 
 				$wp_customize->add_setting(
 					'vk_page_header[image_' . $name . ']', array(
@@ -437,20 +518,30 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					)
 				);
 
-				if ( $name == 'page' ) {
-					$description = __( 'If you want to change the image of a specific page, you can set it from the editing screen of each fixed page.', 'vk_page_header_textdomain' ) . '<br>';
-				} else {
-					$description = '';
-				}
-				$description .= __( 'When not set, the image of [ Basic ] is applied.', 'vk_page_header_textdomain' );
-
 				$wp_customize->add_control(
 					new WP_Customize_Image_Control(
 						$wp_customize, 'page_header_image_' . $name, array(
-							'label'       => __( 'Page header bg image', 'vk_page_header_textdomain' ) . ' [ ' . $label . ' ]',
+							'label'       => __( 'PC', 'vk_page_header_textdomain' ),
 							'section'     => 'vk_page_header_setting',
 							'settings'    => 'vk_page_header[image_' . $name . ']',
-							'description' => $description,
+						)
+					)
+				);
+
+				$wp_customize->add_setting(
+					'vk_page_header[image_' . $name . '_sp]', array(
+						'default'           => '',
+						'type'              => 'option',
+						'capability'        => 'edit_theme_options',
+						'sanitize_callback' => 'esc_url',
+					)
+				);
+				$wp_customize->add_control(
+					new WP_Customize_Image_Control(
+						$wp_customize, 'page_header_image_' . $name . '_sp', array(
+							'label'       => __( 'Mobile', 'vk_page_header_textdomain' ),
+							'section'     => 'vk_page_header_setting',
+							'settings'    => 'vk_page_header[image_' . $name . '_sp]',
 						)
 					)
 				);
@@ -511,6 +602,25 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 				$options = self::options_load();
 
+				// ヘッダー背景画像URL取得
+				$image_url = self::header_image_url();
+				$image_url_sp = self::header_image_url( 'sp' );
+
+				$variables_dynamic_css = '';
+				if ( $image_url ) {
+					$variables_dynamic_css .= ':root{
+						--vk-page-header-url : url(' . esc_url( $image_url ) . ');
+					}';
+				}
+				if ( $image_url ) {
+					$variables_dynamic_css .= '
+					@media ( max-width:575.98px ){
+						:root{
+							--vk-page-header-url : url(' . esc_url( $image_url_sp ) . ');
+						}
+					}';
+				}
+
 				if ( isset( $options['text_color'] ) && $options['text_color'] ) {
 					$title_outer_dynamic_css .= 'color:' . $options['text_color'] . ';';
 				}
@@ -530,19 +640,16 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					$title_outer_dynamic_css .= 'background-color:' . $options['bg_color'] . ';';
 				}
 
-				// ヘッダー背景画像URL取得
-				$image_url = self::header_image_url();
 				if ( $image_url ) {
-					$title_outer_dynamic_css .= 'background: url(' . esc_url( $image_url ) . ') no-repeat 50% center;';
+					$title_outer_dynamic_css .= 'background: var(--vk-page-header-url, url(' . esc_url( $image_url ) . ') ) no-repeat 50% center;';
 					$title_outer_dynamic_css .= 'background-size: cover;';
 				}
 
 				// アウター部分のセレクタと結合
 				if ( $title_outer_dynamic_css ) {
 					// 対象とするclass名を取得
-					global $vk_page_header_output_class;
+					global $vk_page_header_output_class;					
 					$title_outer_dynamic_css = $vk_page_header_output_class . '{' . $title_outer_dynamic_css . '}';
-
 				}
 
 				/*
@@ -554,6 +661,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					$title_text_dynamic_css .= 'margin-top:' . $options['text_margin'] . 'em;';
 					$title_text_dynamic_css .= 'margin-bottom:calc( ' . $options['text_margin'] . 'em - 0.1em );';
 
+					// インナーセレクタとCSSの結合
 					if ( $title_text_dynamic_css ) {
 						global $vk_page_header_inner_class;
 						$title_text_dynamic_css = $vk_page_header_inner_class . '{' . $title_text_dynamic_css . '}';
@@ -563,7 +671,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				// CSS が存在している場合のみ出力
 				if ( $title_outer_dynamic_css || $title_text_dynamic_css ) {
 
-					$dynamic_css = $title_outer_dynamic_css . $title_text_dynamic_css;
+					$dynamic_css = $variables_dynamic_css . $title_outer_dynamic_css . $title_text_dynamic_css;
 
 					// delete before after space
 					$dynamic_css = trim( $dynamic_css );
