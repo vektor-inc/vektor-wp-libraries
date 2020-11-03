@@ -250,9 +250,17 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			// 固定ページの場合
 			if ( $post_type['slug'] == 'page' ) {
 				global $post;
-				if ( $post->vk_page_header_image ) {
+
+				if ( 'sp' == $size ){
+					$target_field = 'vk_page_header_image_sp';
+				} else {
+					$target_field = 'vk_page_header_image';
+				}
+
+				$vk_page_header_image = get_post_meta( $post->ID, $target_field, true );
+				if ( $vk_page_header_image ) {
 					// 今の固定ページに画像が登録されていればそのまま使用
-					$image_id = $post->vk_page_header_image;
+					$image_id = $vk_page_header_image;
 				} else {
 					// 先祖階層を取得
 					$ancestors = array_reverse( get_post_ancestors( $post->ID ) );
@@ -260,7 +268,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					foreach ( $ancestors as $ancestor ) {
 						$vk_page_header_image = '';
 						// 親階層から順に画像を取得し、下階層に画像があれば上書きしていく
-						$vk_page_header_image = get_post_meta( $ancestor, 'vk_page_header_image', true );
+						$vk_page_header_image = get_post_meta( $ancestor, $target_field, true );
 						if ( $vk_page_header_image ) {
 							$image_id = $vk_page_header_image;
 						}
@@ -579,6 +587,12 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			$custom_fields_array = array(
 				'vk_page_header_image' => array(
 					'label'       => __( 'Page header bg image', 'vk_page_header_textdomain' ),
+					'type'        => 'image',
+					'description' => '',
+					'required'    => false,
+				),
+				'vk_page_header_image_sp' => array(
+					'label'       => __( 'Page header bg image', 'vk_page_header_textdomain' ) . ' ( ' . __( 'Mobile', 'vk_page_header_textdomain' ) . ' )',
 					'type'        => 'image',
 					'description' => '',
 					'required'    => false,
