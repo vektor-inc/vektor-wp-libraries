@@ -725,6 +725,20 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			return $custom_fields_array;
 		} // custom_fields_array(){
 
+
+		public function get_layout( $layout = 'default' ) {
+			$options = self::options_load();
+			if ( is_single() ) {
+				$display_type = 'displaytype_'.get_post_type(); // カスタム分類アーカイブと違って取得ミスがないため標準関数を使用
+				// 表示タイプが 標準レイアウトじゃない（記事タイトルや日付など）場合
+				if ( ! empty( $options[$display_type] ) ){
+					$layout	= $options[$display_type];
+				}
+			}
+			return $layout;
+		}
+
+
 		/*
 		  print head style
 		/*-------------------------------------------*/
@@ -761,6 +775,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 				if ( isset( $options['text_color'] ) && $options['text_color'] ) {
 					$title_outer_dynamic_css .= 'color:' . $options['text_color'] . ';';
+				} else if ( self::get_layout() == 'post_title_and_meta' ){
+					$title_outer_dynamic_css .= 'color:#fff;';
 				}
 
 				if ( isset( $options['text_shadow_color'] ) && $options['text_shadow_color'] ) {
@@ -791,9 +807,20 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 				}
 
+				// 表示タイプが 標準レイアウトじゃない（記事タイトルや日付など）場合
+				if ( self::get_layout() === 'post_title_and_meta' ){
+					if ( empty( $options['cover_color'] ) ){
+						$options['cover_color'] = '#000';
+					}
+					if ( empty( $options['cover_opacity'] ) ){
+						$options['cover_opacity'] = '0.5';
+					}
+				}
+
 				// カバー部分
-				if ( ! empty( $options['cover_color'] ) && ! empty( $options['cover_opacity'] ) ) {
-					$title_outer_dynamic_css .= $vk_page_header_output_class . ':before{
+				if ( ! empty( $options['cover_color'] ) || ! empty( $options['cover_opacity'] ) ) {
+
+					$title_outer_dynamic_css .= $vk_page_header_output_class . ':after{
 						content:"";
 						position:absolute;
 						top:0;
