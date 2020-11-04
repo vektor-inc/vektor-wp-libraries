@@ -264,9 +264,12 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				$image_url = $options[ $image_url_field ];
 			}
 
+			if ( is_singular() ){
+				global $post;
+			}
+
 			// 固定ページの場合
 			if ( $post_type['slug'] == 'page' ) {
-				global $post;
 
 				if ( 'sp' == $size ){
 					$target_field = 'vk_page_header_image_sp';
@@ -301,7 +304,15 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 						$image_url = $image_url[0];
 					}
 				}
-			} // if ( $post_type == 'page' ){
+			} elseif ( is_single() ) {
+				$display_type = 'displaytype_'.$post_type['slug'];
+				// デフォルトレイアウトじゃない場合
+				if ( isset( $options[$display_type] ) &&  $options[$display_type] !== 'default' ){
+					// アイキャッチ画像で上書き
+					$image_url = get_the_post_thumbnail_url( $post->id, 'full' );
+				}
+			}
+
 			return $image_url;
 		}
 
@@ -619,6 +630,56 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 			}
 
+			global $vk_page_header_use_type;
+			if ( $vk_page_header_use_type ){
+				// Single page display item
+				$wp_customize->add_setting(
+					'single_page_display_item',
+					array(
+						'sanitize_callback' => 'sanitize_text_field',
+					)
+				);
+				$wp_customize->add_control(
+					new Custom_Html_Control(
+						$wp_customize,
+						'single_page_display_item',
+						array(
+							'label'            => __( 'Single page display item', 'katawara' ),
+							'section'          => 'vk_page_header_setting',
+							'type'             => 'text',
+							'custom_title_sub' => '',
+							'custom_html'      => '',
+						)
+					)
+				);
+
+				foreach ( $custom_types as $name => $label ) {
+					if ( 'page' !== $name ) {
+						$wp_customize->add_setting(
+							'vk_page_header[displaytype_' . $name . ']',
+							array(
+								'default'           => 'default',
+								'type'              => 'option',
+							)
+						);
+						$wp_customize->add_control(
+							'vk_page_header[displaytype_' . $name . ']',
+							array(
+								'label'       => __( 'Page header Content Setting', 'katawara' ) . ' [ ' . $label . ' ]',
+								'section'     => 'vk_page_header_setting',
+								'settings'    => 'vk_page_header[displaytype_' . $name . ']',
+								'description' => '',
+								'type'        => 'select',
+								'choices'     => array(
+									'default'             => __( 'Default', 'katawara' ),
+									'thumbnail'           => __( 'Display only Thumbnail', 'katawara' ),
+									'post_title_and_meta' => __( 'Display Title, Thumbnail and Post Meta', 'katawara' ),
+								),
+							)
+						);
+					}
+				}
+			} // if ( $vk_page_header_use_type ){
 		}
 
 		/*
