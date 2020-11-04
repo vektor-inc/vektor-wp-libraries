@@ -325,6 +325,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			global $customize_setting_prefix;
 			global $customize_section_priority;
 			global $vk_page_header_default;
+			global $vk_page_header_output_class;
 
 			$wp_customize->add_section(
 				'vk_page_header_setting', array(
@@ -332,10 +333,10 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					'priority' => $customize_section_priority,
 				)
 			);
-
+	
 			$wp_customize->selective_refresh->add_partial(
 				'vk_page_header[bg_color]', array(
-					'selector'        => '.page-header .container',
+					'selector'        => $vk_page_header_output_class,
 					'render_callback' => '',
 				)
 			);
@@ -726,7 +727,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		} // custom_fields_array(){
 
 
-		public function get_layout( $layout = 'default' ) {
+		public static function get_layout( $layout = 'default' ) {
 			$options = self::options_load();
 			if ( is_single() ) {
 				$display_type = 'displaytype_'.get_post_type(); // カスタム分類アーカイブと違って取得ミスがないため標準関数を使用
@@ -820,7 +821,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				// カバー部分
 				if ( ! empty( $options['cover_color'] ) || ! empty( $options['cover_opacity'] ) ) {
 
-					$title_outer_dynamic_css .= $vk_page_header_output_class . ':after{
+					$title_outer_dynamic_css .= $vk_page_header_output_class . '::before{
 						content:"";
 						position:absolute;
 						top:0;
