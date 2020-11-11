@@ -102,17 +102,18 @@ gulp.task('copy_post-type-manager', function(done) {
 /*-------------------------------------*/
 /*  Watch
 /*-------------------------------------*/
-gulp.task('copy_custom-field-builder', function () {
+gulp.task('copy_custom-field-builder', function (done) {
   gulp.src('./custom-field-builder/package/**')
     .pipe(gulp.dest('../plugins/vk-google-job-posting-manager/inc/custom-field-builder/package/'))
     .pipe(gulp.dest('../plugins/vk-version-table/inc/custom-field-builder/package/'))
     .pipe(gulp.dest('../themes/bill-vektor/inc/custom-field-builder/'))
     .pipe(gulp.dest('../themes/katawara/inc/custom-field-builder/package/'))
     .pipe(gulp.dest('../themes/lightning-pro/inc/custom-field-builder/package/'));
-
+  done();
 });
-gulp.task('watch_cf', function () {
+gulp.task('watch_cf', function (done) {
     gulp.watch('./custom-field-builder/package/**', gulp.task('copy_custom-field-builder'));
+    done();
 });
 gulp.task('watch_ptm', function () {
     gulp.watch('./post-type-manager/package/**', gulp.task('copy_post-type-manager'));
