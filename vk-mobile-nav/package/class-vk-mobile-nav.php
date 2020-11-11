@@ -183,7 +183,8 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 			$dynamic_css = preg_replace( '/[\n\r\t]/', '', $dynamic_css );
 			// Change multiple spaces to single space
 			$dynamic_css = preg_replace( '/\s(?=\s)/', '', $dynamic_css );
-			wp_add_inline_style( 'lightning-common-style', $dynamic_css );
+			global $vk_mobile_nav_inline_style_handle;
+			wp_add_inline_style( $vk_mobile_nav_inline_style_handle, $dynamic_css );
 		}
 
 	} // class Vk_Mobile_Nav
