@@ -30,10 +30,11 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 		管理画面用共通js読み込み（記述場所によっては動作しないので注意）
 		-------------------------------------------
 		*/
-		public static function print_script($hook_suffix) {
+		public static function print_script( $hook_suffix ) {
 			wp_register_script( 'datepicker', self::admin_directory_url() . 'js/datepicker.js', array( 'jquery', 'jquery-ui-datepicker' ), self::$version, true );
 			wp_enqueue_script( 'datepicker' );
 			wp_register_script( 'vk_mediauploader', self::admin_directory_url() . 'js/mediauploader.js', array( 'jquery' ), self::$version, true );
+			wp_localize_script( 'vk_mediauploader', 'vk_cfb_select_image', __( 'Select image', 'custom_field_builder_textdomain' ) );
 			wp_enqueue_script( 'vk_mediauploader' );
 
 			/* 
