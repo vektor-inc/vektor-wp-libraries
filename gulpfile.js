@@ -346,7 +346,7 @@ gulp.task('copy_fa', function (done) {
         .pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/font-awesome/package/'))
         .pipe(gulp.dest('../plugins/vk-blocks/inc/font-awesome/package'))
         .pipe(gulp.dest('../plugins/vk-blocks-pro/inc/font-awesome/package'))
-        .pipe(gulp.dest('../plugins/vk-post-author-display/inc/font-awesome/'));
+        .pipe(gulp.dest('../plugins/vk-post-author-display/inc/font-awesome/package'));
         done();
 });
 gulp.task('watch_fa', function () {
