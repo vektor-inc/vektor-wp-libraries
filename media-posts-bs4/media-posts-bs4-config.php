@@ -22,6 +22,9 @@ if ( ! class_exists( 'VK_MEDIA_POSTS_BS4' ) ) {
 		$customize_section_name = 'Lightning ';
 	}
 
+	global $vk_mpbs4_archive_layout_class;
+	$vk_mpbs4_archive_layout_class = '.mainSection';
+
 	require_once dirname( __FILE__ ) . '/package/class-vk-media-posts-bs4.php';
 
 	/**

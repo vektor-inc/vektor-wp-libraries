@@ -168,10 +168,11 @@ class VK_Media_Posts_BS4_Admin {
 				)
 			);
 
+			global $vk_mpbs4_archive_layout_class;
 			$wp_customize->selective_refresh->add_partial(
 				'vk_post_type_archive[' . $type . '][layout]',
 				array(
-					'selector'        => '.mainSection .vk_posts-postType-' . $type,
+					'selector'        => $vk_mpbs4_archive_layout_class . ' .vk_posts-postType-' . $type,
 					'render_callback' => '',
 				)
 			);
