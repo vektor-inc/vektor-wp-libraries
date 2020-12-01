@@ -322,9 +322,10 @@ gulp.task('copy_term-color', function(done) {
   gulp.src('./term-color/package/**')
     .pipe(gulp.dest('../plugins/vk-post-author-display/inc/term-color/'))
     .pipe(gulp.dest('../plugins/vk-blocks/inc/term-color/package/'))
-        .pipe(gulp.dest('../plugins/vk-blocks-pro/inc/term-color/package/'))
-        .pipe(gulp.dest('../themes/katawara/inc/term-color/package/'))
-        .pipe(gulp.dest('../themes/lightning-child-rerise/inc/term-color/'))
+	.pipe(gulp.dest('../plugins/vk-blocks-pro/inc/term-color/package/'))
+	.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/term-color/package/'))
+	.pipe(gulp.dest('../themes/katawara/inc/term-color/package/'))
+	.pipe(gulp.dest('../themes/lightning-child-rerise/inc/term-color/'))
     .pipe(gulp.dest('../themes/lightning-pro/inc/term-color/package/'))
     .pipe(gulp.dest('../themes/lightning/inc/term-color/package/'));
     done();
