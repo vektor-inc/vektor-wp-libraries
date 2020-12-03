@@ -103,6 +103,7 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 			'display_image'              => true,
 			'display_image_overlay_term' => true,
 			'display_excerpt'            => false,
+			'display_author'             => false,
 			'display_date'               => true,
 			'display_new'                => true,
 			'display_taxonomies'         => false,
@@ -420,6 +421,7 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 				'display_image'              => __( 'Image', 'media-posts-bs4-textdomain' ),
 				'display_image_overlay_term' => __( 'Term name', 'media-posts-bs4-textdomain' ),
 				'display_excerpt'            => __( 'Excerpt', 'media-posts-bs4-textdomain' ),
+				'display_author'             => __( 'Author', 'media-posts-bs4-textdomain' ),
 				'display_date'               => __( 'Date', 'media-posts-bs4-textdomain' ),
 				'display_new'                => __( 'New mark', 'media-posts-bs4-textdomain' ),
 				'display_taxonomies'         => __( 'Taxonomies', 'media-posts-bs4-textdomain' ),
@@ -515,6 +517,7 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 		$instance['display_image']              = VK_Helpers::sanitize_checkbox( $new_instance['display_image'] );
 		$instance['display_image_overlay_term'] = VK_Helpers::sanitize_checkbox( $new_instance['display_image_overlay_term'] );
 		$instance['display_excerpt']            = VK_Helpers::sanitize_checkbox( $new_instance['display_excerpt'] );
+		$instance['display_author']             = VK_Helpers::sanitize_checkbox( $new_instance['display_author'] );
 		$instance['display_date']               = VK_Helpers::sanitize_checkbox( $new_instance['display_date'] );
 		$instance['display_new']                = VK_Helpers::sanitize_checkbox( $new_instance['display_new'] );
 		$instance['display_btn']                = VK_Helpers::sanitize_checkbox( $new_instance['display_btn'] );

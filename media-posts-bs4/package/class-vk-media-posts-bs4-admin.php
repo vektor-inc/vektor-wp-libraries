@@ -351,6 +351,10 @@ class VK_Media_Posts_BS4_Admin {
 					'label' => __( 'Excerpt', 'media-posts-bs4-textdomain' ),
 					// 'default' => false,
 				),
+				'display_author'            => array(
+					'label' => __( 'Author', 'media-posts-bs4-textdomain' ),
+					// 'default' => false,
+				),
 				'display_date'               => array(
 					'label' => __( 'Date', 'media-posts-bs4-textdomain' ),
 					// 'default' => true,
