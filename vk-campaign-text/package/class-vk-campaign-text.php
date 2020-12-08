@@ -493,22 +493,14 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			$options = get_option( 'vk_campaign_text' );
 			$default = self::default_option();
 			$options = wp_parse_args( $options, $default );
+			$options = apply_filters( 'vk_campaign_text_options', $options );
 
 			if ( isset( $options['display'] ) && 'hide' !== $options['display'] ) {
-				$icon = ! empty( $options['icon'] ) ? '<i class="' . $options['icon'] . '"></i>' : '';
-				$icon = apply_filters( 'vk_campaign_text_icon', $icon );
-
-				$main_text = ! empty( $options['main_text'] ) ? $options['main_text'] : '';
-				$main_text = apply_filters( 'vk_campaign_text_main_text', $main_text );
-
+				$icon        = ! empty( $options['icon'] ) ? '<i class="' . $options['icon'] . '"></i>' : '';
+				$main_text   = ! empty( $options['main_text'] ) ? $options['main_text'] : '';
 				$button_text = ! empty( $options['button_text'] ) ? $options['button_text'] : '';
-				$button_text = apply_filters( 'vk_campaign_text_button_text', $button_text );
-
-				$button_url = ! empty( $options['button_url'] ) ? $options['button_url'] : '';
-				$button_url = apply_filters( 'vk_campaign_text_button_url', $button_url );
-
+				$button_url  = ! empty( $options['button_url'] ) ? $options['button_url'] : '';
 				$link_target = ! empty( $options['link_target'] ) ? ' target="_blank"' : '';
-				$link_target = apply_filters( 'vk_campaign_text_link_target', $link_target );
 
 				$campaign_html .= '<div class="vk-campaign-text">';
 				if ( empty( $button_text ) ) {
@@ -518,7 +510,6 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 					$campaign_html .= '<a class="vk-campaign-text_btn" href="' . $button_url . '"' . $link_target . '>' . $button_text . '</a>';
 				}
 				$campaign_html .= '</div>';
-				$campaign_html  = apply_filters( 'vk_campaign_text_campaign_html', $campaign_html );
 			}
 
 			echo wp_kses( $campaign_html, $allowed_html );
