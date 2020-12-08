@@ -431,6 +431,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			$options = get_option( 'vk_campaign_text' );
 			$default = self::default_option();
 			$options = wp_parse_args( $options, $default );
+			$options = apply_filters( 'vk_campaign_text_options', $options );
 
 			$main_text_color               = $options['main_text_color'];
 			$main_bg_color                 = $options['main_background_color'];
