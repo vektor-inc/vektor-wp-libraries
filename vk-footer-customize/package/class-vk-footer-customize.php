@@ -1,6 +1,6 @@
 <?php
 /**
- * Widget Setting
+ * VK Footer Customize
  *
  * @package VK Footer Customize
  */
