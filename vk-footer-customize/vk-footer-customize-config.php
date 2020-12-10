@@ -9,6 +9,9 @@ if ( ! class_exists( 'VK_Footer_Customize' ) ) {
 	global $vk_footer_customize_hook_style;
 	$vk_footer_customize_hook_style = 'katawara-design-style';
 
+	global $vk_footer_widget_area_count;
+	$vk_footer_widget_area_count = 'katawara_footer_widget_area_count';
+
 	global $vk_footer_selector;
 	$vk_footer_selector = '.l-site-footer-upper';
 
