@@ -22,5 +22,3 @@ $vk_footer_setting_name = 'katawara_widget_setting';
 
 global $vk_footer_customize_priority;
 $vk_footer_customize_priority = 540;
-
-
