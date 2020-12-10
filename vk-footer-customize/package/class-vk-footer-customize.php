@@ -5,11 +5,11 @@
  * @package VK Footer Customize
  */
 
-if ( ! class_exists( 'Widget_Area_Setting' ) ) {
+if ( ! class_exists( 'VK_Footer_Customize' ) ) {
 	/**
-	 * Widget_Area_Setting
+	 * VK Footer Customize
 	 */
-	class Widget_Area_Setting {
+	class VK_Footer_Customize {
 		/**
 		 * Constructor.
 		 */
@@ -185,5 +185,5 @@ if ( ! class_exists( 'Widget_Area_Setting' ) ) {
 		}
 
 	}
-	new Widget_Area_Setting();
+	new VK_Footer_Customize();
 }
