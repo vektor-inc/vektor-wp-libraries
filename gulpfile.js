@@ -357,15 +357,15 @@ gulp.task('watch_fa', function () {
 /**
  * Widget Area Setting.
  */
-gulp.task('copy_widget-area-setting', function (done) {
-    gulp.src('./widget-area-setting/package/**')
-        .pipe(gulp.dest('../themes/lightning/inc/widget-area-setting/package'))
-        .pipe(gulp.dest('../themes/lightning-pro/inc/widget-area-setting/package'))
-        .pipe(gulp.dest('../themes/katawara/inc/widget-area-setting/package'));
+gulp.task('copy_vk-footer-customize', function (done) {
+    gulp.src('./vk-footer-customize/package/**')
+        .pipe(gulp.dest('../themes/lightning/inc/vk-footer-customize/package'))
+        .pipe(gulp.dest('../themes/lightning-pro/inc/vk-footer-customize/package'))
+        .pipe(gulp.dest('../themes/katawara/inc/vk-footer-customize/package'));
         done();
 });
-gulp.task('watch_widget-area-setting', function () {
-    gulp.watch('./widget-area-setting/package/**', gulp.task('copy_widget-area-setting'));
+gulp.task('watch_vk-footer-customize', function () {
+    gulp.watch('./vk-footer-customize/package/**', gulp.task('copy_vk-footer-customize'));
 });
 
 /**
