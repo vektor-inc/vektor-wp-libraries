@@ -421,6 +421,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			);
 
 		}
+
 		/**
 		 * Get Option
 		 */
