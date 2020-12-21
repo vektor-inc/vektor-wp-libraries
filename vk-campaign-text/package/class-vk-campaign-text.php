@@ -422,16 +422,21 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 
 		}
 
+		public static function get_option() {
+			$options = get_option( 'vk_campaign_text' );
+			$default = self::default_option();
+			$options = wp_parse_args( $options, $default );
+			$options = apply_filters( 'vk_campaign_text_options', $options );
+			return $options;
+		}
+
 		/**
 		 * Enqueue Style.
 		 */
 		public static function enqueue_style() {
 			global $vk_campaign_text_hook_style;
 
-			$options = get_option( 'vk_campaign_text' );
-			$default = self::default_option();
-			$options = wp_parse_args( $options, $default );
-			$options = apply_filters( 'vk_campaign_text_options', $options );
+			$options = self::get_option();
 
 			$main_text_color               = $options['main_text_color'];
 			$main_bg_color                 = $options['main_background_color'];
@@ -491,10 +496,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 
 			);
 
-			$options = get_option( 'vk_campaign_text' );
-			$default = self::default_option();
-			$options = wp_parse_args( $options, $default );
-			$options = apply_filters( 'vk_campaign_text_options', $options );
+			$options = self::get_option();
 
 			if ( isset( $options['display'] ) && 'hide' !== $options['display'] ) {
 				$icon        = ! empty( $options['icon'] ) ? '<i class="' . $options['icon'] . '"></i>' : '';
