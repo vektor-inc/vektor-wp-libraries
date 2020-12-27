@@ -229,8 +229,9 @@ gulp.task('sass_compo', function (done) {
 gulp.task('copy_compo', function (done) {
     gulp.src('./vk-components/package/**')
         .pipe(gulp.dest('../themes/katawara/inc/vk-components/package/'))
-    .pipe(gulp.dest('../themes/lightning/inc/vk-components/package/'))
-    .pipe(gulp.dest('../themes/lightning-pro/inc/vk-components/package/'))
+        .pipe(gulp.dest('../themes/lightning/inc/vk-components/package/'))
+        .pipe(gulp.dest('../themes/lightning/_g3/inc/vk-components/package/'))
+        .pipe(gulp.dest('../themes/lightning-pro/inc/vk-components/package/'))
         .pipe(gulp.dest('../plugins/vk-blocks-pro/inc/vk-components/package/'));
         done();
 });
