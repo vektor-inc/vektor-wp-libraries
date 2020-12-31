@@ -386,7 +386,7 @@ gulp.task('watch_vk-campaign-text', function () {
 /*  vk-mobile-nav
 /*-------------------------------------*/
 gulp.task('sass_vk-mobile-nav', function (done) {
-  return gulp.src('vk-mobile-nav/package/_scss/*.scss')
+  gulp.src('vk-mobile-nav/package/_scss/*.scss')
     .pipe(sass())
     .pipe(cmq({
         log: true
@@ -398,7 +398,7 @@ gulp.task('sass_vk-mobile-nav', function (done) {
 });
 
 gulp.task('copy_vk-mobile-nav', function (done) {
-  return gulp.src('./vk-mobile-nav/package/**')
+  gulp.src('./vk-mobile-nav/package/**')
     .pipe(gulp.dest('../themes/lightning/inc/vk-mobile-nav/package/'))
     .pipe(gulp.dest('../themes/lightning-pro/inc/vk-mobile-nav/package/'))
     .pipe(gulp.dest('../themes/katawara/inc/vk-mobile-nav/package/'))
