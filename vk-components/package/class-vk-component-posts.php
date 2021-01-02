@@ -202,7 +202,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				$class_outer .= ' vk_post-btn-display';
 			}
 			global $post;
-			$html = '<div id="post-' . esc_attr( $post->ID ) . '" class="vk_post vk-post-postType-' . esc_attr( $post->post_type ) . ' ' . join( ' ', get_post_class( $class_outer ) ) . '">';
+			$html = '<div id="post-' . esc_attr( $post->ID ) . '" class="vk_post vk_post-postType-' . esc_attr( $post->post_type ) . ' ' . join( ' ', get_post_class( $class_outer ) ) . '">';
 			return $html;
 		}
 
