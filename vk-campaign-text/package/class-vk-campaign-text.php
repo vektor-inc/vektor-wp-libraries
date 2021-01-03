@@ -422,6 +422,9 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 
 		}
 
+		/**
+		 * Get Option
+		 */
 		public static function get_option() {
 			$options = get_option( 'vk_campaign_text' );
 			$default = self::default_option();
