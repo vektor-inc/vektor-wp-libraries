@@ -81,29 +81,21 @@ https://github.com/vektor-inc/vektor-wp-libraries
 /* .card-noborder
 /*-------------------------------------------*/
 .card-intext {
-	// .vk_post_imgOuter a {
-	// 	position: absolute;
-	// 	top:0;
-	// 	width:100%;
-	// 	height:100%;
-	// 	z-index: 1000;
-	// }
+	// display: block;
 	.card-intext-inner {
 		display:block; 
 		overflow:hidden;
 		width:100%;
 		height:100%;
-		z-index: 1000;
-		transition: all 0.5s ease-out;
 		.vk_post_body {
 			position: absolute;
 			display:block; overflow:hidden;
 			width:100%;
 			bottom:0;
 			height:calc(15px + var(--vk-line-height-low) * 2 + 15px);
-			transition: all 0.5s ease-out;
+			transition: all 0.3s ease-out;
 			background-color: rgba( 0,0,0,0.8 );
-			z-index: 999999999;
+			z-index: 100;
 			.vk_post_title {
 				color:#fff;
 				display:block; overflow:hidden;
@@ -114,14 +106,10 @@ https://github.com/vektor-inc/vektor-wp-libraries
 			p,div {
 				color:#fff;
 			}
-			.vk_post_date {
-				
-			}
 		}
 		&:hover {
 			.vk_post_body {
-				transition: all 0.5s ease-out;
-				// background-color: rgba( 200,0,0,0.8 );
+				transition: all 0.3s ease-out;
 				height:100%;
 			}
 		}
