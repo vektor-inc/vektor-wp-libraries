@@ -92,7 +92,7 @@ https://github.com/vektor-inc/vektor-wp-libraries
 			display:block; overflow:hidden;
 			width:100%;
 			bottom:0;
-			height:calc(15px + var(--vk-line-height-low) * 2 + 15px);
+			height:calc(15px + var(--vk-line-height-low) + 15px);
 			transition: all 0.3s ease-out;
 			background-color: rgba( 0,0,0,0.8 );
 			z-index: 100;
@@ -100,7 +100,9 @@ https://github.com/vektor-inc/vektor-wp-libraries
 				color:#fff;
 				display:block; overflow:hidden;
 				line-height:var(--vk-line-height-low);
-				height:calc(var(--vk-line-height-low) * 2);
+				width: 100%;
+				white-space: nowrap;
+				text-overflow: ellipsis;
 				margin-bottom:15px;
 			}
 			p,div {
@@ -111,6 +113,12 @@ https://github.com/vektor-inc/vektor-wp-libraries
 			.vk_post_body {
 				transition: all 0.3s ease-out;
 				height:100%;
+				.vk_post_title {
+					height:auto;
+					margin-bottom:0;
+					white-space:unset;
+					text-overflow:unset;
+				}
 			}
 		}
 	}
