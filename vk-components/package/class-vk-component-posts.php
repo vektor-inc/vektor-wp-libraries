@@ -184,6 +184,8 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				$class_outer = 'card card-post card-horizontal';
 			} elseif ( $options['layout'] == 'card-noborder' ) {
 				$class_outer = 'card card-noborder';
+			} elseif ( $options['layout'] == 'card-intext' ) {
+				$class_outer = 'card card-intext';
 			} elseif ( $options['layout'] == 'media' ) {
 				$class_outer = 'media';
 			} elseif ( $options['layout'] == 'postListText' ) {
@@ -235,7 +237,10 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				$style = ' style="background-image:url(' . $image_src . ')"';
 
 				$html .= '<div class="vk_post_imgOuter' . $classes['class_outer'] . '"' . $style . '>';
-				$html .= '<a href="' . get_the_permalink( $post->ID ) . '">';
+
+				if ( $options['layout'] != 'card-intext' ){
+					$html .= '<a href="' . get_the_permalink( $post->ID ) . '">';
+				}
 
 				if ( $options['overlay'] ) {
 					$html .= '<div class="card-img-overlay">';
@@ -268,7 +273,11 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				} elseif ( $options['image_default_url'] ) {
 					$html .= '<img src="' . esc_url( $options['image_default_url'] ) . '" alt="" class="' . $image_class . '" loading="lazy" />';
 				}
-				$html .= '</a>';
+
+				if ( $options['layout'] != 'card-intext' ){
+					$html .= '</a>';
+				}
+
 				$html .= '</div><!-- [ /.vk_post_imgOuter ] -->';
 			} // if ( $options['display_image'] ) {
 			return $html;
@@ -286,7 +295,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 			// $attr = wp_parse_args( $attr, $default );
 
 			$layout_type = $options['layout'];
-			if ( $layout_type == 'card-horizontal' || $layout_type == 'card-noborder' ) {
+			if ( $layout_type == 'card-horizontal' || $layout_type == 'card-noborder' || $layout_type == 'card-intext' ) {
 				$layout_type = 'card';
 			}
 
@@ -299,6 +308,14 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 			}
 
 			$html .= '<h5 class="vk_post_title ' . $layout_type . '-title">';
+
+			/*
+			カードインテキストの場合、リンクの中にリンクがあるとブラウザでDOMが書き換えられるので
+			中のリンクを解除する必要がある。
+			*/
+			if ( $options['layout'] == 'card-intext' ){
+				$options['textlink'] = false;
+			}
 
 			if ( $options['textlink'] ) {
 				$html .= '<a href="' . get_the_permalink( $post->ID ) . '">';
@@ -379,28 +396,32 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				} // if ($taxonomies)
 			}
 
-			if ( $options['display_btn'] ) {
-				$button_options = array(
-					'outer_id'       => '',
-					'outer_class'    => '',
-					'btn_text'       => $options['btn_text'],
-					'btn_url'        => get_the_permalink( $post->ID ),
-					'btn_class'      => 'btn btn-sm btn-primary vk_post_btn',
-					'btn_target'     => '',
-					'btn_ghost'      => false,
-					'btn_color_text' => '',
-					'btn_color_bg'   => '',
-					'shadow_use'     => false,
-					'shadow_color'   => '',
-				);
+			if ( $options['textlink'] ) {
 
-				// $text_align = '';
-				// if ( $options['btn_align'] == 'right' ) {
-				// $text_align = ' text-right';
-				// }
-				$html .= '<div class="vk_post_btnOuter ' . $options['btn_align'] . '">';
-				$html .= VK_Component_Button::get_view( $button_options );
-				$html .= '</div>';
+				if ( $options['display_btn'] ) {
+					$button_options = array(
+						'outer_id'       => '',
+						'outer_class'    => '',
+						'btn_text'       => $options['btn_text'],
+						'btn_url'        => get_the_permalink( $post->ID ),
+						'btn_class'      => 'btn btn-sm btn-primary vk_post_btn',
+						'btn_target'     => '',
+						'btn_ghost'      => false,
+						'btn_color_text' => '',
+						'btn_color_bg'   => '',
+						'shadow_use'     => false,
+						'shadow_color'   => '',
+					);
+
+					// $text_align = '';
+					// if ( $options['btn_align'] == 'right' ) {
+					// $text_align = ' text-right';
+					// }
+					$html .= '<div class="vk_post_btnOuter ' . $options['btn_align'] . '">';
+					$html .= VK_Component_Button::get_view( $button_options );
+					$html .= '</div>';
+				}
+
 			}
 
 			if ( ! empty( $options['body_append'] ) ) {
@@ -458,8 +479,16 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				'class_image' => 'card-img-top',
 			);
 
+			if ( $options['layout'] == 'card-intext' ){
+				$html .= '<a href="' . get_the_permalink( $post->ID ) . '" class="card-intext-inner">';
+			}
+
 			$html .= self::get_thumbnail_image( $post, $options, $attr );
 			$html .= self::get_view_body( $post, $options );
+
+			if ( $options['layout'] == 'card-intext' ){
+				$html .= '</a>';
+			}
 
 			$html .= '</div><!-- [ /.card ] -->';
 			return $html;

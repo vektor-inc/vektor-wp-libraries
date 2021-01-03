@@ -78,6 +78,55 @@ https://github.com/vektor-inc/vektor-wp-libraries
 	}
 }
 /*-------------------------------------------*/
+/* .card-noborder
+/*-------------------------------------------*/
+.card-intext {
+	// .vk_post_imgOuter a {
+	// 	position: absolute;
+	// 	top:0;
+	// 	width:100%;
+	// 	height:100%;
+	// 	z-index: 1000;
+	// }
+	.card-intext-inner {
+		display:block; 
+		overflow:hidden;
+		width:100%;
+		height:100%;
+		z-index: 1000;
+		transition: all 0.5s ease-out;
+		.vk_post_body {
+			position: absolute;
+			width:100%;
+			bottom:0;
+			height:50%;
+			background-color: rgba( 0,0,0,0.8 );
+			.vk_post_title {
+				color:#fff;
+			}
+			.vk_post_date {
+				color:#fff;
+			}
+		}
+		&:hover {
+			.vk_post_body {
+				transition: all 0.5s ease-out;
+				height: 100%;
+				background-color: rgba( 200,0,0,0.8 );
+			}
+		}
+	}
+	.vk_post_excerpt,
+	.vk_post_btnOuter {
+		display: none;
+	}
+	.vk_post_body,
+	&.vk_post-btn-display .vk_post_body{
+		padding: 15px 20px;
+	}
+}
+
+/*-------------------------------------------*/
 /* .card-imageRound
 /*-------------------------------------------*/
 .card-imageRound {
