@@ -97,28 +97,38 @@ https://github.com/vektor-inc/vektor-wp-libraries
 		transition: all 0.5s ease-out;
 		.vk_post_body {
 			position: absolute;
+			display:block; overflow:hidden;
 			width:100%;
 			bottom:0;
-			height:50%;
+			height:calc(15px + var(--vk-line-height-low) * 2 + 15px);
+			transition: all 0.5s ease-out;
 			background-color: rgba( 0,0,0,0.8 );
+			z-index: 999999999;
 			.vk_post_title {
+				color:#fff;
+				display:block; overflow:hidden;
+				line-height:var(--vk-line-height-low);
+				height:calc(var(--vk-line-height-low) * 2);
+				margin-bottom:15px;
+			}
+			p,div {
 				color:#fff;
 			}
 			.vk_post_date {
-				color:#fff;
+				
 			}
 		}
 		&:hover {
 			.vk_post_body {
 				transition: all 0.5s ease-out;
-				height: 100%;
-				background-color: rgba( 200,0,0,0.8 );
+				// background-color: rgba( 200,0,0,0.8 );
+				height:100%;
 			}
 		}
 	}
 	.vk_post_excerpt,
 	.vk_post_btnOuter {
-		display: none;
+		// display: none;
 	}
 	.vk_post_body,
 	&.vk_post-btn-display .vk_post_body{
