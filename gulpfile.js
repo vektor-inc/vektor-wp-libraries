@@ -408,7 +408,7 @@ gulp.task('copy_vk-mobile-nav', function (done) {
 });
 
 gulp.task('watch_mobile', function () {
-  gulp.watch('./vk-mobile-nav/package/_scss/**', gulp.series('sass_vk-mobile-nav','copy_vk-mobile-nav'));
+  gulp.watch('./vk-mobile-nav/package/**', gulp.series('sass_vk-mobile-nav','copy_vk-mobile-nav'));
 });
 
 /*-------------------------------------*/
