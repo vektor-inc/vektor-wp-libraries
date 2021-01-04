@@ -279,7 +279,7 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 			$wp_customize->add_control(
 				'vk_mobile_nav_options[slide_type]',
 				array(
-					'label'    => __( 'Menu button slide direction', 'vk_mobile_nav_textdomain' ),
+					'label'    => __( 'Menu slide direction', 'vk_mobile_nav_textdomain' ),
 					'section'  => 'vk_mobile_nav_setting',
 					'settings' => 'vk_mobile_nav_options[slide_type]',
 					'type'     => 'radio',
