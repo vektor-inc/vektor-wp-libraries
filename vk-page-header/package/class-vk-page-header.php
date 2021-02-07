@@ -709,8 +709,10 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		}
 
 		public function save_custom_fields() {
-			$custom_fields_array = self::custom_fields_array();
-			VK_Custom_Field_Builder::save_cf_value( $custom_fields_array );
+			if ( ! is_customize_preview() ){
+				$custom_fields_array = self::custom_fields_array();
+				VK_Custom_Field_Builder::save_cf_value( $custom_fields_array );
+			}
 		}
 
 		public static function custom_fields_array() {
