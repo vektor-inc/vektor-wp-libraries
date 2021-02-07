@@ -268,8 +268,10 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				global $post;
 			}
 
-			// 固定ページの場合
-			if ( $post_type['slug'] == 'page' ) {
+			// 固定ページの場合.
+			// 検索結果ページでも $post_type['slug'] == 'page' に反応するため  ! is_search() && ! is_404() を追加.
+			// is_page() でない理由は？？
+			if ( $post_type['slug'] == 'page' && ! is_search() && ! is_404()  ) {
 
 				if ( 'sp' == $size ){
 					$target_field = 'vk_page_header_image_sp';
@@ -333,33 +335,31 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					'priority' => $customize_section_priority,
 				)
 			);
-	
-			$wp_customize->selective_refresh->add_partial(
-				'vk_page_header[bg_color]', array(
-					'selector'        => $vk_page_header_output_class,
-					'render_callback' => '',
-				)
-			);
 
-			// bgcolor
-			$wp_customize->add_setting(
-				'vk_page_header[bg_color]', array(
-					'default'           => '',
-					'type'              => 'option',
-					'capability'        => 'edit_theme_options',
-					'sanitize_callback' => 'sanitize_hex_color',
-				)
-			);
-			$wp_customize->add_control(
-				new WP_Customize_Color_Control(
-					$wp_customize, 'bg_color', array(
-						'label'    => __( 'Background color', 'vk_page_header_textdomain' ),
-						'section'  => 'vk_page_header_setting',
-						'settings' => 'vk_page_header[bg_color]',
-					// 'priority' => $priority,
+			global $vk_page_header_bg_color_hide;
+
+			if ( ! $vk_page_header_bg_color_hide ){
+
+				// bgcolor
+				$wp_customize->add_setting(
+					'vk_page_header[bg_color]', array(
+						'default'           => '',
+						'type'              => 'option',
+						'capability'        => 'edit_theme_options',
+						'sanitize_callback' => 'sanitize_hex_color',
 					)
-				)
-			);
+				);
+				$wp_customize->add_control(
+					new WP_Customize_Color_Control(
+						$wp_customize, 'bg_color', array(
+							'label'    => __( 'Background color', 'vk_page_header_textdomain' ),
+							'section'  => 'vk_page_header_setting',
+							'settings' => 'vk_page_header[bg_color]',
+						// 'priority' => $priority,
+						)
+					)
+				);
+			}
 
 			// cover color
 			$wp_customize->add_setting(
@@ -378,6 +378,13 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 						'settings' => 'vk_page_header[cover_color]',
 					// 'priority' => $priority,
 					)
+				)
+			);
+
+			$wp_customize->selective_refresh->add_partial(
+				'vk_page_header[text_color]', array(
+					'selector'        => $vk_page_header_output_class,
+					'render_callback' => '',
 				)
 			);
 
@@ -803,7 +810,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				// アウター部分のセレクタと結合
 				if ( $title_outer_dynamic_css ) {
 					// 対象とするclass名を取得
-					global $vk_page_header_output_class;					
+					global $vk_page_header_output_class;
 					$title_outer_dynamic_css = $vk_page_header_output_class . '{ position:relative;' . $title_outer_dynamic_css . '}';
 
 				}
