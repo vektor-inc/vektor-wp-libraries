@@ -90,7 +90,6 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		public function __construct() {
 			add_action( 'customize_register', array( $this, 'customize_register' ) );
 			add_action( 'wp_head', array( $this, 'dynamic_header_css' ), 5 );
-			// add_action( 'customize_preview_init', array( $this, 'customize_pageinfo' ) );
 			add_action( 'add_meta_boxes', array( $this, 'add_pagehead_setting_meta_box' ) );
 			add_action( 'save_post', array( $this, 'save_custom_fields' ), 10, 2 );
 
