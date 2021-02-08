@@ -13,11 +13,37 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 		/**
 		 * Constructor.
 		 */
+
+		public static $version = '0.1.0';
+
 		public function __construct() {
 			add_action( 'customize_register', array( __CLASS__, 'resister_customize' ) );
 			add_action( 'wp_head', array( __CLASS__, 'enqueue_style' ), 5 );
 			add_action( 'after_setup_theme', array( __CLASS__, 'change_old_option' ) );
 			add_action( 'wp', array( __CLASS__, 'launch_action' ) );
+
+			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'load_css' ) );
+			add_filter( 'vk_css_tree_shaking_array', array( __CLASS__, 'css_tree_shaking_array' ) );
+		}
+
+		public static function load_css() {
+			if ( apply_filters( 'vk_campaign_text_print_css', false ) ){
+				$path = wp_normalize_path( dirname( __FILE__ ) );
+				$css_url = str_replace( wp_normalize_path( ABSPATH ), site_url() . '/', $path ) . '/css/vk-campaign-text.css';
+				wp_enqueue_style( 'vk-campaign-text', $css_url, array(), self::$version );
+			}
+		}
+
+		public static function css_tree_shaking_array( $vk_css_tree_shaking_array ){
+			$path = wp_normalize_path( dirname( __FILE__ ) );
+			$css_url = str_replace( wp_normalize_path( ABSPATH ), site_url() . '/', $path ) . '/css/vk-campaign-text.css';
+			$vk_css_tree_shaking_array[] = array(
+				'id'      => 'vk-campaign-text',
+				'url'     => $css_url,
+				'path'    => dirname( __FILE__ ) . '/css/vk-campaign-text.css',
+				'version' => self::$version,
+			);
+			return $vk_css_tree_shaking_array;
 		}
 
 		/**
@@ -521,6 +547,6 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			echo wp_kses( $campaign_html, $allowed_html );
 		}
 	}
-	new VK_Campaign_Text();
+	$VK_Campaign_Text = new VK_Campaign_Text();
 
 }

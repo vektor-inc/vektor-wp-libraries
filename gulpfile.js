@@ -375,7 +375,8 @@ gulp.task('watch_vk-footer-customize', function () {
 gulp.task('copy_vk-campaign-text', function (done) {
     gulp.src('./vk-campaign-text/package/**')
         .pipe(gulp.dest('../themes/katawara/inc/vk-campaign-text/package'))
-        .pipe(gulp.dest('../themes/lightning-pro/inc/vk-campaign-text/package'));
+        .pipe(gulp.dest('../themes/lightning-pro/inc/vk-campaign-text/package'))
+        .pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/vk-campaign-text/package'));
         done();
 });
 gulp.task('watch_vk-campaign-text', function () {

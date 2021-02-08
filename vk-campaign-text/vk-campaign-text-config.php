@@ -45,3 +45,5 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 // なるべくLightnigの名前になるように class_exists の外でOK.
 global $vk_campaign_text_prefix;
 $vk_campaign_text_prefix = lightning_get_prefix_customize_panel();
+
+global $vk_campaign_text_dir_uri;
