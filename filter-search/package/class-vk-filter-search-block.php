@@ -65,7 +65,7 @@ class VK_Filter_Search_Block {
 
 		$style_css = 'build/style.css';
 		wp_register_style(
-			'vk-filter-search',
+			'vk-filter-search-style',
 			plugins_url( $style_css, __FILE__ ),
 			array(),
 			$asset_file['version']
@@ -218,7 +218,7 @@ class VK_Filter_Search_Block {
 		wp_localize_script( 'vk-filter-search-js', 'vk_filter_search_taxonomy_option', $taxonomy_option );
 
 		if ( function_exists( 'wp_set_script_translations' ) ) {
-			wp_set_script_translations( 'vk-filter-search-js', 'vk-filter-search' );
+			wp_set_script_translations( 'vk-filter-search-js', 'filter-search-textdomain' );
 		}
 
 		$block_array = array(
