@@ -36,12 +36,12 @@ export default function TaxonomySearchEdit( props ) {
 			<div>
 				<div className="vkfs__warning">
 					<div className="vkfs__label-name">
-						{ __( 'Taxonomy', 'vk-filter-search' ) }
+						{ __( 'Taxonomy', 'filter-search-textdomain' ) }
 					</div>
 					<div className="vkfs__warning-text">
 						{ __(
 							'Because no taxonomy is selected, this block will not render.',
-							'vk-filter-search'
+							'filter-search-textdomain'
 						) }
 					</div>
 				</div>
@@ -57,7 +57,7 @@ export default function TaxonomySearchEdit( props ) {
 					<div className="vkfs__warning-text">
 						{ __(
 							'Because this taxonomy has no term, this block will not render.',
-							'vk-filter-search'
+							'filter-search-textdomain'
 						) }
 					</div>
 				</div>
@@ -73,12 +73,12 @@ export default function TaxonomySearchEdit( props ) {
 		<>
 			<InspectorControls>
 				<PanelBody
-					title={ __( 'Taxonomy Option', 'vk-filter-search' ) }
+					title={ __( 'Taxonomy Option', 'filter-search-textdomain' ) }
 					initialOpen={ true }
 				>
 					<BaseControl id={ 'vsfs03' }>
 						<SelectControl
-							label={ __( 'Taxonomy', 'vk-filter-search' ) }
+							label={ __( 'Taxonomy', 'filter-search-textdomain' ) }
 							value={ isSelectedTaxonomy }
 							//eslint-disable-next-line camelcase,no-undef
 							options={ vk_filter_search_taxonomy_option }
