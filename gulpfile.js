@@ -445,3 +445,13 @@ gulp.task('watch_mobile-fix', function(done) {
   gulp.watch('./vk-mobile-fix-nav/package/**', gulp.task('copy_vk-mobile-fix-nav'));
   done();
 });
+
+/**
+ * Filter Search
+ */
+gulp.task('copy_filter-search', function (done) {
+    gulp.src('./filter-search/package/**')
+        .pipe(gulp.dest('../plugins/vk-filter-search/inc/filter-search/package/'))
+		.pipe(gulp.dest('../plugins/vk-filter-search/inc/filter-search-pro/package/'));
+        done();
+});
