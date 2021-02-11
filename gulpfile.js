@@ -433,6 +433,7 @@ gulp.task('copy_vk-mobile-fix-nav', function(done) {
   gulp.src('./vk-mobile-fix-nav/package/**')
     .pipe(gulp.dest('../themes/lightning-pro/inc/vk-mobile-fix-nav/package/'))
         .pipe(gulp.dest('../themes/katawara/inc/vk-mobile-fix-nav/package/'))
+        .pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/vk-mobile-fix-nav/package/'))
         .pipe(gulp.dest('../themes/souzoku/inc/vk-mobile-fix-nav/'))
         .pipe(gulp.dest('../themes/seizen-souzoku/inc/vk-mobile-fix-nav/'));
         done();

@@ -59,12 +59,12 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			 * to be able to change the action hook point of css load from theme..
 			 */
 			// get_called_class()じゃないと外しにくい
-			add_action( 'after_setup_theme', array( get_called_class(), 'load_css_action' ) );
-
+			add_action( 'wp_enqueue_scripts', array( get_called_class(), 'add_style' ) );
 			add_action( 'customize_register', array( $this, 'vk_mobil_fix_nav_customize_register' ) ); // $thisじゃないとエラーになる
 			add_filter( 'body_class', array( __CLASS__, 'add_body_class' ) );
 			add_action( 'wp_footer', array( __CLASS__, 'vk_mobil_fix_nav_html' ) );
 			add_action( 'widgets_init', array( __CLASS__, 'widgets_init' ) );
+			add_filter( 'vk_css_tree_shaking_array', array( __CLASS__, 'css_tree_shaking_array' ) );
 		}
 
 		public static function widgets_init() {
@@ -80,11 +80,14 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			);
 		}
 
-		public static function load_css_action() {
-			$hook_point = apply_filters( 'vk_mobile_fix_nav_enqueue_point', 'wp_enqueue_scripts' );
-			// get_called_class()じゃないと外しにくい
-			add_action( $hook_point, array( get_called_class(), 'add_style' ) );
-		}
+		// public static function load_css_action() {
+		// 	die();
+		// 	echo '━━━━━━━━━━━+++━━━━━━━━━'."<br>\n";
+		// 	$hook_point = apply_filters( 'vk_mobile_fix_nav_enqueue_point', 'wp_enqueue_scripts' );
+		// 	// get_called_class()じゃないと外しにくい
+		// 	echo '━━━━━━━━━━━━━━━━━━━━'."<br>\n";
+		// 	add_action( $hook_point, array( get_called_class(), 'add_style' ) );
+		// }
 
 		public static function default_options() {
 			$default_options = array(
@@ -561,10 +564,26 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 		/*
 		  Load js & CSS
 		/*-------------------------------------------*/
+		public static function style_url(){
+			$path = wp_normalize_path( dirname( __FILE__ ) );
+			$css_url = str_replace( wp_normalize_path( ABSPATH ), site_url() . '/', $path ) . '/css/vk-mobile-fix-nav.css';
+			return $css_url;
+		}
 
 		static function add_style() {
-			global $vk_mobile_fix_nav_directory_uri;
-			wp_enqueue_style( 'vk-mobile-fix-nav', $vk_mobile_fix_nav_directory_uri . '/package/css/vk-mobile-fix-nav.css', array(), self::$version, 'all' );
+			$css_url = self::style_url();
+			wp_enqueue_style( 'vk-mobile-fix-nav', $css_url, array(), self::$version, 'all' );
+		}
+
+		public static function css_tree_shaking_array( $vk_css_tree_shaking_array ){
+			$css_url = self::style_url();
+			$vk_css_tree_shaking_array[] = array(
+				'id'      => 'vk-mobile-fix-nav',
+				'url'     => $css_url,
+				'path'    => dirname( __FILE__ ) . '/css/vk-mobile-fix-nav.css',
+				'version' => self::$version,
+			);
+			return $vk_css_tree_shaking_array;
 		}
 
 		/**
