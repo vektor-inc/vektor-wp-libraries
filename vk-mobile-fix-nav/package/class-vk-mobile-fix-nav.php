@@ -80,15 +80,6 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			);
 		}
 
-		// public static function load_css_action() {
-		// 	die();
-		// 	echo '━━━━━━━━━━━+++━━━━━━━━━'."<br>\n";
-		// 	$hook_point = apply_filters( 'vk_mobile_fix_nav_enqueue_point', 'wp_enqueue_scripts' );
-		// 	// get_called_class()じゃないと外しにくい
-		// 	echo '━━━━━━━━━━━━━━━━━━━━'."<br>\n";
-		// 	add_action( $hook_point, array( get_called_class(), 'add_style' ) );
-		// }
-
 		public static function default_options() {
 			$default_options = array(
 				'hidden'       => true,
