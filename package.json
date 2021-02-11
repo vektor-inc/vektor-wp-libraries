@@ -1,42 +1,44 @@
 {
-  "name": "vektor-wp-libraries",
-  "version": "1.0.0",
-  "description": "* WordPress開発環境の wp-content ディレクトリにこの vektor-wp-libraries を置いて gulpを走らせます。",
-  "main": "gulpfile.js",
-  "scripts": {
-    "gulp": "gulp",
-    "sass_vk-mobile-nav": "gulp sass_vk-mobile-nav",
-    "jsmin_vk-mobile-nav": "webpack --config webpack/vk-mobile-nav.config.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://kurudrive@github.com/vektor-inc/vektor-wp-libraries.git"
-  },
-  "author": "",
-  "license": "GPL-2.0",
-  "bugs": {
-    "url": "https://github.com/vektor-inc/vektor-wp-libraries/issues"
-  },
-  "homepage": "https://github.com/vektor-inc/vektor-wp-libraries#readme",
-  "dependencies": {
-    "@babel/core": "^7.11.1",
-    "@babel/preset-env": "^7.11.0",
-    "babel-loader": "^8.1.0",
-    "gulp": "^4.0.2",
-    "gulp-autoprefixer": "^7.0.1",
-    "gulp-babel": "^8.0.0",
-    "gulp-clean-css": "^4.3.0",
-    "gulp-concat": "^2.6.1",
-    "gulp-cssmin": "^0.2.0",
-    "gulp-jsmin": "^0.1.5",
-    "gulp-merge-media-queries": "^0.2.1",
-    "gulp-plumber": "^1.2.1",
-    "gulp-sass": "^4.1.0",
-    "gulp-uglify": "^3.0.2",
-    "is-mobile": "^2.2.2",
-    "npm-check-updates": "^7.1.0",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
-  },
-  "devDependencies": {}
+	"name": "vektor-wp-libraries",
+	"version": "1.0.0",
+	"description": "* WordPress開発環境の wp-content ディレクトリにこの vektor-wp-libraries を置いて gulpを走らせます。",
+	"main": "gulpfile.js",
+	"scripts": {
+		"gulp": "gulp",
+		"sass_vk-mobile-nav": "gulp sass_vk-mobile-nav",
+		"jsmin_vk-mobile-nav": "webpack --config webpack/vk-mobile-nav.config.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://kurudrive@github.com/vektor-inc/vektor-wp-libraries.git"
+	},
+	"author": "",
+	"license": "GPL-2.0",
+	"bugs": {
+		"url": "https://github.com/vektor-inc/vektor-wp-libraries/issues"
+	},
+	"homepage": "https://github.com/vektor-inc/vektor-wp-libraries#readme",
+	"dependencies": {
+		"@babel/core": "^7.12.13",
+		"@babel/preset-env": "^7.12.13",
+		"babel-loader": "^8.2.2",
+		"gulp": "^4.0.2",
+		"gulp-autoprefixer": "^7.0.1",
+		"gulp-babel": "^8.0.0",
+		"gulp-clean-css": "^4.3.0",
+		"gulp-concat": "^2.6.1",
+		"gulp-cssmin": "^0.2.0",
+		"gulp-jsmin": "^0.1.5",
+		"gulp-merge-media-queries": "^0.2.1",
+		"gulp-plumber": "^1.2.1",
+		"gulp-sass": "^4.1.0",
+		"gulp-uglify": "^3.0.2",
+		"is-mobile": "^2.2.2",
+		"npm-check-updates": "^11.1.1",
+		"webpack": "^5.21.2",
+		"webpack-cli": "^4.5.0"
+	},
+	"devDependencies": {
+		"gulp-replace": "^1.0.0"
+	}
 }

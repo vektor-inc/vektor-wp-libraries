@@ -39,6 +39,7 @@ var jsmin = require('gulp-jsmin');
 var uglify = require('gulp-uglify');
 // エラーでも監視を続行させる
 var plumber = require('gulp-plumber');
+var replace = require("gulp-replace");
 
 var babel = require('gulp-babel');
 
@@ -445,4 +446,17 @@ gulp.task('watch_mobile-fix', function(done) {
   gulp.watch('./vk-mobile-fix-nav/package/_scss/**', gulp.task('sass_vk-mobile-fix-nav'));
   gulp.watch('./vk-mobile-fix-nav/package/**', gulp.task('copy_vk-mobile-fix-nav'));
   done();
+});
+
+/**
+ * Filter Search
+ */
+gulp.task('copy_filter-search', function (done) {
+    gulp.src('./filter-search/package/**')
+		.pipe(replace("'filter-search-textdomain'","'vk-filter-search'"))
+        .pipe(gulp.dest('../plugins/vk-filter-search/inc/filter-search/package/'))
+	gulp.src('./filter-search/package/**')
+		.pipe(replace("'filter-search-textdomain'","'vk-filter-search-pro'"))
+		.pipe(gulp.dest('../plugins/vk-filter-search-pro/inc/filter-search/package/'));
+    done();
 });

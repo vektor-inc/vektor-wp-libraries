@@ -1,0 +1,35 @@
+// 一部CSSがコアの指定に負けてしまうため .wp-core-ui の中に変更
+.wp-core-ui {
+
+	& .vkfs select {
+		width: 100%;
+		max-width: 100%;
+		margin: 0;
+		padding: 0.3em 1em;
+	}
+
+	.vkfs {
+
+		&__labels {
+			display: block;
+			.block-editor-block-list__layout {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: space-between;
+
+				.vkfs__keyword,
+				.vkfs__post-type,
+				.vkfs__taxonomy {
+					margin: .5rem 0;
+				}
+
+				& > div {
+					flex-basis: calc(50% - 0.8em);
+					margin: 0;
+				}
+			}
+		}
+	}
+}
+
+// only editor
