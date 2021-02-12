@@ -458,6 +458,7 @@ gulp.task('copy_filter-search', function (done) {
         .pipe(gulp.dest('../plugins/vk-filter-search/inc/filter-search/package/'))
 	gulp.src('./filter-search/package/**')
 		.pipe(replace("'filter-search-textdomain'","'vk-filter-search-pro'"))
+		.pipe(replace("wp_set_script_translations( 'vk-filter-search-js', 'vk-filter-search-pro', VKFS_PRO_PATH . '/languages/');","wp_set_script_translations( 'vk-filter-search-js', 'vk-filter-search' );"))
 		.pipe(gulp.dest('../plugins/vk-filter-search-pro/inc/filter-search/package/'));
     done();
 });
