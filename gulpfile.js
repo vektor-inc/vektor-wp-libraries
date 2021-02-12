@@ -452,7 +452,7 @@ gulp.task('watch_mobile-fix', function(done) {
 /**
  * Filter Search
  */
-gulp.task('copy_filter-search', function (done) {
+gulp.task('copy_filter_search', function (done) {
     gulp.src('./filter-search/package/**')
 		.pipe(replace("'filter-search-textdomain'","'vk-filter-search'"))
         .pipe(gulp.dest('../plugins/vk-filter-search/inc/filter-search/package/'))
