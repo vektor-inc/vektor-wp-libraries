@@ -411,7 +411,11 @@ gulp.task('copy_vk-mobile-nav', function (done) {
 });
 
 gulp.task('watch_mobile', function () {
-  gulp.watch('./vk-mobile-nav/package/**', gulp.series('sass_vk-mobile-nav','copy_vk-mobile-nav'));
+  gulp.watch('./vk-mobile-nav/package/_scss/**', gulp.series('sass_vk-mobile-nav'));
+  gulp.watch('./vk-mobile-nav/package/_scss/**', gulp.series('copy_vk-mobile-nav'));
+  gulp.watch('./vk-mobile-nav/package/**.php', gulp.series('copy_vk-mobile-nav'));
+  gulp.watch('./vk-mobile-nav/package/images/**', gulp.series('copy_vk-mobile-nav'));
+  gulp.watch('./vk-mobile-nav/package/js/**', gulp.series('copy_vk-mobile-nav'));
 });
 
 /*-------------------------------------*/
