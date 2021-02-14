@@ -185,6 +185,11 @@ if ( ! class_exists( 'VK_MEDIA_POSTS_BS4' ) ) {
 	 *
 	 * @param object $query WP_Query.
 	 */
+	/**
+	 * アーカイブページレイアウト
+	 *
+	 * @param object $query WP_Query.
+	 */
 	function lightning_posts_per_page_custom_bs4( $query ) {
 
 		if ( is_admin() || ! $query->is_main_query() ) {
@@ -192,35 +197,36 @@ if ( ! class_exists( 'VK_MEDIA_POSTS_BS4' ) ) {
 		}
 
 		// アーカイブの時以外は関係ないので return.
-		if ( ! $query->is_archive() && ! $query->is_home() ) {
+		if ( ! $query->is_archive() && ! $query->is_home() && ! $query->is_search() ){
 			return;
 		}
 
 		// アーカイブページの表示件数情報を取得.
 		$vk_post_type_archive = get_option( 'vk_post_type_archive' );
+		// Post Type
+		$post_type_info = lightning_get_post_type();
+		$post_type = $post_type_info['slug'];
 
 		if ( $query->is_home() && ! $query->is_front_page() && ! empty( $vk_post_type_archive['post']['count'] ) ) {
-				return $query->set( 'posts_per_page', $vk_post_type_archive['post']['count'] );
+			$query->set( 'posts_per_page', $vk_post_type_archive['post']['count'] );
 		}
 
-		// authhor archive.
-		if ( $query->is_author() && ! empty( $vk_post_type_archive['author']['count'] ) ) {
-			return $query->set( 'posts_per_page', $vk_post_type_archive['author']['count'] );
-		}
-
-		if ( $query->is_archive() ) {
+		if ( $query->is_archive() || $query->is_home() ) {
 
 			$page_for_posts['post_top_id'] = get_option( 'page_for_posts' );
 
 			// post_type_archive & is_date and other.
 			if ( ! empty( $query->query_vars['post_type'] ) ) {
-				$post_type = $query->query_vars['post_type'];
-				if ( is_array( $post_type ) ) {
-					$post_type = current( $post_type );
-				}
 				if ( isset( $vk_post_type_archive[ $post_type ]['count'] ) ) {
-					return $query->set( 'posts_per_page', $vk_post_type_archive[ $post_type ]['count'] );
+					$query->set( 'posts_per_page', $vk_post_type_archive[ $post_type ]['count'] );
 				}
+			}
+
+			if ( isset( $vk_post_type_archive[ $post_type ]['orderby'] ) ) {
+				$query->set( 'orderby', $vk_post_type_archive[ $post_type ]['orderby'] );
+			}
+			if ( isset( $vk_post_type_archive[ $post_type ]['order'] ) ) {
+				$query->set( 'order', $vk_post_type_archive[ $post_type ]['order'] );
 			}
 
 			// カスタム分類アーカイブ.
@@ -228,12 +234,30 @@ if ( ! class_exists( 'VK_MEDIA_POSTS_BS4' ) ) {
 				$taxonomy  = $query->tax_query->queries[0]['taxonomy'];
 				$post_type = get_taxonomy( $taxonomy )->object_type[0];
 				if ( ! empty( $vk_post_type_archive[ $post_type ]['count'] ) ) {
-					return $query->set( 'posts_per_page', $vk_post_type_archive[ $post_type ]['count'] );
+					$query->set( 'posts_per_page', $vk_post_type_archive[ $post_type ]['count'] );
 				}
 			}
 		}
 
+		if ( is_author() || is_search() ){
+			if ( is_author() ){
+				$post_type = 'author';
+			} elseif ( is_search() ){
+				$post_type = 'search';
+			}
+			if ( ! empty( $vk_post_type_archive[$post_type]['count'] ) ) {
+				$query->set( 'posts_per_page', $vk_post_type_archive[$post_type]['count'] );
+			}
+			if ( isset( $vk_post_type_archive[ $post_type ]['orderby'] ) ) {
+				$query->set( 'orderby', $vk_post_type_archive[ $post_type ]['orderby'] );
+			}
+			if ( isset( $vk_post_type_archive[ $post_type ]['order'] ) ) {
+				$query->set( 'order', $vk_post_type_archive[ $post_type ]['order'] );
+			}
+		}
+
 		return $query;
+
 
 	}
 	add_action( 'pre_get_posts', 'lightning_posts_per_page_custom_bs4' );
