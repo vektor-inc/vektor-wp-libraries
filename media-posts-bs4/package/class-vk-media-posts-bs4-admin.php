@@ -64,9 +64,11 @@ class VK_Media_Posts_BS4_Admin {
 		$post_types           = array( 'post' => 0 );
 		$post_types           = VK_Media_Posts_BS4::get_custom_types() + $post_types;
 		$post_types['author'] = 'author';
+		$post_types['search'] = 'search';
 
 		$post_types_labels           = VK_Media_Posts_BS4::label_names() + VK_Media_Posts_BS4::get_custom_types_labels();
 		$post_types_labels['author'] = __( 'Author', 'media-posts-bs4-textdomain' );
+		$post_types_labels['search'] = __( 'Search', 'media-posts-bs4-textdomain' );
 
 		$patterns['default']['label'] = $system_name . ' ' . __( 'default', 'media-posts-bs4-textdomain' );
 
