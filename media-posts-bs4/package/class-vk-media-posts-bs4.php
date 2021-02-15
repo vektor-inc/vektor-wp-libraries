@@ -288,8 +288,9 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 
 			// アーカイブページの表示件数情報を取得.
 			$vk_post_type_archive = get_option( 'vk_post_type_archive' );
+			
 			// Post Type
-			$post_type_info = lightning_get_post_type();
+			global $post_type_info;
 			$post_type = $post_type_info['slug'];
 
 			if ( $query->is_home() && ! $query->is_front_page() && ! empty( $vk_post_type_archive['post']['count'] ) ) {
