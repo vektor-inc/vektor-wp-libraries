@@ -20,6 +20,14 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 			require_once dirname( __FILE__ ) . '/class-vk-media-posts-bs4-admin.php';
 			add_action( 'widgets_init', array( __CLASS__, 'register_widget' ) );
 
+			global $is_extend_loop_name;
+			add_filter( $is_extend_loop_name, array( __CLASS__, 'is_loop_layout_change' ) );
+
+			global $do_extend_loop_name;
+			add_action( $do_extend_loop_name, array( __CLASS__, 'loop_layout_change' ) );
+
+			add_action( 'pre_get_posts', array( __CLASS__, 'posts_per_page_custom' ) );
+
 		}
 
 		/**
@@ -190,6 +198,151 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 		public static function register_widget() {
 			require_once dirname( __FILE__ ) . '/class-vk-media-posts-bs4-widget.php';
 			register_widget( 'VK_Media_Posts_BS4_Widget' );
+		}
+
+		/**
+		 * アーカイブループを改変するかどうかの指定
+		 *
+		 * @param boolean $flag Change archive loop or not.
+		 */
+		static public function is_loop_layout_change() {
+
+			$flag = false;
+
+			global $post_type_info;
+			$post_type      = $post_type_info['slug'];
+
+			if ( is_author() ) {
+				$post_type = 'author';
+			}
+			if ( is_search() ) {
+				$post_type = 'search';
+			}
+
+			$vk_post_type_archive = get_option( 'vk_post_type_archive' );
+			// 指定の投稿タイプアーカイブのレイアウトに値が存在する場合.
+			if ( ! empty( $vk_post_type_archive[ $post_type ]['layout'] ) ) {
+				// デフォルトじゃない場合.
+				if ( 'default' !== $vk_post_type_archive[ $post_type ]['layout'] ) {
+					$flag = true;
+				}
+			}
+
+			return $flag;
+		}
+
+		/**
+		 * 改変ループ出力実行
+		 */
+		public static function loop_layout_change() {
+
+			$vk_post_type_archive = get_option( 'vk_post_type_archive' );
+
+			global $post_type_info;
+			$post_type_slug = $post_type_info['slug'];
+
+			if ( is_author() ){
+				$post_type_slug = 'author';
+			}
+			if ( is_search() ){
+				$post_type_slug = 'search';
+			}
+
+			$flag = self::is_loop_layout_change();
+
+			if ( $flag ) {
+
+				$customize_options = $vk_post_type_archive[ $post_type_slug ];
+				// Get default option.
+				$customize_options_default = VK_Media_Posts_BS4::options_default();
+				// Markge options.
+				$options = wp_parse_args( $customize_options, $customize_options_default );
+
+				global $wp_query;
+
+				/*
+				Lightning Pro のみ
+				おそらくこの値が保存されている事はないので不具合報告がこない場合は2020年12月で削除可
+				unset($options['col_xxl']);
+				*/
+
+				VK_Component_Posts::the_loop( $wp_query, $options );
+			}
+		}
+	
+		/**
+		 * アーカイブページの表示件数改変
+		 *
+		 * @param object $query WP_Query.
+		 */
+		static public function posts_per_page_custom( $query ) {
+
+			if ( is_admin() || ! $query->is_main_query() ) {
+				return;
+			}
+
+			// アーカイブの時以外は関係ないので return.
+			if ( ! $query->is_archive() && ! $query->is_home() && ! $query->is_search() ){
+				return;
+			}
+
+			// アーカイブページの表示件数情報を取得.
+			$vk_post_type_archive = get_option( 'vk_post_type_archive' );
+			// Post Type
+			$post_type_info = lightning_get_post_type();
+			$post_type = $post_type_info['slug'];
+
+			if ( $query->is_home() && ! $query->is_front_page() && ! empty( $vk_post_type_archive['post']['count'] ) ) {
+				$query->set( 'posts_per_page', $vk_post_type_archive['post']['count'] );
+			}
+
+			if ( $query->is_archive() || $query->is_home() ) {
+
+				$page_for_posts['post_top_id'] = get_option( 'page_for_posts' );
+
+				// post_type_archive & is_date and other.
+				if ( ! empty( $query->query_vars['post_type'] ) ) {
+					if ( isset( $vk_post_type_archive[ $post_type ]['count'] ) ) {
+						$query->set( 'posts_per_page', $vk_post_type_archive[ $post_type ]['count'] );
+					}
+				}
+
+				if ( isset( $vk_post_type_archive[ $post_type ]['orderby'] ) ) {
+					$query->set( 'orderby', $vk_post_type_archive[ $post_type ]['orderby'] );
+				}
+				if ( isset( $vk_post_type_archive[ $post_type ]['order'] ) ) {
+					$query->set( 'order', $vk_post_type_archive[ $post_type ]['order'] );
+				}
+
+				// カスタム分類アーカイブ.
+				if ( ! empty( $query->tax_query->queries ) ) {
+					$taxonomy  = $query->tax_query->queries[0]['taxonomy'];
+					$post_type = get_taxonomy( $taxonomy )->object_type[0];
+					if ( ! empty( $vk_post_type_archive[ $post_type ]['count'] ) ) {
+						$query->set( 'posts_per_page', $vk_post_type_archive[ $post_type ]['count'] );
+					}
+				}
+			}
+
+			if ( is_author() || is_search() ){
+				if ( is_author() ){
+					$post_type = 'author';
+				} elseif ( is_search() ){
+					$post_type = 'search';
+				}
+				if ( ! empty( $vk_post_type_archive[$post_type]['count'] ) ) {
+					$query->set( 'posts_per_page', $vk_post_type_archive[$post_type]['count'] );
+				}
+				if ( isset( $vk_post_type_archive[ $post_type ]['orderby'] ) ) {
+					$query->set( 'orderby', $vk_post_type_archive[ $post_type ]['orderby'] );
+				}
+				if ( isset( $vk_post_type_archive[ $post_type ]['order'] ) ) {
+					$query->set( 'order', $vk_post_type_archive[ $post_type ]['order'] );
+				}
+			}
+
+			return $query;
+
 		}
 
 	}
