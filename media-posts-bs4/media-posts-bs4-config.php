@@ -14,7 +14,6 @@ if ( ! class_exists( 'VK_MEDIA_POSTS_BS4' ) ) {
 	global $system_name;
 	$system_name = lightning_get_theme_name();
 
-	// プリフィックス.
 	global $vk_media_post_prefix;
 	$vk_media_post_prefix = lightning_get_prefix();
 
