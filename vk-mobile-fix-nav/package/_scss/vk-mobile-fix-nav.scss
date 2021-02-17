@@ -27,6 +27,10 @@
 	height: auto;
 	width: auto;
 }
+// モバイルナビの管理バー対応に負けないように追加
+.admin-bar .mobile-fix-nav .vk-mobile-nav-menu-btn{
+	top: unset;
+}
 
 .copySection {
 	display: flex;
