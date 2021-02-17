@@ -209,7 +209,7 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 
 			$flag = false;
 
-			global $post_type_info;
+			$post_type_info = VK_Helpers::get_post_type_info();
 			$post_type      = $post_type_info['slug'];
 
 			if ( is_author() ) {
@@ -238,7 +238,7 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 
 			$vk_post_type_archive = get_option( 'vk_post_type_archive' );
 
-			global $post_type_info;
+			$post_type_info = VK_Helpers::get_post_type_info();
 			$post_type_slug = $post_type_info['slug'];
 
 			if ( is_author() ){
@@ -290,7 +290,7 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 			$vk_post_type_archive = get_option( 'vk_post_type_archive' );
 			
 			// Post Type
-			global $post_type_info;
+			$post_type_info = VK_Helpers::get_post_type_info();
 			$post_type = $post_type_info['slug'];
 
 			if ( $query->is_home() && ! $query->is_front_page() && ! empty( $vk_post_type_archive['post']['count'] ) ) {
