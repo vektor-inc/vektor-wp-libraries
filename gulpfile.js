@@ -80,7 +80,7 @@ gulp.task('parallax', function () {
     .pipe(gulp.dest('./js-libraries/'))
     .pipe(concat('_vk-prlx.min.js'))
     .pipe(gulp.dest('../themes/lightning/assets/js/'))
-    .pipe(gulp.dest('../themes/lightning-pro/assets/js/'))
+    .pipe(gulp.dest('../themes/lightning-pro/assets/js/'));
 });
 
 /*-------------------------------------*/
@@ -105,11 +105,11 @@ gulp.task('copy_post-type-manager', function(done) {
 /*-------------------------------------*/
 gulp.task('copy_custom-field-builder', function (done) {
   gulp.src('./custom-field-builder/package/**')
-    .pipe(gulp.dest('../plugins/vk-google-job-posting-manager/inc/custom-field-builder/package/'))
-    .pipe(gulp.dest('../plugins/vk-version-table/inc/custom-field-builder/package/'))
-    .pipe(gulp.dest('../themes/bill-vektor/inc/custom-field-builder/'))
-    .pipe(gulp.dest('../themes/katawara/inc/custom-field-builder/package/'))
-    .pipe(gulp.dest('../themes/lightning-pro/inc/custom-field-builder/package/'))
+	.pipe(gulp.dest('../plugins/vk-google-job-posting-manager/inc/custom-field-builder/package/'))
+	.pipe(gulp.dest('../plugins/vk-version-table/inc/custom-field-builder/package/'))
+	.pipe(gulp.dest('../themes/bill-vektor/inc/custom-field-builder/'))
+	.pipe(gulp.dest('../themes/katawara/inc/custom-field-builder/package/'))
+	.pipe(gulp.dest('../themes/lightning-pro/inc/custom-field-builder/package/'))
 	.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/custom-field-builder/package/'));
   done();
 });
@@ -132,21 +132,21 @@ gulp.task('watch_full-title', function () {
 /*  Template Tags
 /*-------------------------------------*/
 gulp.task('c_tags', function(done) {
-    gulp.src('./template-tags/package/**')
-        .pipe(gulp.dest('../themes/katawara/inc/template-tags/'))
-    .pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/template-tags/package/'))
-    .pipe(gulp.dest('../plugins/vk-blocks-pro/inc/template-tags/package/'))
-    .pipe(gulp.dest('../plugins/vk-google-job-posting-manager/inc/template-tags/package/'))
-    .pipe(gulp.dest('../plugins/vk-post-author-display/inc/template-tags/package/'));
-    gulp.src('./template-tags/tests/**')
-        .pipe(gulp.dest('../themes/katawara/inc/tests/'))
-    .pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/tests/'))
-        .pipe(gulp.dest('../plugins/vk-post-author-display/tests/'));
+	gulp.src('./template-tags/package/**')
+		.pipe(gulp.dest('../themes/katawara/inc/template-tags/'))
+		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/template-tags/package/'))
+		.pipe(gulp.dest('../plugins/vk-blocks-pro/inc/template-tags/package/'))
+		.pipe(gulp.dest('../plugins/vk-google-job-posting-manager/inc/template-tags/package/'))
+		.pipe(gulp.dest('../plugins/vk-post-author-display/inc/template-tags/package/'));
+	gulp.src('./template-tags/tests/**')
+		.pipe(gulp.dest('../themes/katawara/inc/tests/'))
+	.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/tests/'))
+		.pipe(gulp.dest('../plugins/vk-post-author-display/tests/'));
     done();
 });
 gulp.task('w_tags', function (done) {
-  gulp.watch('./template-tags/package/**', gulp.task('c_tags'));
-    done();
+	gulp.watch('./template-tags/package/**', gulp.task('c_tags'));
+	done();
 });
 
 /*-------------------------------------*/
