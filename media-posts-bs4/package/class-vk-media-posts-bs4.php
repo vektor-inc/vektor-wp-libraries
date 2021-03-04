@@ -205,9 +205,7 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 		 *
 		 * @param boolean $flag Change archive loop or not.
 		 */
-		static public function is_loop_layout_change() {
-
-			$flag = false;
+		static public function is_loop_layout_change( $flag = false ) {
 
 			$post_type_info = VK_Helpers::get_post_type_info();
 			$post_type      = $post_type_info['slug'];
