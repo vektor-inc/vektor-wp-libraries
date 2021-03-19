@@ -536,10 +536,20 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 
 				$campaign_html .= '<div class="vk-campaign-text">';
 				if ( empty( $button_text ) ) {
-					$campaign_html .= '<a class="vk-campaign-text_link" href="' . $button_url . '"' . $link_target . '><span class="vk-campaign-text_text">' . $icon . $main_text . '</span></a>';
+					if ( ! empty( $button_url ) ) {
+						$campaign_html .= '<a class="vk-campaign-text_link" href="' . $button_url . '"' . $link_target . '>';
+						$campaign_html .= '<span class="vk-campaign-text_text">' . $icon . $main_text . '</span>';
+						$campaign_html .= '</a>';
+					} else {
+						$campaign_html .= '<span class="vk-campaign-text_text">' . $icon . $main_text . '</span>';
+					}
 				} else {
 					$campaign_html .= '<span class="vk-campaign-text_text">' . $icon . $main_text . '</span>';
-					$campaign_html .= '<a class="vk-campaign-text_btn" href="' . $button_url . '"' . $link_target . '>' . $button_text . '</a>';
+					if ( ! empty( $button_url ) ) {
+						$campaign_html .= '<a class="vk-campaign-text_btn" href="' . $button_url . '"' . $link_target . '>' . $button_text . '</a>';
+					} else {
+						$campaign_html .= '<span class="vk-campaign-text_btn">' . $button_text . '</span>';
+					}
 				}
 				$campaign_html .= '</div>';
 			}
