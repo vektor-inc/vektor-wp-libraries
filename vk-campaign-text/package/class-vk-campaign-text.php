@@ -487,7 +487,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			$dynamic_css .= 'background:' . $button_bg_color . ';';
 			$dynamic_css .= 'color:' . $button_text_color . ';';
 			$dynamic_css .= '}';
-			$dynamic_css .= '.vk-campaign-text_btn:hover{';
+			$dynamic_css .= 'a.vk-campaign-text_btn:hover{';
 			$dynamic_css .= 'background:' . $button_background_hover_color . ';';
 			$dynamic_css .= 'color:' . $button_text_hover_color . ';';
 			$dynamic_css .= '}';
