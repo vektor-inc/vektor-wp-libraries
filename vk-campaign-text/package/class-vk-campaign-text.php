@@ -56,6 +56,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			$default = self::default_option();
 			$options = wp_parse_args( $options, $default );
 
+			// 保存されている出力位置
 			$position = $options['display_position'];
 			global $vk_campaign_text_display_position_array;
 			if ( ! $vk_campaign_text_hook_point ) {

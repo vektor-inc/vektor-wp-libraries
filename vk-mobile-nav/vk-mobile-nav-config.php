@@ -10,7 +10,7 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 	$default_nav = 'Header';
 
 	global $library_url;
-	$library_url = get_template_directory_uri() . '/inc/vk-mobile-nav/package/';
+	$library_url = get_template_directory_uri() . '/inc/vk-mobile-nav/package';
 
 	// Default Vk Mobile Nav HTML was exported to footer.
 	// But Originally it is desirable to output with a header
