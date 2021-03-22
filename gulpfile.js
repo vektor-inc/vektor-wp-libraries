@@ -252,7 +252,6 @@ gulp.task('copy_page-header', function (done) {
 	gulp.src('./vk-page-header/package/**')
 		.pipe(gulp.dest('../themes/katawara/inc/vk-page-header/package/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-page-header/package/'))
-		.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/vk-page-header/package/'));
 	done();
 });
 gulp.task('watch_page-header', function () {
