@@ -290,11 +290,11 @@ gulp.task('copy_media-posts-bs4', function (done) {
 /**
  * Headding Design
  */
-gulp.task('copy_headding-design', function (done) {
-    gulp.src('./vk-headding-design/package/**')
-		.pipe(gulp.dest('../themes/katawara/inc/vk-headding-design/package/'))
-		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-headding-design/package/'))
-		.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/vk-headding-design/package/'))
+gulp.task('copy_heading-design', function (done) {
+    gulp.src('./vk-heading-design/package/**')
+		.pipe(gulp.dest('../themes/katawara/inc/vk-heading-design/package/'))
+		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-heading-design/package/'))
+		.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/vk-heading-design/package/'))
         done();
 });
 
