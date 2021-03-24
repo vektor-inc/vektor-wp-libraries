@@ -112,6 +112,6 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 	global $headding_editor_hook_style;
 	$headding_editor_hook_style = 'lightning-common-editor-gutenberg';
 
-	require_once plugin_dir_path( __FILE__ ) . '/package/class-vk-headding-design.php';
+	require_once plugin_dir_path( __FILE__ ) . '/package/class-vk-heading-design.php';
 
 }
