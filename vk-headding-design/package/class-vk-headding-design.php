@@ -643,31 +643,31 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 				'h2' => array(
 					'label'    => __( 'H2', 'headding_design_textdomain' ),
 					'selector' => array(
-						'.edit-post-visual-editor.editor-styles-wrapper h2',
+						'.edit-post-visual-editor .editor-styles-wrapper h2',
 					),
 				),
 				'h3' => array(
 					'label'    => __( 'H3', 'headding_design_textdomain' ),
 					'selector' => array(
-						'.edit-post-visual-editor.editor-styles-wrapper h3',
+						'.edit-post-visual-editor .editor-styles-wrapper h3',
 					),
 				),
 				'h4' => array(
 					'label'    => __( 'H4', 'headding_design_textdomain' ),
 					'selector' => array(
-						'.edit-post-visual-editor.editor-styles-wrapper h4',
+						'.edit-post-visual-editor .editor-styles-wrapper h4',
 					),
 				),
 				'h5' => array(
 					'label'    => __( 'H5', 'headding_design_textdomain' ),
 					'selector' => array(
-						'.edit-post-visual-editor.editor-styles-wrapper h5',
+						'.edit-post-visual-editor .editor-styles-wrapper h5',
 					),
 				),
 				'h6' => array(
 					'label'    => __( 'H6', 'headding_design_textdomain' ),
 					'selector' => array(
-						'.edit-post-visual-editor.editor-styles-wrapper h6',
+						'.edit-post-visual-editor .editor-styles-wrapper h6',
 					),
 				),
 			);
