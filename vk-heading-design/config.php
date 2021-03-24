@@ -95,16 +95,16 @@ function lightning_get_headding_selector_array() {
 
 if ( ! class_exists( 'VK_Headding_Design' ) ) {
 	global $headding_default_options;
-	$headding_default_options = lightning_headding_default_option();
+	$headding_default_options = 'lightning_headding_default_option';
 
 	global $headding_selector_array;
-	$headding_selector_array = lightning_get_headding_selector_array();
+	$headding_selector_array = 'lightning_get_headding_selector_array';
 
 	global $headding_customize_section;
 	$headding_customize_section = 'lightning_design';
 
 	global $headding_theme_options;
-	$headding_theme_options = get_option( 'lightning_theme_options' );
+	$headding_theme_options = 'lightning_theme_options';
 
 	global $headding_front_hook_style;
 	$headding_front_hook_style = 'lightning-design-style';
