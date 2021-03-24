@@ -488,6 +488,8 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 			global $headding_customize_section;
 			global $headding_theme_options;
 
+			$default_option = call_user_func( $headding_default_options );
+
 			// カスタマイザーに表示されるタイトルなど.
 			$wp_customize->add_setting(
 				'vk_headding_design',
@@ -520,12 +522,12 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 				$choices[ $key ] = $value['label'];
 			}
 
-			$selectors = $headding_selector_array;
+			$selectors = call_user_func( $headding_selector_array );
 			foreach ( $selectors as $key => $value ) {
 				$wp_customize->add_setting(
 					'vk_headding_desigin[' . $key . '][style]',
 					array(
-						'default'           => $headding_default_options[ $key ]['style'],
+						'default'           => $default_option[ $key ]['style'],
 						'type'              => 'option',
 						'capability'        => 'edit_theme_options',
 						'sanitize_callback' => 'sanitize_text_field',
@@ -555,8 +557,10 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 			global $headding_default_options;
 			global $headding_theme_options;
 
+			$theme_options = get_option( $headding_theme_options );
+
 			$options = get_option( 'vk_headding_desigin' );
-			$default = $headding_default_options;
+			$default = call_user_func( $headding_default_options );
 			$options = wp_parse_args( $options, $default );
 			if ( ! is_array( $options ) ) {
 				return;
@@ -565,8 +569,8 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 			$dynamic_css = '';
 
 			// キーカラーの色情報を取得.
-			if ( ! empty( $headding_theme_options['color_key'] ) ) {
-				$color_key = esc_html( $headding_theme_options['color_key'] );
+			if ( ! empty( $theme_options['color_key'] ) ) {
+				$color_key = esc_html( $theme_options['color_key'] );
 			} else {
 				$color_key = '#337ab7';
 			}
@@ -636,7 +640,9 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 		public static function print_headding_front_css() {
 			global $headding_selector_array;
 			global $headding_front_hook_style;
-			$dynamic_css = self::headding_css( $headding_selector_array );
+
+			$selectors   = call_user_func( $headding_selector_array );
+			$dynamic_css = self::headding_css( $selectors );
 			if ( ! empty( $dynamic_css ) ) {
 				$dynamic_css = '/* Pro Title Design */ ' . $dynamic_css;
 				wp_add_inline_style( $headding_front_hook_style, $dynamic_css );
