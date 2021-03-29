@@ -172,10 +172,10 @@ gulp.task('copy_vk-admin', function(done) {
     .pipe(gulp.dest('../plugins/vk-legacy-notice/inc/vk-admin/package/'))
     .pipe(gulp.dest('../plugins/vk-blocks-pro/inc/vk-admin/package/'))
     // .pipe(gulp.dest('../plugins/vk-call-to-action/inc/vk-admin/'))
-    .pipe(gulp.dest('../plugins/vk-link-target-controller/inc/vk-admin/'))
+    .pipe(gulp.dest('../plugins/vk-link-target-controller/inc/vk-admin/package/'))
     .pipe(gulp.dest('../plugins/vk-plugin-beta-tester/inc/vk-admin/package/'))
     .pipe(gulp.dest('../plugins/wp-easy-responsive-tabs-to-accordion/vk-admin/'))
-	.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/vk-admin//package/'));
+	.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/vk-admin/package/'));
 done();
 });
 gulp.task('watch_admin', function (done) {
