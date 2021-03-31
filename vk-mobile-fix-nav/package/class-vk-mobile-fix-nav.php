@@ -141,6 +141,14 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			}
 		}
 
+		public static function sanitize_boolean( $input ) {
+			if ( $input == true ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
 		/*
 		  Customizer
 		/*-------------------------------------------*/
@@ -172,7 +180,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					'default'           => $default_options['hidden'],
 					'type'              => 'option', // 保存先 option or theme_mod
 					'capability'        => 'edit_theme_options', // サイト編集者
-					'sanitize_callback' => 'veu_sanitize_boolean',
+					'sanitize_callback' => array( 'Vk_Mobile_Fix_Nav', 'sanitize_boolean' ),
 				)
 			);
 
@@ -215,7 +223,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					'default'           => $default_options['widget_padding'],
 					'type'              => 'option', // 保存先 option or theme_mod
 					'capability'        => 'edit_theme_options', // サイト編集者
-					'sanitize_callback' => 'veu_sanitize_boolean',
+					'sanitize_callback' => array( 'Vk_Mobile_Fix_Nav', 'sanitize_boolean' ),
 				)
 			);
 
@@ -258,7 +266,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					'default'           => $default_options['add_menu_btn'],
 					'type'              => 'option', // 保存先 option or theme_mod
 					'capability'        => 'edit_theme_options', // サイト編集者
-					'sanitize_callback' => 'veu_sanitize_boolean',
+					'sanitize_callback' => array( 'Vk_Mobile_Fix_Nav', 'sanitize_boolean' ),
 				)
 			);
 
@@ -406,7 +414,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 						'default'           => $default_options[ 'link_blank_' . $i ],
 						'type'              => 'option', // 保存先 option or theme_mod
 						'capability'        => 'edit_theme_options', // サイト編集者
-						'sanitize_callback' => 'veu_sanitize_boolean',
+						'sanitize_callback' => array( 'Vk_Mobile_Fix_Nav', 'sanitize_boolean' ),
 					)
 				);
 
