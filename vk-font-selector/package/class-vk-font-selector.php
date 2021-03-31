@@ -748,7 +748,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 					$count_family++;
 				}
-				echo '<link href="https://fonts.googleapis.com/css?family=' . $family_parameter . '&display=swap" rel="stylesheet">';
+				echo '<link href="https://fonts.googleapis.com/css?family=' . $family_parameter . '&display=swap" rel="preload">';
 			} // if ( ! empty( $selected_fonts_info['selected_webFonts'] ) ) {
 		} // public function load_web_fonts() {
 

@@ -172,10 +172,10 @@ gulp.task('copy_vk-admin', function(done) {
     .pipe(gulp.dest('../plugins/vk-legacy-notice/inc/vk-admin/package/'))
     .pipe(gulp.dest('../plugins/vk-blocks-pro/inc/vk-admin/package/'))
     // .pipe(gulp.dest('../plugins/vk-call-to-action/inc/vk-admin/'))
-    .pipe(gulp.dest('../plugins/vk-link-target-controller/inc/vk-admin/'))
+    .pipe(gulp.dest('../plugins/vk-link-target-controller/inc/vk-admin/package/'))
     .pipe(gulp.dest('../plugins/vk-plugin-beta-tester/inc/vk-admin/package/'))
     .pipe(gulp.dest('../plugins/wp-easy-responsive-tabs-to-accordion/vk-admin/'))
-	.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/vk-admin//package/'));
+	.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/vk-admin/package/'));
 done();
 });
 gulp.task('watch_admin', function (done) {
@@ -252,7 +252,6 @@ gulp.task('copy_page-header', function (done) {
 	gulp.src('./vk-page-header/package/**')
 		.pipe(gulp.dest('../themes/katawara/inc/vk-page-header/package/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-page-header/package/'))
-		.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/vk-page-header/package/'));
 	done();
 });
 gulp.task('watch_page-header', function () {
@@ -291,11 +290,11 @@ gulp.task('copy_media-posts-bs4', function (done) {
 /**
  * Headding Design
  */
-gulp.task('copy_headding-design', function (done) {
-    gulp.src('./headding-design/package/**')
-		.pipe(gulp.dest('../themes/katawara/inc/headding-design/package/'))
-		.pipe(gulp.dest('../themes/lightning-pro/inc/headding-design/package/'))
-		.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/headding-design/package/'))
+gulp.task('copy_heading-design', function (done) {
+    gulp.src('./vk-heading-design/package/**')
+		.pipe(gulp.dest('../themes/katawara/inc/vk-heading-design/package/'))
+		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-heading-design/package/'))
+		.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/vk-heading-design/package/'))
         done();
 });
 
@@ -473,3 +472,15 @@ gulp.task('copy_filter_search', function (done) {
 		.pipe(gulp.dest('../plugins/vk-filter-search-pro/inc/filter-search/package/'));
     done();
 });
+
+/**
+ * VK Swiper
+ */
+ gulp.task('copy_vk-swiper', function(done) {
+	gulp.src('./vk-swiper/package/**')
+		.pipe(gulp.dest('../themes/lightning/_g3/inc/vk-swiper/package/'))
+		.pipe(gulp.dest('../themes/katawara/inc//vk-swiper/package/'))
+		.pipe(gulp.dest('../plugins/vk-blocks-pro/inc/vk-swiper/package/'))
+	done();
+});
+
