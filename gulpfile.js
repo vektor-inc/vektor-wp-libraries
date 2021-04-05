@@ -295,10 +295,10 @@ gulp.task('copy_media-posts-bs4', function (done) {
 		// Lightning Pro
 		.pipe(replace("'heading_design_textdomain'", "'lightning-pro'"))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-heading-design/package/'))
-		// Katawara にコピー
+		// Katawara
 		.pipe(replace("'heading_design_textdomain'", "'katawara'"))
 		.pipe(gulp.dest('../themes/katawara/inc/vk-heading-design/package/'))
-		// Lightning G3 Pro Unit にコピー
+		// Lightning G3 Pro Unit
 		.pipe(replace("'heading_design_textdomain'", "'lightning-g3-pro-unit'"))
 		.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/vk-heading-design/package/'))
     done();
