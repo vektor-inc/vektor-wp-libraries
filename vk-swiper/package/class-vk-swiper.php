@@ -26,7 +26,7 @@ if ( ! class_exists( 'VK_Swiper' ) ) {
 		/**
 		 * Init
 		 */
-		public function __construct() {
+		public static function init() {
 			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'load_swiper' ) );
 			add_filter( 'vk_css_tree_shaking_array', array( __CLASS__, 'css_tree_shaking_array' ), 11 );
 		}
@@ -49,6 +49,6 @@ if ( ! class_exists( 'VK_Swiper' ) ) {
 			return $vk_css_tree_shaking_array;
 		}
 	}
-	new VK_Swiper();
+	VK_Swiper::init();
 }
 
