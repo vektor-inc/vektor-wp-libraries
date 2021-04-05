@@ -5,15 +5,6 @@
  * @package VK Heqading Design
  */
 
-/*
-このファイルの元ファイルは
-https://github.com/vektor-inc/vektor-wp-libraries
-にあります。
-修正の際は上記リポジトリのデータを修正してください。
-編集権限を持っていない方で何か修正要望などありましたら
-各プラグインのリポジトリにプルリクエストで結構です。
-*/
-
 if ( ! class_exists( 'VK_Headding_Design' ) ) {
 
 	/**
@@ -62,14 +53,14 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 			';
 			$styles                       = array(
 				'plain'                           => array(
-					'label'  => __( 'Plain', 'heading_design_textdomain' ),
+					'label'  => __( 'Plain', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . 'text-align:left;',
 					'before' => $reset,
 					'after'  => $reset,
 				),
 				'plain_center'                    => array(
-					'label'  => __( 'Plain ( Align center )', 'heading_design_textdomain' ),
+					'label'  => __( 'Plain ( Align center )', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . 'text-align:center;',
 					'before' => $reset,
@@ -77,7 +68,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 				),
 
 				'speech_balloon_fill'             => array(
-					'label'  => __( 'Speech balloon fill', 'heading_design_textdomain' ),
+					'label'  => __( 'Speech balloon fill', 'katawara' ),
 					'inner'  => 'color:#fff;',
 					'normal' => $reset . '
 						background-color:' . $color_key . ';
@@ -105,7 +96,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					'after'  => $reset,
 				),
 				'background_fill'                 => array(
-					'label'  => __( 'Background fill', 'heading_design_textdomain' ),
+					'label'  => __( 'Background fill', 'katawara' ),
 					'inner'  => 'color:#fff;',
 					'normal' => $reset . '
 						background-color:' . $color_key . ';
@@ -118,7 +109,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					'after'  => $reset,
 				),
 				'background_fill_stitch'          => array(
-					'label'  => __( 'Background fill stitch', 'heading_design_textdomain' ),
+					'label'  => __( 'Background fill stitch', 'katawara' ),
 					'inner'  => 'color:#fff;',
 					'normal' => $reset . '
 						background-color:' . $color_key . ';
@@ -133,7 +124,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					'after'  => $reset,
 				),
 				'background_fill_lightgray'       => array(
-					'label'  => __( 'Background fill lightgray', 'heading_design_textdomain' ),
+					'label'  => __( 'Background fill lightgray', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . '
 						color: #333;
@@ -147,7 +138,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 				),
 
 				'topborder_background_fill_none'  => array(
-					'label'  => __( 'Top border keycolor background fill none', 'heading_design_textdomain' ),
+					'label'  => __( 'Top border keycolor background fill none', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . '
 						color: #333;
@@ -161,7 +152,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 				),
 
 				'topborder_background_fill_black' => array(
-					'label'  => __( 'Top border keycolor background fill black', 'heading_design_textdomain' ),
+					'label'  => __( 'Top border keycolor background fill black', 'katawara' ),
 					'inner'  => 'color:#fff;',
 					'normal' => $reset . '
 						background-color: #191919;
@@ -176,7 +167,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 				),
 
 				'double'                          => array(
-					'label'  => __( 'Double', 'heading_design_textdomain' ),
+					'label'  => __( 'Double', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . '
 						color: #333;
@@ -189,7 +180,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					'after'  => $reset,
 				),
 				'double_black'                    => array(
-					'label'  => __( 'Double black', 'heading_design_textdomain' ),
+					'label'  => __( 'Double black', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . '
 						color:#333;
@@ -202,7 +193,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					'after'  => $reset,
 				),
 				'double_bottomborder'             => array(
-					'label'  => __( 'Double bottom border', 'heading_design_textdomain' ),
+					'label'  => __( 'Double bottom border', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . '
 						color:#333;
@@ -214,7 +205,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					'after'  => $reset,
 				),
 				'double_bottomborder_black'       => array(
-					'label'  => __( 'Double bottom border black', 'heading_design_textdomain' ),
+					'label'  => __( 'Double bottom border black', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . '
 						color:#333;
@@ -226,7 +217,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					'after'  => $reset,
 				),
 				'solid'                           => array(
-					'label'  => __( 'Solid', 'heading_design_textdomain' ),
+					'label'  => __( 'Solid', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . '
 						color:#333;
@@ -239,7 +230,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					'after'  => $reset,
 				),
 				'solid_black'                     => array(
-					'label'  => __( 'Solid black', 'heading_design_textdomain' ),
+					'label'  => __( 'Solid black', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . '
 						color:#333;
@@ -252,7 +243,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					'after'  => $reset,
 				),
 				'solid_bottomborder'              => array(
-					'label'  => __( 'Solid bottom border', 'heading_design_textdomain' ),
+					'label'  => __( 'Solid bottom border', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . '
 						color:#333;
@@ -264,7 +255,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					'after'  => $reset,
 				),
 				'solid_bottomborder_black'        => array(
-					'label'  => __( 'Solid bottom border black', 'heading_design_textdomain' ),
+					'label'  => __( 'Solid bottom border black', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . '
 						color:#333;
@@ -276,7 +267,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					'after'  => $reset,
 				),
 				'solid_bottomborder_leftkeycolor' => array(
-					'label'  => __( 'Solid bottom border left keycolor', 'heading_design_textdomain' ),
+					'label'  => __( 'Solid bottom border left keycolor', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . '
 						color:#333;
@@ -302,7 +293,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					',
 				),
 				'dotted_bottomborder_black'       => array(
-					'label'  => __( 'Dotted bottom border black', 'heading_design_textdomain' ),
+					'label'  => __( 'Dotted bottom border black', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . '
 						color:#333;
@@ -315,7 +306,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					'after'  => $reset,
 				),
 				'both_ends'                       => array(
-					'label'  => __( 'Both ends', 'heading_design_textdomain' ),
+					'label'  => __( 'Both ends', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . '
 						color:#333;
@@ -348,7 +339,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					',
 				),
 				'leftborder'                      => array(
-					'label'  => __( 'Left border', 'heading_design_textdomain' ),
+					'label'  => __( 'Left border', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . '
 						color:#333;
@@ -362,7 +353,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					'after'  => $reset,
 				),
 				'leftborder_nobackground'         => array(
-					'label'  => __( 'Left border nobackground', 'heading_design_textdomain' ),
+					'label'  => __( 'Left border nobackground', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . '
 						color:#333;
@@ -377,7 +368,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					'after'  => $reset,
 				),
 				'diagonal_stripe_bottomborder'    => array(
-					'label'  => __( 'Diagonal stripe bottom border', 'heading_design_textdomain' ),
+					'label'  => __( 'Diagonal stripe bottom border', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . '
 						color:#333;
@@ -403,7 +394,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					',
 				),
 				'brackets'                        => array(
-					'label'  => __( 'Brackets', 'heading_design_textdomain' ),
+					'label'  => __( 'Brackets', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . '
 						color:#333;
@@ -426,7 +417,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					',
 				),
 				'brackets_black'                  => array(
-					'label'  => __( 'Brackets black', 'heading_design_textdomain' ),
+					'label'  => __( 'Brackets black', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . '
 						color:#333;
@@ -450,7 +441,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					',
 				),
 				'small_bottomborder'              => array(
-					'label'  => __( 'Small bottom border', 'heading_design_textdomain' ),
+					'label'  => __( 'Small bottom border', 'katawara' ),
 					'inner'  => 'color:#333;',
 					'normal' => $reset . '
 						color:#333;
@@ -488,8 +479,6 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 			global $headding_customize_section;
 			global $headding_theme_options;
 
-			$default_option = call_user_func( $headding_default_options );
-
 			// カスタマイザーに表示されるタイトルなど.
 			$wp_customize->add_setting(
 				'vk_headding_design',
@@ -502,11 +491,11 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 					$wp_customize,
 					'vk_headding_design',
 					array(
-						'label'            => __( 'Headding Design', 'heading_design_textdomain' ),
+						'label'            => __( 'Headding Design', 'katawara' ),
 						'section'          => $headding_customize_section,
 						'type'             => 'text',
 						'custom_title_sub' => '',
-						'custom_html'      => __( '※ 配置する場所の背景色などの都合で適切に見えないものがあります。', 'heading_design_textdomain' ),
+						'custom_html'      => __( '※ 配置する場所の背景色などの都合で適切に見えないものがあります。', 'katawara' ),
 						'priority'         => 710,
 
 					)
@@ -514,7 +503,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 			);
 
 			$choices = array(
-				'none' => __( 'No setting', 'heading_design_textdomain' ),
+				'none' => __( 'No setting', 'katawara' ),
 			);
 
 			$styles = self::get_headding_style_array();
@@ -522,12 +511,12 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 				$choices[ $key ] = $value['label'];
 			}
 
-			$selectors = call_user_func( $headding_selector_array );
+			$selectors = $headding_selector_array;
 			foreach ( $selectors as $key => $value ) {
 				$wp_customize->add_setting(
 					'vk_headding_desigin[' . $key . '][style]',
 					array(
-						'default'           => $default_option[ $key ]['style'],
+						'default'           => $headding_default_options[ $key ]['style'],
 						'type'              => 'option',
 						'capability'        => 'edit_theme_options',
 						'sanitize_callback' => 'sanitize_text_field',
@@ -557,10 +546,8 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 			global $headding_default_options;
 			global $headding_theme_options;
 
-			$theme_options = get_option( $headding_theme_options );
-
 			$options = get_option( 'vk_headding_desigin' );
-			$default = call_user_func( $headding_default_options );
+			$default = $headding_default_options;
 			$options = wp_parse_args( $options, $default );
 			if ( ! is_array( $options ) ) {
 				return;
@@ -569,8 +556,8 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 			$dynamic_css = '';
 
 			// キーカラーの色情報を取得.
-			if ( ! empty( $theme_options['color_key'] ) ) {
-				$color_key = esc_html( $theme_options['color_key'] );
+			if ( ! empty( $headding_theme_options['color_key'] ) ) {
+				$color_key = esc_html( $headding_theme_options['color_key'] );
 			} else {
 				$color_key = '#337ab7';
 			}
@@ -640,9 +627,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 		public static function print_headding_front_css() {
 			global $headding_selector_array;
 			global $headding_front_hook_style;
-
-			$selectors   = call_user_func( $headding_selector_array );
-			$dynamic_css = self::headding_css( $selectors );
+			$dynamic_css = self::headding_css( $headding_selector_array );
 			if ( ! empty( $dynamic_css ) ) {
 				$dynamic_css = '/* Pro Title Design */ ' . $dynamic_css;
 				wp_add_inline_style( $headding_front_hook_style, $dynamic_css );
@@ -656,31 +641,31 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 			global $headding_editor_hook_style;
 			$headding_selector_array = array(
 				'h2' => array(
-					'label'    => __( 'H2', 'heading_design_textdomain' ),
+					'label'    => __( 'H2', 'katawara' ),
 					'selector' => array(
 						'.edit-post-visual-editor .editor-styles-wrapper h2',
 					),
 				),
 				'h3' => array(
-					'label'    => __( 'H3', 'heading_design_textdomain' ),
+					'label'    => __( 'H3', 'katawara' ),
 					'selector' => array(
 						'.edit-post-visual-editor .editor-styles-wrapper h3',
 					),
 				),
 				'h4' => array(
-					'label'    => __( 'H4', 'heading_design_textdomain' ),
+					'label'    => __( 'H4', 'katawara' ),
 					'selector' => array(
 						'.edit-post-visual-editor .editor-styles-wrapper h4',
 					),
 				),
 				'h5' => array(
-					'label'    => __( 'H5', 'heading_design_textdomain' ),
+					'label'    => __( 'H5', 'katawara' ),
 					'selector' => array(
 						'.edit-post-visual-editor .editor-styles-wrapper h5',
 					),
 				),
 				'h6' => array(
-					'label'    => __( 'H6', 'heading_design_textdomain' ),
+					'label'    => __( 'H6', 'katawara' ),
 					'selector' => array(
 						'.edit-post-visual-editor .editor-styles-wrapper h6',
 					),
@@ -696,6 +681,3 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 	}
 	new VK_Headding_Design();
 }
-
-
-
