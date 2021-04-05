@@ -489,6 +489,7 @@ gulp.task('copy_filter_search', function (done) {
 		.pipe(gulp.dest('../themes/lightning/_g3/inc/vk-swiper/package/'))
 		.pipe(gulp.dest('../themes/katawara/inc/vk-swiper/package/'))
 		.pipe(gulp.dest('../plugins/vk-blocks-pro/inc/vk-swiper/package/'))
+		.pipe(gulp.dest('../plugins/lightning-advanced-slider/inc/vk-swiper/package/'))
 	done();
 });
 
