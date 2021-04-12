@@ -2,7 +2,7 @@
 /**
  * VK Swiper Config
  *
- * @package Lightning G3
+ * @package VK Swiper
  */
 
 if ( ! class_exists( 'VK_Swiper' ) ) {
