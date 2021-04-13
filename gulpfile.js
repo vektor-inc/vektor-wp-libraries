@@ -493,3 +493,18 @@ gulp.task('copy_filter_search', function (done) {
 	done();
 });
 
+/**
+ * VK Google Tag Manager
+ */
+ gulp.task('copy_tag_manager', function (done) {
+    gulp.src('./vk-google-tag-manager/package/**')
+		.pipe(replace("'tag-manager-textdomain'","'lightning-pro'"))
+        .pipe(gulp.dest('../themes/lightning-pro/inc/vk-google-tag-manager/package/'))
+	gulp.src('./vk-google-tag-manager/package/**')
+		.pipe(replace("'tag-manager-textdomain'","'katawara'"))
+		.pipe(gulp.dest('../themes/katawara/inc/vk-google-tag-manager/package/'))
+	gulp.src('./vk-google-tag-manager/package/**')
+		.pipe(replace("'tag-manager-textdomain'","'vk-all-in-one-expansion-unit'"))
+		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/vk-google-tag-manager/package/'))
+    done();
+});
