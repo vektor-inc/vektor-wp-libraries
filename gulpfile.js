@@ -174,7 +174,7 @@ gulp.task('copy_vk-admin', function(done) {
     // .pipe(gulp.dest('../plugins/vk-call-to-action/inc/vk-admin/'))
     .pipe(gulp.dest('../plugins/vk-link-target-controller/inc/vk-admin/package/'))
     .pipe(gulp.dest('../plugins/vk-plugin-beta-tester/inc/vk-admin/package/'))
-    .pipe(gulp.dest('../plugins/wp-easy-responsive-tabs-to-accordion/vk-admin/'))
+    //.pipe(gulp.dest('../plugins/wp-easy-responsive-tabs-to-accordion/vk-admin/'))
 	.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/vk-admin/package/'));
 done();
 });
@@ -290,12 +290,20 @@ gulp.task('copy_media-posts-bs4', function (done) {
 /**
  * Headding Design
  */
-gulp.task('copy_heading-design', function (done) {
-    gulp.src('./vk-heading-design/package/**')
-		.pipe(gulp.dest('../themes/katawara/inc/vk-heading-design/package/'))
+ gulp.task('copy_heading-design', function (done) {
+	// Lightning Pro
+	gulp.src('./inc/vk-heading-design/package/**')
+		.pipe(replace("'heading_design_textdomain'", "'lightning-pro'"))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-heading-design/package/'))
+	// Katawara
+	gulp.src('./inc/vk-heading-design/package/**')
+		.pipe(replace("'heading_design_textdomain'", "'katawara'"))
+		.pipe(gulp.dest('../themes/katawara/inc/vk-heading-design/package/'))
+	// Lightning G3 Pro Unit
+	gulp.src('./inc/vk-heading-design/package/**')
+		.pipe(replace("'heading_design_textdomain'", "'lightning-g3-pro-unit'"))
 		.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/vk-heading-design/package/'))
-        done();
+    done();
 });
 
 /*-------------------------------------*/
@@ -479,8 +487,24 @@ gulp.task('copy_filter_search', function (done) {
  gulp.task('copy_vk-swiper', function(done) {
 	gulp.src('./vk-swiper/package/**')
 		.pipe(gulp.dest('../themes/lightning/_g3/inc/vk-swiper/package/'))
-		.pipe(gulp.dest('../themes/katawara/inc//vk-swiper/package/'))
+		.pipe(gulp.dest('../themes/katawara/inc/vk-swiper/package/'))
 		.pipe(gulp.dest('../plugins/vk-blocks-pro/inc/vk-swiper/package/'))
+		.pipe(gulp.dest('../plugins/lightning-advanced-slider/inc/vk-swiper/package/'))
 	done();
 });
 
+/**
+ * VK Google Tag Manager
+ */
+ gulp.task('copy_tag_manager', function (done) {
+    gulp.src('./vk-google-tag-manager/package/**')
+		.pipe(replace("'tag-manager-textdomain'","'lightning-pro'"))
+        .pipe(gulp.dest('../themes/lightning-pro/inc/vk-google-tag-manager/package/'))
+	gulp.src('./vk-google-tag-manager/package/**')
+		.pipe(replace("'tag-manager-textdomain'","'katawara'"))
+		.pipe(gulp.dest('../themes/katawara/inc/vk-google-tag-manager/package/'))
+	gulp.src('./vk-google-tag-manager/package/**')
+		.pipe(replace("'tag-manager-textdomain'","'vk-all-in-one-expansion-unit'"))
+		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/vk-google-tag-manager/package/'))
+    done();
+});
