@@ -419,12 +419,12 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 			<?php
 			$items = array(
 				'display_image'              => __( 'Image', 'media-posts-bs4-textdomain' ),
-				'display_image_overlay_term' => __( 'Term name', 'media-posts-bs4-textdomain' ),
+				'display_image_overlay_term' => __( "Term's name on Image", 'media-posts-bs4-textdomain' ),
 				'display_excerpt'            => __( 'Excerpt', 'media-posts-bs4-textdomain' ),
 				'display_author'             => __( 'Author', 'media-posts-bs4-textdomain' ),
 				'display_date'               => __( 'Date', 'media-posts-bs4-textdomain' ),
 				'display_new'                => __( 'New mark', 'media-posts-bs4-textdomain' ),
-				'display_taxonomies'         => __( 'Taxonomies', 'media-posts-bs4-textdomain' ),
+				'display_taxonomies'         => __( 'Taxonomies (all)', 'media-posts-bs4-textdomain' ),
 				'display_btn'                => __( 'Button', 'media-posts-bs4-textdomain' ),
 			);
 			foreach ( $items as $key => $value ) {

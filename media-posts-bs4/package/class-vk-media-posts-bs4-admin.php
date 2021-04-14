@@ -346,7 +346,7 @@ class VK_Media_Posts_BS4_Admin {
 					'default' => true,
 				),
 				'display_image_overlay_term' => array(
-					'label' => __( 'Term name', 'media-posts-bs4-textdomain' ),
+					'label' => __( "Term's name on Image", 'media-posts-bs4-textdomain' ),
 					// 'default' => true,
 				),
 				'display_excerpt'            => array(
@@ -366,7 +366,7 @@ class VK_Media_Posts_BS4_Admin {
 					// 'default' => true,
 				),
 				'display_taxonomies'                => array(
-					'label' => __( 'Taxonomies', 'media-posts-bs4-textdomain' ),
+					'label' => __( 'Taxonomies (all)', 'media-posts-bs4-textdomain' ),
 					// 'default' => false,
 				),
 				'display_btn'                => array(
