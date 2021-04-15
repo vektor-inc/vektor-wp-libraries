@@ -68,6 +68,7 @@ if ( ! class_exists( 'Vk_Goole_Tag_Manager' ) ) {
 				'vk_google_tag_manager_related_setting', array(
 					'title'    => $vk_gtm_prefix . __( 'Google Tag Manager', 'tag-manager-textdomain' ),
 					'priority' => $vk_gtm_priority,
+					'panel'    => $vk_gtm_panel,
 				)
 			);
 
