@@ -12,6 +12,12 @@ if( function_exists('register_block_type_from_metadata')) {
 				'style'           => 'vk-filter-search-style',
 				'editor_style'    => 'vk-filter-search-editor',
 				'editor_script'   => 'vk-filter-search-js',
+				'attributes'      => array(
+					'className'   => array(
+						'type'    => 'string',
+						'default' => '',
+					),
+				),
 				'render_callback' => 'vkfs_keyword_search_render_callback',
 			)
 		);
@@ -25,6 +31,16 @@ if( function_exists('register_block_type_from_metadata')) {
  * @param array $attributes attributes.
  * @param html  $content content.
  */
-function vkfs_keyword_search_render_callback( $attributes, $content = '' ) {
-	return VK_Filter_Search::get_keyword_form_html();
+function vkfs_keyword_search_render_callback( $attributes, $content ) {
+	$attributes = wp_parse_args(
+		$attributes,
+		array(
+			'className' => '',
+		)
+	);
+	$label         = '';
+	$placeholder   = '';
+	$outer_columns = array();
+	$class_name    = ! empty( $attributes['className'] ) ? $attributes['className'] : '';
+	return VK_Filter_Search::get_keyword_form_html( $label, $placeholder, $outer_columns, $class_name );
 }

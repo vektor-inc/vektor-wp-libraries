@@ -17,6 +17,10 @@ if( function_exists('register_block_type_from_metadata')) {
 						'type'    => 'string',
 						'default' => 'category',
 					),
+					'className'          => array(
+						'type'    => 'string',
+						'default' => '',
+					),
 				),
 				'render_callback' => 'vkfs_taxonomy_search_render_callback',
 			)
@@ -31,17 +35,26 @@ if( function_exists('register_block_type_from_metadata')) {
  * @param array $attributes attributes.
  * @param html  $content content.
  */
-function vkfs_taxonomy_search_render_callback( $attributes, $content = '' ) {
+function vkfs_taxonomy_search_render_callback( $attributes, $content ) {
 	$attributes = wp_parse_args(
 		$attributes,
 		array(
 			'isSelectedTaxonomy' => 'category',
+			'className'          => '',
 		)
 	);
 
-	$taxonomy = ! empty( $attributes['isSelectedTaxonomy'] ) ? $attributes['isSelectedTaxonomy'] : '';
+	$taxonomy      = ! empty( $attributes['isSelectedTaxonomy'] ) ? $attributes['isSelectedTaxonomy'] : '';
+	$label         = '';
+	$form_design   = '';
+	$operator      = '';
+	$outer_columns = array();
+	$class_name    = ! empty( $attributes['className'] ) ? $attributes['className'] : '';
 
-	$content = ! empty( $taxonomy ) ? VK_Filter_Search::get_taxonomy_form_html( $taxonomy ) : '';
+	$content = '';
+	if ( ! empty( $taxonomy ) ) {
+		$content = VK_Filter_Search::get_taxonomy_form_html( $taxonomy, $label, $form_design, $operator, $outer_columns, $class_name );
+	}
 
 	return $content;
 }
