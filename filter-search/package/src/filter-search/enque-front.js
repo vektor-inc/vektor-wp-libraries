@@ -3,8 +3,9 @@
  */
 /* eslint camelcase: 0 */
 /* eslint no-shadow: 0 */
-function get_url_queries() {
-	const query_string = window.location.search.slice( 1 ); // 文頭?を除外
+const query_string = window.location.search.slice( 1 ); // 文頭?を除外
+
+const get_url_queries = () => {
 	const queries = {};
 
 	// クエリがない場合は空のオブジェクトを返す
@@ -19,7 +20,7 @@ function get_url_queries() {
 		queries[ query_array[ 0 ] ] = query_array[ 1 ];
 	} );
 	return queries;
-}
+};
 
 const form_html = document.getElementsByClassName( `vk-filter-search` );
 const url_queries = get_url_queries();
@@ -113,6 +114,19 @@ const set_query_value = ( i ) => {
 	} );
 };
 
-for ( let i = 0; i < form_html.length; i++ ) {
-	set_query_value( i );
+const url_redirect = () => {
+	Object.keys( url_queries ).forEach( ( key ) => {
+		//eslint-disable-next-line camelcase,no-undef
+		const home_url = vk_filter_search_params.home_url + '/';
+		const has_question = false;
+		console.log( { url_queries } );
+	} );
+};
+
+if ( query_string.indexOf( 'vkfs_submitted=true' ) !== -1 ) {
+	url_redirect();
+} else {
+	for ( let i = 0; i < form_html.length; i++ ) {
+		set_query_value( i );
+	}
 }

@@ -76,10 +76,7 @@ export default function FilterSearchEdit( props ) {
 		<>
 			<InspectorControls>
 				<PanelBody
-					title={ __(
-						'Target of Post Type',
-						'filter-search-textdomain'
-					) }
+					title={ __( 'Target of Post Type', 'filter-search-textdomain' ) }
 					initialOpen={ true }
 				>
 					<BaseControl id={ 'vkfs-search-form-01' }>

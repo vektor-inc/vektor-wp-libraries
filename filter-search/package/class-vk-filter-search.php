@@ -18,7 +18,7 @@ class VK_Filter_Search {
 		$theme_hook_array     = self::theme_hook_array();
 		$current_parent_theme = get_template();
 
-		add_action( 'wp', array( __CLASS__, 'get_header' ) );
+		// add_action( 'wp', array( __CLASS__, 'get_header' ) );
 		add_action( 'pre_get_posts', array( __CLASS__, 'pre_get_posts' ) );
 		add_action( 'dynamic_sidebar_before', array( __CLASS__, 'dynamic_sidebar_before' ) );
 		add_action( 'dynamic_sidebar_after', array( __CLASS__, 'dynamic_sidebar_after' ) );
@@ -799,6 +799,13 @@ class VK_Filter_Search {
 
 		if ( isset( $_GET['vkfs_form_id'] ) ) {
 			wp_enqueue_script( 'vk-filter-search-result', plugin_dir_url( __FILE__ ) . 'build/vk-filter-search.min.js', array(), $asset_file['version'], true );
+			wp_localize_script(
+				'vk-filter-search-result',
+				'vk_filter_search_params',
+				array(
+					'home_url'                   => home_url( '/' ),
+				)
+			);
 		}
 		do_action( 'vkfs_enqueue_scripts' );
 	}
