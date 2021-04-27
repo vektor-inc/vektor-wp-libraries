@@ -28,6 +28,7 @@ if ( ! class_exists( 'VK_Swiper' ) ) {
 		 */
 		public static function init() {
 			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'load_swiper' ) );
+			add_filter( 'vk_css_simple_minify_array', array( __CLASS__, 'css_simple_minify_array' ) );
 		}
 
 		/**
@@ -37,6 +38,22 @@ if ( ! class_exists( 'VK_Swiper' ) ) {
 			global $vk_swiper_url;
 			wp_enqueue_style( 'vk-swiper-style', $vk_swiper_url . 'assets/css/swiper.min.css', array(), SWIPER_VERSION );
 			wp_enqueue_script( 'vk-swiper-script', $vk_swiper_url . 'assets/js/swiper.min.js', array(), SWIPER_VERSION, true );
+		}
+
+		/**
+		 * Simple Minify Array
+		 */
+		public function css_simple_minify_array( $vk_css_simple_minify_array ) {
+			global $vk_swiper_url;
+			global $vk_swiper_path;
+			$vk_css_simple_minify_array[] = array(
+				'id'      => 'vk-swiper-style',
+				'url'     => $vk_swiper_url . 'assets/css/swiper.min.css',
+				'path'    => $vk_swiper_path . 'assets/css/swiper.min.css',
+				'version' => SWIPER_VERSION,
+			);
+			return $vk_css_simple_minify_array;
+
 		}
 	}
 	VK_Swiper::init();
