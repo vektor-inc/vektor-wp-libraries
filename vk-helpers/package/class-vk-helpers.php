@@ -20,6 +20,19 @@ if ( ! class_exists( 'VK_Helpers' ) ) {
 	 */
 	class VK_Helpers {
 
+		public function __construct() {
+			add_action( 'customize_register', array( __CLASS__, 'add_customize_class' ), 0 );
+		}
+
+		public static function add_customize_class( $wp_customize ) {
+			if ( ! class_exists( 'VK_Custom_Html_Control' ) ) {
+				require_once dirname( __FILE__ ) . '/class-vk-custom-html-control.php';
+			}
+			if ( ! class_exists( 'VK_Custom_Text_Control' ) ) {
+				require_once dirname( __FILE__ ) . '/class-vk-custom-text-control.php';
+			}
+		}
+
         public static function get_post_top_info() {
 
             $post_top_info = array();
@@ -314,4 +327,7 @@ if ( ! class_exists( 'VK_Helpers' ) ) {
 		}
 
 	}
+	new VK_Helpers();
 }
+
+
