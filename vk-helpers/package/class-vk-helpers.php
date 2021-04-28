@@ -96,7 +96,7 @@ if ( ! class_exists( 'VK_Helpers' ) ) {
                 $post_type_info['url'] = esc_url( get_post_type_archive_link( $post_type_info['slug'] ) );
             }
 
-            $post_type_info = apply_filters( 'lightning_postType_custom', $post_type_info );
+            $post_type_info = apply_filters( 'vk_post_type_custom', $post_type_info );
             return $post_type_info;
         }
 
