@@ -39,7 +39,7 @@ language には表示する言語を格納（現状 'ja' or 'en' ）
 
 下記のように  
 type には　'plugin'  
-slug には　'(プラグインのディレクトリ名)/（プラグインのファイル名）'  
+slug には　'(プラグインのディレクトリ名)/（プラグイン本体のファイル名）'  
 image_url には　$imgge_base_url . '（バナーのファイル名）'  
 link_url には 'リンク先 URL'  
 alt には alt 属性のテキスト  
