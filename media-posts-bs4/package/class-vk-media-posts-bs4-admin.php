@@ -116,7 +116,7 @@ class VK_Media_Posts_BS4_Admin {
 				)
 			);
 			$wp_customize->add_control(
-				new Custom_Html_Control(
+				new VK_Custom_Html_Control(
 					$wp_customize,
 					'vk_post_type_archive[' . $type . '][display_conditions_title]',
 					array(
@@ -156,7 +156,7 @@ class VK_Media_Posts_BS4_Admin {
 				)
 			);
 			$wp_customize->add_control(
-				new Custom_Html_Control(
+				new VK_Custom_Html_Control(
 					$wp_customize,
 					'post_type_title_' . $type,
 					array(
@@ -256,7 +256,7 @@ class VK_Media_Posts_BS4_Admin {
 				)
 			);
 			$wp_customize->add_control(
-				new Custom_Html_Control(
+				new VK_Custom_Html_Control(
 					$wp_customize,
 					'vk_post_type_archive[' . $type . '][order_title]',
 					array(
@@ -326,7 +326,7 @@ class VK_Media_Posts_BS4_Admin {
 				)
 			);
 			$wp_customize->add_control(
-				new Custom_Html_Control(
+				new VK_Custom_Html_Control(
 					$wp_customize,
 					'vk_post_type_archive[' . $type . '][display_item_title]',
 					array(
@@ -403,7 +403,7 @@ class VK_Media_Posts_BS4_Admin {
 				)
 			);
 			$wp_customize->add_control(
-				new Custom_Html_Control(
+				new VK_Custom_Html_Control(
 					$wp_customize,
 					'vk_post_type_archive[' . $type . '][new_mark_title]',
 					array(
@@ -463,7 +463,7 @@ class VK_Media_Posts_BS4_Admin {
 				)
 			);
 			$wp_customize->add_control(
-				new Custom_Html_Control(
+				new VK_Custom_Html_Control(
 					$wp_customize,
 					'vk_post_type_archive[' . $type . '][btn_setting_title]',
 					array(

@@ -496,7 +496,7 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 				)
 			);
 			$wp_customize->add_control(
-				new Custom_Html_Control(
+				new VK_Custom_Html_Control(
 					$wp_customize,
 					'vk_headding_design',
 					array(
