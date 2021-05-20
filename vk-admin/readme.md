@@ -4,24 +4,24 @@
 1. vk-admin-config.php の中身をプラグインの情報にあわせて書き換える
 1. プラグインが最初に読み込むPHPファイルなどから require_once( 'inc/vk-admin-config.php' ); などで読み込む
 
-## バーナーのサイズ
+## バナーのサイズ
 600px x 500px でお願いします。
 
-## バーナーの追加方法
+## バナーの追加方法
 
-1. package/images にバーナーを追加
+1. package/images にバナーを追加
 1. package/vk-admin-banner.php を開く
 1. 下記のように編集
 
 ### テーマのバナーを追加する場合
 
-下記のように
-type には　'theme'
-slug には　'(テーマのディレクトリ名)/style.css'
-image_url には　$imgge_base_url . '（バナーのファイル名）'
-link_url には 'リンク先 URL'
-alt には alt 属性のテキスト
-language には表示する言語を格納（現状 'ja' or 'en' ）
+下記のように  
+type には　'theme'  
+slug には　'(テーマのディレクトリ名)/style.css'  
+image_url には　$imgge_base_url . '（バナーのファイル名）'  
+link_url には 'リンク先 URL'  
+alt には alt 属性のテキスト  
+language には表示する言語を格納（現状 'ja' or 'en' ）  
 
 ```
 	// Lightning (ja)
@@ -37,13 +37,13 @@ language には表示する言語を格納（現状 'ja' or 'en' ）
 
 ### プラグインのバナーを追加する場合
 
-下記のように
-type には　'plugin'
-slug には　'(プラグインのディレクトリ名)/（プラグインのファイル名）'
-image_url には　$imgge_base_url . '（バナーのファイル名）'
-link_url には 'リンク先 URL'
-alt には alt 属性のテキスト
-language には表示する言語を格納（現状 'ja' or 'en' ）
+下記のように  
+type には　'plugin'  
+slug には　'(プラグインのディレクトリ名)/（プラグインのファイル名）'  
+image_url には　$imgge_base_url . '（バナーのファイル名）'  
+link_url には 'リンク先 URL'  
+alt には alt 属性のテキスト  
+language には表示する言語を格納（現状 'ja' or 'en' ）  
 
 ```
 	// VK Block Patterns (ja)
