@@ -94,22 +94,22 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 			$banner_html .= '<div class="vk-admin-banner-grid">';
 
 			foreach( $banner_array as $banner ) {
-				if ( 'theme' === $banner['product_type'] ) {
+				if ( 'theme' === $banner['type'] ) {
 					if ( ! self::theme_exists( $banner['slug'] ) ) {
 						if ( $lang === $banner['language'] ) {
-							$banner_html .= '<a href="' . $banner['link-url'] . '" target="_blank" class="admin_banner">';
-							$banner_html .= '<img src="' . $banner['image-url'] . '" alt="' . $banner['alt'] . '" />';
+							$banner_html .= '<a href="' . $banner['link_url'] . '" target="_blank" class="admin_banner">';
+							$banner_html .= '<img src="' . $banner['image_url'] . '" alt="' . $banner['alt'] . '" />';
 							$banner_html .= '</a>';
 
 						}
 					}
 				}
 
-				if ( 'plugin' === $banner['product_type'] ) {
+				if ( 'plugin' === $banner['type'] ) {
 					if ( ! self::plugin_exists( $banner['slug'] ) ) {
 						if ( $lang === $banner['language'] ) {
-							$banner_html .= '<a href="' . $banner['link-url'] . '" target="_blank" class="admin_banner">';
-							$banner_html .= '<img src="' . $banner['image-url'] . '" alt="' . $banner['alt'] . '" />';
+							$banner_html .= '<a href="' . $banner['link_url'] . '" target="_blank" class="admin_banner">';
+							$banner_html .= '<img src="' . $banner['image_url'] . '" alt="' . $banner['alt'] . '" />';
 							$banner_html .= '</a>';
 
 						}
@@ -119,7 +119,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 
 			$banner_html .= '</div>';
 
-			$banner_html .= '<a href="//www.vektor-inc.co.jp" class="vektor_logo" target="_blank" class="admin_banner"><img src="' . $dir_url . 'images/vektor_logo-//2020.png" alt="Vektor,Inc." /></a>';
+			$banner_html .= '<a href="//www.vektor-inc.co.jp" class="vektor_logo" target="_blank" class="admin_banner"><img src="' . $dir_url . 'images/vektor_logo-2020.png" alt="Vektor,Inc." /></a>';
 
 			$banner_html .= '</div>';
 
