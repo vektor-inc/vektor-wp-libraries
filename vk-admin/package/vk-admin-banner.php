@@ -19,7 +19,7 @@ function vk_admin_registrer_banners() {
 		'type' => 'theme',
 		'slug' => 'lightning/style.css',
 		'image_url'    => $imgge_base_url . 'lightning_bnr_ja.jpg',
-		'link_url'     => 'https://lightning.nagoya/ja/',
+		'link_url'     => 'https://lightning.nagoya/ja/?rel=vkadmin',
 		'alt'          => 'Lightning',
 		'language'     => 'ja'
 	);
@@ -29,7 +29,7 @@ function vk_admin_registrer_banners() {
 		'type' => 'theme',
 		'slug' => 'lightning/style.css',
 		'image_url'    => $imgge_base_url . 'lightning_bnr_en.jpg',
-		'link_url'     => 'https://lightning.nagoya/',
+		'link_url'     => 'https://lightning.nagoya/?rel=vkadmin',
 		'alt'          => 'Lightning',
 		'language'     => 'en'
 	);
@@ -39,7 +39,7 @@ function vk_admin_registrer_banners() {
 		'type' => 'theme',
 		'slug' => 'katawara/style.css',
 		'image_url'    => $imgge_base_url . 'katawara_bnr.jpg',
-		'link_url'     => 'https://www.vektor-inc.co.jp/service/wordpress-theme/katawara/',
+		'link_url'     => 'https://www.vektor-inc.co.jp/service/wordpress-theme/katawara/?rel=vkadmin',
 		'alt'          => 'Katawara',
 		'language'     => 'ja'
 	);
@@ -49,7 +49,7 @@ function vk_admin_registrer_banners() {
 		'type' => 'theme',
 		'slug' => 'bill-vektor/style.css',
 		'image_url'    => $imgge_base_url . 'billvektor_banner.png',
-		'link_url'     => 'https://billvektor.com',
+		'link_url'     => 'https://billvektor.com/?rel=vkadmin',
 		'alt'          => '見積書・請求書管理用WordPressテーマ Bill Vektor',
 		'language'     => 'ja'
 	);
@@ -67,7 +67,7 @@ function vk_admin_registrer_banners() {
 		'type' => 'plugin',
 		'slug' => 'vk-block-patterns/vk-block-patterns.php',
 		'image_url'    => $imgge_base_url . 'vk-block-patterns_bnr_ja.jpg',
-		'link_url'     => admin_url('plugin-install.php?s=vk+block+patterns&tab=search&type=term'),
+		'link_url'     => admin_url( 'plugin-install.php?s=vk+block+patterns&tab=search&type=term' ),
 		'alt'          => 'VK Block Patterns',
 		'language'     => 'ja'
 	);
@@ -127,7 +127,7 @@ function vk_admin_registrer_banners() {
 		'type' => 'plugin',
 		'slug' => 'vk-all-in-one-expansion-unit/vkExUnit.php',
 		'image_url'    => $imgge_base_url . 'ExUnit_bnr.png',
-		'link_url'     => 'https://ex-unit.nagoya/ja/',
+		'link_url'     => 'https://ex-unit.nagoya/ja/?rel=vkadmin',
 		'alt'          => 'VK All in One Expansion Unit',
 		'language'     => 'ja'
 	);

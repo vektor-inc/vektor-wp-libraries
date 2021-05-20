@@ -4,6 +4,9 @@
 1. vk-admin-config.php の中身をプラグインの情報にあわせて書き換える
 1. プラグインが最初に読み込むPHPファイルなどから require_once( 'inc/vk-admin-config.php' ); などで読み込む
 
+## バーナーのサイズ
+600px x 500px でお願いします。
+
 ## バーナーの追加方法
 
 1. package/images にバーナーを追加
