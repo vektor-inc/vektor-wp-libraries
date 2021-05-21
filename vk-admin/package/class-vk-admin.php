@@ -81,7 +81,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 
 			// 画像を配置したディレクトリの URL
 			$img_base_url = 'https://raw.githubusercontent.com/vektor-inc/vk-banners/main/images/';
-			
+
 			// テーマの配列を取得・生成
 			$theme_json_url = 'https://raw.githubusercontent.com/vektor-inc/vk-banners/main/vk-theme-banners.json';
 			$theme_json     = file_get_contents( $theme_json_url );
@@ -96,7 +96,6 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 
 			$banner_html .= '<div class="vk-admin-banner">';
 
-			
 			if ( $lang == 'ja' ) {
 				// $banner_html .= '<a class="admin_banner" href="https://recruit.vektor-inc.co.jp/?rel=vkadmin" target="_blank">';
 				// $banner_html .= '<img src="' . $dir_url . 'images/admin_banner_recruit.jpg" alt="[ Vektor,Inc. 採用情報 ]" />';
@@ -107,6 +106,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 
 			$banner_html .= '<div class="vk-admin-banner-grid">';
 
+			// テーマのバナーを設置
 			foreach( $theme_array as $theme ) {
 				if ( ! self::theme_exists( $theme['slug'] ) ) {
 					if ( $lang === $theme['language'] ) {
@@ -123,6 +123,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 				}
 			}
 
+			// プラグインのバナーを設置
 			foreach( $plugin_array as $plugin ) {
 				if ( ! self::plugin_exists( $plugin['slug'] ) ) {
 					if ( $lang === $plugin['language'] ) {
@@ -130,6 +131,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 						// プラグインの検索結果に飛ばす場合 URL を変換する必要がある
 						$plugin_url = true === $plugin['admin_url'] ? admin_url( $plugin['link_url'] ) : $plugin['link_url'];
 
+						// バナーを追加
 						$banner_html .= '<a href="' . $plugin_url . '" target="_blank" class="admin_banner">';
 						$banner_html .= '<img src="' . $img_base_url . $plugin['image_file'] . '" alt="' . $plugin['alt'] . '" />';
 						$banner_html .= '</a>';
