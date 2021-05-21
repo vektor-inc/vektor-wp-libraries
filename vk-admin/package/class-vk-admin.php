@@ -75,6 +75,9 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 		get_admin_banner
 		/*--------------------------------------------------*/
 		public static function get_admin_banner() {
+
+
+
 			$banner_html  = '';
 			$dir_url = plugin_dir_url( __FILE__ );
 			$lang    = ( get_locale() == 'ja' ) ? 'ja' : 'en';
@@ -82,17 +85,27 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 			// 画像を配置したディレクトリの URL
 			$img_base_url = 'https://raw.githubusercontent.com/vektor-inc/vk-banners/main/images/';
 
-			// テーマの配列を取得・生成
-			$theme_json_url = 'https://raw.githubusercontent.com/vektor-inc/vk-banners/main/vk-theme-banners.json';
-			$theme_json     = file_get_contents( $theme_json_url );
-			$theme_json     = mb_convert_encoding( $theme_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN' );
-			$theme_array    = json_decode( $theme_json,true );
+			// 変数の初期化
+			$theme_array  = array();
+			$plugin_array = array();
 
-			// プラグインの配列を取得・生成
-			$plugin_json_url = 'https://raw.githubusercontent.com/vektor-inc/vk-banners/main/vk-plugin-banners.json';
-			$plugin_json     = file_get_contents( $plugin_json_url );
-			$plugin_json     = mb_convert_encoding( $plugin_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN' );
-			$plugin_array    = json_decode( $plugin_json,true );
+			// WP File System で JSON ファイルを読み込み
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			if ( WP_Filesystem() ) {
+				global $wp_filesystem;
+
+				// テーマの配列を取得・生成
+				$theme_json_url = 'https://raw.githubusercontent.com/vektor-inc/vk-banners/main/vk-theme-banners.json';
+				$theme_json     = $wp_filesystem->get_contents( $theme_json_url );
+				$theme_json     = mb_convert_encoding( $theme_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN' );
+				$theme_array    = json_decode( $theme_json,true );
+
+				// プラグインの配列を取得・生成
+				$plugin_json_url = 'https://raw.githubusercontent.com/vektor-inc/vk-banners/main/vk-plugin-banners.json';
+				$plugin_json     = $wp_filesystem->get_contents( $plugin_json_url );
+				$plugin_json     = mb_convert_encoding( $plugin_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN' );
+				$plugin_array    = json_decode( $plugin_json,true );
+			}
 
 			$banner_html .= '<div class="vk-admin-banner">';
 
