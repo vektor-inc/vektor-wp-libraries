@@ -75,11 +75,25 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 		get_admin_banner
 		/*--------------------------------------------------*/
 		public static function get_admin_banner() {
-			require_once plugin_dir_path( __FILE__ ) . 'vk-banners.php';
 			$banner_html  = '';
 			$dir_url = plugin_dir_url( __FILE__ );
 			$lang    = ( get_locale() == 'ja' ) ? 'ja' : 'en';
-			$banner_array = vk_admin_registrer_banners();
+
+			// 画像を配置したディレクトリの URL
+			$img_base_url = 'https://raw.githubusercontent.com/vektor-inc/vk-banners/main/images/';
+			
+			// テーマの配列を取得・生成
+			$theme_json_url = 'https://raw.githubusercontent.com/vektor-inc/vk-banners/main/vk-theme-banners.json';
+			$theme_json     = file_get_contents( $theme_json_url );
+			$theme_json     = mb_convert_encoding( $theme_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN' );
+			$theme_array    = json_decode( $theme_json,true );
+
+			// プラグインの配列を取得・生成
+			$plugin_json_url = 'https://raw.githubusercontent.com/vektor-inc/vk-banners/main/vk-plugin-banners.json';
+			$plugin_json     = file_get_contents( $plugin_json_url );
+			$plugin_json     = mb_convert_encoding( $plugin_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN' );
+			$plugin_array    = json_decode( $plugin_json,true );
+
 			$banner_html .= '<div class="vk-admin-banner">';
 
 			
@@ -93,26 +107,33 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 
 			$banner_html .= '<div class="vk-admin-banner-grid">';
 
-			foreach( $banner_array as $banner ) {
-				if ( 'theme' === $banner['type'] ) {
-					if ( ! self::theme_exists( $banner['slug'] ) ) {
-						if ( $lang === $banner['language'] ) {
-							$banner_html .= '<a href="' . $banner['link_url'] . '" target="_blank" class="admin_banner">';
-							$banner_html .= '<img src="' . $banner['image_url'] . '" alt="' . $banner['alt'] . '" />';
-							$banner_html .= '</a>';
+			foreach( $theme_array as $theme ) {
+				if ( ! self::theme_exists( $theme['slug'] ) ) {
+					if ( $lang === $theme['language'] ) {
 
-						}
+						// プラグインの検索結果に飛ばす場合 URL を変換する必要がある
+						$theme_url = true === $theme['admin_url'] ? admin_url( $theme['link_url'] ) : $theme['link_url'];
+
+						// バナーを追加
+						$banner_html .= '<a href="' . $theme_url . '" target="_blank" class="admin_banner">';
+						$banner_html .= '<img src="' . $img_base_url . $theme['image_file'] . '" alt="' . $theme['alt'] . '" />';
+						$banner_html .= '</a>';
+
 					}
 				}
+			}
 
-				if ( 'plugin' === $banner['type'] ) {
-					if ( ! self::plugin_exists( $banner['slug'] ) ) {
-						if ( $lang === $banner['language'] ) {
-							$banner_html .= '<a href="' . $banner['link_url'] . '" target="_blank" class="admin_banner">';
-							$banner_html .= '<img src="' . $banner['image_url'] . '" alt="' . $banner['alt'] . '" />';
-							$banner_html .= '</a>';
+			foreach( $plugin_array as $plugin ) {
+				if ( ! self::plugin_exists( $plugin['slug'] ) ) {
+					if ( $lang === $plugin['language'] ) {
 
-						}
+						// プラグインの検索結果に飛ばす場合 URL を変換する必要がある
+						$plugin_url = true === $plugin['admin_url'] ? admin_url( $plugin['link_url'] ) : $plugin['link_url'];
+
+						$banner_html .= '<a href="' . $plugin_url . '" target="_blank" class="admin_banner">';
+						$banner_html .= '<img src="' . $img_base_url . $plugin['image_file'] . '" alt="' . $plugin['alt'] . '" />';
+						$banner_html .= '</a>';
+
 					}
 				}
 			}
