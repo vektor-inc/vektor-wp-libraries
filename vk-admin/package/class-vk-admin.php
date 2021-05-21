@@ -75,7 +75,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 		get_admin_banner
 		/*--------------------------------------------------*/
 		public static function get_admin_banner() {
-			require_once plugin_dir_path( __FILE__ ) . 'vk-admin-banner.php';
+			require_once plugin_dir_path( __FILE__ ) . 'vk-banners.php';
 			$banner_html  = '';
 			$dir_url = plugin_dir_url( __FILE__ );
 			$lang    = ( get_locale() == 'ja' ) ? 'ja' : 'en';
