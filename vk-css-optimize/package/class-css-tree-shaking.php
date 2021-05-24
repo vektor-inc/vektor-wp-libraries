@@ -251,7 +251,7 @@ class CSS_tree_shaking {
 		$css = self::atrule_store( $css );
 		$css = self::tree_shaking( $css );
 		$css = self::atrule_restore( $css );
-		$css = self::tree_shaking4var( $css );
+		// $css = self::tree_shaking4var( $css );
 		return $css;
 	}
 }
