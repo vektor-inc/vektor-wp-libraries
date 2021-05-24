@@ -46,7 +46,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 
 		/**
 		 * Plugin Exists
-		 * 
+		 *
 		 * @param string $plugin '${plugin_dir}/${plugin_file}.php'.
 		 */
 		public static function plugin_exists( $plugin ) {
@@ -86,25 +86,19 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 			$img_base_url = 'https://raw.githubusercontent.com/vektor-inc/vk-banners/main/images/';
 
 			// 変数の初期化
-			$theme_array  = array();
-			$plugin_array = array();
+			$product_array  = array();
 
 			// WP File System で JSON ファイルを読み込み
 			require_once ABSPATH . 'wp-admin/includes/file.php';
 			if ( WP_Filesystem() ) {
 				global $wp_filesystem;
 
-				// テーマの配列を取得・生成
-				$theme_json_url = 'https://raw.githubusercontent.com/vektor-inc/vk-banners/main/vk-theme-banners.json';
-				$theme_json     = $wp_filesystem->get_contents( $theme_json_url );
-				$theme_json     = mb_convert_encoding( $theme_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN' );
-				$theme_array    = json_decode( $theme_json,true );
+				// プロダクトの配列を取得・生成
+				$product_json_url = 'https://raw.githubusercontent.com/vektor-inc/vk-banners/main/vk-banners.json';
+				$product_json     = $wp_filesystem->get_contents( $product_json_url );
+				$product_json     = mb_convert_encoding( $product_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN' );
+				$product_array    = json_decode( $product_json,true );
 
-				// プラグインの配列を取得・生成
-				$plugin_json_url = 'https://raw.githubusercontent.com/vektor-inc/vk-banners/main/vk-plugin-banners.json';
-				$plugin_json     = $wp_filesystem->get_contents( $plugin_json_url );
-				$plugin_json     = mb_convert_encoding( $plugin_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN' );
-				$plugin_array    = json_decode( $plugin_json,true );
 			}
 
 			$banner_html .= '<div class="vk-admin-banner">';
@@ -120,35 +114,37 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 			$banner_html .= '<div class="vk-admin-banner-grid">';
 
 			// テーマのバナーを設置
-			foreach( $theme_array as $theme ) {
-				if ( ! self::theme_exists( $theme['slug'] ) ) {
-					if ( $lang === $theme['language'] ) {
+			foreach( $product_array as $product ) {
 
-						// プラグインの検索結果に飛ばす場合 URL を変換する必要がある
-						$theme_url = true === $theme['admin_url'] ? admin_url( $theme['link_url'] ) : $theme['link_url'];
+				if ( 'theme' === $product['type'] ) {
+					if ( ! self::theme_exists( $product['slug'] ) ) {
+						if ( $lang === $product['language'] ) {
 
-						// バナーを追加
-						$banner_html .= '<a href="' . $theme_url . '" target="_blank" class="admin_banner">';
-						$banner_html .= '<img src="' . $img_base_url . $theme['image_file'] . '" alt="' . $theme['alt'] . '" />';
-						$banner_html .= '</a>';
+							// プラグインの検索結果に飛ばす場合 URL を変換する必要がある
+							$product_url = true === $product['admin_url'] ? admin_url( $product['link_url'] ) : $product['link_url'];
 
+							// バナーを追加
+							$banner_html .= '<a href="' . $product_url . '" target="_blank" class="admin_banner">';
+							$banner_html .= '<img src="' . $img_base_url . $product['image_file'] . '" alt="' . $product['alt'] . '" />';
+							$banner_html .= '</a>';
+
+						}
 					}
 				}
-			}
 
-			// プラグインのバナーを設置
-			foreach( $plugin_array as $plugin ) {
-				if ( ! self::plugin_exists( $plugin['slug'] ) ) {
-					if ( $lang === $plugin['language'] ) {
+				if ( 'plugin' === $product['type'] ) {
+					if ( ! self::plugin_exists( $product['slug'] ) ) {
+						if ( $lang === $product['language'] ) {
 
-						// プラグインの検索結果に飛ばす場合 URL を変換する必要がある
-						$plugin_url = true === $plugin['admin_url'] ? admin_url( $plugin['link_url'] ) : $plugin['link_url'];
+							// プラグインの検索結果に飛ばす場合 URL を変換する必要がある
+							$product_url = true === $product['admin_url'] ? admin_url( $product['link_url'] ) : $product['link_url'];
 
-						// バナーを追加
-						$banner_html .= '<a href="' . $plugin_url . '" target="_blank" class="admin_banner">';
-						$banner_html .= '<img src="' . $img_base_url . $plugin['image_file'] . '" alt="' . $plugin['alt'] . '" />';
-						$banner_html .= '</a>';
+							// バナーを追加
+							$banner_html .= '<a href="' . $product_url . '" target="_blank" class="admin_banner">';
+							$banner_html .= '<img src="' . $img_base_url . $product['image_file'] . '" alt="' . $product['alt'] . '" />';
+							$banner_html .= '</a>';
 
+						}
 					}
 				}
 			}
