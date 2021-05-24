@@ -251,6 +251,7 @@ class CSS_tree_shaking {
 		$css = self::atrule_store( $css );
 		$css = self::tree_shaking( $css );
 		$css = self::atrule_restore( $css );
+		// 変数のTreeshaking は必要なのに除外されてしまうので停止
 		// $css = self::tree_shaking4var( $css );
 		return $css;
 	}
