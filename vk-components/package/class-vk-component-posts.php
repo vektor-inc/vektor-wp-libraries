@@ -154,6 +154,11 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 
 			endif;
 
+			/* 
+			wp_reset_query()がないとトップページでショートコードなどから呼び出した場合に
+			固定ページのトップ指定が解除されて投稿一覧が表示される
+			*/
+			wp_reset_query(); 
 			wp_reset_postdata();
 			return $loop;
 		}
