@@ -155,10 +155,13 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 			endif;
 
 			/* 
-			wp_reset_query()がないとトップページでショートコードなどから呼び出した場合に
+			wp_reset_query() がないとトップページでショートコードなどから呼び出した場合に
 			固定ページのトップ指定が解除されて投稿一覧が表示される
+			→ と言いたい所だが、そもそも global $wp_query を上書きするなという話で、
+			wp_reset_query()をするという事は余分に1回クエリが走る事になるので、
+			$wp_query を上書きしないルールにしてここでは wp_reset_query() を走らせない
 			*/
-			wp_reset_query(); 
+			// wp_reset_query();
 			wp_reset_postdata();
 			return $loop;
 		}
