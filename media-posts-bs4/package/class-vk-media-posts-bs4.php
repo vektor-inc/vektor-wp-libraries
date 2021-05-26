@@ -203,26 +203,33 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 		/**
 		 * アーカイブループを改変するかどうかの指定
 		 *
-		 * @param boolean $flag Change archive loop or not.
+		 * @param string $post_type_slug 改変する場合は投稿タイプ名を返す
 		 */
-		static public function is_loop_layout_change( $flag = false ) {
-
-			$post_type_info = VK_Helpers::get_post_type_info();
-			$post_type      = $post_type_info['slug'];
-
-			if ( is_author() ) {
-				$post_type = 'author';
-			}
-			if ( is_search() ) {
-				$post_type = 'search';
-			}
+		static public function is_loop_layout_change( $flag ) {
 
 			$vk_post_type_archive = get_option( 'vk_post_type_archive' );
+
+			$post_type_info = VK_Helpers::get_post_type_info();
+			$post_type_slug = $post_type_info['slug'];
+
+			if ( is_author() ) {
+				$post_type_slug = 'author';
+			}
+
+			// 検索結果ページの場合
+			if ( is_search() ) {
+				// 検索にそもそも投稿タイプ指定がある場合は、その投稿タイプで指定されたレイアウトで表示するため
+				// 検索に投稿タイプ指定がない場合のみ、検索専用レイアウトを適用する
+				if ( ! $post_type_slug ){
+					$post_type_slug = 'search';
+				}
+			}
+
 			// 指定の投稿タイプアーカイブのレイアウトに値が存在する場合.
-			if ( ! empty( $vk_post_type_archive[ $post_type ]['layout'] ) ) {
+			if ( ! empty( $vk_post_type_archive[ $post_type_slug ]['layout'] ) ) {
 				// デフォルトじゃない場合.
-				if ( 'default' !== $vk_post_type_archive[ $post_type ]['layout'] ) {
-					$flag = true;
+				if ( 'default' !== $vk_post_type_archive[ $post_type_slug ]['layout'] ) {
+					$flag = $post_type_slug;
 				}
 			}
 
@@ -234,21 +241,12 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 		 */
 		public static function loop_layout_change() {
 
-			$vk_post_type_archive = get_option( 'vk_post_type_archive' );
+			$flag = false;
+			$post_type_slug = self::is_loop_layout_change( $flag );
 
-			$post_type_info = VK_Helpers::get_post_type_info();
-			$post_type_slug = $post_type_info['slug'];
+			if ( $post_type_slug ) {
 
-			if ( is_author() ){
-				$post_type_slug = 'author';
-			}
-			if ( is_search() ){
-				$post_type_slug = 'search';
-			}
-
-			$flag = self::is_loop_layout_change();
-
-			if ( $flag ) {
+				$vk_post_type_archive = get_option( 'vk_post_type_archive' );
 
 				$customize_options = $vk_post_type_archive[ $post_type_slug ];
 				// Get default option.
@@ -257,12 +255,6 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 				$options = wp_parse_args( $customize_options, $customize_options_default );
 
 				global $wp_query;
-
-				/*
-				Lightning Pro のみ
-				おそらくこの値が保存されている事はないので不具合報告がこない場合は2020年12月で削除可
-				unset($options['col_xxl']);
-				*/
 
 				VK_Component_Posts::the_loop( $wp_query, $options );
 			}
