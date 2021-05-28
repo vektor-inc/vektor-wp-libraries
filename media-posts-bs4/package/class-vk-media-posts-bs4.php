@@ -17,6 +17,10 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 		 */
 		public function __construct() {
 
+			$path = dirname( plugin_basename( __FILE__ ) ) . '/languages/';
+			// print '<pre style="text-align:left">';print_r($path);print '</pre>';
+			load_plugin_textdomain( 'media-posts-bs4-textdomain', false, $path );
+
 			require_once dirname( __FILE__ ) . '/class-vk-media-posts-bs4-admin.php';
 			add_action( 'widgets_init', array( __CLASS__, 'register_widget' ) );
 
@@ -43,11 +47,11 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 					'label'             => __( 'Card', 'media-posts-bs4-textdomain' ),
 					'class_posts_outer' => '',
 				),
-				'card-noborder'            => array(
+				'card-noborder'   => array(
 					'label'             => __( 'Card Noborder', 'media-posts-bs4-textdomain' ),
 					'class_posts_outer' => '',
 				),
-				'card-intext'            => array(
+				'card-intext'     => array(
 					'label'             => __( 'Card Intext', 'media-posts-bs4-textdomain' ),
 					'class_posts_outer' => '',
 				),
@@ -205,7 +209,7 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 		 *
 		 * @param string $post_type_slug 改変する場合は投稿タイプ名を返す
 		 */
-		static public function is_loop_layout_change( $flag ) {
+		public static function is_loop_layout_change( $flag ) {
 
 			$vk_post_type_archive = get_option( 'vk_post_type_archive' );
 
@@ -220,7 +224,7 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 			if ( is_search() ) {
 				// 検索にそもそも投稿タイプ指定がある場合は、その投稿タイプで指定されたレイアウトで表示するため
 				// 検索に投稿タイプ指定がない場合のみ、検索専用レイアウトを適用する
-				if ( ! $post_type_slug ){
+				if ( ! $post_type_slug ) {
 					$post_type_slug = 'search';
 				}
 			}
@@ -241,7 +245,7 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 		 */
 		public static function loop_layout_change() {
 
-			$flag = false;
+			$flag           = false;
 			$post_type_slug = self::is_loop_layout_change( $flag );
 
 			if ( $post_type_slug ) {
@@ -250,7 +254,7 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 
 				$customize_options = $vk_post_type_archive[ $post_type_slug ];
 				// Get default option.
-				$customize_options_default = VK_Media_Posts_BS4::options_default();
+				$customize_options_default = self::options_default();
 				// Markge options.
 				$options = wp_parse_args( $customize_options, $customize_options_default );
 
@@ -259,29 +263,29 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 				VK_Component_Posts::the_loop( $wp_query, $options );
 			}
 		}
-	
+
 		/**
 		 * アーカイブページの表示件数改変
 		 *
 		 * @param object $query WP_Query.
 		 */
-		static public function posts_per_page_custom( $query ) {
+		public static function posts_per_page_custom( $query ) {
 
 			if ( is_admin() || ! $query->is_main_query() ) {
 				return;
 			}
 
 			// アーカイブの時以外は関係ないので return.
-			if ( ! $query->is_archive() && ! $query->is_home() && ! $query->is_search() ){
+			if ( ! $query->is_archive() && ! $query->is_home() && ! $query->is_search() ) {
 				return;
 			}
 
 			// アーカイブページの表示件数情報を取得.
 			$vk_post_type_archive = get_option( 'vk_post_type_archive' );
-			
+
 			// Post Type
 			$post_type_info = VK_Helpers::get_post_type_info();
-			$post_type = $post_type_info['slug'];
+			$post_type      = $post_type_info['slug'];
 
 			if ( $query->is_home() && ! $query->is_front_page() && ! empty( $vk_post_type_archive['post']['count'] ) ) {
 				$query->set( 'posts_per_page', $vk_post_type_archive['post']['count'] );
@@ -315,14 +319,14 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 				}
 			}
 
-			if ( is_author() || is_search() ){
-				if ( is_author() ){
+			if ( is_author() || is_search() ) {
+				if ( is_author() ) {
 					$post_type = 'author';
-				} elseif ( is_search() ){
+				} elseif ( is_search() ) {
 					$post_type = 'search';
 				}
-				if ( ! empty( $vk_post_type_archive[$post_type]['count'] ) ) {
-					$query->set( 'posts_per_page', $vk_post_type_archive[$post_type]['count'] );
+				if ( ! empty( $vk_post_type_archive[ $post_type ]['count'] ) ) {
+					$query->set( 'posts_per_page', $vk_post_type_archive[ $post_type ]['count'] );
 				}
 				if ( isset( $vk_post_type_archive[ $post_type ]['orderby'] ) ) {
 					$query->set( 'orderby', $vk_post_type_archive[ $post_type ]['orderby'] );
