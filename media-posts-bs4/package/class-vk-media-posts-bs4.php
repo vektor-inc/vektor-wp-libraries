@@ -75,7 +75,7 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 			$default_options = array(
 				'order'                      => 'DESC',
 				'orderby'                    => 'date',
-				'layout'                     => 'card',
+				'layout'                     => 'default',
 				'display_image'              => true,
 				'display_image_overlay_term' => true,
 				'display_excerpt'            => false,
