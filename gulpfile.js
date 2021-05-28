@@ -277,7 +277,7 @@ gulp.task('w_mp', function (done) {
  * Media Posts BS4
  */
 gulp.task('w_mp4', function (done) {
-  gulp.watch('media-posts-bs4/package/**', gulp.task('copy_media-posts-bs4'));
+  gulp.watch( ['media-posts-bs4/package/**', 'media-posts-bs4/tests/**'], gulp.task('copy_media-posts-bs4'));
   done();
 });
 gulp.task('copy_media-posts-bs4', function (done) {
@@ -285,6 +285,8 @@ gulp.task('copy_media-posts-bs4', function (done) {
 		.pipe(gulp.dest('../themes/katawara/inc/media-posts-bs4/package/'))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/media-posts-bs4/package/'))
 		.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/media-posts-bs4/package/'))
+    gulp.src('./media-posts-bs4/tests/**')
+		.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/tests/'))
     done();
 });
 
