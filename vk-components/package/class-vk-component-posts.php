@@ -154,6 +154,14 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 
 			endif;
 
+			/* 
+			wp_reset_query() がないとトップページでショートコードなどから呼び出した場合に
+			固定ページのトップ指定が解除されて投稿一覧が表示される
+			→ と言いたい所だが、そもそも global $wp_query を上書きするなという話で、
+			wp_reset_query()をするという事は余分に1回クエリが走る事になるので、
+			$wp_query を上書きしないルールにしてここでは wp_reset_query() を走らせない
+			*/
+			// wp_reset_query();
 			wp_reset_postdata();
 			return $loop;
 		}
@@ -361,7 +369,8 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 					$html            .= '<span class="vk_post_author_image">';
 					if ( $profile_image_id ) {
 						$profile_image_src = wp_get_attachment_image_src( $profile_image_id, 'thumbnail' );
-						$html             .= '<img class="vk_post_author_image" src="' . $profile_image_src[0] . '" alt="' . esc_attr( $author ) . '" />';
+						// Gravater の時はクラス名つけられないので、こちらにもつけないこと。
+						$html             .= '<img src="' . $profile_image_src[0] . '" alt="' . esc_attr( $author ) . '" />';
 					} else {
 						$html .= get_avatar( get_the_author_meta( 'email' ), 100 );
 					}

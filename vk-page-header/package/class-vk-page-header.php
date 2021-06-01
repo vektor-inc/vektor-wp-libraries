@@ -513,7 +513,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				)
 			);
 			$wp_customize->add_control(
-				new Custom_Html_Control(
+				new VK_Custom_Html_Control(
 					$wp_customize,
 					'vk_page_header_title_common',
 					array(
@@ -585,7 +585,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					)
 				);
 				$wp_customize->add_control(
-					new Custom_Html_Control(
+					new VK_Custom_Html_Control(
 						$wp_customize,
 						'vk_page_header_title_' . $label,
 						array(
@@ -647,7 +647,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					)
 				);
 				$wp_customize->add_control(
-					new Custom_Html_Control(
+					new VK_Custom_Html_Control(
 						$wp_customize,
 						'single_page_display_item',
 						array(

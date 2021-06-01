@@ -108,6 +108,29 @@ class VK_Media_Posts_BS4_Admin {
 				)
 			);
 
+			if ( 'search' === $type ) {
+				// Display conditions.
+				$wp_customize->add_setting(
+					'vk_post_type_archive[' . $type . '][description]',
+					array(
+						'sanitize_callback' => 'sanitize_text_field',
+					)
+				);
+				$wp_customize->add_control(
+					new VK_Custom_Html_Control(
+						$wp_customize,
+						'vk_post_type_archive[' . $type . '][description]',
+						array(
+							'label'            => '',
+							'section'          => 'vk_post_type_archive_setting_' . $type,
+							'type'             => 'text',
+							'custom_title_sub' => '',
+							'custom_html'      => '<p>* ' . __( 'If the search condition includes the "post type" as not only the keyword search, the settings specified in the "post type" will be applied.', 'media-posts-bs4-textdomain' ) . '</p>',
+						)
+					)
+				);
+			}
+
 			// Display conditions.
 			$wp_customize->add_setting(
 				'vk_post_type_archive[' . $type . '][display_conditions_title]',
@@ -116,7 +139,7 @@ class VK_Media_Posts_BS4_Admin {
 				)
 			);
 			$wp_customize->add_control(
-				new Custom_Html_Control(
+				new VK_Custom_Html_Control(
 					$wp_customize,
 					'vk_post_type_archive[' . $type . '][display_conditions_title]',
 					array(
@@ -156,7 +179,7 @@ class VK_Media_Posts_BS4_Admin {
 				)
 			);
 			$wp_customize->add_control(
-				new Custom_Html_Control(
+				new VK_Custom_Html_Control(
 					$wp_customize,
 					'post_type_title_' . $type,
 					array(
@@ -256,7 +279,7 @@ class VK_Media_Posts_BS4_Admin {
 				)
 			);
 			$wp_customize->add_control(
-				new Custom_Html_Control(
+				new VK_Custom_Html_Control(
 					$wp_customize,
 					'vk_post_type_archive[' . $type . '][order_title]',
 					array(
@@ -326,7 +349,7 @@ class VK_Media_Posts_BS4_Admin {
 				)
 			);
 			$wp_customize->add_control(
-				new Custom_Html_Control(
+				new VK_Custom_Html_Control(
 					$wp_customize,
 					'vk_post_type_archive[' . $type . '][display_item_title]',
 					array(
@@ -353,7 +376,7 @@ class VK_Media_Posts_BS4_Admin {
 					'label' => __( 'Excerpt', 'media-posts-bs4-textdomain' ),
 					// 'default' => false,
 				),
-				'display_author'            => array(
+				'display_author'             => array(
 					'label' => __( 'Author', 'media-posts-bs4-textdomain' ),
 					// 'default' => false,
 				),
@@ -365,7 +388,7 @@ class VK_Media_Posts_BS4_Admin {
 					'label' => __( 'New mark', 'media-posts-bs4-textdomain' ),
 					// 'default' => true,
 				),
-				'display_taxonomies'                => array(
+				'display_taxonomies'         => array(
 					'label' => __( 'Taxonomies (all)', 'media-posts-bs4-textdomain' ),
 					// 'default' => false,
 				),
@@ -403,7 +426,7 @@ class VK_Media_Posts_BS4_Admin {
 				)
 			);
 			$wp_customize->add_control(
-				new Custom_Html_Control(
+				new VK_Custom_Html_Control(
 					$wp_customize,
 					'vk_post_type_archive[' . $type . '][new_mark_title]',
 					array(
@@ -463,7 +486,7 @@ class VK_Media_Posts_BS4_Admin {
 				)
 			);
 			$wp_customize->add_control(
-				new Custom_Html_Control(
+				new VK_Custom_Html_Control(
 					$wp_customize,
 					'vk_post_type_archive[' . $type . '][btn_setting_title]',
 					array(
