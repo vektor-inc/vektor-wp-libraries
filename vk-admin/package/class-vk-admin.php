@@ -151,7 +151,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 
 			$banner_html .= '</div>';
 
-			$banner_html .= '<a href="//www.vektor-inc.co.jp" class="vektor_logo" target="_blank" class="admin_banner"><img src="' . $img_base_url . 'images/vektor_logo-2020.png" alt="Vektor,Inc." /></a>';
+			$banner_html .= '<a href="//www.vektor-inc.co.jp" class="vektor_logo" target="_blank" class="admin_banner"><img src="' . $img_base_url . 'vektor_logo-2020.png" alt="Vektor,Inc." /></a>';
 
 			$banner_html .= '</div>';
 
