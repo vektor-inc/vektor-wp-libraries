@@ -78,9 +78,9 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 
 
 
-			$banner_html  = '';
-			$dir_url = plugin_dir_url( __FILE__ );
-			$lang    = ( get_locale() == 'ja' ) ? 'ja' : 'en';
+			$banner_html = '';
+			$dir_url     = plugin_dir_url( __FILE__ );
+			$lang        = ( get_locale() == 'ja' ) ? 'ja' : 'en';
 
 			// 画像を配置したディレクトリの URL
 			$img_base_url = 'https://raw.githubusercontent.com/vektor-inc/vk-admin-banners/main/images/';
