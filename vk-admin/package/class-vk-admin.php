@@ -83,7 +83,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 			$lang    = ( get_locale() == 'ja' ) ? 'ja' : 'en';
 
 			// 画像を配置したディレクトリの URL
-			$img_base_url = 'https://raw.githubusercontent.com/vektor-inc/vk-banners/main/images/';
+			$img_base_url = 'https://raw.githubusercontent.com/vektor-inc/vk-admin-banners/main/images/';
 
 			// 変数の初期化
 			$product_array  = array();
@@ -94,7 +94,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 				global $wp_filesystem;
 
 				// プロダクトの配列を取得・生成
-				$product_json_url = 'https://raw.githubusercontent.com/vektor-inc/vk-banners/main/vk-banners.json';
+				$product_json_url = 'https://raw.githubusercontent.com/vektor-inc/vk-admin-banners/main/vk-admin-banners.json';
 				$product_json     = $wp_filesystem->get_contents( $product_json_url );
 				$product_json     = mb_convert_encoding( $product_json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN' );
 				$product_array    = json_decode( $product_json,true );
@@ -151,7 +151,7 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 
 			$banner_html .= '</div>';
 
-			$banner_html .= '<a href="//www.vektor-inc.co.jp" class="vektor_logo" target="_blank" class="admin_banner"><img src="' . $dir_url . 'images/vektor_logo-2020.png" alt="Vektor,Inc." /></a>';
+			$banner_html .= '<a href="//www.vektor-inc.co.jp" class="vektor_logo" target="_blank" class="admin_banner"><img src="' . $img_base_url . 'images/vektor_logo-2020.png" alt="Vektor,Inc." /></a>';
 
 			$banner_html .= '</div>';
 
