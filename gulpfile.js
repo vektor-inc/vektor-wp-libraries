@@ -419,8 +419,8 @@ gulp.task('sass_vk-mobile-nav', function (done) {
 
 gulp.task('copy_vk-mobile-nav', function (done) {
   gulp.src('./vk-mobile-nav/package/**')
-    .pipe(gulp.dest('../themes/lightning/inc/vk-mobile-nav/package/'))
-    // .pipe(gulp.dest('../themes/lightning/_g3/inc/vk-mobile-nav/package/'))
+    .pipe(gulp.dest('../themes/lightning/_g2/inc/vk-mobile-nav/package/'))
+    .pipe(gulp.dest('../themes/lightning/_g3/inc/vk-mobile-nav/package/'))
     .pipe(gulp.dest('../themes/lightning-pro/inc/vk-mobile-nav/package/'))
     .pipe(gulp.dest('../themes/katawara/inc/vk-mobile-nav/package/'))
     // .pipe(gulp.dest('../themes/seizen-souzoku/inc/vk-mobile-nav/'))
