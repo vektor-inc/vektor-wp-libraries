@@ -62,7 +62,8 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			add_action( 'wp_enqueue_scripts', array( get_called_class(), 'add_style' ) );
 			add_action( 'customize_register', array( $this, 'vk_mobil_fix_nav_customize_register' ) ); // $thisじゃないとエラーになる
 			add_filter( 'body_class', array( __CLASS__, 'add_body_class' ) );
-			add_action( 'wp_footer', array( __CLASS__, 'vk_mobil_fix_nav_html' ) );
+			$vk_mobil_fix_nav_html_hook_point = apply_filters( 'vk_mobil_fix_nav_html_hook_point', 'wp_footer' );
+			add_action( $vk_mobil_fix_nav_html_hook_point, array( __CLASS__, 'vk_mobil_fix_nav_html' ) );
 			add_action( 'widgets_init', array( __CLASS__, 'widgets_init' ) );
 			add_filter( 'vk_css_tree_shaking_array', array( __CLASS__, 'css_tree_shaking_array' ) );
 		}
@@ -82,26 +83,26 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 		public static function default_options() {
 			$default_options = array(
-				'hidden'       => true,
-				'widget_padding'       => false,
-				'add_menu_btn' => false,
-				'link_text_0'  => 'MENU',
-				'link_text_1'  => 'HOME',
-				'link_icon_1'  => 'fas fa-home',
-				'link_url_1'   => home_url(),
-				'link_blank_1' => false,
-				'link_text_2'  => 'アクセス',
-				'link_icon_2'  => 'fas fa-map-marker-alt',
-				'link_url_2'   => 'https://www.google.co.jp/maps/search/%E5%90%8D%E5%8F%A4%E5%B1%8B%E5%B8%82%E4%B8%AD%E5%8C%BA%E6%A0%84%E4%B8%80%E4%B8%81%E7%9B%AE%EF%BC%92%EF%BC%92%E7%95%AA%EF%BC%91%EF%BC%96%E5%8F%B7+%E3%83%9F%E3%83%8A%E3%83%9F%E6%A0%84%E3%83%93%E3%83%AB+302%E5%8F%B7%E5%AE%A4/@35.1645087,136.8922015,17z/data=!3m1!4b1',
-				'link_blank_2' => true,
-				'link_text_3'  => 'お問い合わせ',
-				'link_icon_3'  => 'fas fa-envelope',
-				'link_url_3'   => home_url( '/contact/' ),
-				'link_blank_3' => false,
-				'link_text_4'  => 'TEL',
-				'link_icon_4'  => 'fas fa-phone-square',
-				'link_url_4'   => 'tel:000-000-0000',
-				'link_blank_4' => true,
+				'hidden'         => true,
+				'widget_padding' => false,
+				'add_menu_btn'   => false,
+				'link_text_0'    => 'MENU',
+				'link_text_1'    => 'HOME',
+				'link_icon_1'    => 'fas fa-home',
+				'link_url_1'     => home_url(),
+				'link_blank_1'   => false,
+				'link_text_2'    => 'アクセス',
+				'link_icon_2'    => 'fas fa-map-marker-alt',
+				'link_url_2'     => 'https://www.google.co.jp/maps/search/%E5%90%8D%E5%8F%A4%E5%B1%8B%E5%B8%82%E4%B8%AD%E5%8C%BA%E6%A0%84%E4%B8%80%E4%B8%81%E7%9B%AE%EF%BC%92%EF%BC%92%E7%95%AA%EF%BC%91%EF%BC%96%E5%8F%B7+%E3%83%9F%E3%83%8A%E3%83%9F%E6%A0%84%E3%83%93%E3%83%AB+302%E5%8F%B7%E5%AE%A4/@35.1645087,136.8922015,17z/data=!3m1!4b1',
+				'link_blank_2'   => true,
+				'link_text_3'    => 'お問い合わせ',
+				'link_icon_3'    => 'fas fa-envelope',
+				'link_url_3'     => home_url( '/contact/' ),
+				'link_blank_3'   => false,
+				'link_text_4'    => 'TEL',
+				'link_icon_4'    => 'fas fa-phone-square',
+				'link_url_4'     => 'tel:000-000-0000',
+				'link_blank_4'   => true,
 			);
 
 			// フックでメニューの数を増やされた時に カスタマイザーのデフォルト値のところで Undefined index にならないように
@@ -158,7 +159,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			// セクション、テーマ設定、コントロールを追加
 			global $vk_mobile_fix_nav_prefix;
 			global $vk_mobile_fix_nav_priority;
-			if ( ! $vk_mobile_fix_nav_priority ){
+			if ( ! $vk_mobile_fix_nav_priority ) {
 				$vk_mobile_fix_nav_priority = 900;
 			}
 
@@ -563,8 +564,8 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 		/*
 		  Load js & CSS
 		/*-------------------------------------------*/
-		public static function style_url(){
-			$path = wp_normalize_path( dirname( __FILE__ ) );
+		public static function style_url() {
+			$path    = wp_normalize_path( dirname( __FILE__ ) );
 			$css_url = str_replace( wp_normalize_path( ABSPATH ), site_url() . '/', $path ) . '/css/vk-mobile-fix-nav.css';
 			return $css_url;
 		}
@@ -574,8 +575,8 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			wp_enqueue_style( 'vk-mobile-fix-nav', $css_url, array(), self::$version, 'all' );
 		}
 
-		public static function css_tree_shaking_array( $vk_css_tree_shaking_array ){
-			$css_url = self::style_url();
+		public static function css_tree_shaking_array( $vk_css_tree_shaking_array ) {
+			$css_url                     = self::style_url();
 			$vk_css_tree_shaking_array[] = array(
 				'id'      => 'vk-mobile-fix-nav',
 				'url'     => $css_url,
@@ -636,7 +637,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 		  vk_mobil_fix_nav_html
 		/*-------------------------------------------*/
 		public static function vk_mobil_fix_nav_html() {
-			
+
 			if ( self::is_hidden_all() ) {
 				return;
 			}
@@ -667,12 +668,13 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			<nav class="mobile-fix-nav" style="background-color: <?php echo sanitize_hex_color( $nav_bg_color ); ?>;">
 
 				<?php if ( is_active_sidebar( 'mobile-fix-nav-widget-area' ) ) : ?>
-				<?php
-				$padding_class = '';
-				if ( ! empty( $options['widget_padding'] ) ){
-					$padding_class = ' mobile-fix-nav-top-padding-true';
-				} ?>
-					<div class="mobile-fix-nav-top<?php echo $padding_class;?>">
+					<?php
+					$padding_class = '';
+					if ( ! empty( $options['widget_padding'] ) ) {
+						$padding_class = ' mobile-fix-nav-top-padding-true';
+					}
+					?>
+					<div class="mobile-fix-nav-top<?php echo $padding_class; ?>">
 						<?php dynamic_sidebar( 'mobile-fix-nav-widget-area' ); ?>
 					</div>
 				<?php endif; ?>
