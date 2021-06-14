@@ -62,7 +62,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			add_action( 'wp_enqueue_scripts', array( get_called_class(), 'add_style' ) );
 			add_action( 'customize_register', array( $this, 'vk_mobil_fix_nav_customize_register' ) ); // $thisじゃないとエラーになる
 			add_filter( 'body_class', array( __CLASS__, 'add_body_class' ) );
-			$vk_mobil_fix_nav_html_hook_point = apply_filters( 'vk_mobil_fix_nav_html_hook_point', 'wp_footer' );
+			$vk_mobil_fix_nav_html_hook_point = apply_filters( 'vk_mobile_fix_nav_html_hook_point', 'wp_footer' );
 			add_action( $vk_mobil_fix_nav_html_hook_point, array( __CLASS__, 'vk_mobil_fix_nav_html' ) );
 			add_action( 'widgets_init', array( __CLASS__, 'widgets_init' ) );
 			add_filter( 'vk_css_tree_shaking_array', array( __CLASS__, 'css_tree_shaking_array' ) );
@@ -71,7 +71,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 		public static function widgets_init() {
 			register_sidebar(
 				array(
-					'name'          => __( 'Widget area of mobile fix nav', 'lightning-pro' ),
+					'name'          => __( 'Widget area of mobile fix nav', 'vk_mobile_fix_nav_textdomain' ),
 					'id'            => 'mobile-fix-nav-widget-area',
 					'before_widget' => '<aside class="mobile-fix-nav-widget %2$s" id="%1$s">',
 					'after_widget'  => '</aside>',
@@ -169,7 +169,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			$wp_customize->add_section(
 				'vk_mobil_fix_nav_setting',
 				array(
-					'title'    => $vk_mobile_fix_nav_prefix . __( 'Mobile Fix Nav', 'lightning-pro' ),
+					'title'    => $vk_mobile_fix_nav_prefix . __( 'Mobile Fix Nav', 'vk_mobile_fix_nav_textdomain' ),
 					'priority' => $vk_mobile_fix_nav_priority,
 				)
 			);
