@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VK Media Posts BS4\n"
-"POT-Creation-Date: 2021-06-16 14:42+0900\n"
-"PO-Revision-Date: 2021-06-16 14:43+0900\n"
+"POT-Creation-Date: 2021-06-16 14:44+0900\n"
+"PO-Revision-Date: 2021-06-16 14:44+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja\n"
@@ -18,8 +18,7 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
 "esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
 "_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
-"X-Poedit-SearchPath-0: package\n"
-"X-Poedit-SearchPath-1: .\n"
+"X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
 
 #: media-posts-bs4-config.php:49 package/class-vk-media-posts-bs4-admin.php:243
@@ -355,6 +354,10 @@ msgstr "投稿"
 #: package/class-vk-media-posts-bs4.php:166
 msgid "Pages"
 msgstr "固定ページ"
+
+#. Plugin Name of the plugin/theme
+msgid "VK Media Posts BS4"
+msgstr "VK Media Posts BS4"
 
 #~ msgid "https://vektor-inc.co.jp"
 #~ msgstr "https://vektor-inc.co.jp"

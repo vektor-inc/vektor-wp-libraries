@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: 
+ * Plugin Name: VK Media Posts BS4
  * Plugin URI: 
  * Description: 
  * Version: 1.3.0
