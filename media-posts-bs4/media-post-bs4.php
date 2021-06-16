@@ -8,7 +8,7 @@
  * Author:
  * Author URI: 
  * Text Domain: vk-media-posts-bs4
- * Domain Path: /languages
+ * Domain Path: package/languages
  * License: GPL 2.0 or Later
  *
  * @package VK Media Posts BS4
