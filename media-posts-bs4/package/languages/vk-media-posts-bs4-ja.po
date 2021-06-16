@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VK Media Posts BS4\n"
 "POT-Creation-Date: 2021-06-16 13:51+0900\n"
-"PO-Revision-Date: 2021-06-16 13:52+0900\n"
+"PO-Revision-Date: 2021-06-16 14:09+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja\n"
@@ -346,7 +346,7 @@ msgstr "メディア"
 #: package/class-vk-media-posts-bs4.php:84
 msgctxt "post list type"
 msgid "Text 1 Column"
-msgstr "テキスト 1020 カラム"
+msgstr "テキスト 1 カラム"
 
 #: package/class-vk-media-posts-bs4.php:165
 msgid "Posts"
