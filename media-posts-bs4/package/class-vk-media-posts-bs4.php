@@ -44,10 +44,10 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 			);
 
 			$moFile = $domain . '-' . $locale . '.mo';
-			$path = realpath(dirname(__FILE__) . '/languages');
+			$path = realpath( dirname(__FILE__) . '/languages' );
 
 			if ($path && file_exists($path)) {
-				load_textdomain($domain, $path . '/' . $moFile);
+				load_textdomain( $domain, $path . '/' . $moFile );
 			}
 		}
 
