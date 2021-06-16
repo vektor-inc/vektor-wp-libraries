@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VK Media Posts BS4\n"
-"POT-Creation-Date: 2021-06-16 13:51+0900\n"
-"PO-Revision-Date: 2021-06-16 14:09+0900\n"
+"POT-Creation-Date: 2021-06-16 14:28+0900\n"
+"PO-Revision-Date: 2021-06-16 14:28+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja\n"
@@ -356,22 +356,12 @@ msgstr "投稿"
 msgid "Pages"
 msgstr "固定ページ"
 
-#. Plugin Name of the plugin/theme
-msgid "VK Media Posts BS4"
-msgstr ""
+#~ msgid "https://vektor-inc.co.jp"
+#~ msgstr "https://vektor-inc.co.jp"
 
-#. Plugin URI of the plugin/theme
-msgid "https://github.com/vektor-inc/vektor-wp-libraries/"
-msgstr ""
+#~ msgid "Vektor,Inc."
+#~ msgstr "株式会社ベクトル"
 
-#. Description of the plugin/theme
-msgid "This is a plugin that you can add a filter search function with blocks."
-msgstr "ブロックを使ったフィルター検索機能を追加できるプラグインです。"
-
-#. Author of the plugin/theme
-msgid "Vektor,Inc."
-msgstr "株式会社ベクトル"
-
-#. Author URI of the plugin/theme
-msgid "https://vektor-inc.co.jp"
-msgstr "https://vektor-inc.co.jp"
+#~ msgid ""
+#~ "This is a plugin that you can add a filter search function with blocks."
+#~ msgstr "ブロックを使ったフィルター検索機能を追加できるプラグインです。"

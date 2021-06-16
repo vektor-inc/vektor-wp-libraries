@@ -17,7 +17,7 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 		 */
 		public function __construct() {
 
-			add_action('init', array( __CLASS__, 'load_text_domain' ), 0 );
+			add_action( 'init', array( __CLASS__, 'load_text_domain' ), 0 );
 
 			require_once dirname( __FILE__ ) . '/class-vk-media-posts-bs4-admin.php';
 			add_action( 'widgets_init', array( __CLASS__, 'register_widget' ) );
@@ -39,7 +39,7 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 			$domain = 'vk-media-posts-bs4';
 			$locale = apply_filters(
 				'plugin_locale',
-				(is_admin() && function_exists('get_user_locale')) ? get_user_locale() : get_locale(),
+				( is_admin() && function_exists('get_user_locale') ) ? get_user_locale() : get_locale(),
 				$domain
 			);
 
