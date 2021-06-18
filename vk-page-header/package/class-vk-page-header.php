@@ -694,8 +694,12 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		/*-------------------------------------------*/
 		/* static にすると環境によってmetabox内のコールバック関数が反応しない */
 		public function add_pagehead_setting_meta_box() {
+			global $post;
+			$page_for_posts = (int) get_option( 'page_for_posts' );
 
-			add_meta_box( 'vk_page_header_meta_box', __( 'Page Header Image', 'vk_page_header_textdomain' ), array( $this, 'vk_page_header_meta_box_content' ), 'page', 'normal', 'high' );
+			if ( $page_for_posts !== $post->ID ) {
+				add_meta_box( 'vk_page_header_meta_box', __( 'Page Header Image', 'vk_page_header_textdomain' ), array( $this, 'vk_page_header_meta_box_content' ), 'page', 'normal', 'high' );
+			}
 		}
 
 		public function vk_page_header_meta_box_content() {
