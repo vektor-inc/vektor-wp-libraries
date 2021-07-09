@@ -160,6 +160,9 @@ $xxl-min: 1400px;
 	display: flex;
 	flex-wrap: wrap;
 	clear: both; /* To be cope with inline image float and so on. */
+	&.post-list{
+		display:block;
+	}
 }
 .vk_post {
 	margin-left: 15px;
