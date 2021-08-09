@@ -154,7 +154,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 
 			endif;
 
-			/* 
+			/*
 			wp_reset_query() がないとトップページでショートコードなどから呼び出した場合に
 			固定ページのトップ指定が解除されて投稿一覧が表示される
 			→ と言いたい所だが、そもそも global $wp_query を上書きするなという話で、
@@ -176,9 +176,9 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 		}
 
 
-		/*
-		 Common Parts
-		/*-------------------------------------------*/
+		/***********************************************
+		 * Common Parts
+		 */
 
 		/**
 		 * Common Part _ first DIV
@@ -298,13 +298,12 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 		 * @var [type]
 		 */
 		public static function get_view_body( $post, $options ) {
-			// $default = array(
-			// 'textlink' => false,
-			// );
-			// $attr = wp_parse_args( $attr, $default );
 
 			$layout_type = $options['layout'];
-			if ( $layout_type == 'card-horizontal' || $layout_type == 'card-noborder' || $layout_type == 'card-intext' ) {
+			if ( 'card-horizontal' === $layout_type ||
+				'card-noborder' === $layout_type ||
+				'card-intext' === $layout_type
+				) {
 				$layout_type = 'card';
 			}
 
@@ -322,7 +321,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 			カードインテキストの場合、リンクの中にリンクがあるとブラウザでDOMが書き換えられるので
 			中のリンクを解除する必要がある。
 			*/
-			if ( $options['layout'] == 'card-intext' ) {
+			if ( 'card-intext' === $options['layout'] ) {
 				$options['textlink'] = false;
 			}
 
@@ -370,7 +369,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 					if ( $profile_image_id ) {
 						$profile_image_src = wp_get_attachment_image_src( $profile_image_id, 'thumbnail' );
 						// Gravater の時はクラス名つけられないので、こちらにもつけないこと。
-						$html             .= '<img src="' . $profile_image_src[0] . '" alt="' . esc_attr( $author ) . '" />';
+						$html .= '<img src="' . $profile_image_src[0] . '" alt="' . esc_attr( $author ) . '" />';
 					} else {
 						$html .= get_avatar( get_the_author_meta( 'email' ), 100 );
 					}
@@ -403,7 +402,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 						$html .= '<dl class="vk_post_taxonomy vk_post_taxonomy-' . $key . '">' . $value . '</dl>';
 					} // foreach
 					$html .= '</div>';
-				} // if ($taxonomies)
+				}
 			}
 
 			if ( $options['textlink'] ) {
@@ -443,10 +442,15 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 		}
 
 
-		/*
-		 Layout patterns
-		/*-------------------------------------------*/
+		/***********************************************
+		 * Layout patterns
+		 */
 
+		 /**
+		  * Get Pattern
+		  *
+		  * @return array $patterns Post Layout pattern array
+		  */
 		public static function get_patterns() {
 
 			$patterns = array(
@@ -492,7 +496,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 			$html_body .= self::get_thumbnail_image( $post, $options, $attr );
 			$html_body .= self::get_view_body( $post, $options );
 
-			if ( $options['layout'] == 'card-intext' ) {
+			if ( 'card-intext' === $options['layout'] ) {
 
 				$html .= '<a href="' . esc_url( get_the_permalink( $post->ID ) ) . '" class="card-intext-inner">';
 
@@ -521,10 +525,8 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 		public static function get_view_type_card_horizontal( $post, $options ) {
 			$html  = '';
 			$html .= self::get_view_first_div( $post, $options );
-			// $html .= '<a href="' . get_the_permalink( $post->ID ) . '" class="card-horizontal-inner">';
 			$html .= '<div class="row no-gutters card-horizontal-inner-row">';
 
-			// $image_src = '';
 			if ( $options['display_image'] ) {
 				$html .= '<div class="col-5 card-img-outer">';
 				$attr  = array(
@@ -543,7 +545,6 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 			}
 
 			$html .= '</div><!-- [ /.row ] -->';
-			// $html .= '</a>';
 			$html .= '</div><!-- [ /.card ] -->';
 			return $html;
 		}
@@ -624,9 +625,9 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 			return $html;
 		}
 
-		/*
-		 UI Helper method
-		/*-------------------------------------------*/
+		/***********************************************
+		 * UI Helper method
+		 */
 
 		/**
 		 * Convert col-count from inputed column count.
