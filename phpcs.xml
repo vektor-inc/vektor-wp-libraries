@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<ruleset name="Vektor WordPress">
+    <rule ref="WordPress">
+    <exclude name="Squiz.Commenting.InlineComment.InvalidEndChar"/>
+    <exclude name="Generic.Arrays.DisallowShortArraySyntax.Found"/>
+    </rule>
+</ruleset>

@@ -1,24 +1,39 @@
 <?php
-/*
-The original of this file is located at:
-https://github.com/vektor-inc/vektor-wp-libraries
-If you want to change this file, please change the original file.
-*/
+/**
+ * VK Components Posts
+ *
+ * @package VK Component
+ *
+ * *********************** CAUTION ***********************
+ * The original of this file is located at:
+ * https://github.com/vektor-inc/vektor-wp-libraries
+ * If you want to change this file, please change the original file.
+ */
 
 if ( ! class_exists( 'VK_Component_Posts' ) ) {
 
+	/**
+	 * VK Component for Posts
+	 */
 	class VK_Component_Posts {
 
-		/*
-		 Basic method
-		 Common Parts
-		 Layout patterns
-		 UI Helper method
-		/*-------------------------------------------*/
+		/***********************************************
+		 * Basic method
+		 * Common Parts
+		 * Layout patterns
+		 * UI Helper method
+		 */
 
-		/*
-		 Basic method
-		/*-------------------------------------------*/
+		/***********************************************
+		 * Basic method
+		 */
+
+		/**
+		 * Get Loop Post View Options
+		 *
+		 * @param array $options options array.
+		 * @return array options
+		 */
 		public static function get_loop_post_view_options( $options ) {
 			$default = array(
 				'layout'                     => 'card',
@@ -70,12 +85,23 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 			return $html;
 		}
 
+		/**
+		 * Display single view
+		 *
+		 * @param object $post post oject.
+		 * @param array  $options display options.
+		 * @return void
+		 */
 		public static function the_view( $post, $options ) {
-			 echo wp_kses_post( self::get_view( $post, $options ) );
+			echo wp_kses_post( self::get_view( $post, $options ) );
 		}
 
 		/**
-		 * [public description]
+		 * Get post loop
+		 *
+		 * @param object $wp_query query object.
+		 * @param array  $options display options.
+		 * @param array  $options_loop loop options.
 		 *
 		 * @var [type]
 		 */
@@ -105,9 +131,9 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				$loop_outer_class .= ' ' . $options_loop['class_loop_outer'];
 			}
 
-			// Set post item outer col class
+			// Set post item outer col class.
 			if ( 'postListText' !== $options['layout'] ) {
-				// If get info of column that deploy col to class annd add
+				// If get info of column that deploy col to class annd add.
 				if ( empty( $options['class_outer'] ) ) {
 					$options['class_outer'] = self::get_col_size_classes( $options );
 				} else {
@@ -115,7 +141,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				}
 			}
 
-			// Set hidden class
+			// Set hidden class.
 			$hidden_class = array();
 			if ( ! empty( $options['vkb_hidden'] ) ) {
 				array_push( $hidden_class, 'vk_hidden' );
@@ -151,31 +177,33 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 
 					$loop .= apply_filters( 'vk_posts_loop_item_after', '', $options );
 
-				} // while ( have_posts() ) {
+				}
 
 				$loop .= '</div>';
 
 				endif;
 
 			/*
+			Caution
 			wp_reset_query() がないとトップページでショートコードなどから呼び出した場合に
 			固定ページのトップ指定が解除されて投稿一覧が表示される
 			→ と言いたい所だが、そもそも global $wp_query を上書きするなという話で、
 			wp_reset_query()をするという事は余分に1回クエリが走る事になるので、
 			$wp_query を上書きしないルールにしてここでは wp_reset_query() を走らせない
 			*/
-			// wp_reset_query();
 			wp_reset_postdata();
 			return $loop;
 		}
 
 		/**
-		 * [public description]
+		 * Display loop
 		 *
-		 * @var [type]
+		 * @param object $wp_query query object.
+		 * @param array  $options display options.
+		 * @param array  $options_loop loop options.
 		 */
 		public static function the_loop( $wp_query, $options, $options_loop = array() ) {
-			echo self::get_loop( $wp_query, $options, $options_loop );
+			echo wp_kses_post( self::get_loop( $wp_query, $options, $options_loop ) );
 		}
 
 
@@ -186,11 +214,14 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 		/**
 		 * Common Part _ first DIV
 		 *
-		 * @var [type]
+		 * @param object $post post oject.
+		 * @param array  $options display options.
+		 *
+		 * @return string
 		 */
 		public static function get_view_first_div( $post, $options ) {
 
-			// Add layout Class
+			// Add layout Class.
 			if ( 'card-horizontal' === $options['layout'] ) {
 				$class_outer = 'card card-post card-horizontal';
 			} elseif ( 'card-noborder' === $options['layout'] ) {
@@ -219,13 +250,15 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 			return $html;
 		}
 
+
 		/**
 		 * Common Part _ post thumbnail
 		 *
-		 * @param  [type] $post    [description]
-		 * @param  [type] $options [description]
-		 * @param  string $class   [description]
-		 * @return [type]          [description]
+		 * @param object $post global post object.
+		 * @param array  $options component options.
+		 * @param array  $attr   get_the_post_thumbnail() image attr.
+		 *
+		 * @return string
 		 */
 		public static function get_thumbnail_image( $post, $options, $attr = array() ) {
 
@@ -298,7 +331,8 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 		/**
 		 * Common Part _ post body
 		 *
-		 * @var [type]
+		 * @param object $post global post object.
+		 * @param array  $options component options.
 		 */
 		public static function get_view_body( $post, $options ) {
 
@@ -332,12 +366,12 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				$html .= '<a href="' . get_the_permalink( $post->ID ) . '">';
 			}
 
-			$html .= get_the_title( $post->ID );
+			$html .= apply_filters( 'vk_post_title', get_the_title( $post->ID ), $post, $options );
 
 			if ( $options['display_new'] ) {
 				$today = date_i18n( 'U' );
 				$entry = get_the_time( 'U', $post );
-				$kiji  = date( 'U', ( $today - $entry ) ) / 86400;
+				$kiji  = gmdate( 'U', ( $today - $entry ) ) / 86400;
 				if ( $options['new_date'] > $kiji ) {
 					$html .= '<span class="vk_post_title_new">' . $options['new_text'] . '</span>';
 				}
@@ -371,7 +405,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 					$html            .= '<span class="vk_post_author_image">';
 					if ( $profile_image_id ) {
 						$profile_image_src = wp_get_attachment_image_src( $profile_image_id, 'thumbnail' );
-						// Gravater の時はクラス名つけられないので、こちらにもつけないこと。
+						// Gravater の時はクラス名つけられないので、こちらにもつけないこと.
 						$html .= '<img src="' . $profile_image_src[0] . '" alt="' . esc_attr( $author ) . '" />';
 					} else {
 						$html .= get_avatar( get_the_author_meta( 'email' ), 100 );
@@ -391,7 +425,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				);
 				$taxonomies = get_the_taxonomies( $post->ID, $args );
 				$exclusion  = array( 'product_type' );
-				// このフィルター名は投稿詳細でも使っているので注意
+				// このフィルター名は投稿詳細でも使っているので注意.
 				$exclusion = apply_filters( 'vk_get_display_taxonomies_exclusion', $exclusion );
 
 				if ( is_array( $exclusion ) ) {
@@ -479,7 +513,8 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 		/**
 		 * Card
 		 *
-		 * @var [type]
+		 * @param object $post global post object.
+		 * @param array  $options component options.
 		 */
 		public static function get_view_type_card( $post, $options ) {
 			$html  = '';
@@ -518,7 +553,8 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 		/**
 		 * Card horizontal
 		 *
-		 * @var [type]
+		 * @param object $post global post object.
+		 * @param array  $options component options.
 		 */
 		public static function get_view_type_card_horizontal( $post, $options ) {
 			$html  = '';
@@ -550,19 +586,18 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 		/**
 		 * Media
 		 *
-		 * @var [type]
+		 * @param object $post global post object.
+		 * @param array  $options component options.
 		 */
 		public static function get_view_type_media( $post, $options ) {
 			$html  = '';
 			$html .= self::get_view_first_div( $post, $options );
 			if ( $options['display_image'] ) {
-				// $html .= '<a href="' . get_the_permalink() . '" class="media-img">';
 				$attr  = array(
 					'class_outer' => 'media-img',
 					'class_image' => '',
 				);
 				$html .= self::get_thumbnail_image( $post, $options, $attr );
-				// $html .= '</a>';
 			}
 
 			$html .= self::get_view_body( $post, $options );
@@ -574,7 +609,8 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 		/**
 		 * Text
 		 *
-		 * @var [type]
+		 * @param object $post global post object.
+		 * @param array  $options component options.
 		 */
 		public static function get_view_type_text( $post, $options ) {
 
@@ -608,7 +644,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 			if ( $options['display_new'] ) {
 				$today = date_i18n( 'U' );
 				$entry = get_the_time( 'U' );
-				$kiji  = date( 'U', ( $today - $entry ) ) / 86400;
+				$kiji  = gmdate( 'U', ( $today - $entry ) ) / 86400;
 				if ( $options['new_date'] > $kiji ) {
 					$html .= '<span class="vk_post_title_new">' . $options['new_text'] . '</span>';
 				}
@@ -631,15 +667,16 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 		 * @return string             grid col number
 		 */
 		public static function get_col_converted_size( $input_col = 4 ) {
-			if ( $input_col == 1 ) {
+			$input_col = strval( $input_col );
+			if ( '1' === $input_col ) {
 				$col = 12;
-			} elseif ( $input_col == 2 ) {
+			} elseif ( '2' === $input_col ) {
 				$col = 6;
-			} elseif ( $input_col == 3 ) {
+			} elseif ( '3' === $input_col ) {
 				$col = 4;
-			} elseif ( $input_col == 4 ) {
+			} elseif ( '4' === $input_col ) {
 				$col = 3;
-			} elseif ( $input_col == 6 ) {
+			} elseif ( '6' === $input_col ) {
 				$col = 2;
 			} else {
 				$col = 4;
