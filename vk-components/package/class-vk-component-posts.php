@@ -7,292 +7,292 @@ If you want to change this file, please change the original file.
 
 if ( ! class_exists( 'VK_Component_Posts' ) ) {
 
-class VK_Component_Posts {
-
-	/*
-	 Basic method
-	 Common Parts
-	 Layout patterns
-	 UI Helper method
-	/*-------------------------------------------*/
-
-	/*
-	 Basic method
-	/*-------------------------------------------*/
-	public static function get_loop_post_view_options( $options ) {
-		$default = array(
-			'layout'                     => 'card',
-			'display_image'              => true,
-			'display_image_overlay_term' => true,
-			'display_excerpt'            => false,
-			'display_author'             => false,
-			'display_date'               => true,
-			'display_new'                => true,
-			'display_taxonomies'         => false,
-			'display_btn'                => false,
-			'image_default_url'          => false,
-			'overlay'                    => false,
-			'btn_text'                   => __( 'Read more', 'vk_components_textdomain' ),
-			'btn_align'                  => 'text-right',
-			'new_text'                   => __( 'New!!', 'vk_components_textdomain' ),
-			'new_date'                   => 7,
-			'textlink'                   => true,
-			'class_outer'                => '',
-			'class_title'                => '',
-			'body_prepend'               => '',
-			'body_append'                => '',
-		);
-		$return  = apply_filters( 'vk_post_options', wp_parse_args( $options, $default ) );
-		return $return;
-	}
-
-	/**
-	 * Post View
-	 *
-	 * @param object $post global post object.
-	 * @param array  $options component options.
-	 *
-	 * @return string $html
-	 */
-	public static function get_view( $post, $options ) {
-
-		$options = self::get_loop_post_view_options( $options );
-
-		if ( 'card-horizontal' === $options['layout'] ) {
-			$html = self::get_view_type_card_horizontal( $post, $options );
-		} elseif ( 'media' === $options['layout'] ) {
-			$html = self::get_view_type_media( $post, $options );
-		} elseif ( 'postListText' === $options['layout'] ) {
-			$html = self::get_view_type_text( $post, $options );
-		} else {
-			$html = self::get_view_type_card( $post, $options );
-		}
-		return $html;
-	}
-
-	public static function the_view( $post, $options ) {
-		 echo wp_kses_post( self::get_view( $post, $options ) );
-	}
-
-	/**
-	 * [public description]
-	 *
-	 * @var [type]
-	 */
-	public static function get_loop( $wp_query, $options, $options_loop = array() ) {
-
-		// Outer Post Type classes.
-		$patterns                    = self::get_patterns();
-		$loop_outer_class_post_types = array();
-		if ( ! isset( $wp_query->query['post_type'] ) ) {
-			$loop_outer_class_post_types[] = 'vk_posts-postType-post';
-		} else {
-			if ( is_array( $wp_query->query['post_type'] ) ) {
-				foreach ( $wp_query->query['post_type'] as $key => $value ) {
-					$loop_outer_class_post_types[] = 'vk_posts-postType-' . $value;
-				}
-			} else {
-				$loop_outer_class_post_types[] = 'vk_posts-postType-' . $wp_query->query['post_type'];
-			}
-		}
-
-		$loop_outer_class_post_types[] = 'vk_posts-layout-' . $options['layout'];
-
-		// Additional loop option.
-		$loop_outer_class = implode( ' ', $loop_outer_class_post_types );
-
-		if ( ! empty( $options_loop['class_loop_outer'] ) ) {
-			$loop_outer_class .= ' ' . $options_loop['class_loop_outer'];
-		}
-
-		// Set post item outer col class
-		if ( 'postListText' !== $options['layout'] ) {
-			// If get info of column that deploy col to class annd add
-			if ( empty( $options['class_outer'] ) ) {
-				$options['class_outer'] = self::get_col_size_classes( $options );
-			} else {
-				$options['class_outer'] .= ' ' . self::get_col_size_classes( $options );
-			}
-		}
-
-		// Set hidden class
-		$hidden_class = array();
-		if ( ! empty( $options['vkb_hidden'] ) ) {
-			array_push( $hidden_class, 'vk_hidden' );
-		} elseif ( ! empty( $options['vkb_hidden_xxl'] ) ) {
-			array_push( $hidden_class, 'vk_hidden-xxl' );
-		} elseif ( ! empty( $options['vkb_hidden_xl'] ) ) {
-			array_push( $hidden_class, 'vk_hidden-xl' );
-		} elseif ( ! empty( $options['vkb_hidden_lg'] ) ) {
-			array_push( $hidden_class, 'vk_hidden-lg' );
-		} elseif ( ! empty( $options['vkb_hidden_md'] ) ) {
-			array_push( $hidden_class, 'vk_hidden-md' );
-		} elseif ( ! empty( $options['vkb_hidden_sm'] ) ) {
-			array_push( $hidden_class, 'vk_hidden-sm' );
-		} elseif ( ! empty( $options['vkb_hidden_xs'] ) ) {
-			array_push( $hidden_class, 'vk_hidden-xs' );
-		}
-
-		$loop = '';
-		if ( $wp_query->have_posts() ) :
-
-			$loop .= '<div class="vk_posts ' . esc_attr( $loop_outer_class ) . ' ' . esc_attr( implode( ' ', $hidden_class ) ) . '">';
-
-			global $vk_posts_loop_item_count;
-			$vk_posts_loop_item_count = 0;
-
-			while ( $wp_query->have_posts() ) {
-
-				$vk_posts_loop_item_count++;
-
-				$wp_query->the_post();
-				global $post;
-				$loop .= self::get_view( $post, $options );
-
-				$loop .= apply_filters( 'vk_posts_loop_item_after', '', $options );
-
-			} // while ( have_posts() ) {
-
-			$loop .= '</div>';
-
-			endif;
+	class VK_Component_Posts {
 
 		/*
-		wp_reset_query() がないとトップページでショートコードなどから呼び出した場合に
-		固定ページのトップ指定が解除されて投稿一覧が表示される
-		→ と言いたい所だが、そもそも global $wp_query を上書きするなという話で、
-		wp_reset_query()をするという事は余分に1回クエリが走る事になるので、
-		$wp_query を上書きしないルールにしてここでは wp_reset_query() を走らせない
-		*/
-		// wp_reset_query();
-		wp_reset_postdata();
-		return $loop;
-	}
+		 Basic method
+		 Common Parts
+		 Layout patterns
+		 UI Helper method
+		/*-------------------------------------------*/
 
-	/**
-	 * [public description]
-	 *
-	 * @var [type]
-	 */
-	public static function the_loop( $wp_query, $options, $options_loop = array() ) {
-		echo self::get_loop( $wp_query, $options, $options_loop );
-	}
-
-
-	/***********************************************
-	 * Common Parts
-	 */
-
-	/**
-	 * Common Part _ first DIV
-	 *
-	 * @var [type]
-	 */
-	public static function get_view_first_div( $post, $options ) {
-
-		// Add layout Class
-		if ( 'card-horizontal' === $options['layout'] ) {
-			$class_outer = 'card card-post card-horizontal';
-		} elseif ( 'card-noborder' === $options['layout'] ) {
-			$class_outer = 'card card-noborder';
-		} elseif ( 'card-intext' === $options['layout'] ) {
-			$class_outer = 'card card-intext';
-		} elseif ( 'media' === $options['layout'] ) {
-			$class_outer = 'media';
-		} elseif ( 'postListText' === $options['layout'] ) {
-			$class_outer = 'postListText';
-		} else {
-			$class_outer = 'card card-post';
+		/*
+		 Basic method
+		/*-------------------------------------------*/
+		public static function get_loop_post_view_options( $options ) {
+			$default = array(
+				'layout'                     => 'card',
+				'display_image'              => true,
+				'display_image_overlay_term' => true,
+				'display_excerpt'            => false,
+				'display_author'             => false,
+				'display_date'               => true,
+				'display_new'                => true,
+				'display_taxonomies'         => false,
+				'display_btn'                => false,
+				'image_default_url'          => false,
+				'overlay'                    => false,
+				'btn_text'                   => __( 'Read more', 'vk_components_textdomain' ),
+				'btn_align'                  => 'text-right',
+				'new_text'                   => __( 'New!!', 'vk_components_textdomain' ),
+				'new_date'                   => 7,
+				'textlink'                   => true,
+				'class_outer'                => '',
+				'class_title'                => '',
+				'body_prepend'               => '',
+				'body_append'                => '',
+			);
+			$return  = apply_filters( 'vk_post_options', wp_parse_args( $options, $default ) );
+			return $return;
 		}
 
-		// Add Outer class.
-		if ( ! empty( $options['class_outer'] ) ) {
-			$class_outer .= ' ' . esc_attr( $options['class_outer'] );
-		}
+		/**
+		 * Post View
+		 *
+		 * @param object $post global post object.
+		 * @param array  $options component options.
+		 *
+		 * @return string $html
+		 */
+		public static function get_view( $post, $options ) {
 
-		// Add btn class.
-		if ( $options['display_btn'] && 'postListText' !== $options['layout'] ) {
-			$class_outer .= ' vk_post-btn-display';
-		}
-		global $post;
-		$html = '<div id="post-' . esc_attr( $post->ID ) . '" class="vk_post vk_post-postType-' . esc_attr( $post->post_type ) . ' ' . join( ' ', get_post_class( $class_outer ) ) . '">';
-		return $html;
-	}
+			$options = self::get_loop_post_view_options( $options );
 
-	/**
-	 * Common Part _ post thumbnail
-	 *
-	 * @param  [type] $post    [description]
-	 * @param  [type] $options [description]
-	 * @param  string $class   [description]
-	 * @return [type]          [description]
-	 */
-	public static function get_thumbnail_image( $post, $options, $attr = array() ) {
-
-		$default = array(
-			'class_outer' => '',
-			'class_image' => '',
-		);
-		$classes = wp_parse_args( $attr, $default );
-
-		$html = '';
-		if ( $options['display_image'] ) {
-			if ( $classes['class_outer'] ) {
-				$classes['class_outer'] = ' ' . $classes['class_outer'];
-			}
-
-			$image_src = get_the_post_thumbnail_url( $post->ID, 'large' );
-			if ( ! $image_src && $options['image_default_url'] ) {
-				$image_src = esc_url( $options['image_default_url'] );
-			}
-			$style = ' style="background-image:url(' . $image_src . ')"';
-
-			$html .= '<div class="vk_post_imgOuter' . $classes['class_outer'] . '"' . $style . '>';
-
-			if ( 'card-intext' !== $options['layout'] ) {
-				$html .= '<a href="' . get_the_permalink( $post->ID ) . '">';
-			}
-
-			if ( $options['overlay'] ) {
-				$html .= '<div class="card-img-overlay">';
-				$html .= $options['overlay'];
-				$html .= '</div>';
-			}
-
-			if ( $options['display_image_overlay_term'] ) {
-
-				$html     .= '<div class="card-img-overlay">';
-				$term_args = array(
-					'class' => 'vk_post_imgOuter_singleTermLabel',
-				);
-				if ( method_exists( 'Vk_term_color', 'get_single_term_with_color' ) ) {
-					$html .= Vk_term_color::get_single_term_with_color( $post, $term_args );
-				}
-				$html .= '</div>';
-
-			}
-			if ( $classes['class_image'] ) {
-				$image_class = 'vk_post_imgOuter_img ' . $classes['class_image'];
+			if ( 'card-horizontal' === $options['layout'] ) {
+				$html = self::get_view_type_card_horizontal( $post, $options );
+			} elseif ( 'media' === $options['layout'] ) {
+				$html = self::get_view_type_media( $post, $options );
+			} elseif ( 'postListText' === $options['layout'] ) {
+				$html = self::get_view_type_text( $post, $options );
 			} else {
-				$image_class = 'vk_post_imgOuter_img';
+				$html = self::get_view_type_card( $post, $options );
+			}
+			return $html;
+		}
+
+		public static function the_view( $post, $options ) {
+			 echo wp_kses_post( self::get_view( $post, $options ) );
+		}
+
+		/**
+		 * [public description]
+		 *
+		 * @var [type]
+		 */
+		public static function get_loop( $wp_query, $options, $options_loop = array() ) {
+
+			// Outer Post Type classes.
+			$patterns                    = self::get_patterns();
+			$loop_outer_class_post_types = array();
+			if ( ! isset( $wp_query->query['post_type'] ) ) {
+				$loop_outer_class_post_types[] = 'vk_posts-postType-post';
+			} else {
+				if ( is_array( $wp_query->query['post_type'] ) ) {
+					foreach ( $wp_query->query['post_type'] as $key => $value ) {
+						$loop_outer_class_post_types[] = 'vk_posts-postType-' . $value;
+					}
+				} else {
+					$loop_outer_class_post_types[] = 'vk_posts-postType-' . $wp_query->query['post_type'];
+				}
 			}
 
-			$image_attr = array( 'class' => $image_class );
-			$img        = get_the_post_thumbnail( $post->ID, 'medium', $image_attr );
-			if ( $img ) {
-				$html .= $img;
-			} elseif ( $options['image_default_url'] ) {
-				$html .= '<img src="' . esc_url( $options['image_default_url'] ) . '" alt="" class="' . $image_class . '" loading="lazy" />';
+			$loop_outer_class_post_types[] = 'vk_posts-layout-' . $options['layout'];
+
+			// Additional loop option.
+			$loop_outer_class = implode( ' ', $loop_outer_class_post_types );
+
+			if ( ! empty( $options_loop['class_loop_outer'] ) ) {
+				$loop_outer_class .= ' ' . $options_loop['class_loop_outer'];
 			}
 
-			if ( 'card-intext' !== $options['layout'] ) {
-				$html .= '</a>';
+			// Set post item outer col class
+			if ( 'postListText' !== $options['layout'] ) {
+				// If get info of column that deploy col to class annd add
+				if ( empty( $options['class_outer'] ) ) {
+					$options['class_outer'] = self::get_col_size_classes( $options );
+				} else {
+					$options['class_outer'] .= ' ' . self::get_col_size_classes( $options );
+				}
 			}
 
-			$html .= '</div><!-- [ /.vk_post_imgOuter ] -->';
-		}{
+			// Set hidden class
+			$hidden_class = array();
+			if ( ! empty( $options['vkb_hidden'] ) ) {
+				array_push( $hidden_class, 'vk_hidden' );
+			} elseif ( ! empty( $options['vkb_hidden_xxl'] ) ) {
+				array_push( $hidden_class, 'vk_hidden-xxl' );
+			} elseif ( ! empty( $options['vkb_hidden_xl'] ) ) {
+				array_push( $hidden_class, 'vk_hidden-xl' );
+			} elseif ( ! empty( $options['vkb_hidden_lg'] ) ) {
+				array_push( $hidden_class, 'vk_hidden-lg' );
+			} elseif ( ! empty( $options['vkb_hidden_md'] ) ) {
+				array_push( $hidden_class, 'vk_hidden-md' );
+			} elseif ( ! empty( $options['vkb_hidden_sm'] ) ) {
+				array_push( $hidden_class, 'vk_hidden-sm' );
+			} elseif ( ! empty( $options['vkb_hidden_xs'] ) ) {
+				array_push( $hidden_class, 'vk_hidden-xs' );
+			}
 
-		return $html;
+			$loop = '';
+			if ( $wp_query->have_posts() ) :
+
+				$loop .= '<div class="vk_posts ' . esc_attr( $loop_outer_class ) . ' ' . esc_attr( implode( ' ', $hidden_class ) ) . '">';
+
+				global $vk_posts_loop_item_count;
+				$vk_posts_loop_item_count = 0;
+
+				while ( $wp_query->have_posts() ) {
+
+					$vk_posts_loop_item_count++;
+
+					$wp_query->the_post();
+					global $post;
+					$loop .= self::get_view( $post, $options );
+
+					$loop .= apply_filters( 'vk_posts_loop_item_after', '', $options );
+
+				} // while ( have_posts() ) {
+
+				$loop .= '</div>';
+
+				endif;
+
+			/*
+			wp_reset_query() がないとトップページでショートコードなどから呼び出した場合に
+			固定ページのトップ指定が解除されて投稿一覧が表示される
+			→ と言いたい所だが、そもそも global $wp_query を上書きするなという話で、
+			wp_reset_query()をするという事は余分に1回クエリが走る事になるので、
+			$wp_query を上書きしないルールにしてここでは wp_reset_query() を走らせない
+			*/
+			// wp_reset_query();
+			wp_reset_postdata();
+			return $loop;
+		}
+
+		/**
+		 * [public description]
+		 *
+		 * @var [type]
+		 */
+		public static function the_loop( $wp_query, $options, $options_loop = array() ) {
+			echo self::get_loop( $wp_query, $options, $options_loop );
+		}
+
+
+		/***********************************************
+		 * Common Parts
+		 */
+
+		/**
+		 * Common Part _ first DIV
+		 *
+		 * @var [type]
+		 */
+		public static function get_view_first_div( $post, $options ) {
+
+			// Add layout Class
+			if ( 'card-horizontal' === $options['layout'] ) {
+				$class_outer = 'card card-post card-horizontal';
+			} elseif ( 'card-noborder' === $options['layout'] ) {
+				$class_outer = 'card card-noborder';
+			} elseif ( 'card-intext' === $options['layout'] ) {
+				$class_outer = 'card card-intext';
+			} elseif ( 'media' === $options['layout'] ) {
+				$class_outer = 'media';
+			} elseif ( 'postListText' === $options['layout'] ) {
+				$class_outer = 'postListText';
+			} else {
+				$class_outer = 'card card-post';
+			}
+
+			// Add Outer class.
+			if ( ! empty( $options['class_outer'] ) ) {
+				$class_outer .= ' ' . esc_attr( $options['class_outer'] );
+			}
+
+			// Add btn class.
+			if ( $options['display_btn'] && 'postListText' !== $options['layout'] ) {
+				$class_outer .= ' vk_post-btn-display';
+			}
+			global $post;
+			$html = '<div id="post-' . esc_attr( $post->ID ) . '" class="vk_post vk_post-postType-' . esc_attr( $post->post_type ) . ' ' . join( ' ', get_post_class( $class_outer ) ) . '">';
+			return $html;
+		}
+
+		/**
+		 * Common Part _ post thumbnail
+		 *
+		 * @param  [type] $post    [description]
+		 * @param  [type] $options [description]
+		 * @param  string $class   [description]
+		 * @return [type]          [description]
+		 */
+		public static function get_thumbnail_image( $post, $options, $attr = array() ) {
+
+			$default = array(
+				'class_outer' => '',
+				'class_image' => '',
+			);
+			$classes = wp_parse_args( $attr, $default );
+
+			$html = '';
+			if ( $options['display_image'] ) {
+				if ( $classes['class_outer'] ) {
+					$classes['class_outer'] = ' ' . $classes['class_outer'];
+				}
+
+				$image_src = get_the_post_thumbnail_url( $post->ID, 'large' );
+				if ( ! $image_src && $options['image_default_url'] ) {
+					$image_src = esc_url( $options['image_default_url'] );
+				}
+				$style = ' style="background-image:url(' . $image_src . ')"';
+
+				$html .= '<div class="vk_post_imgOuter' . $classes['class_outer'] . '"' . $style . '>';
+
+				if ( 'card-intext' !== $options['layout'] ) {
+					$html .= '<a href="' . get_the_permalink( $post->ID ) . '">';
+				}
+
+				if ( $options['overlay'] ) {
+					$html .= '<div class="card-img-overlay">';
+					$html .= $options['overlay'];
+					$html .= '</div>';
+				}
+
+				if ( $options['display_image_overlay_term'] ) {
+
+					$html     .= '<div class="card-img-overlay">';
+					$term_args = array(
+						'class' => 'vk_post_imgOuter_singleTermLabel',
+					);
+					if ( method_exists( 'Vk_term_color', 'get_single_term_with_color' ) ) {
+						$html .= Vk_term_color::get_single_term_with_color( $post, $term_args );
+					}
+					$html .= '</div>';
+
+				}
+				if ( $classes['class_image'] ) {
+					$image_class = 'vk_post_imgOuter_img ' . $classes['class_image'];
+				} else {
+					$image_class = 'vk_post_imgOuter_img';
+				}
+
+				$image_attr = array( 'class' => $image_class );
+				$img        = get_the_post_thumbnail( $post->ID, 'medium', $image_attr );
+				if ( $img ) {
+					$html .= $img;
+				} elseif ( $options['image_default_url'] ) {
+					$html .= '<img src="' . esc_url( $options['image_default_url'] ) . '" alt="" class="' . $image_class . '" loading="lazy" />';
+				}
+
+				if ( 'card-intext' !== $options['layout'] ) {
+					$html .= '</a>';
+				}
+
+				$html .= '</div><!-- [ /.vk_post_imgOuter ] -->';
+			}
+
+			return $html;
 		}
 
 		/**
