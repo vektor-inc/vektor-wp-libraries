@@ -1,0 +1,370 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: VK Media Posts BS4\n"
+"POT-Creation-Date: 2021-06-16 14:44+0900\n"
+"PO-Revision-Date: 2021-06-16 14:44+0900\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0\n"
+"X-Poedit-Basepath: ../..\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: media-post-bs4.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.min.js\n"
+
+#: media-posts-bs4-config.php:49 package/class-vk-media-posts-bs4-admin.php:243
+#: package/class-vk-media-posts-bs4-widget.php:342
+msgid "Extra small"
+msgstr "Extra small"
+
+#: media-posts-bs4-config.php:50 package/class-vk-media-posts-bs4-admin.php:244
+#: package/class-vk-media-posts-bs4-widget.php:343
+msgid "Small"
+msgstr "Small"
+
+#: media-posts-bs4-config.php:51 package/class-vk-media-posts-bs4-admin.php:245
+#: package/class-vk-media-posts-bs4-widget.php:344
+msgid "Medium"
+msgstr "Medium"
+
+#: media-posts-bs4-config.php:52 package/class-vk-media-posts-bs4-admin.php:246
+#: package/class-vk-media-posts-bs4-widget.php:345
+msgid "Large"
+msgstr "Large"
+
+#: media-posts-bs4-config.php:53 package/class-vk-media-posts-bs4-admin.php:247
+#: package/class-vk-media-posts-bs4-widget.php:346
+msgid "Extra large"
+msgstr "Extra large"
+
+#: media-posts-bs4-config.php:74 media-posts-bs4-config.php:118
+#: package/class-vk-media-posts-bs4-widget.php:112
+#: package/class-vk-media-posts-bs4.php:109
+msgid "Read more"
+msgstr "続きを読む"
+
+#: media-posts-bs4-config.php:77 package/class-vk-media-posts-bs4.php:112
+msgid "New!!"
+msgstr "New!!"
+
+#: media-posts-bs4-config.php:102
+#: package/class-vk-media-posts-bs4-widget.php:44
+#: package/class-vk-media-posts-bs4-widget.php:93
+msgid "Recent Posts"
+msgstr "最近の投稿"
+
+#: package/class-vk-media-posts-bs4-admin.php:60
+msgid "Archive Page Setting"
+msgstr "アーカイブページ設定"
+
+#: package/class-vk-media-posts-bs4-admin.php:70
+#: package/class-vk-media-posts-bs4-admin.php:380
+#: package/class-vk-media-posts-bs4-widget.php:424
+msgid "Author"
+msgstr "投稿者"
+
+#: package/class-vk-media-posts-bs4-admin.php:71
+msgid "Search"
+msgstr "検索"
+
+#: package/class-vk-media-posts-bs4-admin.php:73
+#: package/class-vk-media-posts-bs4.php:144
+msgid "default"
+msgstr "標準"
+
+#: package/class-vk-media-posts-bs4-admin.php:128
+msgid ""
+"If the search condition includes the \"post type\" as not only the keyword "
+"search, the settings specified in the \"post type\" will be applied."
+msgstr ""
+"検索条件にキーワード検索だけでなく「投稿タイプ」が含まれている場合は、「投稿"
+"タイプ」で指定した設定が適用されます。"
+
+#: package/class-vk-media-posts-bs4-admin.php:146
+#: package/class-vk-media-posts-bs4-widget.php:227
+msgid "Display conditions"
+msgstr "表示条件"
+
+#: package/class-vk-media-posts-bs4-admin.php:149
+msgid "Number of posts per page"
+msgstr "表示件数"
+
+#. translators: Display type and columns of posttype.
+#: package/class-vk-media-posts-bs4-admin.php:187
+#, php-format
+msgid "Display type and columns [ %s ]"
+msgstr "表示タイプとカラム[ %s ]"
+
+#: package/class-vk-media-posts-bs4-admin.php:216
+#: package/class-vk-media-posts-bs4-widget.php:306
+msgid "Display type"
+msgstr "表示タイプ"
+
+#: package/class-vk-media-posts-bs4-admin.php:248
+#: package/class-vk-media-posts-bs4-widget.php:347
+msgid "XX large"
+msgstr "XX large"
+
+#. translators: Column of Screen sizes of xs, sm, md, lg, xl, xxl.
+#. translators: column of each screnn size of xs, sm, md, lg, xl and xxl.
+#: package/class-vk-media-posts-bs4-admin.php:266
+#: package/class-vk-media-posts-bs4-widget.php:354
+#, php-format
+msgid "Column ( Screen size : %s )"
+msgstr "カラム ( 画面サイズ : %s )"
+
+#: package/class-vk-media-posts-bs4-admin.php:286
+#: package/class-vk-media-posts-bs4-widget.php:366
+msgid "Order Option"
+msgstr "表示順オプション"
+
+#: package/class-vk-media-posts-bs4-admin.php:312
+#: package/class-vk-media-posts-bs4-widget.php:371
+msgid "Published Day"
+msgstr "公開日"
+
+#: package/class-vk-media-posts-bs4-admin.php:313
+#: package/class-vk-media-posts-bs4-widget.php:372
+msgid "Modefied Day"
+msgstr "更新日"
+
+#: package/class-vk-media-posts-bs4-admin.php:314
+#: package/class-vk-media-posts-bs4-widget.php:373
+msgid "Title"
+msgstr "タイトル"
+
+#: package/class-vk-media-posts-bs4-admin.php:315
+#: package/class-vk-media-posts-bs4-widget.php:374
+msgid "Random"
+msgstr "ランダム"
+
+#: package/class-vk-media-posts-bs4-admin.php:333
+#: package/class-vk-media-posts-bs4-widget.php:389
+msgid "Order"
+msgstr "順番"
+
+#: package/class-vk-media-posts-bs4-admin.php:338
+#: package/class-vk-media-posts-bs4-widget.php:393
+msgid "DESC"
+msgstr "降順"
+
+#: package/class-vk-media-posts-bs4-admin.php:339
+#: package/class-vk-media-posts-bs4-widget.php:394
+msgid "ASC"
+msgstr "昇順"
+
+#. translators: Display item of each post type.
+#: package/class-vk-media-posts-bs4-admin.php:357
+#, php-format
+msgid "Display item [ %s ]"
+msgstr "表示要素 [ %s ]"
+
+#: package/class-vk-media-posts-bs4-admin.php:368
+#: package/class-vk-media-posts-bs4-widget.php:421
+msgid "Image"
+msgstr "画像"
+
+#: package/class-vk-media-posts-bs4-admin.php:372
+#: package/class-vk-media-posts-bs4-widget.php:422
+msgid "Term's name on Image"
+msgstr "画像右上分類名"
+
+#: package/class-vk-media-posts-bs4-admin.php:376
+#: package/class-vk-media-posts-bs4-widget.php:423
+msgid "Excerpt"
+msgstr "抜粋"
+
+#: package/class-vk-media-posts-bs4-admin.php:384
+#: package/class-vk-media-posts-bs4-widget.php:425
+msgid "Date"
+msgstr "日付"
+
+#: package/class-vk-media-posts-bs4-admin.php:388
+#: package/class-vk-media-posts-bs4-widget.php:426
+msgid "New mark"
+msgstr "新着表示"
+
+#: package/class-vk-media-posts-bs4-admin.php:392
+#: package/class-vk-media-posts-bs4-widget.php:427
+msgid "Taxonomies (all)"
+msgstr "分類（全項目）"
+
+#: package/class-vk-media-posts-bs4-admin.php:396
+#: package/class-vk-media-posts-bs4-widget.php:428
+msgid "Button"
+msgstr "ボタン"
+
+#. translators: New mark options of each post type.
+#: package/class-vk-media-posts-bs4-admin.php:437
+#, php-format
+msgid "New mark option [ %s ]"
+msgstr "新着表示オプション [ %s ]"
+
+#: package/class-vk-media-posts-bs4-admin.php:455
+#: package/class-vk-media-posts-bs4-widget.php:447
+msgid "Number of days to display the new post mark"
+msgstr "新着表示する日数"
+
+#: package/class-vk-media-posts-bs4-admin.php:474
+#: package/class-vk-media-posts-bs4-widget.php:453
+msgid "New mark text"
+msgstr "新着表示テキスト"
+
+#. translators: Button option of each post type.
+#: package/class-vk-media-posts-bs4-admin.php:497
+#, php-format
+msgid "Button option [ %s ]"
+msgstr "ボタンオプション [ %s ]"
+
+#: package/class-vk-media-posts-bs4-admin.php:515
+#: package/class-vk-media-posts-bs4-widget.php:463
+msgid "Button text"
+msgstr "ボタンの文字"
+
+#: package/class-vk-media-posts-bs4-admin.php:523
+#: package/class-vk-media-posts-bs4-widget.php:474
+msgid "Left"
+msgstr "左"
+
+#: package/class-vk-media-posts-bs4-admin.php:524
+#: package/class-vk-media-posts-bs4-widget.php:477
+msgid "Center"
+msgstr "中央"
+
+#: package/class-vk-media-posts-bs4-admin.php:525
+#: package/class-vk-media-posts-bs4-widget.php:480
+msgid "Right"
+msgstr "右"
+
+#: package/class-vk-media-posts-bs4-admin.php:540
+msgid "Text align"
+msgstr "文字の位置"
+
+#: package/class-vk-media-posts-bs4-widget.php:25
+msgid "Media Posts BS4"
+msgstr "Media Posts BS4"
+
+#: package/class-vk-media-posts-bs4-widget.php:29
+msgid ""
+"It is a widget that displays the post list. Various shapes can be selected."
+msgstr "投稿リスト用のウィジェットです。様々な表示形式が選択できます。"
+
+#: package/class-vk-media-posts-bs4-widget.php:218
+msgid "Title:"
+msgstr "タイトル:"
+
+#: package/class-vk-media-posts-bs4-widget.php:229
+msgid "Display post types"
+msgstr "表示タイプ"
+
+#: package/class-vk-media-posts-bs4-widget.php:267
+msgid "Category(Term) ID"
+msgstr "カテゴリー (ターム) ID"
+
+#: package/class-vk-media-posts-bs4-widget.php:273
+msgid ""
+"If you need filtering by category(term), add the category ID separate by \","
+"\"."
+msgstr ""
+"特定のカテゴリー（あるいはカスタム分類）の投稿だけを表示したい場合は、表示し"
+"たいカテゴリーのIDを , 区切りで入力してください。"
+
+#: package/class-vk-media-posts-bs4-widget.php:275
+msgid "If empty this area, I will do not filtering."
+msgstr "未入力の場合はカスタム分類による絞り込みはされません。"
+
+#: package/class-vk-media-posts-bs4-widget.php:283
+msgid "Display count"
+msgstr "表示件数"
+
+#: package/class-vk-media-posts-bs4-widget.php:291
+msgid "Offset count"
+msgstr "オフセット数"
+
+#: package/class-vk-media-posts-bs4-widget.php:303
+msgid "Display type and columns"
+msgstr "表示タイプとカラム"
+
+#: package/class-vk-media-posts-bs4-widget.php:334
+msgid "Columns"
+msgstr "カラム"
+
+#: package/class-vk-media-posts-bs4-widget.php:337
+msgid "Please input column count to under the range of 1 to 4."
+msgstr "1～4の間でカラム数を設定してください。"
+
+#: package/class-vk-media-posts-bs4-widget.php:367
+msgid "Order by"
+msgstr "表示順の基準"
+
+#: package/class-vk-media-posts-bs4-widget.php:417
+msgid "Display item"
+msgstr "表示要素"
+
+#: package/class-vk-media-posts-bs4-widget.php:440
+msgid "New mark option"
+msgstr "新着表示オプション"
+
+#: package/class-vk-media-posts-bs4-widget.php:459
+msgid "Button option"
+msgstr "ボタンオプション"
+
+#: package/class-vk-media-posts-bs4-widget.php:468
+msgid "Button align"
+msgstr "ボタンの位置"
+
+#: package/class-vk-media-posts-bs4.php:64
+msgid "Card"
+msgstr "カード"
+
+#: package/class-vk-media-posts-bs4.php:68
+msgid "Card Noborder"
+msgstr "カード（線なし）"
+
+#: package/class-vk-media-posts-bs4.php:72
+msgid "Card Intext"
+msgstr "カードインテキスト"
+
+#: package/class-vk-media-posts-bs4.php:76
+msgid "Card Horizontal"
+msgstr "カード（水平）"
+
+#: package/class-vk-media-posts-bs4.php:80
+msgid "Media"
+msgstr "メディア"
+
+#: package/class-vk-media-posts-bs4.php:84
+msgctxt "post list type"
+msgid "Text 1 Column"
+msgstr "テキスト 1 カラム"
+
+#: package/class-vk-media-posts-bs4.php:165
+msgid "Posts"
+msgstr "投稿"
+
+#: package/class-vk-media-posts-bs4.php:166
+msgid "Pages"
+msgstr "固定ページ"
+
+#. Plugin Name of the plugin/theme
+msgid "VK Media Posts BS4"
+msgstr "VK Media Posts BS4"
+
+#~ msgid "https://vektor-inc.co.jp"
+#~ msgstr "https://vektor-inc.co.jp"
+
+#~ msgid "Vektor,Inc."
+#~ msgstr "株式会社ベクトル"
+
+#~ msgid ""
+#~ "This is a plugin that you can add a filter search function with blocks."
+#~ msgstr "ブロックを使ったフィルター検索機能を追加できるプラグインです。"

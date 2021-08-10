@@ -17,6 +17,8 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 		 */
 		public function __construct() {
 
+			add_action( 'init', array( __CLASS__, 'load_text_domain' ), 0 );
+
 			require_once dirname( __FILE__ ) . '/class-vk-media-posts-bs4-admin.php';
 			add_action( 'widgets_init', array( __CLASS__, 'register_widget' ) );
 
@@ -31,6 +33,25 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 		}
 
 		/**
+		 * Load TextDomain
+		 */
+		public static function load_text_domain() {
+			$domain = 'vk-media-posts-bs4';
+			$locale = apply_filters(
+				'plugin_locale',
+				( is_admin() && function_exists('get_user_locale') ) ? get_user_locale() : get_locale(),
+				$domain
+			);
+
+			$moFile = $domain . '-' . $locale . '.mo';
+			$path = realpath( dirname(__FILE__) . '/languages' );
+
+			if ($path && file_exists($path)) {
+				load_textdomain( $domain, $path . '/' . $moFile );
+			}
+		}
+
+		/**
 		 * Patterns
 		 */
 		public static function patterns() {
@@ -40,27 +61,27 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 			*/
 			$patterns = array(
 				'card'            => array(
-					'label'             => __( 'Card', 'media-posts-bs4-textdomain' ),
+					'label'             => __( 'Card', 'vk-media-posts-bs4' ),
 					'class_posts_outer' => '',
 				),
 				'card-noborder'   => array(
-					'label'             => __( 'Card Noborder', 'media-posts-bs4-textdomain' ),
+					'label'             => __( 'Card Noborder', 'vk-media-posts-bs4' ),
 					'class_posts_outer' => '',
 				),
 				'card-intext'     => array(
-					'label'             => __( 'Card Intext', 'media-posts-bs4-textdomain' ),
+					'label'             => __( 'Card Intext', 'vk-media-posts-bs4' ),
 					'class_posts_outer' => '',
 				),
 				'card-horizontal' => array(
-					'label'             => __( 'Card Horizontal', 'media-posts-bs4-textdomain' ),
+					'label'             => __( 'Card Horizontal', 'vk-media-posts-bs4' ),
 					'class_posts_outer' => '',
 				),
 				'media'           => array(
-					'label'             => __( 'Media', 'media-posts-bs4-textdomain' ),
+					'label'             => __( 'Media', 'vk-media-posts-bs4' ),
 					'class_posts_outer' => 'media-outer',
 				),
 				'postListText'    => array(
-					'label'             => _x( 'Text 1 Column', 'post list type', 'media-posts-bs4-textdomain' ),
+					'label'             => _x( 'Text 1 Column', 'post list type', 'vk-media-posts-bs4' ),
 					'class_posts_outer' => 'postListText-outer',
 				),
 			);
@@ -85,10 +106,10 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 				'display_taxonomies'         => false,
 				'display_btn'                => false,
 				'image_default_url'          => VK_MEDIA_POSTS_BS4_URL . '/images/no-image.png',
-				'btn_text'                   => __( 'Read more', 'media-posts-bs4-textdomain' ),
+				'btn_text'                   => __( 'Read more', 'vk-media-posts-bs4' ),
 				'btn_align'                  => 'text-right',
 				'overlay'                    => false,
-				'new_text'                   => __( 'New!!', 'media-posts-bs4-textdomain' ),
+				'new_text'                   => __( 'New!!', 'vk-media-posts-bs4' ),
 				'new_date'                   => 7,
 				'class_title'                => '',
 				'body_prepend'               => '',
@@ -120,7 +141,7 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 			}
 
 			$selected_html = ( isset( $selected ) && ( 'default' === $selected ) ) ? ' selected' : '';
-			$select_html   = '<option value="default">' . $system_name . __( 'default', 'media-posts-bs4-textdomain' ) . '</option>';
+			$select_html   = '<option value="default">' . $system_name . __( 'default', 'vk-media-posts-bs4' ) . '</option>';
 
 			foreach ( $patterns as $key => $value ) {
 				$selected_html = ( isset( $selected ) && ( $selected === $key ) ) ? ' selected' : '';
@@ -141,8 +162,8 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 		public static function label_names() {
 
 			$post_types_labels = array(
-				'post' => __( 'Posts', 'media-posts-bs4-textdomain' ),
-				'page' => __( 'Pages', 'media-posts-bs4-textdomain' ),
+				'post' => __( 'Posts', 'vk-media-posts-bs4' ),
+				'page' => __( 'Pages', 'vk-media-posts-bs4' ),
 			);
 
 			return $post_types_labels;

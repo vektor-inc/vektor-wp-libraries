@@ -57,7 +57,7 @@ class VK_Media_Posts_BS4_Admin {
 				'priority'       => 535,
 				'capability'     => 'edit_theme_options',
 				'theme_supports' => '',
-				'title'          => $customize_section_name . __( 'Archive Page Setting', 'media-posts-bs4-textdomain' ),
+				'title'          => $customize_section_name . __( 'Archive Page Setting', 'vk-media-posts-bs4' ),
 			)
 		);
 
@@ -67,10 +67,10 @@ class VK_Media_Posts_BS4_Admin {
 		$post_types['search'] = 'search';
 
 		$post_types_labels           = VK_Media_Posts_BS4::label_names() + VK_Media_Posts_BS4::get_custom_types_labels();
-		$post_types_labels['author'] = __( 'Author', 'media-posts-bs4-textdomain' );
-		$post_types_labels['search'] = __( 'Search', 'media-posts-bs4-textdomain' );
+		$post_types_labels['author'] = __( 'Author', 'vk-media-posts-bs4' );
+		$post_types_labels['search'] = __( 'Search', 'vk-media-posts-bs4' );
 
-		$patterns['default']['label'] = $system_name . ' ' . __( 'default', 'media-posts-bs4-textdomain' );
+		$patterns['default']['label'] = $system_name . ' ' . __( 'default', 'vk-media-posts-bs4' );
 
 		/*
 		Cope with old vk-component version at VK Blocks Pro
@@ -125,7 +125,7 @@ class VK_Media_Posts_BS4_Admin {
 							'section'          => 'vk_post_type_archive_setting_' . $type,
 							'type'             => 'text',
 							'custom_title_sub' => '',
-							'custom_html'      => '<p>* ' . __( 'If the search condition includes the "post type" as not only the keyword search, the settings specified in the "post type" will be applied.', 'media-posts-bs4-textdomain' ) . '</p>',
+							'custom_html'      => '<p>* ' . __( 'If the search condition includes the "post type" as not only the keyword search, the settings specified in the "post type" will be applied.', 'vk-media-posts-bs4' ) . '</p>',
 						)
 					)
 				);
@@ -143,10 +143,10 @@ class VK_Media_Posts_BS4_Admin {
 					$wp_customize,
 					'vk_post_type_archive[' . $type . '][display_conditions_title]',
 					array(
-						'label'            => __( 'Display conditions', 'media-posts-bs4-textdomain' ) . ' [ ' . $post_type_label . ' ]',
+						'label'            => __( 'Display conditions', 'vk-media-posts-bs4' ) . ' [ ' . $post_type_label . ' ]',
 						'section'          => 'vk_post_type_archive_setting_' . $type,
 						'type'             => 'text',
-						'custom_title_sub' => __( 'Number of posts per page', 'media-posts-bs4-textdomain' ),
+						'custom_title_sub' => __( 'Number of posts per page', 'vk-media-posts-bs4' ),
 						'custom_html'      => '',
 					)
 				)
@@ -184,7 +184,7 @@ class VK_Media_Posts_BS4_Admin {
 					'post_type_title_' . $type,
 					array(
 						// translators: Display type and columns of posttype.
-						'label'            => sprintf( __( 'Display type and columns [ %s ]', 'media-posts-bs4-textdomain' ), $post_type_label ),
+						'label'            => sprintf( __( 'Display type and columns [ %s ]', 'vk-media-posts-bs4' ), $post_type_label ),
 						'section'          => 'vk_post_type_archive_setting_' . $type,
 						'type'             => 'text',
 						'custom_title_sub' => '',
@@ -213,7 +213,7 @@ class VK_Media_Posts_BS4_Admin {
 			$wp_customize->add_control(
 				'vk_post_type_archive[' . $type . '][layout]',
 				array(
-					'label'    => __( 'Display type', 'media-posts-bs4-textdomain' ),
+					'label'    => __( 'Display type', 'vk-media-posts-bs4' ),
 					'section'  => 'vk_post_type_archive_setting_' . $type,
 					'settings' => 'vk_post_type_archive[' . $type . '][layout]',
 					'type'     => 'select',
@@ -240,12 +240,12 @@ class VK_Media_Posts_BS4_Admin {
 
 			// Columns.
 			$sizes = array(
-				'xs'  => array( 'label' => __( 'Extra small', 'media-posts-bs4-textdomain' ) ),
-				'sm'  => array( 'label' => __( 'Small', 'media-posts-bs4-textdomain' ) ),
-				'md'  => array( 'label' => __( 'Medium', 'media-posts-bs4-textdomain' ) ),
-				'lg'  => array( 'label' => __( 'Large', 'media-posts-bs4-textdomain' ) ),
-				'xl'  => array( 'label' => __( 'Extra large', 'media-posts-bs4-textdomain' ) ),
-				'xxl' => array( 'label' => __( 'XX large', 'media-posts-bs4-textdomain' ) ),
+				'xs'  => array( 'label' => __( 'Extra small', 'vk-media-posts-bs4' ) ),
+				'sm'  => array( 'label' => __( 'Small', 'vk-media-posts-bs4' ) ),
+				'md'  => array( 'label' => __( 'Medium', 'vk-media-posts-bs4' ) ),
+				'lg'  => array( 'label' => __( 'Large', 'vk-media-posts-bs4' ) ),
+				'xl'  => array( 'label' => __( 'Extra large', 'vk-media-posts-bs4' ) ),
+				'xxl' => array( 'label' => __( 'XX large', 'vk-media-posts-bs4' ) ),
 			);
 			$sizes = apply_filters( 'vk_media_post_bs4_size', $sizes );
 
@@ -263,7 +263,7 @@ class VK_Media_Posts_BS4_Admin {
 					'vk_post_type_archive[' . $type . '][col_' . $key . ']',
 					array(
 						// translators: Column of Screen sizes of xs, sm, md, lg, xl, xxl.
-						'label'    => sprintf( __( 'Column ( Screen size : %s )', 'media-posts-bs4-textdomain' ), $value['label'] ),
+						'label'    => sprintf( __( 'Column ( Screen size : %s )', 'vk-media-posts-bs4' ), $value['label'] ),
 						'section'  => 'vk_post_type_archive_setting_' . $type,
 						'settings' => 'vk_post_type_archive[' . $type . '][col_' . $key . ']',
 						'type'     => 'number',
@@ -283,7 +283,7 @@ class VK_Media_Posts_BS4_Admin {
 					$wp_customize,
 					'vk_post_type_archive[' . $type . '][order_title]',
 					array(
-						'label'       => __( 'Order Option', 'media-posts-bs4-textdomain' ) . ' [ ' . $post_type_label . ' ]',
+						'label'       => __( 'Order Option', 'vk-media-posts-bs4' ) . ' [ ' . $post_type_label . ' ]',
 						'section'     => 'vk_post_type_archive_setting_' . $type,
 						'type'        => 'text',
 						'custom_html' => '',
@@ -309,10 +309,10 @@ class VK_Media_Posts_BS4_Admin {
 					'settings' => 'vk_post_type_archive[' . $type . '][orderby]',
 					'type'     => 'select',
 					'choices'  => array(
-						'date'     => __( 'Published Day', 'media-posts-bs4-textdomain' ),
-						'modefied' => __( 'Modefied Day', 'media-posts-bs4-textdomain' ),
-						'title'    => __( 'Title', 'media-posts-bs4-textdomain' ),
-						'rand'     => __( 'Random', 'media-posts-bs4-textdomain' ),
+						'date'     => __( 'Published Day', 'vk-media-posts-bs4' ),
+						'modefied' => __( 'Modefied Day', 'vk-media-posts-bs4' ),
+						'title'    => __( 'Title', 'vk-media-posts-bs4' ),
+						'rand'     => __( 'Random', 'vk-media-posts-bs4' ),
 					),
 				)
 			);
@@ -330,13 +330,13 @@ class VK_Media_Posts_BS4_Admin {
 			$wp_customize->add_control(
 				'vk_post_type_archive[' . $type . '][order]',
 				array(
-					'label'    => __( 'Order', 'media-posts-bs4-textdomain' ),
+					'label'    => __( 'Order', 'vk-media-posts-bs4' ),
 					'section'  => 'vk_post_type_archive_setting_' . $type,
 					'settings' => 'vk_post_type_archive[' . $type . '][order]',
 					'type'     => 'select',
 					'choices'  => array(
-						'DESC' => __( 'DESC', 'media-posts-bs4-textdomain' ),
-						'ASC'  => __( 'ASC', 'media-posts-bs4-textdomain' ),
+						'DESC' => __( 'DESC', 'vk-media-posts-bs4' ),
+						'ASC'  => __( 'ASC', 'vk-media-posts-bs4' ),
 					),
 				)
 			);
@@ -354,7 +354,7 @@ class VK_Media_Posts_BS4_Admin {
 					'vk_post_type_archive[' . $type . '][display_item_title]',
 					array(
 						// translators: Display item of each post type.
-						'label'            => sprintf( __( 'Display item [ %s ]', 'media-posts-bs4-textdomain' ), $post_type_label ),
+						'label'            => sprintf( __( 'Display item [ %s ]', 'vk-media-posts-bs4' ), $post_type_label ),
 						'section'          => 'vk_post_type_archive_setting_' . $type,
 						'type'             => 'text',
 						'custom_title_sub' => '',
@@ -365,35 +365,35 @@ class VK_Media_Posts_BS4_Admin {
 
 			$items = array(
 				'display_image'              => array(
-					'label'   => __( 'Image', 'media-posts-bs4-textdomain' ),
+					'label'   => __( 'Image', 'vk-media-posts-bs4' ),
 					'default' => true,
 				),
 				'display_image_overlay_term' => array(
-					'label' => __( "Term's name on Image", 'media-posts-bs4-textdomain' ),
+					'label' => __( "Term's name on Image", 'vk-media-posts-bs4' ),
 					// 'default' => true,
 				),
 				'display_excerpt'            => array(
-					'label' => __( 'Excerpt', 'media-posts-bs4-textdomain' ),
+					'label' => __( 'Excerpt', 'vk-media-posts-bs4' ),
 					// 'default' => false,
 				),
 				'display_author'             => array(
-					'label' => __( 'Author', 'media-posts-bs4-textdomain' ),
+					'label' => __( 'Author', 'vk-media-posts-bs4' ),
 					// 'default' => false,
 				),
 				'display_date'               => array(
-					'label' => __( 'Date', 'media-posts-bs4-textdomain' ),
+					'label' => __( 'Date', 'vk-media-posts-bs4' ),
 					// 'default' => true,
 				),
 				'display_new'                => array(
-					'label' => __( 'New mark', 'media-posts-bs4-textdomain' ),
+					'label' => __( 'New mark', 'vk-media-posts-bs4' ),
 					// 'default' => true,
 				),
 				'display_taxonomies'         => array(
-					'label' => __( 'Taxonomies (all)', 'media-posts-bs4-textdomain' ),
+					'label' => __( 'Taxonomies (all)', 'vk-media-posts-bs4' ),
 					// 'default' => false,
 				),
 				'display_btn'                => array(
-					'label' => __( 'Button', 'media-posts-bs4-textdomain' ),
+					'label' => __( 'Button', 'vk-media-posts-bs4' ),
 					// 'default' => false,
 				),
 			);
@@ -434,7 +434,7 @@ class VK_Media_Posts_BS4_Admin {
 						'section'          => 'vk_post_type_archive_setting_' . $type,
 						'type'             => 'text',
 						// translators: New mark options of each post type.
-						'custom_title_sub' => sprintf( __( 'New mark option [ %s ]', 'media-posts-bs4-textdomain' ), $post_type_label ),
+						'custom_title_sub' => sprintf( __( 'New mark option [ %s ]', 'vk-media-posts-bs4' ), $post_type_label ),
 						'custom_html'      => '',
 					)
 				)
@@ -452,7 +452,7 @@ class VK_Media_Posts_BS4_Admin {
 			$wp_customize->add_control(
 				'vk_post_type_archive[' . $type . '][new_date]',
 				array(
-					'label'    => __( 'Number of days to display the new post mark', 'media-posts-bs4-textdomain' ),
+					'label'    => __( 'Number of days to display the new post mark', 'vk-media-posts-bs4' ),
 					'section'  => 'vk_post_type_archive_setting_' . $type,
 					'settings' => 'vk_post_type_archive[' . $type . '][new_date]',
 					'type'     => 'text',
@@ -471,7 +471,7 @@ class VK_Media_Posts_BS4_Admin {
 			$wp_customize->add_control(
 				'vk_post_type_archive[' . $type . '][new_text]',
 				array(
-					'label'    => __( 'New mark text', 'media-posts-bs4-textdomain' ),
+					'label'    => __( 'New mark text', 'vk-media-posts-bs4' ),
 					'section'  => 'vk_post_type_archive_setting_' . $type,
 					'settings' => 'vk_post_type_archive[' . $type . '][new_text]',
 					'type'     => 'text',
@@ -494,7 +494,7 @@ class VK_Media_Posts_BS4_Admin {
 						'section'          => 'vk_post_type_archive_setting_' . $type,
 						'type'             => 'text',
 						// translators: Button option of each post type.
-						'custom_title_sub' => sprintf( __( 'Button option [ %s ]', 'media-posts-bs4-textdomain' ), $post_type_label ),
+						'custom_title_sub' => sprintf( __( 'Button option [ %s ]', 'vk-media-posts-bs4' ), $post_type_label ),
 						'custom_html'      => '',
 					)
 				)
@@ -512,7 +512,7 @@ class VK_Media_Posts_BS4_Admin {
 			$wp_customize->add_control(
 				'vk_post_type_archive[' . $type . '][btn_text]',
 				array(
-					'label'    => __( 'Button text', 'media-posts-bs4-textdomain' ),
+					'label'    => __( 'Button text', 'vk-media-posts-bs4' ),
 					'section'  => 'vk_post_type_archive_setting_' . $type,
 					'settings' => 'vk_post_type_archive[' . $type . '][btn_text]',
 					'type'     => 'text',
@@ -520,9 +520,9 @@ class VK_Media_Posts_BS4_Admin {
 			);
 
 			$text_aligns = array(
-				'text-left'   => __( 'Left', 'media-posts-bs4-textdomain' ),
-				'text-center' => __( 'Center', 'media-posts-bs4-textdomain' ),
-				'text-right'  => __( 'Right', 'media-posts-bs4-textdomain' ),
+				'text-left'   => __( 'Left', 'vk-media-posts-bs4' ),
+				'text-center' => __( 'Center', 'vk-media-posts-bs4' ),
+				'text-right'  => __( 'Right', 'vk-media-posts-bs4' ),
 			);
 
 			$wp_customize->add_setting(
@@ -537,7 +537,7 @@ class VK_Media_Posts_BS4_Admin {
 			$wp_customize->add_control(
 				'vk_post_type_archive[' . $type . '][btn_align]',
 				array(
-					'label'    => __( 'Text align', 'media-posts-bs4-textdomain' ),
+					'label'    => __( 'Text align', 'vk-media-posts-bs4' ),
 					'section'  => 'vk_post_type_archive_setting_' . $type,
 					'settings' => 'vk_post_type_archive[' . $type . '][btn_align]',
 					'type'     => 'select',
