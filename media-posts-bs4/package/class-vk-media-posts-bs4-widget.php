@@ -318,7 +318,7 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 				<?php
 
 				foreach ( $patterns as $key => $value ) {
-					if ( $instance['layout'] === $key ) {
+					if ( isset( $instance['layout'] ) && $key === $instance['layout'] ) {
 						$selected = ' selected="selected"';
 					} else {
 						$selected = '';
@@ -395,7 +395,7 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 				);
 
 				foreach ( $order_patterns as $key => $value ) {
-					if ( $instance['order'] === $key ) {
+					if ( isset( $instance['order'] ) && $key === $instance['order'] ) {
 						$selected = ' selected="selected"';
 					} else {
 						$selected = '';
