@@ -23,12 +23,12 @@ jQuery(document).ready(function($){
             return;
         }
         custom_uploader = wp.media({
-            title: vk_cfb_select_image,
+            title: vk_cfb.select_images,
             // library: {
             //     type: 'image'
             // },
             button: {
-                text: vk_cfb_select_image
+                text: vk_cfb.select_images
             },
             multiple: false, // falseにすると画像を1つしか選択できなくなる
         });
