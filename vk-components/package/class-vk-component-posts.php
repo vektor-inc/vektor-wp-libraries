@@ -107,7 +107,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 		 * @var [type]
 		 */
 		public static function get_loop( $wp_query, $options, $options_loop = array() ) {
-			
+
 			// Outer Post Type classes.
 			$patterns                    = self::get_patterns();
 			$loop_outer_class_post_types = array();
