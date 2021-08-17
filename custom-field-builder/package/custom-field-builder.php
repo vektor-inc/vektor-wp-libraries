@@ -158,7 +158,12 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					$form_html .= '</select>';
 
 				} elseif ( $value['type'] == 'checkbox' || $value['type'] == 'radio' ) {
-					$field_value = get_post_meta( $post->ID, $key, true );
+					$field_value = array();
+					if ( ! empty( get_post_meta( $post->ID, $key, true ) ) ) {
+						$field_value = get_post_meta( $post->ID, $key, true );
+					} elseif ( ! empty( $options[ $key ] ) ) {
+						$field_value = $options[ $key ];
+					}
 					$form_html  .= '<ul>';
 
 					// シリアライズして保存されてたら戻す
@@ -166,15 +171,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 						if ( ! is_array( $field_value ) ) {
 							$field_value = unserialize( get_post_meta( $post->ID, $key, true ) );
 						}
-						if ( ! empty( $options[ $key ] ) && ! is_array( $options[ $key ] ) ) {
-							$options[ $key ] = unserialize( $option[ $key ] );
-						}
 					}
-
-					if ( ! empty( $options[ $key ] ) ) {
-						$field_value = array_unique( array_merge( $field_value, $options[ $key ] ) );
-					}
-
 					foreach ( $value['options'] as $option_value => $option_label ) {
 						$selected = '';
 						// print '<pre style="text-align:left">';print_r( $option_value );print '</pre>';
