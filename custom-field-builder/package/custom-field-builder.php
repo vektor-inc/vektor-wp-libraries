@@ -38,7 +38,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 				'vk_mediauploader',
 				'vk_cfb',
 				array(
-					'select_image' => __( 'Select image', 'custom_field_builder_textdomain' )
+					'select_image' => __( 'Select image', 'vk-google-job-posting-manager' )
 				)
 			);
 
@@ -72,7 +72,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 		}
 
 		public static function form_required() {
-			$required = '<span class="required">' . __( 'Required', 'custom_field_builder_textdomain' ) . '</span>';
+			$required = '<span class="required">' . __( 'Required', 'vk-google-job-posting-manager' ) . '</span>';
 			return $required;
 		}
 
@@ -81,7 +81,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 		フォームテーブル
 		-------------------------------------------
 		*/
-		public static function form_table( $custom_fields_array, $befor_items = '', $echo = true ) {
+		public static function form_table( $custom_fields_array, $befor_items = '', $echo = true, $options = array() ) {
 
 			wp_nonce_field( wp_create_nonce( __FILE__ ), 'noncename__fields' );
 
@@ -105,22 +105,49 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 						$form_html .= esc_html( $value['before_text'] ) . ' ';
 					}
 
-					$form_html .= '<input class="form-control" type="text" id="' . $key . '" name="' . $key . '" value="' . self::form_post_value( $key ) . '" size="70">';
+					$post_value = '';
+					if ( ! empty( self::form_post_value( $key ) ) ) {
+						$post_value = self::form_post_value( $key );
+					} else if ( ! empty( $options[ $key ] ) ) {
+						$post_value = $options[ $key ];
+					}
+
+					$form_html .= '<input class="form-control" type="text" id="' . $key . '" name="' . $key . '" value="' . $post_value . '" size="70">';
 
 					if ( isset( $value['after_text'] ) && $value['after_text'] ) {
 						$form_html .= ' ' . esc_html( $value['after_text'] );
 					}
 				} elseif ( $value['type'] == 'datepicker' ) {
-					$form_html .= '<input class="form-control datepicker" type="text" id="' . $key . '" name="' . $key . '" value="' . self::form_post_value( $key ) . '" size="70">';
+
+					$post_value = '';
+					if ( ! empty( self::form_post_value( $key ) ) ) {
+						$post_value = self::form_post_value( $key );
+					} else if ( ! empty( $options[ $key ] ) ) {
+						$post_value = $options[ $key ];
+					}
+
+					$form_html .= '<input class="form-control datepicker" type="text" id="' . $key . '" name="' . $key . '" value="' . $post_value . '" size="70">';
 
 				} elseif ( $value['type'] == 'textarea' ) {
-					$form_html .= '<textarea class="form-control" class="cf_textarea_wysiwyg" name="' . $key . '" cols="70" rows="3">' . self::form_post_value( $key, 'textarea' ) . '</textarea>';
+
+					$post_value = '';
+					if ( ! empty( self::form_post_value( $key, 'textarea' ) ) ) {
+						$post_value = self::form_post_value( $key, 'textarea' );
+					} else if ( ! empty( $options[ $key ] ) ) {
+						$post_value = $options[ $key ];
+					}
+
+					$form_html .= '<textarea class="form-control" class="cf_textarea_wysiwyg" name="' . $key . '" cols="70" rows="3">' . $post_value . '</textarea>';
 
 				} elseif ( $value['type'] == 'select' ) {
 					$form_html .= '<select id="' . $key . '" class="form-control" name="' . $key . '"  >';
 
+
+
 					foreach ( $value['options'] as $option_value => $option_label ) {
 						if ( self::form_post_value( $key ) == $option_value ) {
+							$selected = ' selected="selected"';
+						} elseif ( ! empty( $options[ $key ] ) &&  $options[ $key ] === $option_value ) {
 							$selected = ' selected="selected"';
 						} else {
 							$selected = '';
@@ -139,6 +166,13 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 						if ( ! is_array( $field_value ) ) {
 							$field_value = unserialize( get_post_meta( $post->ID, $key, true ) );
 						}
+						if ( ! empty( $options[ $key ] ) && ! is_array( $options[ $key ] ) ) {
+							$options[ $key ] = unserialize( $option[ $key ] );
+						}
+					}
+
+					if (! empty( $options[ $key ] ) ) {
+						$field_value = array_unique( array_merge( $field_value, $options[ $key ] ) );
 					}
 
 					foreach ( $value['options'] as $option_value => $option_label ) {
@@ -172,30 +206,48 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 						// } elseif ( isset( $_POST[ $key ] ) && $_POST[ $key ] ) {
 						// $thumb_image     = wp_get_attachment_image_src( $image_key, 'medium', false );
 						// $thumb_image_url = $thumb_image[0];
-					} else {
+					} elseif ( ! empty( $options[ $key ] ) ) {
+						$thumb_image     = wp_get_attachment_image_src( $options[ $key ], 'medium', false );
+						$thumb_image_url = $thumb_image[0];
+					}else {
 								$thumb_image_url = $custom_field_builder_url . 'images/no_image.png';
+					}
+
+					$post_value = '';
+					if ( ! empty( self::form_post_value( $key ) ) ) {
+						$post_value = self::form_post_value( $key );
+					} else if ( ! empty( $options[ $key ] ) ) {
+						$post_value = $options[ $key ];
 					}
 					// ダミー & プレビュー画像
 					$form_html .= '<img src="' . $thumb_image_url . '" id="thumb_' . $key . '" alt="" class="input_thumb" style="width:200px;height:auto;"> ';
 
 					// 実際に送信する値
-					$form_html .= '<input type="hidden" name="' . $key . '" id="' . $key . '" value="' . self::form_post_value( $key ) . '" style="width:60%;" />';
+					$form_html .= '<input type="hidden" name="' . $key . '" id="' . $key . '" value="' . $post_value . '" style="width:60%;" />';
 
 					// 画像選択ボタン
 					// .media_btn がトリガーでメディアアップローダーが起動する
 					// id名から media_ を削除した id 名の input 要素に返り値が反映される。
 					// id名が media_src_ で始まる場合はURLを返す
-					$form_html .= '<button id="media_' . $key . '" class="cfb_media_btn btn btn-default button button-default">' . __( 'Choose Image', 'custom_field_builder_textdomain' ) . '</button> ';
+					$form_html .= '<button id="media_' . $key . '" class="cfb_media_btn btn btn-default button button-default">' . __( 'Choose Image', 'vk-google-job-posting-manager' ) . '</button> ';
 
 					// 削除ボタン
 					// ボタンタグだとその場でページが再読込されてしまうのでaタグに変更
-					$form_html .= '<a id="media_reset_' . $key . '" class="media_reset_btn btn btn-default button button-default">' . __( 'Delete Image', 'custom_field_builder_textdomain' ) . '</a>';
+					$form_html .= '<a id="media_reset_' . $key . '" class="media_reset_btn btn btn-default button button-default">' . __( 'Delete Image', 'vk-google-job-posting-manager' ) . '</a>';
 
 				} elseif ( $value['type'] == 'file' ) {
-					$form_html .= '<input name="' . $key . '" id="' . $key . '" value="' . self::form_post_value( $key ) . '" style="width:60%;" />
-<button id="media_src_' . $key . '" class="cfb_media_btn btn btn-default button button-default">' . __( 'Select file', 'custom_field_builder_textdomain' ) . '</button> ';
+
+					$post_value = '';
+					if ( ! empty( self::form_post_value( $key ) ) ) {
+						$post_value = self::form_post_value( $key );
+					} else if ( ! empty( $options[ $key ] ) ) {
+						$post_value = $options[ $key ];
+					}
+
+					$form_html .= '<input name="' . $key . '" id="' . $key . '" value="' . $post_value . '" style="width:60%;" />
+<button id="media_src_' . $key . '" class="cfb_media_btn btn btn-default button button-default">' . __( 'Select file', 'vk-google-job-posting-manager' ) . '</button> ';
 					if ( $post->$key ) {
-						$form_html .= '<a href="' . esc_url( $post->$key ) . '" target="_blank" class="btn btn-default button button-default">' . __( 'View file', 'custom_field_builder_textdomain' ) . '</a>';
+						$form_html .= '<a href="' . esc_url( $post->$key ) . '" target="_blank" class="btn btn-default button button-default">' . __( 'View file', 'vk-google-job-posting-manager' ) . '</a>';
 					}
 				}
 				if ( $value['description'] ) {
