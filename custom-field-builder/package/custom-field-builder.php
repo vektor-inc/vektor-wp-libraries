@@ -201,8 +201,8 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 				} elseif ( $value['type'] == 'image' ) {
 					if ( $post->$key ) {
-								$thumb_image     = wp_get_attachment_image_src( $post->$key, 'medium', false );
-								$thumb_image_url = $thumb_image[0];
+						$thumb_image     = wp_get_attachment_image_src( $post->$key, 'medium', false );
+						$thumb_image_url = $thumb_image[0];
 						// } elseif ( isset( $_POST[ $key ] ) && $_POST[ $key ] ) {
 						// $thumb_image     = wp_get_attachment_image_src( $image_key, 'medium', false );
 						// $thumb_image_url = $thumb_image[0];
