@@ -38,7 +38,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 				'vk_mediauploader',
 				'vk_cfb',
 				array(
-					'select_image' => __( 'Select image', 'vk-google-job-posting-manager' )
+					'select_image' => __( 'Select image', 'custom_field_builder_textdomain' )
 				)
 			);
 
@@ -72,7 +72,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 		}
 
 		public static function form_required() {
-			$required = '<span class="required">' . __( 'Required', 'vk-google-job-posting-manager' ) . '</span>';
+			$required = '<span class="required">' . __( 'Required', 'custom_field_builder_textdomain' ) . '</span>';
 			return $required;
 		}
 
@@ -229,11 +229,11 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					// .media_btn がトリガーでメディアアップローダーが起動する
 					// id名から media_ を削除した id 名の input 要素に返り値が反映される。
 					// id名が media_src_ で始まる場合はURLを返す
-					$form_html .= '<button id="media_' . $key . '" class="cfb_media_btn btn btn-default button button-default">' . __( 'Choose Image', 'vk-google-job-posting-manager' ) . '</button> ';
+					$form_html .= '<button id="media_' . $key . '" class="cfb_media_btn btn btn-default button button-default">' . __( 'Choose Image', 'custom_field_builder_textdomain' ) . '</button> ';
 
 					// 削除ボタン
 					// ボタンタグだとその場でページが再読込されてしまうのでaタグに変更
-					$form_html .= '<a id="media_reset_' . $key . '" class="media_reset_btn btn btn-default button button-default">' . __( 'Delete Image', 'vk-google-job-posting-manager' ) . '</a>';
+					$form_html .= '<a id="media_reset_' . $key . '" class="media_reset_btn btn btn-default button button-default">' . __( 'Delete Image', 'custom_field_builder_textdomain' ) . '</a>';
 
 				} elseif ( $value['type'] == 'file' ) {
 
@@ -245,9 +245,9 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					}
 
 					$form_html .= '<input name="' . $key . '" id="' . $key . '" value="' . $post_value . '" style="width:60%;" />
-<button id="media_src_' . $key . '" class="cfb_media_btn btn btn-default button button-default">' . __( 'Select file', 'vk-google-job-posting-manager' ) . '</button> ';
+<button id="media_src_' . $key . '" class="cfb_media_btn btn btn-default button button-default">' . __( 'Select file', 'custom_field_builder_textdomain' ) . '</button> ';
 					if ( $post->$key ) {
-						$form_html .= '<a href="' . esc_url( $post->$key ) . '" target="_blank" class="btn btn-default button button-default">' . __( 'View file', 'vk-google-job-posting-manager' ) . '</a>';
+						$form_html .= '<a href="' . esc_url( $post->$key ) . '" target="_blank" class="btn btn-default button button-default">' . __( 'View file', 'custom_field_builder_textdomain' ) . '</a>';
 					}
 				}
 				if ( $value['description'] ) {
