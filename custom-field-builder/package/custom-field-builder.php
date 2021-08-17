@@ -209,7 +209,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					} elseif ( ! empty( $options[ $key ] ) ) {
 						$thumb_image     = wp_get_attachment_image_src( $options[ $key ], 'medium', false );
 						$thumb_image_url = $thumb_image[0];
-					}else {
+					} else {
 								$thumb_image_url = $custom_field_builder_url . 'images/no_image.png';
 					}
 
