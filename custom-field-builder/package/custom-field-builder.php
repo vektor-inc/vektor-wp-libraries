@@ -242,8 +242,8 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 					$form_html .= '<input name="' . $key . '" id="' . $key . '" value="' . $post_value . '" style="width:60%;" />
 <button id="media_src_' . $key . '" class="cfb_media_btn btn btn-default button button-default">' . __( 'Select file', 'custom_field_builder_textdomain' ) . '</button> ';
-					if ( $post->$key ) {
-						$form_html .= '<a href="' . esc_url( $post->$key ) . '" target="_blank" class="btn btn-default button button-default">' . __( 'View file', 'custom_field_builder_textdomain' ) . '</a>';
+					if ( $post_value ) {
+						$form_html .= '<a href="' . esc_url( $post_value ) . '" target="_blank" class="btn btn-default button button-default">' . __( 'View file', 'custom_field_builder_textdomain' ) . '</a>';
 					}
 				}
 				if ( $value['description'] ) {
