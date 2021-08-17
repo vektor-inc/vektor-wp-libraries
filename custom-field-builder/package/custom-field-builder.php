@@ -172,7 +172,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 							$field_value = unserialize( get_post_meta( $post->ID, $key, true ) );
 						}
 					}
-					
+
 					foreach ( $value['options'] as $option_value => $option_label ) {
 						$selected = '';
 						// print '<pre style="text-align:left">';print_r( $option_value );print '</pre>';
