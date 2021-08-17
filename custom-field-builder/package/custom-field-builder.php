@@ -142,8 +142,6 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 				} elseif ( $value['type'] == 'select' ) {
 					$form_html .= '<select id="' . $key . '" class="form-control" name="' . $key . '"  >';
 
-
-
 					foreach ( $value['options'] as $option_value => $option_label ) {
 						if ( self::form_post_value( $key ) == $option_value ) {
 							$selected = ' selected="selected"';
