@@ -108,7 +108,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					$post_value = '';
 					if ( ! empty( self::form_post_value( $key ) ) ) {
 						$post_value = self::form_post_value( $key );
-					} else if ( ! empty( $options[ $key ] ) ) {
+					} elseif ( ! empty( $options[ $key ] ) ) {
 						$post_value = $options[ $key ];
 					}
 
@@ -122,7 +122,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					$post_value = '';
 					if ( ! empty( self::form_post_value( $key ) ) ) {
 						$post_value = self::form_post_value( $key );
-					} else if ( ! empty( $options[ $key ] ) ) {
+					} elseif ( ! empty( $options[ $key ] ) ) {
 						$post_value = $options[ $key ];
 					}
 
@@ -133,7 +133,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					$post_value = '';
 					if ( ! empty( self::form_post_value( $key, 'textarea' ) ) ) {
 						$post_value = self::form_post_value( $key, 'textarea' );
-					} else if ( ! empty( $options[ $key ] ) ) {
+					} elseif ( ! empty( $options[ $key ] ) ) {
 						$post_value = $options[ $key ];
 					}
 
@@ -171,7 +171,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 						}
 					}
 
-					if (! empty( $options[ $key ] ) ) {
+					if ( ! empty( $options[ $key ] ) ) {
 						$field_value = array_unique( array_merge( $field_value, $options[ $key ] ) );
 					}
 
