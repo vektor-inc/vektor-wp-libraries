@@ -82,7 +82,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 			} else {
 				$html = self::get_view_type_card( $post, $options );
 			}
-			return $html;
+			return apply_filters( 'vk_post_view', $html, $post, $options );
 		}
 
 		/**
