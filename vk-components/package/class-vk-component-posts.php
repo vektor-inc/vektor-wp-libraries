@@ -3,6 +3,7 @@
  * VK Components Posts
  *
  * @package VK Component
+ * @version 1.1.0
  *
  * *********************** CAUTION ***********************
  * The original of this file is located at:
@@ -30,11 +31,13 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 
 		/**
 		 * Get Loop Post View Options
+		 * 
+		 * @since 1.1.0 Added the `post` parameter.
 		 *
 		 * @param array $options options array.
 		 * @return array options
 		 */
-		public static function get_loop_post_view_options( $options ) {
+		public static function get_loop_post_view_options( $options, $post ) {
 			$default = array(
 				'layout'                     => 'card',
 				'display_image'              => true,
@@ -57,7 +60,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				'body_prepend'               => '',
 				'body_append'                => '',
 			);
-			$return  = apply_filters( 'vk_post_options', wp_parse_args( $options, $default ) );
+			$return  = apply_filters( 'vk_post_options', wp_parse_args( $options, $default ), $post );
 			return $return;
 		}
 
@@ -71,7 +74,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 		 */
 		public static function get_view( $post, $options ) {
 
-			$options = self::get_loop_post_view_options( $options );
+			$options = self::get_loop_post_view_options( $options, $post );
 
 			if ( 'card-horizontal' === $options['layout'] ) {
 				$html = self::get_view_type_card_horizontal( $post, $options );
@@ -235,7 +238,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 					'screen_reader_text' => __( 'Posts navigation' ),
 					'aria_label'         => __( 'Posts' ),
 					'class'              => 'pagination',
-					'before_page_number' => '<span class="meta-nav screen-reader-text">' . __( 'Page', 'lightning' ) . ' </span>',
+					'before_page_number' => '<span class="meta-nav screen-reader-text">' . __( 'Page', 'vk_components_textdomain' ) . ' </span>',
 					'type'               => 'list',
 				)
 			);
