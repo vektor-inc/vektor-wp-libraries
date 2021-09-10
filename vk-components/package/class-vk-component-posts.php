@@ -674,6 +674,10 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 					'label'             => __( 'Card Noborder', 'vk_components_textdomain' ),
 					'class_posts_outer' => '',
 				),
+				'card-intext'     => array(
+					'label'             => __( 'Card Intext', 'vk_components_textdomain' ),
+					'class_posts_outer' => '',
+				),
 				'card-horizontal' => array(
 					'label'             => __( 'Card Horizontal', 'vk_components_textdomain' ),
 					'class_posts_outer' => '',
