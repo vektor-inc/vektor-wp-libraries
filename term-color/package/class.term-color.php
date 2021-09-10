@@ -127,7 +127,7 @@ if ( ! class_exists( 'Vk_term_color' ) ) {
 			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_script( 'wp-color-picker' );
 
-			add_action( 'admin_footer', array( $this, 'term_colors_print_scripts' ) );
+			add_action( 'admin_footer', array( __CLASS__, 'term_colors_print_scripts' ) );
 		}
 
 		/**
@@ -252,7 +252,7 @@ if ( ! class_exists( 'Vk_term_color' ) ) {
 			$single_term_with_color = '';
 			if ( $taxonomies ) :
 				// get $taxonomy name.
-				$taxonomy = key( $taxonomies );
+				$taxonomy = apply_filters( 'vk_term_color_taxonomy', key( $taxonomies ) );
 				$terms    = get_the_terms( $post->ID, $taxonomy );
 				if ( ! $terms ) {
 					return;
@@ -277,7 +277,7 @@ if ( ! class_exists( 'Vk_term_color' ) ) {
 				}
 
 			endif;
-			return $single_term_with_color;
+			return apply_filters( 'vk_get_single_term_with_color', $single_term_with_color, $post );
 		}
 
 		/**
