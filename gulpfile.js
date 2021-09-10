@@ -345,7 +345,7 @@ gulp.task('copy_term-color', function(done) {
 	.pipe(gulp.dest('../themes/katawara/inc/term-color/package/'))
 	.pipe(gulp.dest('../themes/lightning-child-rerise/inc/term-color/'))
     .pipe(gulp.dest('../themes/lightning-pro/inc/term-color/package/'))
-    .pipe(gulp.dest('../themes/lightning/inc/term-color/package/'));
+    .pipe(gulp.dest('../themes/lightning/_g3/inc/term-color/package/'));
     done();
 });
 gulp.task('watch_term', function () {
