@@ -24,24 +24,30 @@
 			}
 		}
 
+		@mixin cfb_inputStyle {
+			border-radius: 3px;
+			padding: 2px;
+			width:90%;
+			margin-bottom:3px;
+		}
+
 		input[type="text"],
 		input[type="number"],
 		input[type="email"],
 		input[type="url"]
 		{
-			width: 100%;
-			padding: 5px;
+			@include cfb_inputStyle();
+			height:28px;
 		}
-		input[type="text"],
-		input[type="number"],
-		input[type="email"],
-		input[type="url"]
-		textarea { border-radius: 3px; padding: 2px;width:90%;margin-bottom:3px; }
-		input[type="text"],
-		input[type="number"],
-		input[type="email"],
-		input[type="url"] { height:28px; }
-		input[type="text"].datepicker { width:90px;margin-right:5px; }
+
+		textarea {
+			@include cfb_inputStyle();
+		}
+
+		input[type="text"].datepicker {
+			width:90px;
+			margin-right:5px;
+		}
 
 		.text-center {
 			text-align: center;
