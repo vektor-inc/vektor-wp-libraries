@@ -314,6 +314,7 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 				return;
 			}
 
+			// wooCommerce は独自の表示件数制御があるのでこちらからは操作しない.
 			if ( ! empty( $query->query_vars['post_type'] ) ) {
 				if ( class_exists( 'woocommerce' ) && 'product' === $query->query_vars['post_type'] ) {
 					return $query;
