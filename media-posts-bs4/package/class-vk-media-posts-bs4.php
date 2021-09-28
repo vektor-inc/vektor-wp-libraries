@@ -314,6 +314,12 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 				return;
 			}
 
+			if ( ! empty( $query->query_vars['post_type'] ) ) {
+				if ( class_exists( 'woocommerce' ) && 'product' === $query->query_vars['post_type'] ) {
+					return $query;
+				}
+			}
+
 			// アーカイブページの表示件数情報を取得.
 			$vk_post_type_archive = get_option( 'vk_post_type_archive' );
 
