@@ -47,51 +47,19 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 		/**
 		 * Plugin Exists
 		 *
-		 * @param string $plugin_string '${plugin_dir}/${plugin_file}.php'.
+		 * @param string $plugin '${plugin_dir}/${plugin_file}.php'.
 		 */
-		public static function plugin_exists( $plugin_string ) {
-			// コンマで区切ったものを配列に
-			$plugins = explode( ',', $plugin_string );
-			// 返す値を初期化
-			$return_value = false;
-			// 配列の場合
-			if ( is_array( $plugins ) ) {
-				// 配列の中に該当するものが１つでもあれば実行終了
-				foreach ( $plugins as $plugin ) {
-					if ( file_exists( WP_PLUGIN_DIR . '/' . $plugin ) ) {
-						$return_value = true;
-						break;
-					}
-				}
-			} elseif ( file_exists( WP_PLUGIN_DIR . '/' . $plugins ) ) {
-				$return_value = true;
-			}
-			return $return_value;
+		public static function plugin_exists( $plugin ) {
+			return file_exists( WP_PLUGIN_DIR . '/' . $plugin );
 		}
 
 		/**
 		 * Theme Exists
-		 *
-		 * @param string $theme_string '${theme_dir}/style.css'.
+		 * 
+		 * @param string $theme '${theme_dir}/style.css'.
 		 */
-		public static function theme_exists( $theme_string ) {
-			// コンマで区切ったものを配列に
-			$themes = explode( ',', $theme_string );
-			// 返す値を初期化
-			$return_value = false;
-			// 配列の場合
-			if ( is_array( $themes ) ) {
-				// 配列の中に該当するものが１つでもあれば実行終了
-				foreach ( $themes as $theme ) {
-					if ( file_exists( WP_CONTENT_DIR . '/themes/' . $theme ) ) {
-						$return_value = true;
-						break;
-					}
-				}
-			} elseif ( file_exists( WP_CONTENT_DIR . '/themes/' . $themes ) ) {
-				$return_value = true;
-			}
-			return $return_value;
+		public static function theme_exists( $theme ) {
+			return file_exists( WP_CONTENT_DIR . '/themes/' . $theme );
 		}
 
 		/*
@@ -149,6 +117,26 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 
 				// テーマのバナーを設置
 				foreach( $product_array as $product ) {
+					// inculude 項目を追加。'slug' の値をコンマで区切って記述
+					$includes= explode( ',', $product['include'] );
+					if ( is_array( $includes ) ) {
+						foreach ( $includes as $include ) {
+							if ( str_pos( $include, '.css' ) && self::theme_exists( $include ) ) {
+								break;
+							}
+							if ( str_pos( $include, '.php' ) && self::plugin_exists( $include ) ) {
+								break;
+							}
+						}
+					} else {
+						if ( str_pos( $includes, '.css' ) && self::theme_exists( $includes ) ) {
+							break;
+						}
+						if ( str_pos( $includes, '.php' ) && self::plugin_exists( $includes ) ) {
+							break;
+						}
+					}
+
 					if ( 'theme' === $product['type'] ) {
 						if ( ! self::theme_exists( $product['slug'] ) ) {
 							if ( $lang === $product['language'] ) {
