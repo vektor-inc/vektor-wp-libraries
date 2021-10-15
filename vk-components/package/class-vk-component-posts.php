@@ -31,7 +31,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 
 		/**
 		 * Get Loop Post View Options
-		 * 
+		 *
 		 * @since 1.1.0 Added the `post` parameter.
 		 *
 		 * @param array $options options array.
@@ -355,6 +355,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				'i',
 				'a',
 				'b',
+				'br',
 				'strong',
 				'table',
 				'thead',
