@@ -106,7 +106,6 @@ gulp.task('copy_post-type-manager', function(done) {
 gulp.task('copy_custom-field-builder', function (done) {
   gulp.src('./custom-field-builder/package/**')
 	.pipe(gulp.dest('../plugins/vk-google-job-posting-manager/inc/custom-field-builder/package/'))
-	.pipe(gulp.dest('../themes/bill-vektor/inc/custom-field-builder/'))
 	.pipe(gulp.dest('../themes/katawara/inc/custom-field-builder/package/'))
 	.pipe(gulp.dest('../themes/lightning-pro/inc/custom-field-builder/package/'))
 	.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/custom-field-builder/package/'));
