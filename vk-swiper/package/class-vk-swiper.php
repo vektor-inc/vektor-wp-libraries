@@ -27,17 +27,30 @@ if ( ! class_exists( 'VK_Swiper' ) ) {
 		 * Init
 		 */
 		public static function init() {
-			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'load_swiper' ) );
+			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'register_swiper' ) );
 			add_filter( 'vk_css_simple_minify_array', array( __CLASS__, 'css_simple_minify_array' ) );
 		}
 
 		/**
 		 * Load Swiper
 		 */
-		public static function load_swiper() {
+		public static function register_swiper() {
 			global $vk_swiper_url;
 			wp_register_style( 'vk-swiper-style', $vk_swiper_url . 'assets/css/swiper-bundle.min.css', array(), SWIPER_VERSION );
 			wp_register_script( 'vk-swiper-script', $vk_swiper_url . 'assets/js/swiper-bundle.min.js', array(), SWIPER_VERSION, true );
+		}
+
+		/**
+		 * Enque Swiper
+		 */
+		public static function enqueue_swiper() {
+			add_action(
+				'wp_enqueue_scripts',
+				function() {
+					wp_enqueue_style( 'vk-swiper-style' );
+					wp_enqueue_script( 'vk-swiper-script' );
+				}
+			);
 		}
 
 		/**
