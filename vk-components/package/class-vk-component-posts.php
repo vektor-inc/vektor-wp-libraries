@@ -35,6 +35,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 		 * @since 1.1.0 Added the `post` parameter.
 		 *
 		 * @param array $options options array.
+		 * @param array $post post object.
 		 * @return array options
 		 */
 		public static function get_loop_post_view_options( $options, $post ) {
@@ -110,7 +111,6 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 		 * @var [type]
 		 */
 		public static function get_loop( $wp_query, $options, $options_loop = array() ) {
-
 			// Outer Post Type classes.
 			$patterns                    = self::get_patterns();
 			$loop_outer_class_post_types = array();
@@ -134,6 +134,8 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 			if ( ! empty( $options_loop['class_loop_outer'] ) ) {
 				$loop_outer_class .= ' ' . $options_loop['class_loop_outer'];
 			}
+
+			$options_loop = apply_filters( 'vk_posts_loop_options', $options_loop );
 
 			// Set post item outer col class.
 			if ( 'postListText' !== $options['layout'] ) {
@@ -186,7 +188,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 
 				$loop .= '</div>';
 
-				if ( ! empty( $options_loop['display_pagination'] ) ) {
+				if ( ! empty( $options_loop['pagination_display'] ) ) {
 					$args = array();
 					if ( ! empty( $options_loop['pagination_mid_size'] ) ) {
 						$args['mid_size'] = $options_loop['pagination_mid_size'];
@@ -221,6 +223,28 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 		}
 
 		/**
+		 * Archive Link
+		 *
+		 * @param object $wp_query : post query.
+		 * @param array  $args : setting parametors.
+		 * @return string $html
+		 */
+		public static function get_archive_link( $wp_query, $args = array() ) {
+
+			$args = wp_parse_args(
+				$args,
+				array(
+					'btn_text'          => __( 'More', 'vk_components_textdomain' ),
+					'btn_position'      => __( 'right', 'vk_components_textdomain' ),
+				)
+			);
+
+			$html = '';
+			$html = '<p><a class="btn btn-primary" href="">' . esc_html( $args['btn_text'] ) . '</a></p>';
+			return $html;
+        }
+
+		/**
 		 * Pagenation
 		 *
 		 * @param object $wp_query : post query.
@@ -243,78 +267,85 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				)
 			);
 
-			$showitems = ( $args['mid_size'] * 2 ) + 1;
+			// $showitems = ( $args['mid_size'] * 2 ) + 1;
 
 			$html = '';
 
 			global $paged;
+			$current_page = $paged;
 
 			// 最後のページ.
-			$max_num_pages = $wp_query->max_num_pages;
+			$max_num_pages = intval($wp_query->max_num_pages);
 			if ( ! $max_num_pages ) {
 				$max_num_pages = 1;
 			}
 
 			if ( 1 !== $max_num_pages ) {
 				$html .= '<nav class="navigation ' . $args['class'] . '" role="navigation" aria-label="' . $args['aria_label'] . '">';
-				$html .= '<h2 class="screen-reader-text">' . $args['screen_reader_text'] . '</h2>';
+				$html .= '<h4 class="screen-reader-text">' . $args['screen_reader_text'] . '</h4>';
 				$html .= '<div class="nav-links"><ul class="page-numbers">';
 
-				// Prevリンク
+				if ( 0 === $paged ) {
+					$current_page = 1;
+				}
+
+				// [ << ]
 				// 現在のページが２ページ目以降の場合.
-				if ( $paged > 1 ) {
+				if ( $current_page > 1 ) {
 					$html .= '<li><a class="prev page-numbers" href="' . get_pagenum_link( $paged - 1 ) . '">' . $args['prev_text'] . '</a></li>';
 				}
 
-				// 今のページから mid_size を引いて2以上ある場合 && 最大表示アイテム数より最第ページ数が大きい場合
-				// （ mid_size 数のすぐ次の場合は表示する）
-				// 1...３４５.
-				if ( $paged - $args['mid_size'] >= 2 && $max_num_pages > $showitems ) {
+				// [ 1 ]
+				if ( 1 === $current_page ){
+					$html .= '<li><span aria-current="page" class="page-numbers current">1</span></li>';
+				} else {
 					$html .= '<li><a class="page-numbers" href="' . get_pagenum_link( 1 ) . '">1</a></li>';
 				}
-				// 今のページから mid_size を引いて3以上ある場合 && 最大表示アイテム数より最第ページ数が大きい場合.
-				if ( $paged - $args['mid_size'] >= 3 && $max_num_pages > $showitems ) {
+
+				// [ … ]
+				// 今のページから mid_size を引いて3以上ある場合
+				if ( $current_page - $args['mid_size'] >= 3 ) {
 					$html .= '<li><span class="page-numbers dots">&hellip;</span></li>';
 				}
 
-				// mid_size より前に追加する数.
-				$add_prev_count = $paged + $args['mid_size'] - $max_num_pages;
-				// mid_size より後に追加する数.
-				$add_next_count = -( $paged - 1 - $args['mid_size'] ); // 今のページ数を遡ってカウントするために-1.
+				// 1 と 最後は除外してループ
+				for ( $i = 2; $i < $max_num_pages; $i++ ) {
 
-				for ( $i = 1; $i <= $max_num_pages; $i++ ) {
 					$html .= '<li>';
+
 					// 表示するアイテム.
-					if ( $paged === $i ) {
+					if ( $current_page === $i ) {
 						$page_item = '<span aria-current="page" class="page-numbers current">' . $i . '</span>';
 					} else {
 						$page_item = '<a href="' . get_pagenum_link( $i ) . '" class="page-numbers">' . $i . '</a>';
 					}
 
-					// 今のページから mid_size を引いた数～今のページから mid_size を足した数まで || 最大ページ数が最大表示アイテム数以下の場合.
-					if ( ( $paged - $args['mid_size'] <= $i && $i <= $paged + $args['mid_size'] ) || $max_num_pages <= $showitems ) {
-						$html .= $page_item;
-						// 今のページから mid_size を引くと負数になる場合 && 今のページ+ mid_size +負数を mid_size に加算した数まで.
-					} elseif ( $paged - 1 - $args['mid_size'] < 0 && $paged + $args['mid_size'] + $add_next_count >= $i ) {
-						$html .= $page_item;
-						// 今のページから mid_size を足すと　最後のページよりも大きくなる場合 && 今のページ+ mid_size +負数を mid_size に加算した数まで.
-					} elseif ( $paged + $args['mid_size'] > $max_num_pages && $paged - $args['mid_size'] - $add_prev_count <= $i ) {
+					// 現在のページ番号 - レンジ < $i < 現在のページ番号 + レンジ .
+					if ( ( $current_page - $args['mid_size'] <= $i ) && ( $i <= $current_page + $args['mid_size'] ) ) {
 						$html .= $page_item;
 					}
+
 					$html .= '</li>';
 				}
 
-				// 現在のページに mid_size を足しても最後のページ数より２以上小さい時 && 最大表示アイテム数より最第ページ数が大きい場合.
-				if ( $paged + $args['mid_size'] <= $max_num_pages - 2 && $max_num_pages > $showitems ) {
+				// [ … ]
+				// 今のページから mid_size を引いて3以上ある場合
+				if ( $max_num_pages - $current_page - $args['mid_size'] >= 2 ) {
 					$html .= '<li><span class="page-numbers dots">&hellip;</span></li>';
 				}
-				if ( $paged + $args['mid_size'] <= $max_num_pages - 1 && $max_num_pages > $showitems ) {
-					$html .= '<li><a href="' . get_pagenum_link( $max_num_pages ) . '">' . $max_num_pages . '</a></li>';
+
+				// [ 最後 ]
+				if ( $max_num_pages === $current_page ){
+					$html .= '<li><span aria-current="page" class="page-numbers current">' . $max_num_pages . '</span></li>';
+				} else {
+					$html .= '<li><a class="page-numbers" href="' . get_pagenum_link( $max_num_pages ) . '">' . $max_num_pages . '</a></li>';
 				}
-				// Nextリンク.
-				if ( $paged < $max_num_pages ) {
-					$html .= '<li><a class="next page-numbers" href="' . get_pagenum_link( $paged + 1 ) . '">' . $args['next_text'] . '</a></li>';
+
+				// [ >> ]
+				if ( $current_page < $max_num_pages ) {
+					$html .= '<li><a class="next page-numbers" href="' . get_pagenum_link( $current_page + 1 ) . '">' . $args['next_text'] . '</a></li>';
 				}
+
 				$html .= '</ul>';
 				$html .= '</div>';
 				$html .= '</nav>';
