@@ -305,7 +305,12 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				// [ … ]
 				// 今のページから mid_size を引いて3以上ある場合
 				if ( $current_page - $args['mid_size'] >= 3 ) {
-					$html .= '<li><span class="page-numbers dots">&hellip;</span></li>';
+					// レンジの前 === 2 の場合 ... ではなく 2 を表示する.
+					if ( 2 === $current_page - $args['mid_size'] - 1 ) {
+						$html .= '<li><a href="' . get_pagenum_link( 2 ) . '" class="page-numbers">2</a></li>';
+					} else {
+						$html .= '<li><span class="page-numbers dots">&hellip;</span></li>';
+					}
 				}
 
 				// 1 と 最後は除外してループ
@@ -329,9 +334,15 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				}
 
 				// [ … ]
-				// 今のページから mid_size を引いて3以上ある場合
+				// 最後のページ数 - 今のページ - mid_size を引いて3以上ある場合
 				if ( $max_num_pages - $current_page - $args['mid_size'] >= 2 ) {
-					$html .= '<li><span class="page-numbers dots">&hellip;</span></li>';
+					// 最後のページの一個前 === レンジの次 の場合、 ... ではなく数字を表示する.
+					if ( $max_num_pages - 1 === $current_page + $args['mid_size'] + 1 ) {
+						$i = $max_num_pages - 1;
+						$html .= '<li><a href="' . get_pagenum_link( $i ) . '" class="page-numbers">' . $i . '</a></li>';
+					} else {
+						$html .= '<li><span class="page-numbers dots">&hellip;</span></li>';
+					}
 				}
 
 				// [ 最後 ]
