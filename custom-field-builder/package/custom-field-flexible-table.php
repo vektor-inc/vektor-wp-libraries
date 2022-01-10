@@ -160,7 +160,7 @@ class VK_Custom_Field_Builder_Flexible_Table {
 
 		// 配列の空の行を削除する
 		if ( is_array( $field_value ) ) {
-			// $field_value = Bill_Salary_Custom_Fields::delete_null_row( $field_value );
+			$field_value = self::delete_null_row( $field_value );
 		}
 
 		// データが空だったら入れる
