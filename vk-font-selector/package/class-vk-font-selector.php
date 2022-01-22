@@ -17,16 +17,15 @@ add_action( 'customize_register', 'vkfs_customize_register_add_control', 10 );
 if ( ! function_exists( 'vkfs_customize_register_add_control' ) ) {
 	function vkfs_customize_register_add_control() {
 
-		/*
-		  Add text control description
-		/*-------------------------------------------*/
+		/**********************************************
+		 * Add text control description
+		 */
 		class Vk_Font_Selector_Custom_Html extends WP_Customize_Control {
 			public $type             = 'customtext';
 			public $custom_title_sub = ''; // we add this for the extra custom_html
 			public $custom_html      = ''; // we add this for the extra custom_html
 			public function render_content() {
 				if ( $this->label ) {
-					// echo '<h2 class="admin-custom-h2">' . wp_kses_post( $this->label ) . '</h2>';
 					echo '<h2 class="admin-custom-h2">' . wp_kses_post( $this->label ) . '</h2>';
 				}
 				if ( $this->custom_title_sub ) {
@@ -461,7 +460,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 		public static function register( $wp_customize ) {
 
-			// セクション、テーマ設定、コントロールを追加
+			// セクション、テーマ設定、コントロールを追加.
 
 			global $vk_font_selector_prefix;
 			global $vk_font_selector_priority;
@@ -498,15 +497,15 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 				)
 			);
 
-			// フォントセット読み込み
+			// フォントセット読み込み.
 			$fonts_array = self::fonts_array();
-			// プルダウン用の項目
+			// プルダウン用の項目.
 			$choices = array();
 			foreach ( $fonts_array as $key => $value ) {
 				$choices[ $key ] = $value['label'];
 			}
 
-			// フォント対象読み込み
+			// フォント対象読み込み.
 			$target_arry = self::target_array();
 			$targets     = array();
 			foreach ( $target_arry as $key => $value ) {
@@ -545,11 +544,13 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 			}
 		} // public function vk_font_selector_function_customize_register( $wp_customize )
 
-		/*
-		  print head style
-		/*-------------------------------------------*/
+		/**
+		 * Selected font information
+		 *
+		 * @return array $selected_fonts_info
+		 */
 		public static function get_selected_fonts_info() {
-			// どの場所にどのフォント指定をするのかが格納されている
+			// どの場所にどのフォント指定をするのかが格納されている.
 			$options = get_option( 'vk_font_selector' );
 			// $options = array(
 			// [title] => gothic,
@@ -557,7 +558,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 			// [text] => gothic,
 			// );
 
-			// フォントリストの情報を読み込み
+			// フォントリストの情報を読み込み.
 			$fonts_array = self::fonts_array();
 			// $fonts_array = array(
 			// 'mincho' => array(
@@ -586,50 +587,55 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 			// );
 
 			$dynamic_css       = '';
-			$selected_webFonts = array();
+			$selected_web_fonts = array();
 
-			// フォントを指定するターゲット項目をループする
+			// フォントを指定するターゲット項目をループする.
 			foreach ( $target_array as $target_key => $target_value ) {
 
 				// そのターゲットに対して、どのフォントが指定されているのかを取得
-				// フォント指定先である $target_key（ title とか body とか） にフォント指定情報が保存されていたら
+				// フォント指定先である $target_key（ title とか body とか） にフォント指定情報が保存されていたら.
 				if ( ! empty( $options[ $target_key ] ) ) {
-					// 指定されているフォントのキーを$font_keyに格納
+					// 指定されているフォントのキーを$font_keyに格納.
 					$font_key = $options[ $target_key ];
 
 					// 指定されたフォントキーの実際のフォントファミリーの取得 と CSSの登録
-					// そのフォントキーがフォントの配列に登録されていたら
+					// そのフォントキーがフォントの配列に登録されていたら.
 					if ( isset( $fonts_array[ $font_key ] ) ) {
-						// 配列の中から実際のフォントファミリーを代入
+						// 配列の中から実際のフォントファミリーを代入.
 						$font_family = 'font-family:' . $fonts_array[ $font_key ]['font-family'] . ';';
 
-						// Google Fonts など weight指定があるものは追加
+						// Google Fonts など weight指定があるものは追加.
 						$font_weight = '';
 						if ( isset( $fonts_array[ $font_key ]['font-weight'] ) ) {
 							$font_weight = 'font-weight:' . $fonts_array[ $font_key ]['font-weight'] . ';';
 						}
-						// 出力するCSSに登録
-						$dynamic_css .= $target_value['selector'] . '{ '; 
+						// 出力するCSSに登録.
+						$dynamic_css .= $target_value['selector'] . '{ ';
 						$dynamic_css .= $font_family . $font_weight;
 						$dynamic_css .= 'font-display: swap;';
 						$dynamic_css .= '}';
 					}
 
-					// ウェブフォントを使用していたらウェブフォント情報を取得
+					// ウェブフォントを使用していたらウェブフォント情報を取得.
 					if ( isset( $fonts_array[ $font_key ]['font-family-key'] ) ) {
-						$selected_webFonts[ $font_key ] = $fonts_array[ $font_key ];
+						$selected_web_fonts[ $font_key ] = $fonts_array[ $font_key ];
 					}
 				} // if ( ! empty( $options[ $target_key ] ) ) {
 			}
 
-			// 動的に書き出すCSS情報
+			// 動的に書き出すCSS情報.
 			$selected_fonts_info['dynamic_css'] = $dynamic_css;
 
-			// ウェブフォントが使用されていた場合のウェブフォント情報（ウェブフォントを取得するため）
-			$selected_fonts_info['selected_webFonts'] = $selected_webFonts;
+			// ウェブフォントが使用されていた場合のウェブフォント情報（ウェブフォントを取得するため）.
+			$selected_fonts_info['selected_webFonts'] = $selected_web_fonts;
 			return $selected_fonts_info;
 		}
 
+		/**
+		 * Print inline css to Editor
+		 *
+		 * @return void
+		 */
 		public static function dynamic_editor_css() {
 			global $vk_font_selector_editor_style;
 			$options = get_option( 'vk_font_selector' );
@@ -639,22 +645,22 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 			$dynamic_css = '';
 
-			// フォントを指定するターゲット項目をループする
+			// フォントを指定するターゲット項目をループする.
 			foreach ( $editor_target_array as $target_key => $target_value ) {
 
 				// そのターゲットに対して、どのフォントが指定されているのかを取得
-				// フォント指定先である $target_key（ title とか body とか） にフォント指定情報が保存されていたら
+				// フォント指定先である $target_key（ title とか body とか） にフォント指定情報が保存されていたら.
 				if ( ! empty( $options[ $target_key ] ) ) {
-					// 指定されているフォントのキーを$font_keyに格納
+					// 指定されているフォントのキーを$font_keyに格納.
 					$font_key = $options[ $target_key ];
 
 					// 指定されたフォントキーの実際のフォントファミリーの取得 と CSSの登録
-					// そのフォントキーがフォントの配列に登録されていたら
+					// そのフォントキーがフォントの配列に登録されていたら.
 					if ( isset( $fonts_array[ $font_key ] ) ) {
-						// 配列の中から実際のフォントファミリーを代入
+						// 配列の中から実際のフォントファミリーを代入.
 						$font_family = 'font-family:' . $fonts_array[ $font_key ]['font-family'] . ';';
 
-						// Google Fonts など weight指定があるものは追加
+						// Google Fonts など weight指定があるものは追加.
 						$font_weight = '';
 						if ( isset( $fonts_array[ $font_key ]['font-weight'] ) ) {
 							$font_weight = 'font-weight:' . $fonts_array[ $font_key ]['font-weight'] . ';';
@@ -667,49 +673,55 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 			$dynamic_css = '/* Font switch */' . $dynamic_css;
 
-			// delete before after space
+			// delete before after space.
 			$dynamic_css = trim( $dynamic_css );
-			// convert tab and br to space
+			// convert tab and br to space.
 			$dynamic_css = preg_replace( '/[\n\r\t]/', '', $dynamic_css );
-			// Change multiple spaces to single space
+			// Change multiple spaces to single space.
 			$dynamic_css = preg_replace( '/\s(?=\s)/', '', $dynamic_css );
-			// 出力を実行
+			// 出力を実行.
 			wp_add_inline_style( $vk_font_selector_editor_style, $dynamic_css );
 		}
 
-		/*
-		  print head style
-		/*-------------------------------------------*/
-
+		/**
+		 * Print inline css to Front
+		 *
+		 * @return void
+		 */
 		public static function dynamic_header_css() {
 
 			$selected_fonts_info = self::get_selected_fonts_info();
 			$dynamic_css         = $selected_fonts_info['dynamic_css'];
 
-			// 出力するインラインスタイルが存在していたら
+			// 出力するインラインスタイルが存在していたら.
 			if ( $dynamic_css ) {
 
 				$dynamic_css = '/* Font switch */' . $dynamic_css;
 
-				// delete before after space
+				// delete before after space.
 				$dynamic_css = trim( $dynamic_css );
-				// convert tab and br to space
+				// convert tab and br to space.
 				$dynamic_css = preg_replace( '/[\n\r\t]/', '', $dynamic_css );
-				// Change multiple spaces to single space
+				// Change multiple spaces to single space.
 				$dynamic_css = preg_replace( '/\s(?=\s)/', '', $dynamic_css );
 
-				// 出力を実行
+				// 出力を実行.
 				global $vk_font_selector_enqueue_handle_style;
 				wp_add_inline_style( $vk_font_selector_enqueue_handle_style, $dynamic_css );
 			}
 
 		} // public function skin_dynamic_css(){
 
+		/**
+		 * Load Web Font
+		 *
+		 * @return void
+		 */
 		public static function load_web_fonts() {
 			$selected_fonts_info = self::get_selected_fonts_info();
 			if ( ! empty( $selected_fonts_info['selected_webFonts'] ) ) {
 
-				// 同じフォントでウェイト違いが入ってくるので、フォントごとにまとめた配列を生成する
+				// 同じフォントでウェイト違いが入ってくるので、フォントごとにまとめた配列を生成する.
 				foreach ( $selected_fonts_info['selected_webFonts'] as $key => $value ) {
 
 					$family = $value['font-family-key'];
@@ -720,7 +732,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					}
 				} // foreach ( $selected_fonts_info['selected_webFonts'] as $key => $value ) {
 
-				// Googleに投げるパラメーターの生成
+				// Googleに投げるパラメーターの生成.
 				$family_parameter = '';
 				$before_family    = '';
 				$count_family     = 0;
@@ -732,12 +744,12 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					}
 					$family_parameter .= $family;
 
-					// font-weight 指定がある場合
+					// font-weight 指定がある場合.
 					if ( isset( $family_info['weight'] ) && is_array( $family_info['weight'] ) ) {
 						$count_weight      = 0;
 						$family_parameter .= ':';
 						foreach ( $family_info['weight'] as $key => $value ) {
-									// font-weightが2つ目以降はセパレーターを追加
+									// font-weightが2つ目以降はセパレーターを追加.
 							if ( $count_weight ) {
 								$family_parameter .= ',';
 							}
