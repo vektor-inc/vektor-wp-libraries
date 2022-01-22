@@ -5,16 +5,17 @@ https://github.com/vektor-inc/vektor-wp-libraries
 にあります。修正の際は上記リポジトリのデータを修正してください。
 */
 
-/*
-  Customizer
-/*-------------------------------------------*/
-
+// Customizer.
 add_action( 'customize_register', 'vkfs_customize_register_add_control', 10 );
 
-/*
-  ExUnit Original Controls
-/*-------------------------------------------*/
+// Register custom contorol.
 if ( ! function_exists( 'vkfs_customize_register_add_control' ) ) {
+
+	/**
+	 * Register Customize Control
+	 *
+	 * @return void
+	 */
 	function vkfs_customize_register_add_control() {
 
 		/**********************************************
@@ -22,8 +23,13 @@ if ( ! function_exists( 'vkfs_customize_register_add_control' ) ) {
 		 */
 		class Vk_Font_Selector_Custom_Html extends WP_Customize_Control {
 			public $type             = 'customtext';
-			public $custom_title_sub = ''; // we add this for the extra custom_html
-			public $custom_html      = ''; // we add this for the extra custom_html
+			public $custom_title_sub = ''; // we add this for the extra custom_html.
+			public $custom_html      = ''; // we add this for the extra custom_html.
+			/**
+			 * Custom HTML Control view
+			 *
+			 * @return void
+			 */
 			public function render_content() {
 				if ( $this->label ) {
 					echo '<h2 class="admin-custom-h2">' . wp_kses_post( $this->label ) . '</h2>';
@@ -43,6 +49,9 @@ if ( ! function_exists( 'vkfs_customize_register_add_control' ) ) {
 
 if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
+	/**
+	 * Font customize class
+	 */
 	class Vk_Font_Selector_Customize {
 
 		public static $version = '0.1.2';
@@ -469,7 +478,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 				$vk_font_selector_priority = 900;
 			}
 
-			// セクション追加
+			// セクション追加.
 			$wp_customize->add_section(
 				'vk_font_selector_related_setting',
 				array(
@@ -665,7 +674,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 						if ( isset( $fonts_array[ $font_key ]['font-weight'] ) ) {
 							$font_weight = 'font-weight:' . $fonts_array[ $font_key ]['font-weight'] . ';';
 						}
-						// 出力するCSSに登録
+						// 出力するCSSに登録.
 						$dynamic_css .= $target_value['selector'] . '{ ' . $font_family . $font_weight . '}';
 					}
 				} // if ( ! empty( $options[ $target_key ] ) ) {
