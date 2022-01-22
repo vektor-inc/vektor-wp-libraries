@@ -327,9 +327,10 @@ gulp.task('copy_font-selector', function () {
     	.pipe(gulp.dest('../themes/lightning-pro/inc/vk-font-selector/package/'))
 		.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/vk-font-selector/package/'));
 });
-gulp.task('watch_font', function () {
+gulp.task('watch_font', function (done) {
     gulp.watch('./vk-font-selector/package/**', gulp.task('copy_font-selector'));
     gulp.watch('./vk-font-selector/package/_scss/**', gulp.task('sass_vk-font-selector'));
+	done();
 });
 
 /*-------------------------------------*/
