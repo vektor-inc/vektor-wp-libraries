@@ -54,13 +54,13 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 	 */
 	class Vk_Font_Selector_Customize {
 
-		public static $version = '0.1.2';
+		public static $version = '0.1.3';
 
 		public static function init() {
 			add_action( 'customize_register', array( __CLASS__, 'register' ) );
 			add_action( 'wp_head', array( __CLASS__, 'dynamic_header_css' ), 5 );
 			add_action( 'wp_footer', array( __CLASS__, 'load_web_fonts' ) );
-			add_action( 'enqueue_block_editor_assets', array( __CLASS__, 'dynamic_editor_css' ) );
+			add_action( 'enqueue_block_editor_assets', array( __CLASS__, 'dynamic_editor_css' ), 12 );
 		}
 
 		public static function fonts_array() {
@@ -595,7 +595,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 			// ),
 			// );
 
-			$dynamic_css       = '';
+			$dynamic_css        = '';
 			$selected_web_fonts = array();
 
 			// フォントを指定するターゲット項目をループする.
@@ -646,6 +646,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 		 * @return void
 		 */
 		public static function dynamic_editor_css() {
+
 			global $vk_font_selector_editor_style;
 			$options = get_option( 'vk_font_selector' );
 
