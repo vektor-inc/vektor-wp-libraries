@@ -1,9 +1,11 @@
 <?php
-/*-------------------------------------------*/
-/*  Load modules
+/*
+-------------------------------------------*/
+/*
+  Load modules
 /*-------------------------------------------*/
 if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
-	require_once( 'package/class-vk-font-selector.php' );
+	require_once 'package/class-vk-font-selector.php';
 	global $vk_font_selector_prefix;
 	$vk_font_selector_prefix = lightning_get_prefix_customize_panel();
 
@@ -51,19 +53,19 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 	add_filter( 'vk_font_editor_target_array', 'lightning_font_editor_target_change' );
 	function lightning_font_editor_target_change( $editor_target_array ) {
 		$editor_target_array = array(
-			'title'            => array(
+			'title' => array(
 				'label'    => __( 'Title', 'vk_font_selector_textdomain' ),
-				'selector' => '.edit-post-visual-editor.editor-styles-wrapper h1,
-							.edit-post-visual-editor.editor-styles-wrapper h2,
-							.edit-post-visual-editor.editor-styles-wrapper h3,
-							.edit-post-visual-editor.editor-styles-wrapper h4,
-							.edit-post-visual-editor.editor-styles-wrapper h5,
-							.edit-post-visual-editor.editor-styles-wrapper h6,
-							.edit-post-visual-editor.editor-styles-wrapper dt',
+				'selector' => '.editor-styles-wrapper h1,
+							.editor-styles-wrapper h2,
+							.editor-styles-wrapper h3,
+							.editor-styles-wrapper h4,
+							.editor-styles-wrapper h5,
+							.editor-styles-wrapper h6,
+							.editor-styles-wrapper dt',
 			),
-			'text'             => array(
+			'text'  => array(
 				'label'    => __( 'Text', 'vk_font_selector_textdomain' ),
-				'selector' => '.edit-post-visual-editor.editor-styles-wrapper',
+				'selector' => '.editor-styles-wrapper',
 			),
 		);
 
