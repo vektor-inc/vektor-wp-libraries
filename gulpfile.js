@@ -292,17 +292,17 @@ gulp.task('copy_media-posts-bs4', function (done) {
  */
  gulp.task('copy_heading-design', function (done) {
 	// Lightning Pro
-	gulp.src('./inc/vk-heading-design/package/**')
-		.pipe(replace("'heading_design_textdomain'", "'lightning-pro'"))
+	gulp.src('./vk-heading-design/package/**')
+		// .pipe(replace("'heading_design_textdomain'", "'lightning-pro'"))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-heading-design/package/'))
 	// Katawara
-	gulp.src('./inc/vk-heading-design/package/**')
-		.pipe(replace("'heading_design_textdomain'", "'katawara'"))
+	gulp.src('./vk-heading-design/package/**')
+		// .pipe(replace("'heading_design_textdomain'", "'katawara'"))
 		.pipe(gulp.dest('../themes/katawara/inc/vk-heading-design/package/'))
 	// Lightning G3 Pro Unit
-	gulp.src('./inc/vk-heading-design/package/**')
-		.pipe(replace("'heading_design_textdomain'", "'lightning-g3-pro-unit'"))
-		.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/vk-heading-design/package/'))
+	// gulp.src('./inc/vk-heading-design/package/**')
+	// 	.pipe(replace("'heading_design_textdomain'", "'lightning-g3-pro-unit'"))
+	// 	.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/vk-heading-design/package/'))
     done();
 });
 

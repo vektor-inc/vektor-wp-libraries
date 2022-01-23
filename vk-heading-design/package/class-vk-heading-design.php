@@ -652,31 +652,31 @@ if ( ! class_exists( 'VK_Headding_Design' ) ) {
 				'h2' => array(
 					'label'    => __( 'H2', 'heading_design_textdomain' ),
 					'selector' => array(
-						'.edit-post-visual-editor .editor-styles-wrapper h2',
+						'.editor-styles-wrapper h2',
 					),
 				),
 				'h3' => array(
 					'label'    => __( 'H3', 'heading_design_textdomain' ),
 					'selector' => array(
-						'.edit-post-visual-editor .editor-styles-wrapper h3',
+						'.editor-styles-wrapper h3',
 					),
 				),
 				'h4' => array(
 					'label'    => __( 'H4', 'heading_design_textdomain' ),
 					'selector' => array(
-						'.edit-post-visual-editor .editor-styles-wrapper h4',
+						'.editor-styles-wrapper h4',
 					),
 				),
 				'h5' => array(
 					'label'    => __( 'H5', 'heading_design_textdomain' ),
 					'selector' => array(
-						'.edit-post-visual-editor .editor-styles-wrapper h5',
+						'.editor-styles-wrapper h5',
 					),
 				),
 				'h6' => array(
 					'label'    => __( 'H6', 'heading_design_textdomain' ),
 					'selector' => array(
-						'.edit-post-visual-editor .editor-styles-wrapper h6',
+						'.editor-styles-wrapper h6',
 					),
 				),
 			);
