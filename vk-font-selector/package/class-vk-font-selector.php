@@ -60,6 +60,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 			add_action( 'customize_register', array( __CLASS__, 'register' ) );
 			add_action( 'wp_head', array( __CLASS__, 'dynamic_header_css' ), 5 );
 			add_action( 'wp_footer', array( __CLASS__, 'load_web_fonts' ) );
+			add_action( 'admin_footer', array( __CLASS__, 'load_web_fonts' ) );
 			add_action( 'enqueue_block_editor_assets', array( __CLASS__, 'dynamic_editor_css' ), 12 );
 		}
 
