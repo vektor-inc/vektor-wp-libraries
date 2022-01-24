@@ -321,11 +321,12 @@ gulp.task('sass_vk-font-selector', function () {
         .pipe(cleanCss())
         .pipe(gulp.dest('./vk-font-selector/package/css/'));
 });
-gulp.task('copy_font-selector', function () {
+gulp.task('copy_font-selector', function (done) {
     gulp.src('./vk-font-selector/package/**')
         .pipe(gulp.dest('../themes/katawara/inc/vk-font-selector/package/'))
     	.pipe(gulp.dest('../themes/lightning-pro/inc/vk-font-selector/package/'))
 		.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/vk-font-selector/package/'));
+		done();
 });
 gulp.task('watch_font', function (done) {
     gulp.watch('./vk-font-selector/package/**', gulp.task('copy_font-selector'));

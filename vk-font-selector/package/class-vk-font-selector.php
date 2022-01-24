@@ -119,166 +119,10 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					'font-family-key' => 'Noto+Sans+JP',
 					'font-weight'     => 700,
 				),
-				// 'Noto+Sans+JP:900'      => array(
-				// 'label'           => 'Noto Sans JP 900 ( Google Fonts )',
-				// 'font-family'     => '"Noto Sans JP",sans-serif',
-				// 'font-family-key' => 'Noto+Sans+JP',
-				// 'font-weight'     => 900,
-				// ),
-				// 'Noto+Sans+TC:100'      => array(
-				// 'label'           => 'Noto Sans TC 100 ( Google Fonts )',
-				// 'font-family'     => '"Noto Sans TC",sans-serif',
-				// 'font-family-key' => 'Noto+Sans+TC',
-				// 'font-weight'     => 100,
-				// ),
-				'Noto+Sans+TC:300'      => array(
-					'label'           => 'Noto Sans TC 300 ( Google Fonts )',
-					'font-family'     => '"Noto Sans TC",sans-serif',
-					'font-family-key' => 'Noto+Sans+TC',
-					'font-weight'     => 300,
-				),
-				'Noto+Sans+TC:400'      => array(
-					'label'           => 'Noto Sans TC 400 ( Google Fonts )',
-					'font-family'     => '"Noto Sans TC",sans-serif',
-					'font-family-key' => 'Noto+Sans+TC',
-					'font-weight'     => 400,
-				),
-				'Noto+Sans+TC:500'      => array(
-					'label'           => 'Noto Sans TC 500 ( Google Fonts )',
-					'font-family'     => '"Noto Sans TC",sans-serif',
-					'font-family-key' => 'Noto+Sans+TC',
-					'font-weight'     => 500,
-				),
-				'Noto+Sans+TC:700'      => array(
-					'label'           => 'Noto Sans TC 700 ( Google Fonts )',
-					'font-family'     => '"Noto Sans TC",sans-serif',
-					'font-family-key' => 'Noto+Sans+TC',
-					'font-weight'     => 700,
-				),
-				// 'Noto+Sans+TC:900'      => array(
-				// 'label'           => 'Noto Sans TC 900 ( Google Fonts )',
-				// 'font-family'     => '"Noto Sans TC",sans-serif',
-				// 'font-family-key' => 'Noto+Sans+TC',
-				// 'font-weight'     => 900,
-				// ),
-				// 'Noto+Sans+SC:100'      => array(
-				// 'label'           => 'Noto Sans SC 100 ( Google Fonts )',
-				// 'font-family'     => '"Noto Sans SC",sans-serif',
-				// 'font-family-key' => 'Noto+Sans+SC',
-				// 'font-weight'     => 100,
-				// ),
-				'Noto+Sans+SC:300'      => array(
-					'label'           => 'Noto Sans SC 300 ( Google Fonts )',
-					'font-family'     => '"Noto Sans SC",sans-serif',
-					'font-family-key' => 'Noto+Sans+SC',
-					'font-weight'     => 300,
-				),
-				'Noto+Sans+SC:400'      => array(
-					'label'           => 'Noto Sans SC 400 ( Google Fonts )',
-					'font-family'     => '"Noto Sans SC",sans-serif',
-					'font-family-key' => 'Noto+Sans+SC',
-					'font-weight'     => 400,
-				),
-				'Noto+Sans+SC:500'      => array(
-					'label'           => 'Noto Sans SC 500 ( Google Fonts )',
-					'font-family'     => '"Noto Sans SC",sans-serif',
-					'font-family-key' => 'Noto+Sans+SC',
-					'font-weight'     => 500,
-				),
-				'Noto+Sans+SC:700'      => array(
-					'label'           => 'Noto Sans SC 700 ( Google Fonts )',
-					'font-family'     => '"Noto Sans SC",sans-serif',
-					'font-family-key' => 'Noto+Sans+SC',
-					'font-weight'     => 700,
-				),
-				// 'Noto+Sans+SC:900'      => array(
-				// 'label'           => 'Noto Sans SC 900 ( Google Fonts )',
-				// 'font-family'     => '"Noto Sans SC",sans-serif',
-				// 'font-family-key' => 'Noto+Sans+SC',
-				// 'font-weight'     => 900,
-				// ),
-				'Noto+Serif+TC:200'     => array(
-					'label'           => 'Noto Serif TC 200 ( Google Fonts )',
-					'font-family'     => '"Noto Serif TC",sans-serif',
-					'font-family-key' => 'Noto+Serif+TC',
-					'font-weight'     => 200,
-				),
-				'Noto+Serif+TC:300'     => array(
-					'label'           => 'Noto Serif TC 300 ( Google Fonts )',
-					'font-family'     => '"Noto Serif TC",sans-serif',
-					'font-family-key' => 'Noto+Serif+TC',
-					'font-weight'     => 300,
-				),
-				'Noto+Serif+TC:400'     => array(
-					'label'           => 'Noto Serif TC 400 ( Google Fonts )',
-					'font-family'     => '"Noto Serif TC",sans-serif',
-					'font-family-key' => 'Noto+Serif+TC',
-					'font-weight'     => 400,
-				),
-				'Noto+Serif+TC:500'     => array(
-					'label'           => 'Noto Serif TC 500 ( Google Fonts )',
-					'font-family'     => '"Noto Serif TC",sans-serif',
-					'font-family-key' => 'Noto+Serif+TC',
-					'font-weight'     => 500,
-				),
-				'Noto+Serif+TC:600'     => array(
-					'label'           => 'Noto Serif TC 600 ( Google Fonts )',
-					'font-family'     => '"Noto Serif TC",sans-serif',
-					'font-family-key' => 'Noto+Serif+TC',
-					'font-weight'     => 600,
-				),
-				'Noto+Serif+TC:700'     => array(
-					'label'           => 'Noto Serif TC 700 ( Google Fonts )',
-					'font-family'     => '"Noto Serif TC",sans-serif',
-					'font-family-key' => 'Noto+Serif+TC',
-					'font-weight'     => 700,
-				),
-				'Noto+Serif+TC:900'     => array(
-					'label'           => 'Noto Serif TC 900 ( Google Fonts )',
-					'font-family'     => '"Noto Serif TC",sans-serif',
-					'font-family-key' => 'Noto+Serif+TC',
-					'font-weight'     => 900,
-				),
-				'Noto+Serif+SC:200'     => array(
-					'label'           => 'Noto Serif SC 200 ( Google Fonts )',
-					'font-family'     => '"Noto Serif SC",sans-serif',
-					'font-family-key' => 'Noto+Serif+SC',
-					'font-weight'     => 200,
-				),
-				'Noto+Serif+SC:300'     => array(
-					'label'           => 'Noto Serif SC 300 ( Google Fonts )',
-					'font-family'     => '"Noto Serif SC",sans-serif',
-					'font-family-key' => 'Noto+Serif+SC',
-					'font-weight'     => 300,
-				),
-				'Noto+Serif+SC:400'     => array(
-					'label'           => 'Noto Serif SC 400 ( Google Fonts )',
-					'font-family'     => '"Noto Serif SC",sans-serif',
-					'font-family-key' => 'Noto+Serif+SC',
-					'font-weight'     => 400,
-				),
-				'Noto+Serif+SC:500'     => array(
-					'label'           => 'Noto Serif SC 500 ( Google Fonts )',
-					'font-family'     => '"Noto Serif SC",sans-serif',
-					'font-family-key' => 'Noto+Serif+SC',
-					'font-weight'     => 500,
-				),
-				'Noto+Serif+SC:600'     => array(
-					'label'           => 'Noto Serif SC 600 ( Google Fonts )',
-					'font-family'     => '"Noto Serif SC",sans-serif',
-					'font-family-key' => 'Noto+Serif+SC',
-					'font-weight'     => 600,
-				),
-				'Noto+Serif+SC:700'     => array(
-					'label'           => 'Noto Serif SC 700 ( Google Fonts )',
-					'font-family'     => '"Noto Serif SC",sans-serif',
-					'font-family-key' => 'Noto+Serif+SC',
-					'font-weight'     => 700,
-				),
-				'Noto+Serif+SC:900'     => array(
-					'label'           => 'Noto Serif SC 900 ( Google Fonts )',
-					'font-family'     => '"Noto Serif SC",sans-serif',
-					'font-family-key' => 'Noto+Serif+SC',
+				'Noto+Sans+JP:900'      => array(
+					'label'           => 'Noto Sans JP 900 ( Google Fonts )',
+					'font-family'     => '"Noto Sans JP",sans-serif',
+					'font-family-key' => 'Noto+Sans+JP',
 					'font-weight'     => 900,
 				),
 				'Noto+Serif+JP:200'     => array(
@@ -447,7 +291,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 				),
 				'text'  => array(
 					'label'    => __( 'Text', 'vk_font_selector_textdomain' ),
-					'selector' => 'body',
+					'selector' => 'body,html',
 				),
 			);
 			return apply_filters( 'vk_font_target_array', $target_array );
@@ -748,7 +592,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 				$count_family     = 0;
 				foreach ( $fonts as $family => $family_info ) {
 
-					// font-familyが2つ目以降はセパレーターを追加
+					// font-familyが2つ目以降はセパレーターを追加.
 					if ( $count_family ) {
 						$family_parameter .= '|';
 					}
@@ -770,7 +614,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 					$count_family++;
 				}
-				echo '<link href="https://fonts.googleapis.com/css?family=' . $family_parameter . '&display=swap" rel="preload">';
+				echo '<link href="https://fonts.googleapis.com/css?family=' . $family_parameter . '&display=swap" rel="stylesheet">';
 			} // if ( ! empty( $selected_fonts_info['selected_webFonts'] ) ) {
 		} // public function load_web_fonts() {
 
