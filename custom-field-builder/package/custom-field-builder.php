@@ -81,7 +81,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 		フォームテーブル
 		-------------------------------------------
 		*/
-		public static function form_table( $custom_fields_array, $befor_items = '', $echo = true ) {
+		public static function form_table( $custom_fields_array, $befor_items = '', $echo = true, $options = array() ) {
 
 			wp_nonce_field( wp_create_nonce( __FILE__ ), 'noncename__fields' );
 
@@ -105,22 +105,47 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 						$form_html .= esc_html( $value['before_text'] ) . ' ';
 					}
 
-					$form_html .= '<input class="form-control" type="text" id="' . $key . '" name="' . $key . '" value="' . self::form_post_value( $key ) . '" size="70">';
+					$post_value = '';
+					if ( ! empty( self::form_post_value( $key ) ) ) {
+						$post_value = self::form_post_value( $key );
+					} elseif ( ! empty( $options[ $key ] ) ) {
+						$post_value = $options[ $key ];
+					}
+
+					$form_html .= '<input class="form-control" type="text" id="' . $key . '" name="' . $key . '" value="' . $post_value . '" size="70">';
 
 					if ( isset( $value['after_text'] ) && $value['after_text'] ) {
 						$form_html .= ' ' . esc_html( $value['after_text'] );
 					}
 				} elseif ( $value['type'] == 'datepicker' ) {
-					$form_html .= '<input class="form-control datepicker" type="text" id="' . $key . '" name="' . $key . '" value="' . self::form_post_value( $key ) . '" size="70">';
+
+					$post_value = '';
+					if ( ! empty( self::form_post_value( $key ) ) ) {
+						$post_value = self::form_post_value( $key );
+					} elseif ( ! empty( $options[ $key ] ) ) {
+						$post_value = $options[ $key ];
+					}
+
+					$form_html .= '<input class="form-control datepicker" type="text" id="' . $key . '" name="' . $key . '" value="' . $post_value . '" size="70">';
 
 				} elseif ( $value['type'] == 'textarea' ) {
-					$form_html .= '<textarea class="form-control" class="cf_textarea_wysiwyg" name="' . $key . '" cols="70" rows="3">' . self::form_post_value( $key, 'textarea' ) . '</textarea>';
+
+					$post_value = '';
+					if ( ! empty( self::form_post_value( $key, 'textarea' ) ) ) {
+						$post_value = self::form_post_value( $key, 'textarea' );
+					} elseif ( ! empty( $options[ $key ] ) ) {
+						$post_value = $options[ $key ];
+					}
+
+					$form_html .= '<textarea class="form-control" class="cf_textarea_wysiwyg" name="' . $key . '" cols="70" rows="3">' . $post_value . '</textarea>';
 
 				} elseif ( $value['type'] == 'select' ) {
 					$form_html .= '<select id="' . $key . '" class="form-control" name="' . $key . '"  >';
 
 					foreach ( $value['options'] as $option_value => $option_label ) {
 						if ( self::form_post_value( $key ) == $option_value ) {
+							$selected = ' selected="selected"';
+						} elseif ( ! empty( $options[ $key ] ) &&  $options[ $key ] === $option_value ) {
 							$selected = ' selected="selected"';
 						} else {
 							$selected = '';
@@ -131,7 +156,12 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					$form_html .= '</select>';
 
 				} elseif ( $value['type'] == 'checkbox' || $value['type'] == 'radio' ) {
-					$field_value = get_post_meta( $post->ID, $key, true );
+					$field_value = array();
+					if ( ! empty( get_post_meta( $post->ID, $key, true ) ) ) {
+						$field_value = get_post_meta( $post->ID, $key, true );
+					} elseif ( ! empty( $options[ $key ] ) ) {
+						$field_value = $options[ $key ];
+					}
 					$form_html  .= '<ul>';
 
 					// シリアライズして保存されてたら戻す
@@ -167,19 +197,29 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 				} elseif ( $value['type'] == 'image' ) {
 					if ( $post->$key ) {
-								$thumb_image     = wp_get_attachment_image_src( $post->$key, 'medium', false );
-								$thumb_image_url = $thumb_image[0];
+						$thumb_image     = wp_get_attachment_image_src( $post->$key, 'medium', false );
+						$thumb_image_url = $thumb_image[0];
 						// } elseif ( isset( $_POST[ $key ] ) && $_POST[ $key ] ) {
 						// $thumb_image     = wp_get_attachment_image_src( $image_key, 'medium', false );
 						// $thumb_image_url = $thumb_image[0];
+					} elseif ( ! empty( $options[ $key ] ) ) {
+						$thumb_image     = wp_get_attachment_image_src( $options[ $key ], 'medium', false );
+						$thumb_image_url = $thumb_image[0];
 					} else {
 								$thumb_image_url = $custom_field_builder_url . 'images/no_image.png';
+					}
+
+					$post_value = '';
+					if ( ! empty( self::form_post_value( $key ) ) ) {
+						$post_value = self::form_post_value( $key );
+					} else if ( ! empty( $options[ $key ] ) ) {
+						$post_value = $options[ $key ];
 					}
 					// ダミー & プレビュー画像
 					$form_html .= '<img src="' . $thumb_image_url . '" id="thumb_' . $key . '" alt="" class="input_thumb" style="width:200px;height:auto;"> ';
 
 					// 実際に送信する値
-					$form_html .= '<input type="hidden" name="' . $key . '" id="' . $key . '" value="' . self::form_post_value( $key ) . '" style="width:60%;" />';
+					$form_html .= '<input type="hidden" name="' . $key . '" id="' . $key . '" value="' . $post_value . '" style="width:60%;" />';
 
 					// 画像選択ボタン
 					// .media_btn がトリガーでメディアアップローダーが起動する
@@ -192,10 +232,18 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					$form_html .= '<a id="media_reset_' . $key . '" class="media_reset_btn btn btn-default button button-default">' . __( 'Delete Image', 'custom_field_builder_textdomain' ) . '</a>';
 
 				} elseif ( $value['type'] == 'file' ) {
-					$form_html .= '<input name="' . $key . '" id="' . $key . '" value="' . self::form_post_value( $key ) . '" style="width:60%;" />
+
+					$post_value = '';
+					if ( ! empty( self::form_post_value( $key ) ) ) {
+						$post_value = self::form_post_value( $key );
+					} else if ( ! empty( $options[ $key ] ) ) {
+						$post_value = $options[ $key ];
+					}
+
+					$form_html .= '<input name="' . $key . '" id="' . $key . '" value="' . $post_value . '" style="width:60%;" />
 <button id="media_src_' . $key . '" class="cfb_media_btn btn btn-default button button-default">' . __( 'Select file', 'custom_field_builder_textdomain' ) . '</button> ';
-					if ( $post->$key ) {
-						$form_html .= '<a href="' . esc_url( $post->$key ) . '" target="_blank" class="btn btn-default button button-default">' . __( 'View file', 'custom_field_builder_textdomain' ) . '</a>';
+					if ( $post_value ) {
+						$form_html .= '<a href="' . esc_url( $post_value ) . '" target="_blank" class="btn btn-default button button-default">' . __( 'View file', 'custom_field_builder_textdomain' ) . '</a>';
 					}
 				}
 				if ( $value['description'] ) {
