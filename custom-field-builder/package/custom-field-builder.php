@@ -203,10 +203,14 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 						// $thumb_image     = wp_get_attachment_image_src( $image_key, 'medium', false );
 						// $thumb_image_url = $thumb_image[0];
 					} elseif ( ! empty( $options[ $key ] ) ) {
-						$thumb_image     = wp_get_attachment_image_src( $options[ $key ], 'medium', false );
-						$thumb_image_url = $thumb_image[0];
+						$thumb_image = wp_get_attachment_image_src( $options[ $key ], 'medium', false );
+						if ( is_array( $thumb_image ) && ! empty( $thumb_image[0] ) ) {
+							$thumb_image_url = $thumb_image[0];
+						} else {
+							$thumb_image_url = $custom_field_builder_url . 'images/no_image.png';
+						}
 					} else {
-								$thumb_image_url = $custom_field_builder_url . 'images/no_image.png';
+						$thumb_image_url = $custom_field_builder_url . 'images/no_image.png';
 					}
 
 					$post_value = '';
