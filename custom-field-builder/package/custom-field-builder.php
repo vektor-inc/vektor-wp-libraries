@@ -12,7 +12,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 	class VK_Custom_Field_Builder {
 
-		public static $version = '0.2.0';
+		public static $version = '0.2.1';
 
 		// define( 'Bill_URL', get_template_directory_uri() );
 		public static function init() {
@@ -38,7 +38,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 				'vk_mediauploader',
 				'vk_cfb',
 				array(
-					'select_image' => __( 'Select image', 'custom_field_builder_textdomain' )
+					'select_image' => __( 'Select image', 'custom_field_builder_textdomain' ),
 				)
 			);
 
@@ -49,7 +49,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 			$cfb_flexible_table_excludes = array( 'toplevel_page_nestedpages' );
 			$cfb_flexible_table_excludes = apply_filters( 'cfb_flexible_table_excludes', $cfb_flexible_table_excludes );
 
-			if ( ! in_array( $hook_suffix, $cfb_flexible_table_excludes ) ){
+			if ( ! in_array( $hook_suffix, $cfb_flexible_table_excludes ) ) {
 				wp_enqueue_script( 'flexible-table', self::admin_directory_url() . 'js/flexible-table.js', array( 'jquery', 'jquery-ui-sortable' ), self::$version, true );
 			}
 
@@ -145,7 +145,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					foreach ( $value['options'] as $option_value => $option_label ) {
 						if ( self::form_post_value( $key ) == $option_value ) {
 							$selected = ' selected="selected"';
-						} elseif ( ! empty( $options[ $key ] ) &&  $options[ $key ] === $option_value ) {
+						} elseif ( ! empty( $options[ $key ] ) && $options[ $key ] === $option_value ) {
 							$selected = ' selected="selected"';
 						} else {
 							$selected = '';
@@ -162,7 +162,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					} elseif ( ! empty( $options[ $key ] ) ) {
 						$field_value = $options[ $key ];
 					}
-					$form_html  .= '<ul>';
+					$form_html .= '<ul>';
 
 					// シリアライズして保存されてたら戻す
 					if ( $value['type'] == 'checkbox' ) {
@@ -212,7 +212,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					$post_value = '';
 					if ( ! empty( self::form_post_value( $key ) ) ) {
 						$post_value = self::form_post_value( $key );
-					} else if ( ! empty( $options[ $key ] ) ) {
+					} elseif ( ! empty( $options[ $key ] ) ) {
 						$post_value = $options[ $key ];
 					}
 					// ダミー & プレビュー画像
@@ -231,12 +231,12 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					// ボタンタグだとその場でページが再読込されてしまうのでaタグに変更
 					$form_html .= '<a id="media_reset_' . $key . '" class="media_reset_btn btn btn-default button button-default">' . __( 'Delete Image', 'custom_field_builder_textdomain' ) . '</a>';
 
-				} elseif ( $value['type'] == 'file' ) {
+				} elseif ( 'file' === $value['type'] ) {
 
 					$post_value = '';
 					if ( ! empty( self::form_post_value( $key ) ) ) {
 						$post_value = self::form_post_value( $key );
-					} else if ( ! empty( $options[ $key ] ) ) {
+					} elseif ( ! empty( $options[ $key ] ) ) {
 						$post_value = $options[ $key ];
 					}
 
@@ -305,6 +305,6 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 	VK_Custom_Field_Builder::init();
 
-	require_once( 'custom-field-flexible-table.php' );
+	require_once 'custom-field-flexible-table.php';
 
 } // if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
