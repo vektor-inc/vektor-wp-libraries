@@ -310,7 +310,7 @@ class VK_Media_Posts_BS4_Admin {
 					'type'     => 'select',
 					'choices'  => array(
 						'date'     => __( 'Published Day', 'vk-media-posts-bs4' ),
-						'modefied' => __( 'Modefied Day', 'vk-media-posts-bs4' ),
+						'modified' => __( 'Modified Day', 'vk-media-posts-bs4' ),
 						'title'    => __( 'Title', 'vk-media-posts-bs4' ),
 						'rand'     => __( 'Random', 'vk-media-posts-bs4' ),
 					),
