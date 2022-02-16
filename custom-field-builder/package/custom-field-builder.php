@@ -54,6 +54,13 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 			}
 
 			wp_enqueue_style( 'cf-builder-style', self::admin_directory_url() . 'css/cf-builder.css', array(), self::$version, 'all' );
+
+			// Contact form 7　が jQuery ui のクラス名を使っていて干渉するので除外.
+			$cfb_jquery_ui_excludes = array( 'toplevel_page_wpcf7' );
+			if ( ! in_array( $hook_suffix, $cfb_jquery_ui_excludes ) ) {
+				wp_enqueue_style( 'cf-builder-jquery-ui-style', self::admin_directory_url() . 'css/jquery-ui.css', array( 'cf-builder-style' ), self::$version, 'all' );
+			}
+
 		}
 
 		public static function form_post_value( $post_field = '', $type = false ) {

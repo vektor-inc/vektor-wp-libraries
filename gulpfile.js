@@ -103,18 +103,6 @@ gulp.task('copy_post-type-manager', function(done) {
 /*-------------------------------------*/
 /*  Watch
 /*-------------------------------------*/
-gulp.task('copy_custom-field-builder', function (done) {
-  gulp.src('./custom-field-builder/package/**')
-	.pipe(gulp.dest('../plugins/vk-google-job-posting-manager/inc/custom-field-builder/package/'))
-	.pipe(gulp.dest('../themes/katawara/inc/custom-field-builder/package/'))
-	.pipe(gulp.dest('../themes/lightning-pro/inc/custom-field-builder/package/'))
-	.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/custom-field-builder/package/'));
-  done();
-});
-gulp.task('watch_cf', function (done) {
-    gulp.watch('./custom-field-builder/package/**', gulp.task('copy_custom-field-builder'));
-    done();
-});
 gulp.task('watch_ptm', function () {
     gulp.watch('./post-type-manager/package/**', gulp.task('copy_post-type-manager'));
 });
@@ -124,6 +112,37 @@ gulp.task('watch_full-title', function () {
 });
 
 // gulp.task('default', gulp.task('watch'));
+
+/*-------------------------------------*/
+/*  CF Builder
+/*-------------------------------------*/
+gulp.task('sass_cf', function(done) {
+	// gulp.src( '**/_scss/**/*.scss' )
+	gulp.src('./custom-field-builder/package/_scss/**/*.scss')
+	  .pipe(plumber())
+	  .pipe(sass())
+	  .pipe(cmq({
+		log: true
+	  }))
+	  .pipe(autoprefixer())
+	  .pipe(cleanCss())
+		  .pipe(gulp.dest('./custom-field-builder/package/css/'));
+		  done();
+  });
+  gulp.task('copy_custom-field-builder', function (done) {
+	gulp.src('./custom-field-builder/package/**')
+	  .pipe(gulp.dest('../plugins/vk-google-job-posting-manager/inc/custom-field-builder/package/'))
+	  .pipe(gulp.dest('../themes/katawara/inc/custom-field-builder/package/'))
+	  .pipe(gulp.dest('../themes/lightning-pro/inc/custom-field-builder/package/'))
+	  .pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/custom-field-builder/package/'));
+	done();
+  });
+  gulp.task('watch_cf', function (done) {
+	gulp.watch('./custom-field-builder/package/_scss/**', gulp.task('sass_cf'));
+	gulp.watch('./custom-field-builder/package/**', gulp.task('copy_custom-field-builder'));
+	done();
+  });
+
 
 
 /*-------------------------------------*/
