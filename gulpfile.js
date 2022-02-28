@@ -490,19 +490,6 @@ gulp.task('watch_mobile-fix', function(done) {
 });
 
 /**
- * Filter Search
- */
-gulp.task('copy_filter_search', function (done) {
-    gulp.src('./filter-search/package/**')
-		.pipe(replace("'filter-search-textdomain'","'vk-filter-search'"))
-        .pipe(gulp.dest('../plugins/vk-filter-search/inc/filter-search/package/'))
-	gulp.src('./filter-search/package/**')
-		.pipe(replace("'filter-search-textdomain'","'vk-filter-search-pro'"))
-		.pipe(gulp.dest('../plugins/vk-filter-search-pro/inc/filter-search/package/'));
-    done();
-});
-
-/**
  * VK Swiper
  */
  gulp.task('copy_vk-swiper', function(done) {
