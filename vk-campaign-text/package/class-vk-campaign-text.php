@@ -1,4 +1,13 @@
 <?php
+/*
+このファイルの元ファイルは
+https://github.com/vektor-inc/vektor-wp-libraries
+にあります。
+修正の際は上記リポジトリのデータを修正してください。
+編集権限を持っていない方で何か修正要望などありましたら
+各プラグインのリポジトリにプルリクエストで結構です。
+*/
+
 /**
  * VK Campaign Text
  *
@@ -27,16 +36,16 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 		}
 
 		public static function load_css() {
-			if ( apply_filters( 'vk_campaign_text_print_css', false ) ){
-				$path = wp_normalize_path( dirname( __FILE__ ) );
+			if ( apply_filters( 'vk_campaign_text_print_css', false ) ) {
+				$path    = wp_normalize_path( dirname( __FILE__ ) );
 				$css_url = str_replace( wp_normalize_path( ABSPATH ), site_url() . '/', $path ) . '/css/vk-campaign-text.css';
 				wp_enqueue_style( 'vk-campaign-text', $css_url, array(), self::$version );
 			}
 		}
 
-		public static function css_tree_shaking_array( $vk_css_tree_shaking_array ){
-			$path = wp_normalize_path( dirname( __FILE__ ) );
-			$css_url = str_replace( wp_normalize_path( ABSPATH ), site_url() . '/', $path ) . '/css/vk-campaign-text.css';
+		public static function css_tree_shaking_array( $vk_css_tree_shaking_array ) {
+			$path                        = wp_normalize_path( dirname( __FILE__ ) );
+			$css_url                     = str_replace( wp_normalize_path( ABSPATH ), site_url() . '/', $path ) . '/css/vk-campaign-text.css';
 			$vk_css_tree_shaking_array[] = array(
 				'id'      => 'vk-campaign-text',
 				'url'     => $css_url,
