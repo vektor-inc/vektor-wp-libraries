@@ -21,16 +21,15 @@ add_action( 'customize_register', 'vkmn_customize_register_add_control', 10 );
 if ( ! function_exists( 'vkmn_customize_register_add_control' ) ) {
 	function vkmn_customize_register_add_control() {
 
-		/*
-		  Add text control description
-		/*-------------------------------------------*/
+		/**
+		 * Add text control description
+		 */
 		class MobileNav_Custom_Html extends WP_Customize_Control {
 			public $type             = 'customtext';
-			public $custom_title_sub = ''; // we add this for the extra custom_html
-			public $custom_html      = ''; // we add this for the extra custom_html
+			public $custom_title_sub = ''; // we add this for the extra custom_html.
+			public $custom_html      = ''; // we add this for the extra custom_html.
 			public function render_content() {
 				if ( $this->label ) {
-					// echo '<h2 class="admin-custom-h2">' . wp_kses_post( $this->label ) . '</h2>';
 					echo '<h2 class="admin-custom-h2">' . wp_kses_post( $this->label ) . '</h2>';
 				}
 				if ( $this->custom_title_sub ) {
@@ -58,7 +57,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			 * Reason of Using through the after_setup_theme is
 			 * to be able to change the action hook point of css load from theme..
 			 */
-			// get_called_class()じゃないと外しにくい
+			// get_called_class()じゃないと外しにくい.
 			add_action( 'wp_enqueue_scripts', array( get_called_class(), 'add_style' ) );
 			add_action( 'customize_register', array( $this, 'vk_mobil_fix_nav_customize_register' ) ); // $thisじゃないとエラーになる
 			add_filter( 'body_class', array( __CLASS__, 'add_body_class' ) );
@@ -105,22 +104,22 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				'link_blank_4'   => true,
 			);
 
-			// フックでメニューの数を増やされた時に カスタマイザーのデフォルト値のところで Undefined index にならないように
+			// フックでメニューの数を増やされた時に カスタマイザーのデフォルト値のところで Undefined index にならないように.
 			$menu_num = apply_filters( 'vk_mobil_fix_nav_menu_number', 4 );
-			// 追加するフィールド配列
+			// 追加するフィールド配列.
 			$keys = array(
 				'link_text_',
 				'link_icon_',
 				'link_url_',
 				'link_blank_',
 			);
-			// 空の配列を作成
+			// 空の配列を作成.
 			for ( $i = 1; $i <= $menu_num; $i ++ ) {
 				foreach ( $keys as $key ) {
 					$default_options_added[ $key . $i ] = '';
 				}
 			}
-			// デフォルト値を結合
+			// デフォルト値を結合.
 			$default_options = wp_parse_args( $default_options, $default_options_added );
 
 			return $default_options;
@@ -150,13 +149,15 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			}
 		}
 
-		/*
-		  Customizer
-		/*-------------------------------------------*/
-
+		/**
+		 * Customizer
+		 *
+		 * @param object $wp_customize .
+		 * @return void
+		 */
 		public function vk_mobil_fix_nav_customize_register( $wp_customize ) {
 
-			// セクション、テーマ設定、コントロールを追加
+			// セクション、テーマ設定、コントロールを追加.
 			global $vk_mobile_fix_nav_prefix;
 			global $vk_mobile_fix_nav_priority;
 			if ( ! $vk_mobile_fix_nav_priority ) {
@@ -165,7 +166,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 			$default_options = $this->default_options();
 
-			// セクション追加
+			// セクション追加.
 			$wp_customize->add_section(
 				'vk_mobil_fix_nav_setting',
 				array(
@@ -174,18 +175,18 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				)
 			);
 
-			// hidden セッティング
+			// hidden セッティング.
 			$wp_customize->add_setting(
 				'vk_mobil_fix_nav_options[hidden]',
 				array(
 					'default'           => $default_options['hidden'],
-					'type'              => 'option', // 保存先 option or theme_mod
-					'capability'        => 'edit_theme_options', // サイト編集者
+					'type'              => 'option', // 保存先 option or theme_mod.
+					'capability'        => 'edit_theme_options', // サイト編集者.
 					'sanitize_callback' => array( 'Vk_Mobile_Fix_Nav', 'sanitize_boolean' ),
 				)
 			);
 
-			// hidden コントロール
+			// hidden コントロール.
 			$wp_customize->add_control(
 				'vk_mobil_fix_nav_options[hidden]',
 				array(
@@ -196,7 +197,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				)
 			);
 
-			// nav_title
+			// nav_title.
 			$wp_customize->add_setting(
 				'nav_title_widget',
 				array(
@@ -217,18 +218,18 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				)
 			);
 
-			// hidden セッティング
+			// hidden セッティング.
 			$wp_customize->add_setting(
 				'vk_mobil_fix_nav_options[widget_padding]',
 				array(
 					'default'           => $default_options['widget_padding'],
-					'type'              => 'option', // 保存先 option or theme_mod
-					'capability'        => 'edit_theme_options', // サイト編集者
+					'type'              => 'option', // 保存先 option or theme_mod.
+					'capability'        => 'edit_theme_options', // サイト編集者.
 					'sanitize_callback' => array( 'Vk_Mobile_Fix_Nav', 'sanitize_boolean' ),
 				)
 			);
 
-			// widget_padding コントロール
+			// widget_padding コントロール.
 			$wp_customize->add_control(
 				'vk_mobil_fix_nav_options[widget_padding]',
 				array(
@@ -239,7 +240,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				)
 			);
 
-			// nav_title
+			// nav_title.
 			$wp_customize->add_setting(
 				'nav_title_0',
 				array(
@@ -260,18 +261,18 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				)
 			);
 
-			// add_menu_btn セッティング
+			// add_menu_btn セッティング.
 			$wp_customize->add_setting(
 				'vk_mobil_fix_nav_options[add_menu_btn]',
 				array(
 					'default'           => $default_options['add_menu_btn'],
-					'type'              => 'option', // 保存先 option or theme_mod
-					'capability'        => 'edit_theme_options', // サイト編集者
+					'type'              => 'option', // 保存先 option or theme_mod.
+					'capability'        => 'edit_theme_options', // サイト編集者.
 					'sanitize_callback' => array( 'Vk_Mobile_Fix_Nav', 'sanitize_boolean' ),
 				)
 			);
 
-			// add_menu_btn コントロール
+			// add_menu_btn コントロール.
 			$wp_customize->add_control(
 				'vk_mobil_fix_nav_options[add_menu_btn]',
 				array(
@@ -286,18 +287,18 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			// 「add_menu_btn」にチェックが入っているときの処理
 			$add_menu_btn = array( 'add_menu_btn' );
 			if ( isset( $add_menu_btn ) && $add_menu_btn == true ) {
-				 // link_text セッティング
+				// link_text セッティング.
 				$wp_customize->add_setting(
 					'vk_mobil_fix_nav_options[link_text_0]',
 					array(
 						'default'           => $default_options['link_text_0'],
-						'type'              => 'option', // 保存先 option or theme_mod
-						'capability'        => 'edit_theme_options', // サイト編集者
+						'type'              => 'option', // 保存先 option or theme_mod.
+						'capability'        => 'edit_theme_options', // サイト編集者.
 						'sanitize_callback' => 'sanitize_text_field',
 					)
 				);
 
-				 // link_text コントロール
+				// link_text コントロール.
 				$wp_customize->add_control(
 					'link_text_0',
 					array(
@@ -310,11 +311,11 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 			} // if ( isset( $add_menu_btn ) && $add_menu_btn == true ) {
 
-			// メニュー数をカスタマイズできるフィルターフックを追加
+			// メニュー数をカスタマイズできるフィルターフックを追加.
 			$menu_num = apply_filters( 'vk_mobil_fix_nav_menu_number', 4 );
 			for ( $i = 1; $i <= $menu_num; $i ++ ) {
 
-				// nav_title
+				// nav_title.
 				$wp_customize->add_setting(
 					'nav_title_' . $i,
 					array(
@@ -335,18 +336,18 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					)
 				);
 
-				// link_text セッティング
+				// link_text セッティング.
 				$wp_customize->add_setting(
 					'vk_mobil_fix_nav_options[link_text_' . $i . ']',
 					array(
 						'default'           => $default_options[ 'link_text_' . $i ],
-						'type'              => 'option', // 保存先 option or theme_mod
-						'capability'        => 'edit_theme_options', // サイト編集者
+						'type'              => 'option', // 保存先 option or theme_mod.
+						'capability'        => 'edit_theme_options', // サイト編集者.
 						'sanitize_callback' => 'sanitize_text_field',
 					)
 				);
 
-				// link_text コントロール
+				// link_text コントロール.
 				$wp_customize->add_control(
 					'link_text_' . $i,
 					array(
@@ -357,14 +358,14 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					)
 				);
 
-				// link_icon セッティング
+				// link_icon セッティング.
 				$wp_customize->add_setting(
 					'vk_mobil_fix_nav_options[link_icon_' . $i . ']',
 					array(
 						'default'           => $default_options[ 'link_icon_' . $i ],
-						'type'              => 'option', // 保存先 option or theme_mod
-						'capability'        => 'edit_theme_options', // サイト編集者
-						'sanitize_callback' => 'sanitize_text_field',
+						'type'              => 'option', // 保存先 option or theme_mod.
+						'capability'        => 'edit_theme_options', // サイト編集者.
+						'sanitize_callback' => 'wp_kses_post',
 					)
 				);
 
@@ -373,7 +374,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					$description = Vk_Font_Awesome_Versions::ex_and_link();
 				}
 
-				// link_icon コントロール
+				// link_icon コントロール.
 				$wp_customize->add_control(
 					'link_icon_' . $i,
 					array(
@@ -385,18 +386,18 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					)
 				);
 
-				// link_url セッティング
+				// link_url セッティング.
 				$wp_customize->add_setting(
 					'vk_mobil_fix_nav_options[link_url_' . $i . ']',
 					array(
 						'default'           => $default_options[ 'link_url_' . $i ],
-						'type'              => 'option', // 保存先 option or theme_mod
-						'capability'        => 'edit_theme_options', // サイト編集者
+						'type'              => 'option', // 保存先 option or theme_mod.
+						'capability'        => 'edit_theme_options', // サイト編集者.
 						'sanitize_callback' => 'esc_url_raw',
 					)
 				);
 
-				// link_url コントロール
+				// link_url コントロール.
 				$wp_customize->add_control(
 					'link_url_' . $i,
 					array(
@@ -408,7 +409,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					)
 				);
 
-				// link_blank セッティング
+				// link_blank セッティング.
 				$wp_customize->add_setting(
 					'vk_mobil_fix_nav_options[link_blank_' . $i . ']',
 					array(
@@ -419,7 +420,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					)
 				);
 
-				// link_blank コントロール
+				// link_blank コントロール.
 				$wp_customize->add_control(
 					'vk_mobil_fix_nav_options[link_blank_' . $i . ']',
 					array(
@@ -430,7 +431,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					)
 				);
 
-				// Click event セッティング
+				// Click event セッティング.
 				$wp_customize->add_setting(
 					'vk_mobil_fix_nav_options[event_' . $i . ']',
 					array(
@@ -441,7 +442,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					)
 				);
 
-				// Click event コントロール
+				// Click event コントロール.
 				$wp_customize->add_control(
 					'event_' . $i,
 					array(
@@ -449,13 +450,13 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 						'section'     => 'vk_mobil_fix_nav_setting',
 						'settings'    => 'vk_mobil_fix_nav_options[event_' . $i . ']',
 						'type'        => 'text',
-						'description' => __( 'Ex', 'vk_mobile_fix_nav_textdomain' ) . ") ga('send', 'event', 'Videos', 'play', 'Fall Campaign');",
+						'description' => __( 'Ex', 'vk_mobile_fix_nav_textdomain' ) . " ) ga('send', 'event', 'Videos', 'play', 'Fall Campaign');",
 					)
 				);
 
 			} // for ($i = 1; $i <= 4; $i++) {
 
-				// nav_common
+				// nav_common.
 				$wp_customize->add_setting(
 					'nav_common',
 					array(
@@ -476,18 +477,18 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					)
 				);
 
-			// color セッティング
+			// color セッティング.
 			$wp_customize->add_setting(
 				'vk_mobil_fix_nav_options[color]',
 				array(
 					'default'           => '#2e6da4',
-					'type'              => 'option', // 保存先 option or theme_mod
-					'capability'        => 'edit_theme_options', // サイト編集者
+					'type'              => 'option', // 保存先 option or theme_mod.
+					'capability'        => 'edit_theme_options', // サイト編集者.
 					'sanitize_callback' => 'sanitize_hex_color',
 				)
 			);
 
-			// color コントロール
+			// color コントロール.
 			$wp_customize->add_control(
 				new WP_Customize_Color_Control(
 					$wp_customize,
@@ -500,18 +501,18 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				)
 			);
 
-			// nav_bg_color セッティング
+			// nav_bg_color セッティング.
 			$wp_customize->add_setting(
 				'vk_mobil_fix_nav_options[nav_bg_color]',
 				array(
 					'default'           => '#FFF',
-					'type'              => 'option', // 保存先 option or theme_mod
-					'capability'        => 'edit_theme_options', // サイト編集者
+					'type'              => 'option', // 保存先 option or theme_mod.
+					'capability'        => 'edit_theme_options', // サイト編集者.
 					'sanitize_callback' => 'sanitize_hex_color',
 				)
 			);
 
-			// nav_bg_color コントロール
+			// nav_bg_color コントロール.
 			$wp_customize->add_control(
 				new WP_Customize_Color_Control(
 					$wp_customize,
@@ -524,18 +525,18 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				)
 			);
 
-			// current_color セッティング
+			// current_color セッティング.
 			$wp_customize->add_setting(
 				'vk_mobil_fix_nav_options[current_color]',
 				array(
 					'default'           => '#16354f',
-					'type'              => 'option', // 保存先 option or theme_mod
-					'capability'        => 'edit_theme_options', // サイト編集者
+					'type'              => 'option', // 保存先 option or theme_mod.
+					'capability'        => 'edit_theme_options', // サイト編集者.
 					'sanitize_callback' => 'sanitize_hex_color',
 				)
 			);
 
-			// current_color コントロール
+			// current_color コントロール.
 			$wp_customize->add_control(
 				new WP_Customize_Color_Control(
 					$wp_customize,
@@ -561,9 +562,11 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 		} // function vk_mobil_fix_nav_customize_register( $wp_customize ) {
 
-		/*
-		  Load js & CSS
-		/*-------------------------------------------*/
+		/**
+		 * Load js & CSS
+		 *
+		 * @return $css_url
+		 */
 		public static function style_url() {
 			$path    = wp_normalize_path( dirname( __FILE__ ) );
 			$css_url = str_replace( wp_normalize_path( ABSPATH ), site_url() . '/', $path ) . '/css/vk-mobile-fix-nav.css';
@@ -587,7 +590,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 		}
 
 		/**
-		 * add body class
+		 * add body class.
 		 *
 		 * @return [type] [description]
 		 */
@@ -610,7 +613,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 		 */
 		public static function is_hidden_all() {
 			$is_menu_enable = self::is_menu_enable();
-			// ナビが非表示指定でウィジュエットも登録されていない場合
+			// ナビが非表示指定でウィジュエットも登録されていない場合.
 			if ( ! $is_menu_enable && ! is_active_sidebar( 'mobile-fix-nav-widget-area' ) ) {
 				return true;
 			} else {
@@ -644,21 +647,21 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 			$options = self::get_options();
 
-			// bg color
+			// bg color.
 			if ( isset( $options['nav_bg_color'] ) && $options['nav_bg_color'] ) {
 				$nav_bg_color = $options['nav_bg_color'];
 			} else {
 				$nav_bg_color = '#FFF';
 			}
 
-			// color
+			// color.
 			if ( isset( $options['color'] ) && $options['color'] ) {
 				$color = $options['color'];
 			} else {
 				$color = '#2e6da4';
 			}
 
-			// current color
+			// current color.
 			if ( isset( $options['current_color'] ) && $options['current_color'] ) {
 				$current_color = $options['current_color'];
 			} else {
@@ -683,49 +686,49 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				<ul class="mobile-fix-nav-menu">
 
 						<?php
-						// add_menu_btn
+						// add_menu_btn.
 						if ( ! empty( $options['add_menu_btn'] ) ) {
 							echo '<li>';
 							echo '<span id="vk-mobile-nav-menu-btn" class="vk-mobile-nav-menu-btn" style="color: ' . $color . ';"><span class="link-icon"><i class="fas fa fa-bars" aria-hidden="true"></i></span>' . esc_html( $options['link_text_0'] ) . '</span>';
 							echo '</li>';
 						}
 
-						// メニュー数をカスタマイズできるフィルターフックを追加
+						// メニュー数をカスタマイズできるフィルターフックを追加.
 						$menu_num = apply_filters( 'vk_mobil_fix_nav_menu_number', 4 );
 						for ( $i = 1; $i <= $menu_num; $i ++ ) {
 
-							// link text
+							// link text.
 							if ( ! empty( $options[ 'link_text_' . $i ] ) ) {
 								$link_text = $options[ 'link_text_' . $i ];
 							} else {
 								$link_text = '';
 							}
 
-							// fontawesome icon
+							// fontawesome icon.
 							if ( ! empty( $options[ 'link_icon_' . $i ] ) ) {
 								$link_icon = $options[ 'link_icon_' . $i ];
 							} else {
 								$link_icon = '';
 							}
 
-							// link URL
+							// link URL.
 							if ( ! empty( $options[ 'link_url_' . $i ] ) ) {
 								$link_url = $options[ 'link_url_' . $i ];
 							} else {
 								$link_url = '';
 							}
 
-							// link_blank
+							// link_blank.
 							if ( ! empty( $options[ 'link_blank_' . $i ] ) ) {
 								$blank = ' target="_blank"';
 							} else {
 								$blank = '';
 							}
 
-							// 実際に HTML を出力する
+							// 実際に HTML を出力する.
 							if ( isset( $options[ 'link_text_' . $i ] ) && $options[ 'link_text_' . $i ] || isset( $options[ 'link_icon_' . $i ] ) && $options[ 'link_icon_' . $i ] ) {
 								echo '<li>';
-								// page-current
+								// page-current.
 								$get_current_link = get_the_permalink();
 								$postid           = url_to_postid( get_permalink() );
 								// $get_current_link_cat = get_category_link( $postid );
@@ -739,9 +742,9 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 									$color_style = $color;
 								}
 
-								// click event
+								// click event.
 								$event = '';
-								// クリックイベントが入力されていたら
+								// クリックイベントが入力されていたら.
 								if ( ! empty( $options[ 'event_' . $i ] ) && $options[ 'event_' . $i ] ) {
 									/*
 									onclickはクリックが終わった瞬間に発生するイベント
