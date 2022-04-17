@@ -5,6 +5,11 @@ https://github.com/vektor-inc/vektor-wp-libraries
 にあります。修正の際は上記リポジトリのデータを修正してください。
 */
 
+use VektorInc\VK_Font_Awesome_Versions\VkFontAwesomeVersions;
+if ( method_exists( 'VektorInc\VK_Font_Awesome_Versions\VkFontAwesomeVersions', 'init' ) ) {
+	VkFontAwesomeVersions::init();
+}
+
 // add_action( 'after_setup_theme', 'vkmn_nav_add_customize_panel' );
 //
 // // カスタマイズパネルを出力するかどうかの判別
@@ -370,19 +375,19 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				);
 
 				$description = '';
-				if ( class_exists( 'Vk_Font_Awesome_Versions' ) ) {
-					$description = Vk_Font_Awesome_Versions::ex_and_link();
+				if ( method_exists( 'VektorInc\VK_Font_Awesome_Versions\VkFontAwesomeVersions', 'ex_and_link' ) ) {
+					$description = VkFontAwesomeVersions::ex_and_link();
 				}
 
 				// link_icon コントロール.
 				$wp_customize->add_control(
 					'link_icon_' . $i,
 					array(
-						'label'       => __( 'Icon font class name:', 'vk_mobile_fix_nav_textdomain' ),
+						'label'       => __( 'Font Awesome icon font', 'vk_mobile_fix_nav_textdomain' ),
 						'section'     => 'vk_mobil_fix_nav_setting',
 						'settings'    => 'vk_mobil_fix_nav_options[link_icon_' . $i . ']',
 						'type'        => 'text',
-						'description' => __( 'To choose your favorite icon, and enter the class.', 'vk_mobile_fix_nav_textdomain' ) . '<br>' . $description,
+						'description' => __( 'To choose your favorite icon, and enter the icon html tag.', 'vk_mobile_fix_nav_textdomain' ) . '<br>' . $description,
 					)
 				);
 
@@ -759,13 +764,13 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 									$event .= $options[ 'event_' . $i ] . '"';
 								} // if ( ! empty( $options['event_'.$i] ) && $options['event_'.$i] ){
 
-								$print_fa = '';
-								if ( class_exists( 'Vk_Font_Awesome_Versions' ) ) {
-									$print_fa = Vk_Font_Awesome_Versions::print_fa();
+								$icon_html = '';
+								if ( method_exists( 'VektorInc\VK_Font_Awesome_Versions\VkFontAwesomeVersions', 'get_icon_tag' ) ) {
+									$icon_html = VkFontAwesomeVersions::get_icon_tag( $link_icon );
 								}
 
 								echo '<a href="' . esc_url( $link_url ) . '" ' . $blank . ' style="color: ' . $color_style . ';"' . $event . '>
-		            <span class="link-icon"><i class="' . $print_fa . esc_html( $link_icon ) . '"></i></span>' . esc_html( $link_text ) . '</a>';
+		            <span class="link-icon">' . wp_kses_post( $icon_html ) . '</span>' . esc_html( $link_text ) . '</a>';
 								echo '</li>';
 							}
 						} // <?php for ( $i = 1; $i <= 4; $i++ ) {
