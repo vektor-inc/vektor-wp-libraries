@@ -90,12 +90,6 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					'label'       => __( 'San Francisco', 'vk_font_selector_textdomain' ),
 					'font-family' => '-apple-system,BlinkMacSystemFont,"メイリオ",Meiryo,"ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN,sans-serif',
 				),
-				// 'Noto+Sans+JP:100'      => array(
-				// 'label'           => 'Noto Sans JP 100 ( Google Fonts )',
-				// 'font-family'     => '"Noto Sans JP",sans-serif',
-				// 'font-family-key' => 'Noto+Sans+JP',
-				// 'font-weight'     => 100,
-				// ),
 				'Noto+Sans+JP:300'      => array(
 					'label'           => 'Noto Sans JP 300 ( Google Fonts )',
 					'font-family'     => '"Noto Sans JP",sans-serif',
@@ -168,12 +162,6 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					'font-family-key' => 'Noto+Serif+JP',
 					'font-weight'     => 900,
 				),
-				// 'M+PLUS+1p:100'         => array(
-				// 'label'           => 'M PLUS 1p 100 ( Google Fonts )',
-				// 'font-family'     => '"M PLUS 1p",sans-serif',
-				// 'font-family-key' => 'M+PLUS+1p',
-				// 'font-weight'     => 100,
-				// ),
 				'M+PLUS+1p:300'         => array(
 					'label'           => 'M PLUS 1p 300 ( Google Fonts )',
 					'font-family'     => '"M PLUS 1p",sans-serif',
@@ -198,24 +186,6 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					'font-family-key' => 'M+PLUS+1p',
 					'font-weight'     => 700,
 				),
-				// 'M+PLUS+1p:800'         => array(
-				// 'label'           => 'M PLUS 1p 800 ( Google Fonts )',
-				// 'font-family'     => '"M PLUS 1p",sans-serif',
-				// 'font-family-key' => 'M+PLUS+1p',
-				// 'font-weight'     => 800,
-				// ),
-				// 'M+PLUS+1p:900'         => array(
-				// 'label'           => 'M PLUS 1p 900 ( Google Fonts )',
-				// 'font-family'     => '"M PLUS 1p",sans-serif',
-				// 'font-family-key' => 'M+PLUS+1p',
-				// 'font-weight'     => 900,
-				// ),
-				// 'M+PLUS+Rounded+1c:100' => array(
-				// 'label'           => 'M PLUS Rounded 1c 100 ( Google Fonts )',
-				// 'font-family'     => '"M PLUS Rounded 1c",sans-serif',
-				// 'font-family-key' => 'M+PLUS+Rounded+1c',
-				// 'font-weight'     => 100,
-				// ),
 				'M+PLUS+Rounded+1c:300' => array(
 					'label'           => 'M PLUS Rounded 1c 300 ( Google Fonts )',
 					'font-family'     => '"M PLUS Rounded 1c",sans-serif',
@@ -240,18 +210,6 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					'font-family-key' => 'M+PLUS+Rounded+1c',
 					'font-weight'     => 700,
 				),
-				// 'M+PLUS+Rounded+1c:800' => array(
-				// 'label'           => 'M PLUS Rounded 1c 800 ( Google Fonts )',
-				// 'font-family'     => '"M PLUS Rounded 1c",sans-serif',
-				// 'font-family-key' => 'M+PLUS+Rounded+1c',
-				// 'font-weight'     => 800,
-				// ),
-				// 'M+PLUS+Rounded+1c:900' => array(
-				// 'label'           => 'M PLUS Rounded 1c 900 ( Google Fonts )',
-				// 'font-family'     => '"M PLUS Rounded 1c",sans-serif',
-				// 'font-family-key' => 'M+PLUS+Rounded+1c',
-				// 'font-weight'     => 900,
-				// ),
 				'Sawarabi+Mincho'       => array(
 					'label'           => 'Sawarabi Mincho ( Google Fonts )',
 					'font-family'     => '"Sawarabi Mincho",sans-serif',
@@ -602,20 +560,34 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 					// font-weight 指定がある場合.
 					if ( isset( $family_info['weight'] ) && is_array( $family_info['weight'] ) ) {
 						$count_weight      = 0;
-						$family_parameter .= ':';
+						$weight_700        = 0;
+						$family_parameter .= ':wght@';
 						foreach ( $family_info['weight'] as $key => $value ) {
-									// font-weightが2つ目以降はセパレーターを追加.
+
 							if ( $count_weight ) {
-								$family_parameter .= ',';
+								// font-weightが2つ目以降はセパレーターを追加.
+								$family_parameter .= ';';
 							}
+
 							$family_parameter .= $value;
+
+							// 700 が選択された場合フラグをたてる
+							if ( 700 === intval( $value ) ) {
+								$weight_700++;
+							}
+
 							$count_weight++;
+						}
+
+						// 700が選択されてなかったら700を追加
+						if ( ! $weight_700 ) {
+							$family_parameter .= ';700';
 						}
 					}
 
 					$count_family++;
 				}
-				echo '<link href="https://fonts.googleapis.com/css?family=' . $family_parameter . '&display=swap" rel="stylesheet">';
+				wp_enqueue_style('vk_add_google_web_fonts', 'https://fonts.googleapis.com/css2?family=' . esc_attr( $family_parameter ) . '&display=swap&subset=japanese', array(), '20220521', 'all' );
 			} // if ( ! empty( $selected_fonts_info['selected_webFonts'] ) ) {
 		} // public function load_web_fonts() {
 
