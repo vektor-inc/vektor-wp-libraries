@@ -553,7 +553,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 					// font-familyが2つ目以降はセパレーターを追加.
 					if ( $count_family ) {
-						$family_parameter .= '|';
+						$family_parameter .= '&';
 					}
 					$family_parameter .= $family;
 
