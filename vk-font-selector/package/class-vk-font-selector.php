@@ -54,8 +54,18 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 	 */
 	class Vk_Font_Selector_Customize {
 
-		public static $version = '0.1.3';
+		/**
+		 * Version
+		 *
+		 * @var string
+		 */
+		public static $version = '0.2.0';
 
+		/**
+		 * Init function
+		 *
+		 * @return void
+		 */
 		public static function init() {
 			add_action( 'customize_register', array( __CLASS__, 'register' ) );
 			add_action( 'wp_head', array( __CLASS__, 'dynamic_header_css' ), 5 );
@@ -64,6 +74,11 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 			add_action( 'enqueue_block_editor_assets', array( __CLASS__, 'dynamic_editor_css' ), 12 );
 		}
 
+		/**
+		 * Font Array
+		 *
+		 * @return array $fonts_array
+		 */
 		public static function fonts_array() {
 			$fonts_array = array(
 				''                      => array(
@@ -256,6 +271,11 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 			return apply_filters( 'vk_font_target_array', $target_array );
 		}
 
+		/**
+		 * Editor selector target
+		 *
+		 * @return array $editor_target_array
+		 */
 		public static function editor_target_array() {
 			$editor_target_array = array(
 				'title' => array(
@@ -270,6 +290,12 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 			return apply_filters( 'vk_font_editor_target_array', $editor_target_array );
 		}
 
+		/**
+		 * Customize register
+		 *
+		 * @param object $wp_customize .
+		 * @return void
+		 */
 		public static function register( $wp_customize ) {
 
 			// セクション、テーマ設定、コントロールを追加.
@@ -421,6 +447,9 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 						if ( isset( $fonts_array[ $font_key ]['font-weight'] ) ) {
 							$font_weight = 'font-weight:' . $fonts_array[ $font_key ]['font-weight'] . ';';
 						}
+
+						$fonts_array[ $font_key ]['target'] = $target_key;
+
 						// 出力するCSSに登録.
 						$dynamic_css .= $target_value['selector'] . '{ ';
 						$dynamic_css .= $font_family . $font_weight;
@@ -526,82 +555,102 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 		} // public function skin_dynamic_css(){
 
 		/**
-		 * Load Web Font
+		 * Get Web Font URL
 		 *
 		 * @return void
 		 */
-		public static function load_web_fonts() {
+		public static function get_web_fonts_url() {
 			$selected_fonts_info = self::get_selected_fonts_info();
-			if ( ! empty( $selected_fonts_info['selected_webFonts'] ) ) {
 
-				// 同じフォントでウェイト違いが入ってくるので、フォントごとにまとめた配列を生成する.
-				foreach ( $selected_fonts_info['selected_webFonts'] as $key => $value ) {
+			if ( empty( $selected_fonts_info['selected_webFonts'] ) ) {
+				return;
+			}
 
-					$family = $value['font-family-key'];
-					if ( isset( $value['font-weight'] ) ) {
-						$fonts[ $family ]['weight'][] = $value['font-weight'];
-					} else {
-						$fonts[ $family ] = '';
-					}
-				} // foreach ( $selected_fonts_info['selected_webFonts'] as $key => $value ) {
+			// フォントをキーとする配列を生成する
+			// 配列内に同じフォントでウェイト違いが入ってくるので、フォントごとにまとめた配列を生成する.
+			foreach ( $selected_fonts_info['selected_webFonts'] as $key => $value ) {
 
-				// Googleに投げるパラメーターの生成.
-				$family_parameter = '';
-				$before_family    = '';
-				$count_family     = 0;
-				foreach ( $fonts as $family => $family_info ) {
+				$family = $value['font-family-key'];
+				if ( isset( $value['font-weight'] ) ) {
+					$fonts[ $family ]['weight'][] = $value['font-weight'];
+				} else {
+					$fonts[ $family ] = '';
+				}
+				if ( 'text' === $value['target'] ) {
+					// bold を読み込むかどうかの識別フラグ.
+					$fonts[ $family ]['is_text'] = true;
+				}
+			}
 
-					// font-familyが2つ目以降はセパレーターを追加.
-					if ( $count_family ) {
-						$family_parameter .= '&';
-					}
-					$family_parameter .= $family;
+			// Googleに投げるパラメーターの生成.
+			$family_parameter = '';
+			$before_family    = '';
+			$count_family     = 0;
 
-					// font-weight 指定がある場合.
-					if ( isset( $family_info['weight'] ) && is_array( $family_info['weight'] ) ) {
-						$count_weight      = 0;
-						$weight_700        = 0;
-						$family_parameter .= ':wght@';
-						foreach ( $family_info['weight'] as $key => $value ) {
+			foreach ( $fonts as $family => $family_info ) {
 
-							if ( $count_weight ) {
-								// font-weightが2つ目以降はセパレーターを追加.
-								$family_parameter .= ';';
-							}
+				// font-familyが2つ目以降はセパレーターを追加.
+				if ( $count_family ) {
+					$family_parameter .= '&';
+				}
 
-							$family_parameter .= $value;
+				$family_parameter .= 'family=';
 
-							// 700 が選択された場合フラグをたてる
-							if ( 700 === intval( $value ) ) {
-								$weight_700++;
-							}
+				$family_parameter .= $family;
 
-							$count_weight++;
+				// font-weight 指定がある場合.
+				if ( isset( $family_info['weight'] ) && is_array( $family_info['weight'] ) ) {
+					$count_weight      = 0;
+					$weight_700        = 0;
+					$family_parameter .= ':wght@';
+					foreach ( $family_info['weight'] as $key => $value ) {
+
+						if ( $count_weight ) {
+							// font-weightが2つ目以降はセパレーターを追加.
+							$family_parameter .= ';';
 						}
 
+						$family_parameter .= $value;
+
+						// 700 が選択された場合フラグをたてる
+						if ( 700 === intval( $value ) ) {
+							$weight_700++;
+						}
+
+						$count_weight++;
+					}
+
+					if ( isset( $family_info['is_text'] ) && $family_info['is_text'] ) {
 						// 700が選択されてなかったら700を追加
 						if ( ! $weight_700 ) {
 							$family_parameter .= ';700';
 						}
 					}
-
-					$count_family++;
 				}
-				wp_enqueue_style('vk_add_google_web_fonts', 'https://fonts.googleapis.com/css2?family=' . esc_attr( $family_parameter ) . '&display=swap&subset=japanese', array(), '20220521', 'all' );
-			} // if ( ! empty( $selected_fonts_info['selected_webFonts'] ) ) {
-		} // public function load_web_fonts() {
+
+				$count_family++;
+			}
+
+			$url = 'https://fonts.googleapis.com/css2?' . $family_parameter . '&display=swap&subset=japanese';
+
+			return $url;
+		}
+
+		/**
+		 * Load Web Font
+		 *
+		 * @return void
+		 */
+		public static function load_web_fonts() {
+
+				$url = self::get_web_fonts_url();
+
+				wp_enqueue_style( 'vk_add_google_web_fonts', $url, array(), '20220521', 'all' );
+				// echo '<link href="' . $url . '" rel="stylesheet">';
+		}
 
 	} // class Vk_Font_Selector_Customize
 
 	Vk_Font_Selector_Customize::init();
 
-	// 外す時
-	// add_action(
-	// 'after_setup_theme', function() {
-	// remove_action( 'customize_register', array( 'Vk_Font_Selector_Customize', 'register' ) );
-	// remove_action( 'wp_head', array( 'Vk_Font_Selector_Customize', 'dynamic_header_css' ), 5 );
-	// remove_action( 'wp_footer', array( 'Vk_Font_Selector_Customize', 'load_web_fonts' ) );
-	// }
-	// );
-
-} // if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
+}
