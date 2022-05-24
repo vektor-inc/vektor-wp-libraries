@@ -59,7 +59,7 @@ if ( ! class_exists( 'Vk_Font_Selector' ) ) {
 		 *
 		 * @var string
 		 */
-		public static $version = '0.2.0';
+		public static $version = '0.2.1';
 
 		/**
 		 * Init function
@@ -390,7 +390,6 @@ if ( ! class_exists( 'Vk_Font_Selector' ) ) {
 		public static function get_selected_fonts_info() {
 			// どの場所にどのフォント指定をするのかが格納されている.
 			$options = get_option( 'vk_font_selector' );
-			print '<pre style="text-align:left">';print_r($options);print '</pre>';
 			// $options = array(
 			// [title] => gothic,
 			// [menu] => gothic,
@@ -609,11 +608,11 @@ if ( ! class_exists( 'Vk_Font_Selector' ) ) {
 
 					}
 
-					if ( isset( $family_info['is_text'] ) && $family_info['is_text'] ) {
-						if ( ! in_array( 700, $font_weights ) ) {
-							$font_weights[] = 700;
-						}
+					// if ( isset( $family_info['is_text'] ) && $family_info['is_text'] ) {
+					if ( ! in_array( 700, $font_weights ) ) {
+						$font_weights[] = 700;
 					}
+					// }
 
 					// ウェイトが小さい順に並び替え（小さい順でないとGoogleに404にされる）.
 					asort( $font_weights );
@@ -649,8 +648,9 @@ if ( ! class_exists( 'Vk_Font_Selector' ) ) {
 
 				$url = self::get_web_fonts_url();
 
-				wp_enqueue_style( 'vk_add_google_web_fonts', $url, array(), self::$version, 'all' );
-				// echo '<link href="' . $url . '" rel="stylesheet">';
+				// enqueue だとパラメーターが反応でずにフォントが認識されない事がある
+				// wp_enqueue_style( 'vk_add_google_web_fonts', $url, array(), self::$version, 'all' );
+				echo '<link href="' . $url . '&ver=' . self::$version . '" rel="stylesheet">';
 		}
 
 	} // class Vk_Font_Selector
