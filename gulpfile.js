@@ -345,10 +345,15 @@ gulp.task('copy_font-selector', function (done) {
         .pipe(gulp.dest('../themes/katawara/inc/vk-font-selector/package/'))
     	.pipe(gulp.dest('../themes/lightning-pro/inc/vk-font-selector/package/'))
 		.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/vk-font-selector/package/'));
-		done();
+	gulp.src('./vk-font-selector/tests/**')
+        .pipe(gulp.dest('../themes/katawara/tests/'))
+    	.pipe(gulp.dest('../themes/lightning-pro/tests/'))
+		.pipe(gulp.dest('../plugins/lightning-g3-pro-unit/tests/'));
+	done();
 });
 gulp.task('watch_font', function (done) {
     gulp.watch('./vk-font-selector/package/**', gulp.task('copy_font-selector'));
+    gulp.watch('./vk-font-selector/tests/**', gulp.task('copy_font-selector'));
     gulp.watch('./vk-font-selector/package/_scss/**', gulp.task('sass_vk-font-selector'));
 	done();
 });

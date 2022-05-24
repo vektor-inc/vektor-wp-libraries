@@ -47,12 +47,12 @@ if ( ! function_exists( 'vkfs_customize_register_add_control' ) ) {
 } // if ( ! function_exists( 'vkfs_customize_register_add_control' ) ) {
 
 
-if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
+if ( ! class_exists( 'Vk_Font_Selector' ) ) {
 
 	/**
 	 * Font customize class
 	 */
-	class Vk_Font_Selector_Customize {
+	class Vk_Font_Selector {
 
 		/**
 		 * Version
@@ -390,6 +390,7 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 		public static function get_selected_fonts_info() {
 			// どの場所にどのフォント指定をするのかが格納されている.
 			$options = get_option( 'vk_font_selector' );
+			print '<pre style="text-align:left">';print_r($options);print '</pre>';
 			// $options = array(
 			// [title] => gothic,
 			// [menu] => gothic,
@@ -600,31 +601,34 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 				// font-weight 指定がある場合.
 				if ( isset( $family_info['weight'] ) && is_array( $family_info['weight'] ) ) {
-					$count_weight      = 0;
-					$weight_700        = 0;
-					$family_parameter .= ':wght@';
+
+					$font_weights = array();
 					foreach ( $family_info['weight'] as $key => $value ) {
 
+						$font_weights[] = intval( $value );
+
+					}
+
+					if ( isset( $family_info['is_text'] ) && $family_info['is_text'] ) {
+						if ( ! in_array( 700, $font_weights ) ) {
+							$font_weights[] = 700;
+						}
+					}
+
+					// ウェイトが小さい順に並び替え（小さい順でないとGoogleに404にされる）.
+					asort( $font_weights );
+
+					$count_weight      = 0;
+					$family_parameter .= ':wght@';
+					foreach ( $font_weights as $value ) {
 						if ( $count_weight ) {
 							// font-weightが2つ目以降はセパレーターを追加.
 							$family_parameter .= ';';
 						}
-
 						$family_parameter .= $value;
 
-						// 700 が選択された場合フラグをたてる
-						if ( 700 === intval( $value ) ) {
-							$weight_700++;
-						}
-
 						$count_weight++;
-					}
 
-					if ( isset( $family_info['is_text'] ) && $family_info['is_text'] ) {
-						// 700が選択されてなかったら700を追加
-						if ( ! $weight_700 ) {
-							$family_parameter .= ';700';
-						}
 					}
 				}
 
@@ -645,12 +649,12 @@ if ( ! class_exists( 'Vk_Font_Selector_Customize' ) ) {
 
 				$url = self::get_web_fonts_url();
 
-				wp_enqueue_style( 'vk_add_google_web_fonts', $url, array(), '20220521', 'all' );
+				wp_enqueue_style( 'vk_add_google_web_fonts', $url, array(), self::$version, 'all' );
 				// echo '<link href="' . $url . '" rel="stylesheet">';
 		}
 
-	} // class Vk_Font_Selector_Customize
+	} // class Vk_Font_Selector
 
-	Vk_Font_Selector_Customize::init();
+	Vk_Font_Selector::init();
 
 }
