@@ -608,11 +608,11 @@ if ( ! class_exists( 'Vk_Font_Selector' ) ) {
 
 					}
 
-					// if ( isset( $family_info['is_text'] ) && $family_info['is_text'] ) {
-					if ( ! in_array( 700, $font_weights ) ) {
-						$font_weights[] = 700;
+					if ( isset( $family_info['is_text'] ) && $family_info['is_text'] ) {
+						if ( ! in_array( 700, $font_weights ) ) {
+							$font_weights[] = 700;
+						}
 					}
-					// }
 
 					// ウェイトが小さい順に並び替え（小さい順でないとGoogleに404にされる）.
 					asort( $font_weights );
