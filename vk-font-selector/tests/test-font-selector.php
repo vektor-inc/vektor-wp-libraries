@@ -14,6 +14,10 @@ class VK_Font_Selector_Test extends WP_UnitTestCase {
 
 		// テスト配列 .
 		$test_array = array(
+			array(
+				'vk_font_selector' => null,
+				'correct'          => '',
+			),
 			// 700が先でもURLでは500が先になるかどうか .
 			array(
 				'vk_font_selector' => array(
