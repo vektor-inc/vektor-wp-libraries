@@ -14,6 +14,10 @@ class VK_Font_Selector_Test extends WP_UnitTestCase {
 
 		// テスト配列 .
 		$test_array = array(
+			array(
+				'vk_font_selector' => null,
+				'correct'          => '',
+			),
 			// 700が先でもURLでは500が先になるかどうか .
 			array(
 				'vk_font_selector' => array(
@@ -36,6 +40,19 @@ class VK_Font_Selector_Test extends WP_UnitTestCase {
 				),
 				'correct'          => 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&family=Noto+Serif+JP:wght@500;700&display=swap&subset=japanese',
 			),
+			array(
+				'vk_font_selector' => array(
+					'text'  => 'Sawarabi+Mincho',
+				),
+				'correct'          => 'https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&display=swap&subset=japanese',
+			),
+			array(
+				'vk_font_selector' => array(
+					'title' => 'Noto+Sans+JP:500',
+					'text'  => 'Sawarabi+Mincho',
+				),
+				'correct'          => 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&family=Sawarabi+Mincho&display=swap&subset=japanese',
+			)
 		);
 
 		print PHP_EOL;
