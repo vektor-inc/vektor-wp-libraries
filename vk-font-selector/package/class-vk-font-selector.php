@@ -562,20 +562,20 @@ if ( ! class_exists( 'Vk_Font_Selector' ) ) {
 		public static function get_web_fonts_url() {
 			$selected_fonts_info = self::get_selected_fonts_info();
 
-			if ( empty( $selected_fonts_info['selected_webFonts'] ) ) {
+			if ( empty( $selected_fonts_info['selected_webFonts'] ) || ! is_array( $selected_fonts_info['selected_webFonts'] ) ) {
 				return;
 			}
 
-			// フォントをキーとする配列を生成する
+			// フォントをキーとする配列を生成する.
+			$fonts = array();
 			// 配列内に同じフォントでウェイト違いが入ってくるので、フォントごとにまとめた配列を生成する.
 			foreach ( $selected_fonts_info['selected_webFonts'] as $key => $value ) {
-
 				$family = $value['font-family-key'];
+
 				if ( isset( $value['font-weight'] ) ) {
 					$fonts[ $family ]['weight'][] = $value['font-weight'];
-				} else {
-					$fonts[ $family ] = '';
 				}
+
 				if ( 'text' === $value['target'] ) {
 					// bold を読み込むかどうかの識別フラグ.
 					$fonts[ $family ]['is_text'] = true;
