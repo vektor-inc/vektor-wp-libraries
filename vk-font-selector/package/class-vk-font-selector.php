@@ -646,11 +646,14 @@ if ( ! class_exists( 'Vk_Font_Selector' ) ) {
 		 */
 		public static function load_web_fonts() {
 
-				$url = self::get_web_fonts_url();
+			$url = self::get_web_fonts_url();
 
+			if ( $url ) {
 				// enqueue だとパラメーターが反応でずにフォントが認識されない事がある
 				// wp_enqueue_style( 'vk_add_google_web_fonts', $url, array(), self::$version, 'all' );
 				echo '<link href="' . $url . '&ver=' . self::$version . '" rel="stylesheet">';
+			}
+
 		}
 
 	} // class Vk_Font_Selector
