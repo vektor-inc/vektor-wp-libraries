@@ -572,6 +572,10 @@ if ( ! class_exists( 'Vk_Font_Selector' ) ) {
 			foreach ( $selected_fonts_info['selected_webFonts'] as $key => $value ) {
 				$family = $value['font-family-key'];
 
+				if ( empty( $fonts[ $family ] ) ) {
+					$fonts[ $family ] = array();
+				}
+
 				if ( isset( $value['font-weight'] ) ) {
 					$fonts[ $family ]['weight'][] = $value['font-weight'];
 				}

@@ -42,7 +42,7 @@ class VK_Font_Selector_Test extends WP_UnitTestCase {
 			),
 			array(
 				'vk_font_selector' => array(
-					'text'  => 'Sawarabi+Mincho',
+					'text' => 'Sawarabi+Mincho',
 				),
 				'correct'          => 'https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&display=swap&subset=japanese',
 			),
@@ -52,7 +52,14 @@ class VK_Font_Selector_Test extends WP_UnitTestCase {
 					'text'  => 'Sawarabi+Mincho',
 				),
 				'correct'          => 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&family=Sawarabi+Mincho&display=swap&subset=japanese',
-			)
+			),
+			array(
+				'vk_font_selector' => array(
+					'title' => 'Sawarabi+Mincho',
+					'text'  => 'Noto+Sans+JP:500',
+				),
+				'correct'          => 'https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&family=Noto+Sans+JP:wght@500;700&display=swap&subset=japanese',
+			),
 		);
 
 		print PHP_EOL;
