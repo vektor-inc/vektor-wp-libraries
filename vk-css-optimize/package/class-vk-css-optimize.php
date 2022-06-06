@@ -332,7 +332,7 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 				}
 
 				// ree shaking を実行して再格納 .
-				$css    = celtislab\v2_1\CSS_tree_shaking::extended_minify( celtislab\v2_1\CSS_tree_shaking::simple_minify( $css ), $buffer );
+				$css = celtislab\v2_1\CSS_tree_shaking::extended_minify( celtislab\v2_1\CSS_tree_shaking::simple_minify( $css ), $buffer );
 
 				// ファイルで読み込んでいるCSSを直接出力に置換（バージョンパラメーターあり）.
 				$buffer = str_replace(
@@ -362,11 +362,13 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 
 				$css = celtislab\v2_1\CSS_tree_shaking::simple_minify( $css );
 
+				// ファイルで読み込んでいるCSSを直接出力に置換（バージョンパラメーターあり）.
 				$buffer = str_replace(
 					'<link rel=\'stylesheet\' id=\'' . $vk_css_array['id'] . '-css\'  href=\'' . $vk_css_array['url'] . '?ver=' . $vk_css_array['version'] . '\' type=\'text/css\' media=\'all\' />',
 					'<style id=\'' . $vk_css_array['id'] . '-css\' type=\'text/css\'>' . $css . '</style>',
 					$buffer
 				);
+				// ファイルで読み込んでいるCSSを直接出力に置換（バージョンパラメーターなし）.
 				$buffer = str_replace(
 					'<link rel=\'stylesheet\' id=\'' . $vk_css_array['id'] . '-css\'  href=\'' . $vk_css_array['url'] . '\' type=\'text/css\' media=\'all\' />',
 					'<style id=\'' . $vk_css_array['id'] . '-css\' type=\'text/css\'>' . $css . '</style>',
@@ -381,11 +383,11 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 		/**
 		 * Undocumented function
 		 *
-		 * @param [type] $tag
-		 * @param [type] $handle
-		 * @param [type] $href
-		 * @param [type] $media
-		 * @return void
+		 * @param string $tag .
+		 * @param string $handle .
+		 * @param string $href .
+		 * @param string $media .
+		 * @return string $tag .
 		 */
 		public static function css_preload( $tag, $handle, $href, $media ) {
 
@@ -397,25 +399,30 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 			$options = self::get_css_optimize_options();
 
 			// tree shaking がかかっているものはpreloadから除外する
-			// でないと表示時に一瞬崩れて結局実用性に問題があるため
+			// でないと表示時に一瞬崩れて結局実用性に問題があるため.
 			foreach ( $vk_css_tree_shaking_array as $vk_css_array ) {
 				$exclude_handles[] = $vk_css_array['id'];
 			}
 
 			// Simple Minify がかかっているものはpreloadから除外する
-			// でないと表示時に一瞬崩れて結局実用性に問題があるため
+			// でないと表示時に一瞬崩れて結局実用性に問題があるため.
 			foreach ( $vk_css_simple_minify_array as $vk_css_array ) {
 				$exclude_handles[] = $vk_css_array['id'];
 			}
 
+			// プリロードから除外するCSSハンドルが option で保存されている場合.
 			if ( ! empty( $options['preload_handle_exclude'] ) ) {
-				$exclude_array   = explode( ',', $options['preload_handle_exclude'] );
+				// 保存されているされている除外するCSSハンドルを配列に変換.
+				$exclude_array = explode( ',', $options['preload_handle_exclude'] );
+				// 除外するCSSハンドルの配列をマージ.
 				$exclude_handles = array_merge( $exclude_array, $exclude_handles );
 			}
 
 			$exclude_handles = apply_filters( 'vk_css_preload_exclude_handles', $exclude_handles );
-			// クリティカルじゃないCSS（tree shakingにかけているもの以外）をpreload
+
+			// クリティカルじゃないCSS（tree shakingにかけているもの以外）をpreload .
 			if ( ! in_array( $handle, $exclude_handles ) ) {
+				// preload を追加する.
 				$tag  = "<link rel='preload' id='" . $handle . "-css' href='" . $href . "' as='style' onload=\"this.onload=null;this.rel='stylesheet'\"/>\n";
 				$tag .= "<link rel='stylesheet' id='" . $handle . "-css' href='" . $href . "' media='print' onload=\"this.media='all'; this.onload=null;\">\n";
 			}
