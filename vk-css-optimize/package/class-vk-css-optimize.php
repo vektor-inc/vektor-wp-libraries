@@ -1,7 +1,7 @@
 <?php
 /**
  * VK CSS Optimize
- * 
+ *
  * @package VK CSS Optimize
  */
 
@@ -27,8 +27,7 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 			$options = self::get_css_optimize_options();
 
 			if ( ! empty( $options['tree_shaking'] ) ) {
-				add_action( 'get_header', array( __CLASS__, 'get_html_start' ), 2147483647 );
-				add_action( 'shutdown', array( __CLASS__, 'get_html_end' ), 0 );
+				add_filter('wp_using_themes', array(__CLASS__, 'get_html_start'), 1, 1);
 			}
 
 			if ( ! empty( $options['preload'] ) ) {
@@ -256,17 +255,11 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 		/**
 		 * Get HTML Document Start
 		 */
-		public static function get_html_start() {
-			ob_start( 'VK_CSS_Optimize::css_tree_shaking_buffer' );
-		}
-
-		/**
-		 * Get HTML Document End
-		 */
-		public static function get_html_end() {
-			if ( ob_get_length() ) {
-				ob_end_flush();
+		public static function get_html_start($is_use_themes) {
+			if ($is_use_themes && did_action('template_redirect') === 0 ) {
+				ob_start( 'VK_CSS_Optimize::css_tree_shaking_buffer' );
 			}
+			return $is_use_themes;
 		}
 
 		/**
@@ -314,7 +307,7 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 					$css = $wp_filesystem->get_contents( $path_name );
 				}
 
-				$css    = celtislab\CSS_tree_shaking::extended_minify( $css, $buffer );
+				$css    = celtislab\v2_1\CSS_tree_shaking::extended_minify( celtislab\v2_1\CSS_tree_shaking::simple_minify( $css ), $buffer );
 				$buffer = str_replace(
 					'<link rel=\'stylesheet\' id=\'' . $vk_css_array['id'] . '-css\'  href=\'' . $vk_css_array['url'] . '?ver=' . $vk_css_array['version'] . '\' type=\'text/css\' media=\'all\' />',
 					'<style id=\'' . $vk_css_array['id'] . '-css\' type=\'text/css\'>' . $css . '</style>',
@@ -339,7 +332,7 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 					$css = $wp_filesystem->get_contents( $path_name );
 				}
 
-				$css = celtislab\CSS_tree_shaking::simple_minify( $css );
+				$css = celtislab\v2_1\CSS_tree_shaking::simple_minify( $css );
 
 				$buffer = str_replace(
 					'<link rel=\'stylesheet\' id=\'' . $vk_css_array['id'] . '-css\'  href=\'' . $vk_css_array['url'] . '?ver=' . $vk_css_array['version'] . '\' type=\'text/css\' media=\'all\' />',
