@@ -316,12 +316,12 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 			$vk_css_tree_shaking_array  = self::css_tree_shaking_array();
 			$vk_css_simple_minify_array = self::css_simple_minify_array();
 
+			// WP_Filesystem() が使えるように読み込み.
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+
 			// CSS Tree Shaking //////////////////////////////////////////// .
 
 			foreach ( $vk_css_tree_shaking_array as $vk_css_array ) {
-
-				// WP File System で CSS ファイルを読み込み.
-				require_once ABSPATH . 'wp-admin/includes/file.php';
 
 				// 読み込むCSSファイルのパス.
 				$path_name = $vk_css_array['path'];
@@ -354,8 +354,6 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 
 			foreach ( $vk_css_simple_minify_array as $vk_css_array ) {
 
-				// WP File System で CSS ファイルを読み込み
-				require_once ABSPATH . 'wp-admin/includes/file.php';
 				$path_name = $vk_css_array['path'];
 				if ( WP_Filesystem() ) {
 					global $wp_filesystem;
