@@ -270,7 +270,7 @@ if ( ! class_exists( 'VK_Post_Type_Manager' ) ) {
 		 * @return void
 		 */
 		public static function add_post_notice() {
-			global $pagenow;			
+			global $pagenow;
 			if ( 'post.php' === $pagenow && 'post_type_manage' === get_post_type() && 'edit' === $_GET['action'] ) {
 				$html = '<div class="notice-warning notice is-dismissible">';
 				$link = admin_url() . 'options-permalink.php';
@@ -365,16 +365,23 @@ if ( ! class_exists( 'VK_Post_Type_Manager' ) ) {
 								// REST API を使用するかどうか.
 								$rest_api_true = ( empty( $taxonomy['rest_api'] ) ) ? false : true;
 
+								$labels = array(
+									'name' => $taxonomy['label'],
+								);
+
 								$args = array(
 									'hierarchical'      => $hierarchical_true,
 									'update_count_callback' => '_update_post_term_count',
-									'label'             => $taxonomy['label'],
-									'singular_label'    => $taxonomy['label'],
+									'labels'            => $labels,
 									'public'            => true,
 									'show_ui'           => true,
 									'show_in_rest'      => $rest_api_true,
 									'show_admin_column' => true,
 								);
+
+								if ( $rest_api_true ) {
+									$args['rest_base'] = $taxonomy['slug'];
+								}
 
 								register_taxonomy(
 									$taxonomy['slug'],
