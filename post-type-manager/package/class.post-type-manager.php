@@ -401,7 +401,9 @@ if ( ! class_exists( 'VK_Post_Type_Manager' ) ) {
 			add_action( 'admin_init', array( $this, 'add_cap_post_type_manage' ) );
 			add_action( 'save_post', array( $this, 'save_cf_value' ) );
 			add_action( 'admin_menu', array( $this, 'add_meta_box' ) );
-			add_action( 'after_setup_theme', array( $this, 'add_post_type' ), 0 );
+			// after_setup_theme では 6.0 頃から翻訳があたらなくなる .
+			// init でも 0 などなど早めのpriority 指定しないと投稿タイプに連動するウィジェットエリアが動作しない .
+			add_action( 'init', array( $this, 'add_post_type' ), 0 );
 			add_action( 'admin_notices', array( $this, 'add_post_notice' ) );
 		}
 
