@@ -595,7 +595,12 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 		 * @param array  $options component options.
 		 */
 		public static function get_view_body( $post, $options ) {
-			$layout_type = $options['layout'];
+
+			// Global $post を受け取るが、途中フックで the_content フィルターなどで wp_reset_postdata() が走ったりすると、
+			// $post がリセットされてしまうので、 $post_current に逃がしておく.
+			$post_current = $post;
+
+			$layout_type  = $options['layout'];
 			if ( 'card-horizontal' === $layout_type ||
 				'card-noborder' === $layout_type ||
 				'card-intext' === $layout_type
@@ -653,6 +658,10 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				$html .= wp_kses_post( nl2br( get_the_excerpt( $post->ID ) ) );
 				$html .= '</p>';
 			}
+
+			// get_the_excerpt() は 中で the_content フィルターがあって、その中の処理で wp_reset_postdata される事がある .
+			// $post が書き換わっていたら再セットアップ.
+			setup_postdata( $post_current );
 
 			if ( $options['display_author'] ) {
 				$author = get_the_author();
