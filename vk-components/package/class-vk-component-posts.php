@@ -297,7 +297,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 			$args = wp_parse_args(
 				$args,
 				array(
-					'mid_size'           => 0,
+					'mid_size'           => 1, // get_loop では loop_options のデフォルト値で上書きされる.
 					'prev_text'          => '&laquo;',
 					'next_text'          => '&raquo;',
 					'screen_reader_text' => __( 'Posts navigation', 'vk_components_textdomain' ),
