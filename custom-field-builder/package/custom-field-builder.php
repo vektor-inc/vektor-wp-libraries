@@ -12,7 +12,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 	class VK_Custom_Field_Builder {
 
-		public static $version = '0.2.1';
+		public static $version = '0.2.2';
 
 		// define( 'Bill_URL', get_template_directory_uri() );
 		public static function init() {
@@ -58,7 +58,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 			// Contact form 7　など jQuery ui のクラス名を使っていて干渉するので除外 .
 			$cfb_jquery_ui_excludes = array( 'toplevel_page_wpcf7', 'toplevel_page_gf_edit_forms' );
 			$cfb_jquery_ui_excludes = apply_filters( 'cfb_jquery_ui_excludes', $cfb_jquery_ui_excludes );
-			if ( ! in_array( $hook_suffix, $cfb_jquery_ui_excludes ) ) {
+			if ( ! in_array( $hook_suffix, $cfb_jquery_ui_excludes, true ) ) {
 				wp_enqueue_style( 'cf-builder-jquery-ui-style', self::admin_directory_url() . 'css/jquery-ui.css', array( 'cf-builder-style' ), self::$version, 'all' );
 			}
 
