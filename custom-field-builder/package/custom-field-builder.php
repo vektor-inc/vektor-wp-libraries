@@ -42,14 +42,12 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 				)
 			);
 
-			/*
-			flexible-table の js が NestedPagesのjsと干渉して正常に動かなくなるので、NestedPagesのページで読み込まないように
-			*/
+			// flexible-table の js が NestedPagesのjsと干渉して正常に動かなくなるので、NestedPagesのページで読み込まないように.
 			global $hook_suffix;
 			$cfb_flexible_table_excludes = array( 'toplevel_page_nestedpages' );
 			$cfb_flexible_table_excludes = apply_filters( 'cfb_flexible_table_excludes', $cfb_flexible_table_excludes );
 
-			if ( ! in_array( $hook_suffix, $cfb_flexible_table_excludes ) ) {
+			if ( ! in_array( $hook_suffix, $cfb_flexible_table_excludes, true ) ) {
 				wp_enqueue_script( 'flexible-table', self::admin_directory_url() . 'js/flexible-table.js', array( 'jquery', 'jquery-ui-sortable' ), self::$version, true );
 			}
 
