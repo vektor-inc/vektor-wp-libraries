@@ -132,6 +132,7 @@ gulp.task('sass_cf', function(done) {
   gulp.task('copy_custom-field-builder', function (done) {
 	gulp.src('./custom-field-builder/package/**')
 	  .pipe(gulp.dest('../plugins/vk-google-job-posting-manager/inc/custom-field-builder/package/'))
+	  .pipe(gulp.dest('../plugins/vk-block-pattern-plugin-generator/inc/custom-field-builder/package/'))
 	  .pipe(gulp.dest('../themes/katawara/inc/custom-field-builder/package/'))
 	  .pipe(gulp.dest('../themes/lightning-pro/inc/custom-field-builder/package/'))
 	  .pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/custom-field-builder/package/'));
