@@ -1,5 +1,4 @@
 <?php
-
 /*
 このファイルの元ファイルは
 https://github.com/vektor-inc/vektor-wp-libraries
@@ -11,13 +10,13 @@ https://github.com/vektor-inc/vektor-wp-libraries
 
 if ( ! class_exists( 'Vk_Admin' ) ) {
 	/*
-	congif.phpの方で既に ! class_exists( 'Vk_Admin' ) しているが、
+	congif.phpの方で既に ! class_exists( 'Vk_Admin' ) しているが
 	今後読み込みファイルが増えた時にVk-Adminの中で別のファイルを読み込むために
 	このファイルにも更にclass_exists( 'Vk_Admin' ) がある。
 	*/
 	class Vk_Admin {
 
-		public static $version = '2.3.0';
+		public static $version = '2.4.0';
 
 		static function init() {
 			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_common_css' ) );
