@@ -6,37 +6,81 @@
 .vk_admin_page {
 	--vk-admin-layout-gap: 30px;
 
-	.adminLayout {
-		display: grid;
-		grid-template-columns: 70% 1fr;
+	.adminLayout,
+	.adminMain {
+		display: flex;
+		flex-wrap: wrap;
 		gap: var(--vk-admin-layout-gap);
 	}
 
-	.adminMain {
-		display: grid;
+	.adminLayout {
+		border: 1px solid #0f0;
 
-		#adminContent_sub {
-			padding-bottom: 10px;
-			flex-basis: 25%;
+		.adminMain,
+		.adminSub,
+		.adminMain_main,
+		.adminMain_sub {
+			flex-shrink: 0;
+			flex-grow: 1;
+			max-width: 100%;
+		}
 
-			.vk_option_nav {
+		.adminMain,
+		.adminMain_main {
+			flex-grow: 999;
+		}
+
+		.adminSub,
+		.adminMain_sub {
+			width: 280px;
+			min-width: 280px;
+		}
+
+		.adminMain {
+			border: 1px solid #00f;
+			width: 900px;
+
+			.adminMain_main {
+				width: 450px;
+			}
+
+			// Left Sidebar ///////////////////
+			.adminMain_sub {
+				padding-bottom: 10px;
+
+				&_inner {
+					position: sticky;
+					top: 30px;
+				}
+
+			}
+
+			&.column_2 {
+				// #adminContent_main {
+				// 	width: 100%;
+				// }
+			}
+
+			// &.column_3 {
+
+			// }
+		}
+
+		// Right Sidebar ///////////////////
+		.adminSub {
+			border: 1px solid #ff0000;
+			position: relative;
+
+			.adminSub_inner {
+				// メインが長い場合に右の下（バナー）がかなりスクロースしないと見えないのも困るので固定解除
 				position: sticky;
-				top: 50px;
 				bottom: 30px;
 			}
+
 		}
 
-		&.column_2 {
-			#adminContent_main {
-				width: 100%;
-			}
-		}
-
-		&.column_3 {
-			grid-template-columns: 1fr 70%;
-			gap: var(--vk-admin-layout-gap);
-		}
 	}
+
 }
 
 

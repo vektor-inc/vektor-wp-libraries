@@ -406,11 +406,13 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 				return;
 			}
 			$adminSub = '<div class="adminSub">' . "\n";
+			$adminSub .= '<div class="adminSub_inner">' . "\n";
 			if ( 'ja' == get_locale() ) {
 				$adminSub .= '<div class="infoBox">' . self::get_news_body() . '</div>' . "\n";
 			}
 			$adminSub .= '<div class="vk-admin-banner">' . self::get_admin_banner() . '</div>' . "\n";
 
+			$adminSub .= '</div><!-- [ /.adminSub_inner ] -->' . "\n";
 			$adminSub .= '</div><!-- [ /.adminSub ] -->' . "\n";
 			return $adminSub;
 		}
@@ -433,14 +435,16 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 
 						<?php if ( $get_layout == 'column_3' ) : ?>
 							<div id="adminContent_sub" class="scrTracking adminMain_sub">
-								<div class="pageLogo"><?php echo $get_logo_html; ?></div>
-								<?php if ( $get_page_title ) : ?>
-								<h2 class="page_title"><?php echo $get_page_title; ?></h2>
-								<?php endif; ?>
-								<div class="vk_option_nav">
-									<ul>
-									<?php echo $get_menu_html; ?>
-									</ul>
+								<div class="adminMain_sub_inner">
+									<div class="pageLogo"><?php echo $get_logo_html; ?></div>
+									<?php if ( $get_page_title ) : ?>
+									<h2 class="page_title"><?php echo $get_page_title; ?></h2>
+									<?php endif; ?>
+									<div class="vk_option_nav">
+										<ul>
+										<?php echo $get_menu_html; ?>
+										</ul>
+									</div>
 								</div>
 							</div><!-- [ /#adminContent_sub ] -->
 						<?php endif; ?>
