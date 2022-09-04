@@ -8,51 +8,22 @@
 }
 
 .adminLayout {
-	border: 1px solid #0f0;
 	display: grid;
 	gap: var(--vk-admin-layout-gap);
-	grid-template-columns: repeat(12, [col-start] 1fr);
-
-	.adminMain,
-	.adminSub {
-		grid-column: col-start / span 12;
-		border: 1px solid #00f;
-	}
 
 	.adminMain {
 		display: grid;
 		gap: var(--vk-admin-layout-gap);
-		grid-template-columns: repeat(12, [col-start] 1fr);
-
-		&_main,
-		&_sub {
-			border: 1px solid #ff0000;
-			grid-column: col-start / span 12;
-		}
-
 	}
 
 	@media (min-width: 992px) {
-		.adminMain_main {
-			grid-column: col-start 5 / span 8;
+		.adminMain.column_3 {
+			grid-template-columns: 240px auto;
 		}
-
-		.adminMain_sub {
-			grid-column: col-start 1 / span 4;
-		}
-
 	}
 
-	@media (min-width: 1200px) {
-		.adminMain {
-			grid-column: col-start / span 9;
-		}
-
-		.adminSub {
-			grid-column: col-start 10 / span 3;
-			max-width: 300px;
-		}
-
+	@media (min-width: 1400px) {
+		grid-template-columns: auto 300px;
 	}
 }
 
@@ -63,20 +34,18 @@
 
 	@media (min-width: 992px) {
 		.adminMain_sub_inner {
-			border: 1px solid #ffff00;
 			position: sticky;
 			top: 30px;
 		}
 
 	}
 
-	@media (min-width: 1200px) {
-		align-items: end;
+	@media (min-width: 1400px) {
+		align-items: end; // end 指定しないと下端吸着しない
 
 		.adminSub {
 			position: sticky;
 			bottom: 30px;
-			border: 3px solid #ff0000;
 		}
 	}
 }
