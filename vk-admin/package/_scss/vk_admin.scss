@@ -5,78 +5,79 @@
 /*-------------------------------------------*/
 .vk_admin_page {
 	--vk-admin-layout-gap: 30px;
+}
 
-	.adminLayout {
-		border: 1px solid #0f0;
+.adminLayout {
+	border: 1px solid #0f0;
+	display: grid;
+	gap: var(--vk-admin-layout-gap);
+	grid-template-columns: repeat(12, [col-start] 1fr);
+
+	.adminMain,
+	.adminSub {
+		grid-column: col-start / span 12;
+		border: 1px solid #00f;
+	}
+
+	.adminMain {
 		display: grid;
 		gap: var(--vk-admin-layout-gap);
 		grid-template-columns: repeat(12, [col-start] 1fr);
 
-		.adminMain,
-		.adminSub {
+		&_main,
+		&_sub {
+			border: 1px solid #ff0000;
 			grid-column: col-start / span 12;
-			border: 1px solid #00f;
 		}
 
-		.adminMain {
-			display: grid;
-			gap: var(--vk-admin-layout-gap);
-			grid-template-columns: repeat(12, [col-start] 1fr);
-
-			&_main,
-			&_sub {
-				border: 1px solid #ff0000;
-				grid-column: col-start / span 12;
-			}
-
-		}
-
-		@media (min-width: 992px) {
-			.adminMain {
-				grid-column: col-start / span 8;
-			}
-
-			.adminSub {
-				grid-column: col-start 9 / span 4;
-			}
-		}
-
-		@media (min-width: 1200px) {
-			.adminMain {
-				grid-column: col-start / span 9;
-			}
-
-			.adminSub {
-				grid-column: col-start 10 / span 3;
-			}
-
-			.adminMain_main {
-				grid-column: col-start 5 / span 8;
-			}
-
-			.adminMain_sub {
-				grid-column: col-start 1 / span 4;
-			}
-
-		}
 	}
 
+	@media (min-width: 992px) {
+		.adminMain_main {
+			grid-column: col-start 5 / span 8;
+		}
+
+		.adminMain_sub {
+			grid-column: col-start 1 / span 4;
+		}
+
+	}
+
+	@media (min-width: 1200px) {
+		.adminMain {
+			grid-column: col-start / span 9;
+		}
+
+		.adminSub {
+			grid-column: col-start 10 / span 3;
+			max-width: 300px;
+		}
+
+	}
 }
 
 /*-------------------------------------------*/
 /* サイドバーの固定処理
 /*-------------------------------------------*/
 .adminLayout {
-	// align-items: flex-end; // サイドバー部分がデフォルトでウィンドウからはみ出すので、下まで表示されたら固定するために必要
 
-	.adminSub_inner {
-		// position: sticky;
-		// bottom: 20px;
+	@media (min-width: 992px) {
+		.adminMain_sub_inner {
+			border: 1px solid #ffff00;
+			position: sticky;
+			top: 30px;
+		}
+
 	}
 
-	.vk_option_nav {
-		// position: sticky;
-		// top: 50px;
+	@media (min-width: 1200px) {
+		align-items: end;
+
+		.adminSub {
+			position: sticky;
+			bottom: 30px;
+			border: 3px solid #ff0000;
+		}
 	}
 }
 
