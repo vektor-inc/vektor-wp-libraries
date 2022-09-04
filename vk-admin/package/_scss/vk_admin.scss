@@ -6,83 +6,79 @@
 .vk_admin_page {
 	--vk-admin-layout-gap: 30px;
 
-	.adminLayout,
-	.adminMain {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--vk-admin-layout-gap);
-	}
-
 	.adminLayout {
 		border: 1px solid #0f0;
+		display: grid;
+		gap: var(--vk-admin-layout-gap);
+		grid-template-columns: repeat(12, [col-start] 1fr);
 
 		.adminMain,
-		.adminSub,
-		.adminMain_main,
-		.adminMain_sub {
-			flex-shrink: 0;
-			flex-grow: 1;
-			max-width: 100%;
-		}
-
-		.adminMain,
-		.adminMain_main {
-			flex-grow: 999;
-		}
-
-		.adminSub,
-		.adminMain_sub {
-			width: 280px;
-			min-width: 280px;
+		.adminSub {
+			grid-column: col-start / span 12;
+			border: 1px solid #00f;
 		}
 
 		.adminMain {
-			border: 1px solid #00f;
-			width: 900px;
+			display: grid;
+			gap: var(--vk-admin-layout-gap);
+			grid-template-columns: repeat(12, [col-start] 1fr);
+
+			&_main,
+			&_sub {
+				border: 1px solid #ff0000;
+				grid-column: col-start / span 12;
+			}
+
+		}
+
+		@media (min-width: 992px) {
+			.adminMain {
+				grid-column: col-start / span 8;
+			}
+
+			.adminSub {
+				grid-column: col-start 9 / span 4;
+			}
+		}
+
+		@media (min-width: 1200px) {
+			.adminMain {
+				grid-column: col-start / span 9;
+			}
+
+			.adminSub {
+				grid-column: col-start 10 / span 3;
+			}
 
 			.adminMain_main {
-				width: 450px;
+				grid-column: col-start 5 / span 8;
 			}
 
-			// Left Sidebar ///////////////////
 			.adminMain_sub {
-				padding-bottom: 10px;
-
-				&_inner {
-					position: sticky;
-					top: 30px;
-				}
-
-			}
-
-			&.column_2 {
-				// #adminContent_main {
-				// 	width: 100%;
-				// }
-			}
-
-			// &.column_3 {
-
-			// }
-		}
-
-		// Right Sidebar ///////////////////
-		.adminSub {
-			border: 1px solid #ff0000;
-			position: relative;
-
-			.adminSub_inner {
-				// メインが長い場合に右の下（バナー）がかなりスクロースしないと見えないのも困るので固定解除
-				position: sticky;
-				bottom: 30px;
+				grid-column: col-start 1 / span 4;
 			}
 
 		}
-
 	}
 
 }
 
+/*-------------------------------------------*/
+/* サイドバーの固定処理
+/*-------------------------------------------*/
+.adminLayout {
+	// align-items: flex-end; // サイドバー部分がデフォルトでウィンドウからはみ出すので、下まで表示されたら固定するために必要
+
+	.adminSub_inner {
+		// position: sticky;
+		// bottom: 20px;
+	}
+
+	.vk_option_nav {
+		// position: sticky;
+		// top: 50px;
+	}
+}
 
 /*-------------------------------------------*/
 /* common
