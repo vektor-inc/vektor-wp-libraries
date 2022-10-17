@@ -39,7 +39,7 @@ class VK_Default_Layout_Form_Hider extends WP_Customize_Control {
 				var hidden_item_element_text = ['-display_image', '-display_excerpt', '-display_btn','-new_mark_title', '-btn_setting_title','-btn_text','-btn_align'];
 
 				// その他の非表示要素.
-				var hidden_item_element_all = ['-display_item_title', '-display_image','-display_image_overlay_term', '-display_excerpt', '-display_date', '-display_new', '-display_btn','-new_mark_title', '-new_date', '-new_text','-btn_setting_title','-btn_text','-btn_align'];
+				var hidden_item_element_all = ['-display_item_title', '-display_image','-display_image_overlay_term', '-display_excerpt', '-display_author', '-display_date', '-display_new','-display_taxonomies', '-display_btn','-new_mark_title', '-new_date', '-new_text','-btn_setting_title','-btn_text','-btn_align'];
 
 				function setOptionHidden( value, control_target_array ){
 					control_target_array.forEach(function( value ) {
