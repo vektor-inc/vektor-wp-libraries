@@ -37,7 +37,7 @@ class VK_Media_Posts_BS4_Test extends WP_UnitTestCase {
 
 		$catarr                  = array(
 			'cat_name'        => 'test_category_child',
-			'category_parent' => $cate_id,
+			'category_parent' => $return['cate_id'],
 		);
 		$return['cate_child_id'] = wp_insert_category( $catarr );
 
@@ -58,11 +58,11 @@ class VK_Media_Posts_BS4_Test extends WP_UnitTestCase {
 			'post_title'    => 'test',
 			'post_status'   => 'publish',
 			'post_content'  => 'content',
-			'post_category' => array( $cate_id ),
+			'post_category' => array( $return['cate_id'] ),
 		);
 		$return['post_id'] = wp_insert_post( $post );
 		// 投稿にカテゴリー指定.
-		wp_set_object_terms( $post_id, 'test_category_child', 'category' );
+		wp_set_object_terms( $return['post_id'], 'test_category_child', 'category' );
 
 		// Create test page.
 		$post                     = array(
@@ -78,7 +78,7 @@ class VK_Media_Posts_BS4_Test extends WP_UnitTestCase {
 			'post_type'    => 'page',
 			'post_status'  => 'publish',
 			'post_content' => 'content',
-			'post_parent'  => $normal_page_id,
+			'post_parent'  => $return['normal_page_id'],
 
 		);
 		$return['child_page_id'] = wp_insert_post( $post );
@@ -110,7 +110,7 @@ class VK_Media_Posts_BS4_Test extends WP_UnitTestCase {
 		);
 		$return['event_post_id'] = wp_insert_post( $post );
 		// set event category to event post.
-		wp_set_object_terms( $event_post_id, 'event_category_name', 'event_cat' );
+		wp_set_object_terms( $return['event_post_id'], 'event_category_name', 'event_cat' );
 
 		return $return;
 	}
