@@ -2,7 +2,13 @@
 /**
  * VK Media Posts BS4 Admin
  *
- * @package VK Media Posts BS4
+ * *********************** CAUTION ***********************
+ * The original of this file is located at:
+ * https://github.com/vektor-inc/vektor-wp-libraries
+ * If you want to change this file, please change the original file.
+ *
+ * @package vektor-inc/vektor-wp-libraries/media-posts-bs4
+ * @license GPL-2.0+
  */
 
 /**
