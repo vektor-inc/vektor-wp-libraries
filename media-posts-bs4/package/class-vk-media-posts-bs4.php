@@ -39,14 +39,14 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 			$domain = 'vk-media-posts-bs4';
 			$locale = apply_filters(
 				'plugin_locale',
-				( is_admin() && function_exists('get_user_locale') ) ? get_user_locale() : get_locale(),
+				( is_admin() && function_exists( 'get_user_locale' ) ) ? get_user_locale() : get_locale(),
 				$domain
 			);
 
 			$moFile = $domain . '-' . $locale . '.mo';
-			$path = realpath( dirname(__FILE__) . '/languages' );
+			$path   = realpath( dirname( __FILE__ ) . '/languages' );
 
-			if ($path && file_exists($path)) {
+			if ( $path && file_exists( $path ) ) {
 				load_textdomain( $domain, $path . '/' . $moFile );
 			}
 		}
