@@ -29,7 +29,7 @@ class VK_Media_Posts_BS4_Test extends WP_UnitTestCase {
 			)
 		);
 
-		// Create test category
+		// Create test category.
 		$catarr            = array(
 			'cat_name' => 'test_category',
 		);
@@ -46,14 +46,14 @@ class VK_Media_Posts_BS4_Test extends WP_UnitTestCase {
 		);
 		$return['cate_no_post_id'] = wp_insert_category( $catarr );
 
-		// Create test term
+		// Create test term.
 		$args                    = array(
 			'slug' => 'event_category_name',
 		);
 		$term_info               = wp_insert_term( 'event_category_name', 'event_cat', $args );
 		$return['event_term_id'] = $term_info['term_id'];
 
-		// Create test post
+		// Create test post.
 		$post              = array(
 			'post_title'    => 'test',
 			'post_status'   => 'publish',
@@ -61,10 +61,10 @@ class VK_Media_Posts_BS4_Test extends WP_UnitTestCase {
 			'post_category' => array( $cate_id ),
 		);
 		$return['post_id'] = wp_insert_post( $post );
-		// 投稿にカテゴリー指定
+		// 投稿にカテゴリー指定.
 		wp_set_object_terms( $post_id, 'test_category_child', 'category' );
 
-		// Create test page
+		// Create test page.
 		$post                     = array(
 			'post_title'   => 'normal page',
 			'post_type'    => 'page',
@@ -83,7 +83,7 @@ class VK_Media_Posts_BS4_Test extends WP_UnitTestCase {
 		);
 		$return['child_page_id'] = wp_insert_post( $post );
 
-		// Create test home page
+		// Create test home page.
 		$post                   = array(
 			'post_title'   => 'post_top',
 			'post_type'    => 'page',
@@ -92,7 +92,7 @@ class VK_Media_Posts_BS4_Test extends WP_UnitTestCase {
 		);
 		$return['home_page_id'] = wp_insert_post( $post );
 
-		// Create test home page
+		// Create test home page.
 		$post                    = array(
 			'post_title'   => 'front_page',
 			'post_type'    => 'page',
@@ -109,7 +109,7 @@ class VK_Media_Posts_BS4_Test extends WP_UnitTestCase {
 			'post_content' => 'content',
 		);
 		$return['event_post_id'] = wp_insert_post( $post );
-		// set event category to event post
+		// set event category to event post.
 		wp_set_object_terms( $event_post_id, 'event_category_name', 'event_cat' );
 
 		return $return;
@@ -121,13 +121,13 @@ class VK_Media_Posts_BS4_Test extends WP_UnitTestCase {
 		$option_field  = 'vk_post_type_archive';
 
 		$tests_array = array(
-			// カスタム投稿タイプ event 改変なし
+			// カスタム投稿タイプ event 改変なし.
 			array(
 				'option'     => array(),
 				'target_url' => get_post_type_archive_link( 'event' ),
 				'correct'    => false,
 			),
-			// カスタム投稿タイプ event 投稿タイプアーカイブ改変
+			// カスタム投稿タイプ event 投稿タイプアーカイブ改変.
 			array(
 				'option'     => array(
 					'event' => array(
@@ -137,7 +137,7 @@ class VK_Media_Posts_BS4_Test extends WP_UnitTestCase {
 				'target_url' => get_post_type_archive_link( 'event' ),
 				'correct'    => 'event',
 			),
-			// カスタム投稿タイプ event カスタム分類 event_cat改変
+			// カスタム投稿タイプ event カスタム分類 event_cat改変.
 			array(
 				'option'     => array(
 					'event' => array(
@@ -147,13 +147,13 @@ class VK_Media_Posts_BS4_Test extends WP_UnitTestCase {
 				'target_url' => get_term_link( $test_env_data['event_term_id'], 'event_cat' ),
 				'correct'    => 'event',
 			),
-			// 通常のキーワード検索 改変指定なし
+			// 通常のキーワード検索 改変指定なし.
 			array(
 				'option'     => null,
 				'target_url' => home_url( '/' ) . '?s=post',
 				'correct'    => false,
 			),
-			// 通常のキーワード検索 改変指定あり
+			// 通常のキーワード検索 改変指定あり.
 			array(
 				'option'     => array(
 					'search' => array(
@@ -163,10 +163,10 @@ class VK_Media_Posts_BS4_Test extends WP_UnitTestCase {
 				'target_url' => home_url( '/' ) . '?s=post_top',
 				'correct'    => 'search',
 			),
-			// 投稿タイプ指定あり検索 指定投稿タイプのレイアウト改変指定あり 検索のレイアウト改変指定あり 
+			// 投稿タイプ指定あり検索 指定投稿タイプのレイアウト改変指定あり 検索のレイアウト改変指定あり.
 			array(
 				'option'     => array(
-                    'event' => array(
+					'event'  => array(
 						'layout' => 'card',
 					),
 					'search' => array(
@@ -176,8 +176,8 @@ class VK_Media_Posts_BS4_Test extends WP_UnitTestCase {
 				'target_url' => home_url( '/' ) . '?s=post_top&post_type=event',
 				'correct'    => 'event',
 			),
-			// 投稿タイプ指定あり検索 指定投稿タイプのレイアウト改変指定なし 検索のレイアウト改変指定あり
-            // → 本当は event 返すはずだが、event のレイアウト情報登録がないので search を返す 
+			// 投稿タイプ指定あり検索 指定投稿タイプのレイアウト改変指定なし 検索のレイアウト改変指定あり.
+			// → 本当は event 返すはずだが、event のレイアウト情報登録がないので search を返す.
 			array(
 				'option'     => array(
 					'search' => array(
