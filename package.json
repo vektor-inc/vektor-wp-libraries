@@ -40,5 +40,8 @@
 		"gulp": "^4.0.2",
 		"gulp-replace": "^1.0.0",
 		"npm-check-updates": "^11.3.0"
+	},
+	"volta": {
+		"node": "14.21.1"
 	}
 }
