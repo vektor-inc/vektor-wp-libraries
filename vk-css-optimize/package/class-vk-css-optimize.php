@@ -433,12 +433,14 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 		 */
 		public static function css_preload( $tag, $handle, $href, $media ) {
 
-			$vk_css_tree_shaking_array  = self::css_tree_shaking_array();
-			$vk_css_simple_minify_array = self::css_simple_minify_array();
-
-			$exclude_handles = array( 'woocommerce-layout', 'woocommerce-smallscreen', 'woocommerce-general' );
-
 			$options = self::get_css_optimize_options();
+
+			// Load CSS Arrays
+			// 軽量化するCSSの情報配列読み込み.
+			$vk_css_tree_shaking_array  = $options['tree_shaking_css'];
+			$vk_css_simple_minify_array = $options['simple_minify_css'];
+
+			$exclude_handles = array( 'woocommerce-layout', 'woocommerce-smallscreen', 'woocommerce-general' );			
 
 			// tree shaking がかかっているものはpreloadから除外する
 			// でないと表示時に一瞬崩れて結局実用性に問題があるため.
