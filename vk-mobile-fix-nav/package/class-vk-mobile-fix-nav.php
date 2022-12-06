@@ -584,13 +584,13 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 		}
 
 		public static function css_tree_shaking_array( $vk_css_tree_shaking_array ) {
-			$css_url                     = self::style_url();
-			$vk_css_tree_shaking_array[] = array(
-				'id'      => 'vk-mobile-fix-nav',
-				'url'     => $css_url,
-				'path'    => dirname( __FILE__ ) . '/css/vk-mobile-fix-nav.css',
-				'version' => self::$version,
+			$vk_css_tree_shaking_array = array_merge(
+				$vk_css_tree_shaking_array,
+				array(
+					'vk-mobile-fix-nav'
+				)
 			);
+			
 			return $vk_css_tree_shaking_array;
 		}
 
