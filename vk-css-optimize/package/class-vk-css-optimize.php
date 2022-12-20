@@ -464,21 +464,26 @@ if ( ! class_exists( 'VK_CSS_Optimize' ) ) {
 			$exclude_handles = array( 'woocommerce-layout', 'woocommerce-smallscreen', 'woocommerce-general' );			
 
 			// tree shaking がかかっているものはpreloadの除外リストに追加する ////////////////////
-			// でないと表示時に一瞬崩れて結局実用性に問題があるため.
+			// ※ 除外しないと表示時に一瞬崩れて結局実用性に問題があるため.
+
 			foreach ( $vk_css_tree_shaking_array as $css ) {
-				// ハンドル名だけ取得（$CSSが配列じゃない場合があるっぽいため）
+				// 利用側が古いバージョンの場合 : $cssは配列になるので、ハンドル名だけ取得して格納
 				if ( is_array( $css ) && ! empty( $css['id'] ) ) {
 					$css = $css['id'];
 				}
+				// ハンドル名をプリロード除外リストに追加.
 				$exclude_handles[] = $css;
 			}
 
 			// Simple Minify がかかっているものはpreloadから除外する ////////////////////
-			// でないと表示時に一瞬崩れて結局実用性に問題があるため.
+			// ※ 除外しないと表示時に一瞬崩れて結局実用性に問題があるため.
+
 			foreach ( $vk_css_simple_minify_array as $css ) {
+				// 利用側が古いバージョンの場合 : $cssは配列になるので、ハンドル名だけ取得して格納
 				if ( is_array( $css ) && ! empty( $css['id'] ) ) {
 					$css = $css['id'];
 				}
+				// ハンドル名をプリロード除外リストに追加.
 				$exclude_handles[] = $css;
 			}
 
