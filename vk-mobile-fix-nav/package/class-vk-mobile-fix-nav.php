@@ -69,7 +69,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			$vk_mobil_fix_nav_html_hook_point = apply_filters( 'vk_mobile_fix_nav_html_hook_point', 'wp_footer' );
 			add_action( $vk_mobil_fix_nav_html_hook_point, array( __CLASS__, 'vk_mobil_fix_nav_html' ) );
 			add_action( 'widgets_init', array( __CLASS__, 'widgets_init' ) );
-			add_filter( 'vk_css_tree_shaking_array', array( __CLASS__, 'css_tree_shaking_array' ) );
+			add_filter( 'vk_css_tree_shaking_handles', array( __CLASS__, 'css_tree_shaking_handles' ) );
 		}
 
 		public static function widgets_init() {
@@ -583,15 +583,15 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			wp_enqueue_style( 'vk-mobile-fix-nav', $css_url, array(), self::$version, 'all' );
 		}
 
-		public static function css_tree_shaking_array( $vk_css_tree_shaking_array ) {
-			$vk_css_tree_shaking_array = array_merge(
-				$vk_css_tree_shaking_array,
+		public static function css_tree_shaking_handles( $vk_css_tree_shaking_handles ) {
+			$vk_css_tree_shaking_handles = array_merge(
+				$vk_css_tree_shaking_handles,
 				array(
 					'vk-mobile-fix-nav'
 				)
 			);
 			
-			return $vk_css_tree_shaking_array;
+			return $vk_css_tree_shaking_handles;
 		}
 
 		/**
