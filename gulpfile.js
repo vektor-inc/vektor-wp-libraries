@@ -19,7 +19,6 @@
 
 
 var gulp = require('gulp');
-
 // sass compiler
 var sass = require('gulp-sass');
 
@@ -498,6 +497,10 @@ gulp.task('watch_mobile-fix', function(done) {
  * VK Swiper
  */
  gulp.task('copy_vk-swiper', function(done) {
+  gulp.src('./node_modules/swiper/swiper-bundle.min.css')
+      .pipe(gulp.dest('./vk-swiper/package/assets/css/'))
+  gulp.src('./node_modules/swiper/swiper-bundle.min.js')
+      .pipe(gulp.dest('./vk-swiper/package/assets/js/'))
 	gulp.src('./vk-swiper/package/**')
 		.pipe(gulp.dest('../themes/lightning/_g3/inc/vk-swiper/package/'))
 		.pipe(gulp.dest('../themes/katawara/inc/vk-swiper/package/'))
