@@ -98,6 +98,9 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 
 			}
 
+			// 現在のテーマを取得
+			$current_template = get_template();
+
 			$banner_html .= '<div class="vk-admin-banner">';
 
 			if ( $lang == 'ja' ) {
@@ -114,6 +117,13 @@ if ( ! class_exists( 'Vk_Admin' ) ) {
 
 				// テーマのバナーを設置
 				foreach ( $product_array as $product ) {
+
+					
+					// 該当テーマがアクティブでなければスキップ
+					if ( ! empty( $product['active_theme'] ) && $current_template !== $product['active_theme'] ) {
+						continue;
+					}
+					
 					// include パラメーターが存在する場合
 					if ( ! empty( $product['include'] ) ) {
 						// include パラメーターをカンマで区切って配列化
