@@ -70,8 +70,6 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 				if ( isset( $type ) && $type == 'textarea' ) {
 					// n2brはフォームにbrがそのまま入ってしまうので入れない
 					$value = esc_textarea( $_POST[ $post_field ] );
-				} elseif ( isset( $type ) && $type == 'html' ) {
-					$value = wp_kses_post( $_POST[ $post_field ] );
 				} else {
 					$value = esc_attr( $_POST[ $post_field ] );
 				}
