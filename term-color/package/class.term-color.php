@@ -39,7 +39,7 @@ if ( ! class_exists( 'Vk_term_color' ) ) {
 		 * @return void
 		 */
 		public static function term_meta_color() {
-			register_meta( 'term', 'term_color', array( __CLASS__, 'sanitize_hex' ) );
+			register_meta( 'term', 'term_color', array( 'sanitize_callback', array( __CLASS__, 'sanitize_hex' ) ) );
 		}
 
 		/**
@@ -51,7 +51,7 @@ if ( ! class_exists( 'Vk_term_color' ) ) {
 		public static function sanitize_hex( $color ) {
 			// sanitize_hex_color() は undefined function くらう.
 			$color = ltrim( $color, '#' );
-			return preg_match( '/([A-Fa-f0-9]{3}){1,2}$/', $color ) ? $color : '';
+			return preg_match( '/^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/', $color ) ? $color : '';
 		}
 
 		/**
