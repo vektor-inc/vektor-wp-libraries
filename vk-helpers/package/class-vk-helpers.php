@@ -265,9 +265,9 @@ if ( ! class_exists( 'VK_Helpers' ) ) {
 
 			// 10進数の状態で変更レートを掛けて dechex で 16進数に戻す.
 			$color_array      = array();
-			$color_array['r'] = dechex( self::color_adjust_under_ff( $r * $change_rate ) );
-			$color_array['g'] = dechex( self::color_adjust_under_ff( $g * $change_rate ) );
-			$color_array['b'] = dechex( self::color_adjust_under_ff( $b * $change_rate ) );
+			$color_array['r'] = dechex( round( self::color_adjust_under_ff( $r * $change_rate ) ) );
+			$color_array['g'] = dechex( round( self::color_adjust_under_ff( $g * $change_rate ) ) );
+			$color_array['b'] = dechex( round( self::color_adjust_under_ff( $b * $change_rate ) ) );
 
 			$new_color = '#';
 

@@ -531,7 +531,6 @@ gulp.task('copy_helpers', function (done) {
 		.pipe(gulp.dest('../themes/lightning/_g3/inc/vk-helpers/package/'))
         .pipe(gulp.dest('../themes/lightning-pro/inc/vk-helpers/package/'))
 		.pipe(gulp.dest('../themes/katawara/inc/vk-helpers/package/'))
-		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/vk-helpers/package/'))
 		.pipe(gulp.dest('../plugins/vk-blocks-pro/inc/vk-helpers/package/'));
     done();
 });
