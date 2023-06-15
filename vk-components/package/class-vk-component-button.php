@@ -188,13 +188,14 @@ if ( ! class_exists( 'VK_Components_Button' ) ) {
 
 			} elseif ( ! $options['btn_ghost'] ) {
 
-				$style_bg_hover = 'background-color:' . VK_Helpers::color_auto_modifi( $options['btn_color_bg'], 1.2 ) . ';';
+				$style_bg_hover = 'filter: brightness(1.2) saturate(2);';
 			}
 			return $style_bg_hover;
 		}
 
 		/**
 		 * ボタンの枠線のスタイルを出力する
+		 *
 		 * @param  [type] $options [description]
 		 * @return [type]          [description]
 		 */
@@ -215,14 +216,10 @@ if ( ! class_exists( 'VK_Components_Button' ) ) {
 		 * @return [type]          [description]
 		 */
 		public static function get_style_border_hover( $options ) {
-			$options            = self::get_options( $options );
-			$style_border_hover = '';
-
-			if ( $options['btn_ghost'] ) {
-				$style_border_hover = 'border-color:' . $options['btn_color_bg'] . ';';
-			} else {
-				$style_border_hover = 'border-color:' . VK_Helpers::color_auto_modifi( $options['btn_color_bg'], 1.2 ) . ';';
-			}
+			$options = self::get_options( $options );
+			// 通常の塗りボタンもゴーストボタンも共通
+			// （ hover 時は css filter で色を明るくするようになったので、ホバー時の枠線の色も通常のボタン背景色と同じ指定でよい ）
+			$style_border_hover = 'border-color:' . $options['btn_color_bg'] . ';';
 			return $style_border_hover;
 		}
 
