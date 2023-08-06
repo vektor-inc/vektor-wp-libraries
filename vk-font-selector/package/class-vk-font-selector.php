@@ -59,7 +59,7 @@ if ( ! class_exists( 'Vk_Font_Selector' ) ) {
 		 *
 		 * @var string
 		 */
-		public static $version = '0.2.1';
+		public static $version = '0.2.2';
 
 		/**
 		 * Init function
@@ -227,7 +227,7 @@ if ( ! class_exists( 'Vk_Font_Selector' ) ) {
 				),
 				'Sawarabi+Mincho'       => array(
 					'label'           => 'Sawarabi Mincho ( Google Fonts )',
-					'font-family'     => '"Sawarabi Mincho",sans-serif',
+					'font-family'     => '"Sawarabi Mincho",serif',
 					'font-family-key' => 'Sawarabi+Mincho',
 				),
 				'Sawarabi+Gothic'       => array(
