@@ -267,10 +267,10 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				global $post;
 			}
 
-			// 固定ページの場合.
-			// 検索結果ページでも $post_type['slug'] == 'page' に反応するため  ! is_search() && ! is_404() を追加.
-			// is_page() でない理由は？？
-			if ( $post_type['slug'] == 'page' && ! is_search() && ! is_404() ) {
+			// 固定ページの場合
+			// 検索結果ページでも $post_type_info['slug'] == 'page' に反応してしまうため
+			// ! is_search() && ! is_404() を追加.
+			if ( 'page' === $post_type['slug'] && ! is_search() && ! is_404() ) {
 
 				if ( 'sp' == $size ) {
 					$target_field = 'vk_page_header_image_sp';
