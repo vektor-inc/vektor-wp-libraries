@@ -84,7 +84,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 	class Vk_Page_Header {
 
 
-		public static $version     = '0.1.1';
+		public static $version     = '0.1.2';
 		private static $post_types = array( 'post' => 0 );
 
 		public function __construct() {
@@ -871,12 +871,16 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 						position:absolute;
 						top:0;
 						left:0;';
-					if ( ! empty( $options['cover_color'] ) ) {
-						$title_outer_dynamic_css .= 'background-color:' . $options['cover_color'] . ';';
+					if ( isset( $options['cover_color'] ) ) {
+						if ( ! empty( $options['cover_color'] ) ) {
+							$title_outer_dynamic_css .= 'background-color:' . $options['cover_color'] . ';';
+						}
 					}
 					// cover_opacity の値が 0 の場合も出力する必要があるので注意
-					if ( ! empty( $options['cover_opacity'] ) || '0' === $options['cover_opacity'] ) {
-						$title_outer_dynamic_css .= 'opacity:' . $options['cover_opacity'] . ';';
+					if ( isset( $options['cover_opacity'] ) ) {
+						if ( ! empty( $options['cover_opacity'] ) || '0' === $options['cover_opacity'] ) {
+							$title_outer_dynamic_css .= 'opacity:' . $options['cover_opacity'] . ';';
+						}
 					}
 
 					$title_outer_dynamic_css .= '
