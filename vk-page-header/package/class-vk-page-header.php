@@ -40,11 +40,11 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			public $description  = ''; // we add this for the extra description
 			public $input_before = '';
 			public $input_after  = '';
-			public $num_step  = '';
-			public $num_min  = '';
-			public $num_max  = '';
+			public $num_step     = '';
+			public $num_min      = '';
+			public $num_max      = '';
 			public function render_content() {
-			?>
+				?>
 			<label>
 				<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
 				<?php $style = ( $this->input_before || $this->input_after ) ? ' style="width:50%"' : ''; ?>
@@ -52,31 +52,31 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				<?php echo wp_kses_post( $this->input_before ); ?>
 				<?php
 				$step = '';
-				$min = '';
-				$max = '';
+				$min  = '';
+				$max  = '';
 				if ( $this->type == 'text' ) {
 					$type = 'text';
 				} elseif ( $this->type == 'number' ) {
 					$type = 'number';
-					if ( $this->num_step ){
-						$step = ' step="' . esc_attr(  $this->num_step ) . '"';
+					if ( $this->num_step ) {
+						$step = ' step="' . esc_attr( $this->num_step ) . '"';
 					}
-					if ( $this->num_min ){
+					if ( $this->num_min ) {
 						$min = ' min="' . esc_attr( $this->num_min ) . '"';
 					} else {
 						$min = ' min="0"';
 					}
-					if ( $this->num_max ){
-						$max = ' max="' . esc_attr(  $this->num_max ) . '"';
+					if ( $this->num_max ) {
+						$max = ' max="' . esc_attr( $this->num_max ) . '"';
 					}
 				}
 				?>
-				<input type="<?php echo $type; ?>"<?php echo $step.$min.$max; ?> value="<?php echo esc_attr( $this->value() ); ?>"<?php echo $style; ?> <?php $this->link(); ?> />
+				<input type="<?php echo $type; ?>"<?php echo $step . $min . $max; ?> value="<?php echo esc_attr( $this->value() ); ?>"<?php echo $style; ?> <?php $this->link(); ?> />
 				<?php echo wp_kses_post( $this->input_after ); ?>
 				</div>
 				<div><?php echo $this->description; ?></div>
 			</label>
-			<?php
+				<?php
 			} // public function render_content() {
 		} // class Vk_Page_Header_Custom_Text_Control extends WP_Customize_Control
 	}
@@ -142,7 +142,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			  Chack use post top page
 		/*		get_page_for_posts()
 		/*-------------------------------------------*/
-		public static   function get_page_for_posts() {
+		public static function get_page_for_posts() {
 			// Get post top page by setting display page.
 			$page_for_posts['post_top_id'] = get_option( 'page_for_posts' );
 
@@ -263,16 +263,16 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				$image_url = $options[ $image_url_field ];
 			}
 
-			if ( is_singular() ){
+			if ( is_singular() ) {
 				global $post;
 			}
 
 			// 固定ページの場合.
 			// 検索結果ページでも $post_type['slug'] == 'page' に反応するため  ! is_search() && ! is_404() を追加.
 			// is_page() でない理由は？？
-			if ( $post_type['slug'] == 'page' && ! is_search() && ! is_404()  ) {
+			if ( $post_type['slug'] == 'page' && ! is_search() && ! is_404() ) {
 
-				if ( 'sp' == $size ){
+				if ( 'sp' == $size ) {
 					$target_field = 'vk_page_header_image_sp';
 				} else {
 					$target_field = 'vk_page_header_image';
@@ -306,9 +306,9 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					}
 				}
 			} elseif ( is_single() ) {
-				$display_type = 'displaytype_'.$post_type['slug'];
+				$display_type = 'displaytype_' . $post_type['slug'];
 				// デフォルトレイアウトじゃない場合
-				if ( isset( $options[$display_type] ) &&  $options[$display_type] !== 'default' ){
+				if ( isset( $options[ $display_type ] ) && $options[ $display_type ] !== 'default' ) {
 					// アイキャッチ画像で上書き
 					$image_url = get_the_post_thumbnail_url( $post->id, 'full' );
 				}
@@ -329,7 +329,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			global $vk_page_header_output_class;
 
 			$wp_customize->add_section(
-				'vk_page_header_setting', array(
+				'vk_page_header_setting',
+				array(
 					'title'    => $customize_setting_prefix . __( 'Page Header Setting', 'vk_page_header_textdomain' ),
 					'priority' => $customize_section_priority,
 				)
@@ -337,11 +338,12 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 			global $vk_page_header_bg_color_hide;
 
-			if ( ! $vk_page_header_bg_color_hide ){
+			if ( ! $vk_page_header_bg_color_hide ) {
 
 				// bgcolor
 				$wp_customize->add_setting(
-					'vk_page_header[bg_color]', array(
+					'vk_page_header[bg_color]',
+					array(
 						'default'           => '',
 						'type'              => 'option',
 						'capability'        => 'edit_theme_options',
@@ -350,7 +352,9 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				);
 				$wp_customize->add_control(
 					new WP_Customize_Color_Control(
-						$wp_customize, 'bg_color', array(
+						$wp_customize,
+						'bg_color',
+						array(
 							'label'    => __( 'Background color', 'vk_page_header_textdomain' ),
 							'section'  => 'vk_page_header_setting',
 							'settings' => 'vk_page_header[bg_color]',
@@ -362,7 +366,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 			// cover color
 			$wp_customize->add_setting(
-				'vk_page_header[cover_color]', array(
+				'vk_page_header[cover_color]',
+				array(
 					'default'           => '',
 					'type'              => 'option',
 					'capability'        => 'edit_theme_options',
@@ -371,7 +376,9 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			);
 			$wp_customize->add_control(
 				new WP_Customize_Color_Control(
-					$wp_customize, 'cover_color', array(
+					$wp_customize,
+					'cover_color',
+					array(
 						'label'    => __( 'Cover color', 'vk_page_header_textdomain' ),
 						'section'  => 'vk_page_header_setting',
 						'settings' => 'vk_page_header[cover_color]',
@@ -381,7 +388,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			);
 
 			$wp_customize->selective_refresh->add_partial(
-				'vk_page_header[text_color]', array(
+				'vk_page_header[text_color]',
+				array(
 					'selector'        => $vk_page_header_output_class,
 					'render_callback' => '',
 				)
@@ -389,7 +397,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 			// text position
 			$wp_customize->add_setting(
-				'vk_page_header[cover_opacity]', array(
+				'vk_page_header[cover_opacity]',
+				array(
 					'default'           => '',
 					'type'              => 'option',
 					'capability'        => 'edit_theme_options',
@@ -399,23 +408,25 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 			$wp_customize->add_control(
 				new Vk_Page_Header_Custom_Text_Control(
-					$wp_customize, 'cover_opacity', array(
-						'label'       	=> __( 'Cover opacity', 'vk_page_header_textdomain' ),
-						'section'     	=> 'vk_page_header_setting',
-						'settings'    	=> 'vk_page_header[cover_opacity]',
-						'type'        	=> 'number',
-						'num_step'		=> 0.05,
-						'num_min'		=> 0,
-						'num_max'		=> 1,
-						'description' 	=> __( 'Please enter a number from 0 to 1', 'vk_page_header_textdomain' ),
+					$wp_customize,
+					'cover_opacity',
+					array(
+						'label'       => __( 'Cover opacity', 'vk_page_header_textdomain' ),
+						'section'     => 'vk_page_header_setting',
+						'settings'    => 'vk_page_header[cover_opacity]',
+						'type'        => 'number',
+						'num_step'    => 0.05,
+						'num_min'     => 0,
+						'num_max'     => 1,
+						'description' => __( 'Please enter a number from 0 to 1', 'vk_page_header_textdomain' ),
 					)
 				)
 			);
 
-
 			// color
 			$wp_customize->add_setting(
-				'vk_page_header[text_color]', array(
+				'vk_page_header[text_color]',
+				array(
 					'default'           => '',
 					'type'              => 'option',
 					'capability'        => 'edit_theme_options',
@@ -424,7 +435,9 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			);
 			$wp_customize->add_control(
 				new WP_Customize_Color_Control(
-					$wp_customize, 'text_color', array(
+					$wp_customize,
+					'text_color',
+					array(
 						'label'    => __( 'Text color', 'vk_page_header_textdomain' ),
 						'section'  => 'vk_page_header_setting',
 						'settings' => 'vk_page_header[text_color]',
@@ -435,7 +448,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 			// color
 			$wp_customize->add_setting(
-				'vk_page_header[text_shadow_color]', array(
+				'vk_page_header[text_shadow_color]',
+				array(
 					'default'           => '',
 					'type'              => 'option',
 					'capability'        => 'edit_theme_options',
@@ -444,7 +458,9 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			);
 			$wp_customize->add_control(
 				new WP_Customize_Color_Control(
-					$wp_customize, 'text_shadow_color', array(
+					$wp_customize,
+					'text_shadow_color',
+					array(
 						'label'    => __( 'Text shadow color', 'vk_page_header_textdomain' ),
 						'section'  => 'vk_page_header_setting',
 						'settings' => 'vk_page_header[text_shadow_color]',
@@ -455,7 +471,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 			// text position
 			$wp_customize->add_setting(
-				'vk_page_header[text_align]', array(
+				'vk_page_header[text_align]',
+				array(
 					'default'           => '',
 					'type'              => 'option',
 					'capability'        => 'edit_theme_options',
@@ -463,7 +480,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				)
 			);
 			$wp_customize->add_control(
-				'text_align', array(
+				'text_align',
+				array(
 					'label'    => __( 'Text align', 'vk_page_header_textdomain' ),
 					'section'  => 'vk_page_header_setting',
 					'settings' => 'vk_page_header[text_align]',
@@ -479,7 +497,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 			// text position
 			$wp_customize->add_setting(
-				'vk_page_header[text_margin]', array(
+				'vk_page_header[text_margin]',
+				array(
 					'default'           => '',
 					'type'              => 'option',
 					'capability'        => 'edit_theme_options',
@@ -489,7 +508,9 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 			$wp_customize->add_control(
 				new Vk_Page_Header_Custom_Text_Control(
-					$wp_customize, 'text_margin', array(
+					$wp_customize,
+					'text_margin',
+					array(
 						'label'       => __( 'Text margin (top and bottom)', 'vk_page_header_textdomain' ),
 						'section'     => 'vk_page_header_setting',
 						'settings'    => 'vk_page_header[text_margin]',
@@ -499,7 +520,6 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					)
 				)
 			);
-
 
 			/*
 			  Basic
@@ -527,7 +547,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			);
 
 			$wp_customize->add_setting(
-				'vk_page_header[image_basic]', array(
+				'vk_page_header[image_basic]',
+				array(
 					'default'           => $vk_page_header_default['image_basic'],
 					'type'              => 'option',
 					'capability'        => 'edit_theme_options',
@@ -536,7 +557,9 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			);
 			$wp_customize->add_control(
 				new WP_Customize_Image_Control(
-					$wp_customize, 'page_header_image_basic', array(
+					$wp_customize,
+					'page_header_image_basic',
+					array(
 						'label'       => __( 'PC', 'vk_page_header_textdomain' ),
 						'section'     => 'vk_page_header_setting',
 						'settings'    => 'vk_page_header[image_basic]',
@@ -546,7 +569,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			);
 
 			$wp_customize->add_setting(
-				'vk_page_header[image_basic_sp]', array(
+				'vk_page_header[image_basic_sp]',
+				array(
 					'default'           => '',
 					'type'              => 'option',
 					'capability'        => 'edit_theme_options',
@@ -555,10 +579,12 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			);
 			$wp_customize->add_control(
 				new WP_Customize_Image_Control(
-					$wp_customize, 'page_header_image_basic_sp', array(
-						'label'       => __( 'Mobile', 'vk_page_header_textdomain' ),
-						'section'     => 'vk_page_header_setting',
-						'settings'    => 'vk_page_header[image_basic_sp]',
+					$wp_customize,
+					'page_header_image_basic_sp',
+					array(
+						'label'    => __( 'Mobile', 'vk_page_header_textdomain' ),
+						'section'  => 'vk_page_header_setting',
+						'settings' => 'vk_page_header[image_basic_sp]',
 					)
 				)
 			);
@@ -566,7 +592,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			/*
 			  Post Type
 			--------------------------------------------- */
-			$custom_types = Vk_Page_Header::get_all_post_types_info();
+			$custom_types = self::get_all_post_types_info();
 
 			foreach ( $custom_types as $name => $label ) {
 
@@ -599,7 +625,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				);
 
 				$wp_customize->add_setting(
-					'vk_page_header[image_' . $name . ']', array(
+					'vk_page_header[image_' . $name . ']',
+					array(
 						'default'           => '',
 						'type'              => 'option',
 						'capability'        => 'edit_theme_options',
@@ -609,16 +636,19 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 				$wp_customize->add_control(
 					new WP_Customize_Image_Control(
-						$wp_customize, 'page_header_image_' . $name, array(
-							'label'       => __( 'PC', 'vk_page_header_textdomain' ),
-							'section'     => 'vk_page_header_setting',
-							'settings'    => 'vk_page_header[image_' . $name . ']',
+						$wp_customize,
+						'page_header_image_' . $name,
+						array(
+							'label'    => __( 'PC', 'vk_page_header_textdomain' ),
+							'section'  => 'vk_page_header_setting',
+							'settings' => 'vk_page_header[image_' . $name . ']',
 						)
 					)
 				);
 
 				$wp_customize->add_setting(
-					'vk_page_header[image_' . $name . '_sp]', array(
+					'vk_page_header[image_' . $name . '_sp]',
+					array(
 						'default'           => '',
 						'type'              => 'option',
 						'capability'        => 'edit_theme_options',
@@ -627,10 +657,12 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				);
 				$wp_customize->add_control(
 					new WP_Customize_Image_Control(
-						$wp_customize, 'page_header_image_' . $name . '_sp', array(
-							'label'       => __( 'Mobile', 'vk_page_header_textdomain' ),
-							'section'     => 'vk_page_header_setting',
-							'settings'    => 'vk_page_header[image_' . $name . '_sp]',
+						$wp_customize,
+						'page_header_image_' . $name . '_sp',
+						array(
+							'label'    => __( 'Mobile', 'vk_page_header_textdomain' ),
+							'section'  => 'vk_page_header_setting',
+							'settings' => 'vk_page_header[image_' . $name . '_sp]',
 						)
 					)
 				);
@@ -638,7 +670,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			}
 
 			global $vk_page_header_use_type;
-			if ( $vk_page_header_use_type ){
+			if ( $vk_page_header_use_type ) {
 				// Single page display item
 				$wp_customize->add_setting(
 					'single_page_display_item',
@@ -665,8 +697,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 						$wp_customize->add_setting(
 							'vk_page_header[displaytype_' . $name . ']',
 							array(
-								'default'           => 'default',
-								'type'              => 'option',
+								'default' => 'default',
+								'type'    => 'option',
 							)
 						);
 						$wp_customize->add_control(
@@ -697,7 +729,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			// 投稿トップは固定ページでなくアーカイプページ判定されるので、
 			// 投稿トップにわりあてた固定ページで指定したカラム数は反映されない。
 			// よって、誤解を避けるためにレイアウト設定を含む Lightningデザイン設定のmetabox自体表示しないようにする
-			if ( isset( $_GET['post'] ) && $_GET['post'] === get_option( 'page_for_posts' ) && 'page' === get_option( 'show_on_front' ) ){
+			if ( isset( $_GET['post'] ) && $_GET['post'] === get_option( 'page_for_posts' ) && 'page' === get_option( 'show_on_front' ) ) {
 				return;
 			}
 			add_meta_box( 'vk_page_header_meta_box', __( 'Page Header Image', 'vk_page_header_textdomain' ), array( $this, 'vk_page_header_meta_box_content' ), 'page', 'normal', 'high' );
@@ -714,7 +746,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		}
 
 		public function save_custom_fields() {
-			if ( ! is_customize_preview() ){
+			if ( ! is_customize_preview() ) {
 				$custom_fields_array = self::custom_fields_array();
 				VK_Custom_Field_Builder::save_cf_value( $custom_fields_array );
 			}
@@ -723,7 +755,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		public static function custom_fields_array() {
 
 			$custom_fields_array = array(
-				'vk_page_header_image' => array(
+				'vk_page_header_image'    => array(
 					'label'       => __( 'Page header bg image', 'vk_page_header_textdomain' ),
 					'type'        => 'image',
 					'description' => '',
@@ -743,10 +775,10 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		public static function get_layout( $layout = 'default' ) {
 			$options = self::options_load();
 			if ( is_single() ) {
-				$display_type = 'displaytype_'.get_post_type(); // カスタム分類アーカイブと違って取得ミスがないため標準関数を使用
+				$display_type = 'displaytype_' . get_post_type(); // カスタム分類アーカイブと違って取得ミスがないため標準関数を使用
 				// 表示タイプが 標準レイアウトじゃない（記事タイトルや日付など）場合
-				if ( ! empty( $options[$display_type] ) ){
-					$layout	= $options[$display_type];
+				if ( ! empty( $options[ $display_type ] ) ) {
+					$layout = $options[ $display_type ];
 				}
 			}
 			return $layout;
@@ -769,7 +801,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				$options = self::options_load();
 
 				// ヘッダー背景画像URL取得
-				$image_url = self::header_image_url();
+				$image_url    = self::header_image_url();
 				$image_url_sp = self::header_image_url( 'sp' );
 
 				$variables_dynamic_css = '';
@@ -789,7 +821,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 
 				if ( isset( $options['text_color'] ) && $options['text_color'] ) {
 					$title_outer_dynamic_css .= 'color:' . $options['text_color'] . ';';
-				} else if ( self::get_layout() == 'post_title_and_meta' ){
+				} elseif ( self::get_layout() == 'post_title_and_meta' ) {
 					$title_outer_dynamic_css .= 'color:#fff;';
 				}
 
@@ -822,23 +854,13 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				}
 
 				// 表示タイプが 標準レイアウトじゃない（記事タイトルや日付など）場合
-				if ( self::get_layout() === 'post_title_and_meta' ){
-					if ( empty( $options['cover_color'] ) ){
+				if ( self::get_layout() === 'post_title_and_meta' ) {
+					if ( empty( $options['cover_color'] ) ) {
 						$options['cover_color'] = '#000';
 					}
-					if ( empty( $options['cover_opacity'] ) ){
+					if ( empty( $options['cover_opacity'] ) ) {
 						$options['cover_opacity'] = '0.5';
 					}
-				}
-
-				$style_cover_color = '';
-				if ( isset( $options['cover_color'] ) ){
-					$style_cover_color = 'background-color:' . $options['cover_color'] . ';';
-				}
-
-				$style_cover_opacity = '';
-				if ( isset( $options['cover_opacity'] ) ){
-					$style_cover_opacity = 'opacity:' . $options['cover_opacity'] . ';';
 				}
 
 				// カバー部分
@@ -848,9 +870,16 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 						content:"";
 						position:absolute;
 						top:0;
-						left:0;
-						' . $style_cover_color . '
-						' . $style_cover_opacity . '
+						left:0;';
+					if ( ! empty( $options['cover_color'] ) ) {
+						$title_outer_dynamic_css .= 'background-color:' . $options['cover_color'] . ';';
+					}
+					// cover_opacity の値が 0 の場合も出力する必要があるので注意
+					if ( ! empty( $options['cover_opacity'] ) || '0' === $options['cover_opacity'] ) {
+						$title_outer_dynamic_css .= 'opacity:' . $options['cover_opacity'] . ';';
+					}
+
+					$title_outer_dynamic_css .= '
 						width:100%;
 						height:100%;
 					}';
