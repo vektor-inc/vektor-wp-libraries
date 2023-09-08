@@ -84,7 +84,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 	class Vk_Page_Header {
 
 
-		public static $version     = '0.1.0';
+		public static $version     = '0.1.1';
 		private static $post_types = array( 'post' => 0 );
 
 		public function __construct() {
@@ -831,6 +831,16 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					}
 				}
 
+				$style_cover_color = '';
+				if ( isset( $options['cover_color'] ) ){
+					$style_cover_color = 'background-color:' . $options['cover_color'] . ';';
+				}
+
+				$style_cover_opacity = '';
+				if ( isset( $options['cover_opacity'] ) ){
+					$style_cover_opacity = 'opacity:' . $options['cover_opacity'] . ';';
+				}
+
 				// カバー部分
 				if ( ! empty( $options['cover_color'] ) || ! empty( $options['cover_opacity'] ) ) {
 
@@ -839,8 +849,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 						position:absolute;
 						top:0;
 						left:0;
-						background-color:' . $options['cover_color'] . ';
-						opacity:' . $options['cover_opacity'] . ';
+						' . $style_cover_color . '
+						' . $style_cover_opacity . '
 						width:100%;
 						height:100%;
 					}';
