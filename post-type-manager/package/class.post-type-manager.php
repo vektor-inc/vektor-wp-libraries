@@ -245,9 +245,10 @@ if ( ! class_exists( 'VK_Post_Type_Manager' ) ) {
 
 			// 自動保存ルーチンかどうかチェック。そうだった場合は何もしない（記事の自動保存処理として呼び出された場合の対策）.
 			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-				return $post_id; }
+				return $post_id;
+			}
 
-				// 保存しているカスタムフィールド.
+			// 保存しているカスタムフィールド.
 			$fields = array(
 				'veu_post_type_id',
 				'veu_post_type_items',
