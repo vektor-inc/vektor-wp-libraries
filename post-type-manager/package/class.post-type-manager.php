@@ -273,6 +273,8 @@ if ( ! class_exists( 'VK_Post_Type_Manager' ) ) {
 				}
 			}
 
+			flush_rewrite_rules();
+
 		}
 
 		/**
