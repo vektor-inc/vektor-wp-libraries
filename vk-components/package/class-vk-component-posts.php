@@ -3,7 +3,7 @@
  * VK Components Posts
  *
  * @package VK Component
- * @version 1.5.0
+ * @version 1.6.0
  *
  * *********************** CAUTION ***********************
  * The original of this file is located at:
