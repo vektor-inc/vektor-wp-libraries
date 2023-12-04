@@ -335,6 +335,13 @@ $xxl-min: 1400px;
 	}
 
 	&.card-horizontal {
+		// テーマなどが bootstrap の grid を読み込むと、
+		// horizontal に残っている col-5/col-7 のクラスにpadding をつけられてしまうので打ち消し
+		// （ horizontal から col-5/col-7 のクラスを削除したらこちらも削除可 ）
+		.vk_post-col-5,
+		.vk_post-col-7 {
+			padding: 0;
+		}
 		.vk_post_imgOuter {
 			height: 100%;
 			border-bottom: none;
@@ -347,6 +354,9 @@ $xxl-min: 1400px;
 			.vk_post_imgOuter {
 				border-right:none;
 				border-left:$border_image;
+			}
+			.card-horizontal-inner-row {
+				flex-direction: row-reverse;
 			}
 		}
 	}
