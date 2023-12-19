@@ -721,6 +721,7 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 					} // foreach
 					$html .= '</div>';
 				}
+				$html .= apply_filters( 'vk_post_taxonomies', '' );
 			}
 
 			if ( $options['textlink'] ) {
