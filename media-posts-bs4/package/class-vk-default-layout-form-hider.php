@@ -24,6 +24,7 @@ class VK_Default_Layout_Form_Hider extends WP_Customize_Control {
 		$post_types           = array( 'post' => 0 );
 		$post_types           = VK_Media_Posts_BS4::get_custom_types() + $post_types;
 		$post_types['author'] = 'author';
+		$post_types['search'] = 'search';
 
 		// ページを開いた状態のoption値を取得.
 		$option = get_option( 'vk_post_type_archive' );
