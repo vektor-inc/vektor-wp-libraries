@@ -441,14 +441,14 @@ gulp.task('sass_vk-mobile-nav', function (done) {
 });
 
 gulp.task('copy_vk-mobile-nav', function (done) {
-  gulp.src('./vk-mobile-nav/package/**')
-    .pipe(gulp.dest('../themes/lightning/_g2/inc/vk-mobile-nav/package/'))
-    .pipe(gulp.dest('../themes/lightning/_g3/inc/vk-mobile-nav/package/'))
-    .pipe(gulp.dest('../themes/lightning-pro/inc/vk-mobile-nav/package/'))
-    .pipe(gulp.dest('../themes/katawara/inc/vk-mobile-nav/package/'))
-    // .pipe(gulp.dest('../themes/seizen-souzoku/inc/vk-mobile-nav/'))
-    // .pipe(gulp.dest('../themes/souzoku/inc/vk-mobile-nav/package/'))
-  done()
+	gulp.src('./vk-mobile-nav/package/**')
+		.pipe(gulp.dest('../themes/lightning/_g2/inc/vk-mobile-nav/package/'))
+		.pipe(gulp.dest('../themes/lightning/_g3/inc/vk-mobile-nav/package/'))
+		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-mobile-nav/package/'))
+		.pipe(gulp.dest('../themes/katawara/inc/vk-mobile-nav/package/'))
+		// .pipe(gulp.dest('../themes/seizen-souzoku/inc/vk-mobile-nav/'))
+		// .pipe(gulp.dest('../themes/souzoku/inc/vk-mobile-nav/package/'))
+	done()
 });
 
 gulp.task('watch_mobile', function () {
@@ -456,7 +456,22 @@ gulp.task('watch_mobile', function () {
   gulp.watch('./vk-mobile-nav/package/_scss/**', gulp.series('copy_vk-mobile-nav'));
   gulp.watch('./vk-mobile-nav/package/**.php', gulp.series('copy_vk-mobile-nav'));
   gulp.watch('./vk-mobile-nav/package/images/**', gulp.series('copy_vk-mobile-nav'));
-  gulp.watch('./vk-mobile-nav/package/js/**', gulp.series('copy_vk-mobile-nav'));
+  gulp.watch('./vk-mobile-nav/package/js/vk-mobile-nav.js', gulp.series('jsmin_vk-mobile-nav'));
+  gulp.watch('./vk-mobile-nav/package/js/vk-mobile-nav.min.js', gulp.series('copy_vk-mobile-nav'));
+});
+
+// ./vk-mobile-nav/package/js/** を監視して変更があったら最小化して .min を付与してコピー
+gulp.task('jsmin_vk-mobile-nav', function (done) {
+	gulp.src('./vk-mobile-nav/package/js/vk-mobile-nav.js')
+		.pipe(plumber())
+		.pipe(jsmin())
+		.pipe(rename(
+			{
+				suffix: '.min'
+			}
+		))
+		.pipe(gulp.dest('./vk-mobile-nav/package/js/'));
+  	done();
 });
 
 /*-------------------------------------*/
