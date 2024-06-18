@@ -38,7 +38,7 @@
 		"webpack-cli": "^4.6.0"
 	},
 	"devDependencies": {
-		"gulp": "^4.0.2",
+		"gulp": "^5.0.0",
 		"gulp-replace": "^1.0.0",
 		"npm-check-updates": "^16.7.4"
 	},
