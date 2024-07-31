@@ -21,7 +21,8 @@
 var gulp = require('gulp');
 
 // sass compiler
-var sass = require('gulp-sass')(require('sass'));
+// var sass = require('gulp-sass')(require('sass'));
+var sass = require('gulp-sass');
 
 var cmq = require('gulp-merge-media-queries');
 // add vender prifix
