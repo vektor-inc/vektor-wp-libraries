@@ -341,10 +341,6 @@ $xxl-min: 1400px;
 		.vk_post-col-5,
 		.vk_post-col-7 {
 			padding: 0;
-			&:has(.vk_post_btnOuter) {
-				display: flex;
-				flex-direction: column;
-			}
 		}
 		.vk_post_imgOuter {
 			height: 100%;
