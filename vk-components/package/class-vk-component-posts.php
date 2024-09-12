@@ -716,9 +716,14 @@ if ( ! class_exists( 'VK_Component_Posts' ) ) {
 				}
 				if ( $taxonomies ) {
 					$html .= '<div class="vk_post_taxonomies">';
+
+					// 各タクソノミーの処理
+					$taxonomy_html = '';
 					foreach ( $taxonomies as $key => $value ) {
-						$html .= '<dl class="vk_post_taxonomy vk_post_taxonomy-' . $key . '">' . $value . '</dl>';
+						$taxonomy_html .= '<dl class="vk_post_taxonomy vk_post_taxonomy-' . $key . '">' . $value . '</dl>';
 					} // foreach
+					
+					$html .= apply_filters( 'vk_post_taxonomies_html', $taxonomy_html );
 					$html .= '</div>';
 				}
 				
