@@ -12,7 +12,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 	class VK_Custom_Field_Builder {
 
-		public static $version = '0.2.2';
+		public static $version = '0.2.3';
 
 		// define( 'Bill_URL', get_template_directory_uri() );
 		public static function init() {
@@ -59,7 +59,6 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 			if ( ! in_array( $hook_suffix, $cfb_jquery_ui_excludes, true ) ) {
 				wp_enqueue_style( 'cf-builder-jquery-ui-style', self::admin_directory_url() . 'css/jquery-ui.css', array( 'cf-builder-style' ), self::$version, 'all' );
 			}
-
 		}
 
 		public static function form_post_value( $post_field = '', $type = false ) {
@@ -203,11 +202,12 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 				} elseif ( $value['type'] == 'image' ) {
 					if ( $post->$key ) {
-						$thumb_image     = wp_get_attachment_image_src( $post->$key, 'medium', false );
-						$thumb_image_url = $thumb_image[0];
-						// } elseif ( isset( $_POST[ $key ] ) && $_POST[ $key ] ) {
-						// $thumb_image     = wp_get_attachment_image_src( $image_key, 'medium', false );
-						// $thumb_image_url = $thumb_image[0];
+						$thumb_image = wp_get_attachment_image_src( $post->$key, 'medium', false );
+						if ( is_array( $thumb_image ) && ! empty( $thumb_image[0] ) ) {
+							$thumb_image_url = $thumb_image[0];
+						} else {
+							$thumb_image_url = $custom_field_builder_url . 'images/no_image.png';
+						}
 					} elseif ( ! empty( $options[ $key ] ) ) {
 						$thumb_image = wp_get_attachment_image_src( $options[ $key ], 'medium', false );
 						if ( is_array( $thumb_image ) && ! empty( $thumb_image[0] ) ) {
@@ -270,7 +270,6 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 				wp_enqueue_media();
 				return $form_html;
 			}
-
 		} // public static function form_table( $custom_fields_array, $befor_items, $echo = true ){
 
 		/*
@@ -310,7 +309,6 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 				}
 			} // foreach ($custom_fields_all_array as $key => $value) {
 		}
-
 	} // class Vk_custom_field_builder
 
 	VK_Custom_Field_Builder::init();
