@@ -41,8 +41,10 @@ $color_font_default: rgba(255, 255, 255, 0.8);
 
 .vk-menu-acc .acc-btn {
 	border: 1px solid $color_font_default;
-	background: var(--vk-menu-acc-icon-open-white-bg-src) center 50% no-repeat;
+	background: var(--vk-menu-acc-icon-open-white-bg-src) center 50%
+		no-repeat;
 }
 .vk-menu-acc .acc-btn-close {
-	background: var(--vk-menu-acc-icon-close-white-bg-src) center 50% no-repeat;
+	background: var(--vk-menu-acc-icon-close-white-bg-src) center 50%
+		no-repeat;
 }
