@@ -455,7 +455,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 						'section'     => 'vk_mobil_fix_nav_setting',
 						'settings'    => 'vk_mobil_fix_nav_options[event_' . $i . ']',
 						'type'        => 'text',
-						'description' => __( 'Ex', 'vk_mobile_fix_nav_textdomain' ) . " ) ga('send', 'event', 'Videos', 'play', 'Fall Campaign');",
+						'description' => __( 'Ex', 'vk_mobile_fix_nav_textdomain' ) . " ) gtag('event', 'play', { 'event_category': 'Videos', 'event_label': 'Fall Campaign'});",
 					)
 				);
 
