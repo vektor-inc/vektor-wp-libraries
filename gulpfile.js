@@ -151,13 +151,10 @@ gulp.task('sass_cf', function(done) {
 /*-------------------------------------*/
 gulp.task('c_tags', function(done) {
 	gulp.src('./template-tags/package/**')
-		.pipe(gulp.dest('../themes/katawara/inc/template-tags/'))
 		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/template-tags/package/'))
-		.pipe(gulp.dest('../plugins/vk-blocks-pro/inc/template-tags/package/'))
 		.pipe(gulp.dest('../plugins/vk-post-author-display/inc/template-tags/package/'));
 	gulp.src('./template-tags/tests/**')
-		.pipe(gulp.dest('../themes/katawara/inc/tests/'))
-	.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/tests/'))
+		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/tests/'))
 		.pipe(gulp.dest('../plugins/vk-post-author-display/tests/'));
     done();
 });
