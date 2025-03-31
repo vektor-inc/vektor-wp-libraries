@@ -31,19 +31,26 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 		-------------------------------------------
 		*/
 		public static function print_script( $hook_suffix ) {
+			global $hook_suffix;
 			wp_register_script( 'datepicker', self::admin_directory_url() . 'js/datepicker.js', array( 'jquery', 'jquery-ui-datepicker' ), self::$version, true );
 			wp_enqueue_script( 'datepicker' );
-			wp_enqueue_script( 'vk_mediauploader', self::admin_directory_url() . 'js/mediauploader.js', array( 'jquery' ), self::$version, true );
-			wp_localize_script(
-				'vk_mediauploader',
-				'vk_cfb',
-				array(
-					'select_image' => __( 'Select image', 'custom_field_builder_textdomain' ),
-				)
-			);
 
+			// media_uploader.js は、メディアアップローダーを使うためのjs
+			// Post Author Display と干渉するのでプロフィール画面では読み込まない
+			$media_uploader_exclude = array( 'profile.php' );
+			$media_uploader_exclude = apply_filters( 'cfb_media_uploader_exclude', $media_uploader_exclude );
+			if ( ! in_array( $hook_suffix, $media_uploader_exclude, true ) ) {
+				wp_enqueue_script( 'vk_mediauploader', self::admin_directory_url() . 'js/mediauploader.js', array( 'jquery' ), self::$version, true );
+				wp_localize_script(
+					'vk_mediauploader',
+					'vk_cfb',
+					array(
+						'select_image' => __( 'Select image', 'custom_field_builder_textdomain' ),
+					)
+				);
+			}
+			
 			// flexible-table の js が NestedPagesのjsと干渉して正常に動かなくなるので、NestedPagesのページで読み込まないように.
-			global $hook_suffix;
 			$cfb_flexible_table_excludes = array( 'toplevel_page_nestedpages' );
 			$cfb_flexible_table_excludes = apply_filters( 'cfb_flexible_table_excludes', $cfb_flexible_table_excludes );
 
