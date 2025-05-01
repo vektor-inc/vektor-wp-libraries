@@ -135,7 +135,9 @@ gulp.task('sass_cf', function(done) {
 	  .pipe(gulp.dest('../plugins/vk-block-pattern-plugin-generator/inc/custom-field-builder/package/'))
 	  .pipe(gulp.dest('../themes/katawara/inc/custom-field-builder/package/'))
 	  .pipe(gulp.dest('../themes/lightning-pro/inc/custom-field-builder/package/'))
-	  .pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/custom-field-builder/package/'));
+	  .pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/custom-field-builder/package/'))
+	  .pipe(gulp.dest('../plugins/vk-fullsite-installer-beta-tester/inc/custom-field-builder/package/'))
+	  .pipe(gulp.dest('../plugins/vk-fullsite-installer-web/inc/custom-field-builder/package/'));
 	done();
   });
   gulp.task('watch_cf', function (done) {
