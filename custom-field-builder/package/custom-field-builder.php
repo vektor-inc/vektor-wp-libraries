@@ -110,6 +110,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 						$form_html .= esc_html( $value['before_text'] ) . ' ';
 					}
 
+					$post_value = '';
 					$form_post_value = self::form_post_value( $key );
 					if ( ! empty( $form_post_value ) || '0' === $form_post_value ) {
 						$post_value = $form_post_value;
