@@ -12,7 +12,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 	class VK_Custom_Field_Builder {
 
-		public static $version = '0.2.3';
+		public static $version = '0.2.4';
 
 		// define( 'Bill_URL', get_template_directory_uri() );
 		public static function init() {
@@ -111,8 +111,9 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					}
 
 					$post_value = '';
-					if ( ! empty( self::form_post_value( $key ) ) ) {
-						$post_value = self::form_post_value( $key );
+					$form_post_value = self::form_post_value( $key );
+					if ( ! empty( $form_post_value ) || '0' === $form_post_value ) {
+						$post_value = $form_post_value;
 					} elseif ( ! empty( $options[ $key ] ) ) {
 						$post_value = $options[ $key ];
 					}
