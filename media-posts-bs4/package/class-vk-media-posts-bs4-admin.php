@@ -210,7 +210,11 @@ class VK_Media_Posts_BS4_Admin {
 			$wp_customize->add_setting(
 				'vk_post_type_archive[' . $type . '][layout]',
 				array(
-					'default'           => $customize_options_default['layout'],
+					// レイアウトの改変はこの値の有無をトリガーにしている。
+					// カスタマイザの初期値が vk_post_type_archive の layout の初期値と同じ場合は、 layout 以外のパラメーターを変更しても
+					// layout の値は保存されず、結果、レイアウトの変更が実行されないという不具合が発生する。
+					// そのため、初期値は 'default' としておく。
+					'default'           => 'default',
 					'type'              => 'option',
 					'capability'        => 'edit_theme_options',
 					'sanitize_callback' => 'sanitize_text_field',
