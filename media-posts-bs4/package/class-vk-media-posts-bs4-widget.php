@@ -95,7 +95,7 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 			'orderby'                    => 'date',
 			'orderby'                    => 'DESC',
 			'count'                      => 6,
-			'offset'                     => '',
+			'offset'                     => 0,
 			'title'                      => __( 'Recent Posts', 'vk-media-posts-bs4' ),
 			'post_type'                  => array( 'post' => 1 ), // クエリに投げる形式は違うので要変換.
 			'terms'                      => '',
@@ -510,31 +510,31 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 	 */
 	public function update( $new_instance, $instance ) {
 		$instance                               = $new_instance;
-		$instance['order']                      = $new_instance['order'];
-		$instance['orderby']                    = $new_instance['orderby'];
-		$instance['layout']                     = $new_instance['layout'];
+		$instance['order']                      = ! empty( $new_instance['order'] ) ? esc_attr( $new_instance['order'] ) : 'date';
+		$instance['orderby']                    = ! empty( $new_instance['orderby'] ) ? esc_attr( $new_instance['orderby'] ) : 'DESC';
+		$instance['layout']                     = ! empty( $new_instance['layout'] ) ? esc_attr( $new_instance['layout'] ) : 'media';
 		$instance['col_xs']                     = ! empty( $new_instance['col_xs'] ) ? VK_Helpers::sanitize_number( $new_instance['col_xs'] ) : 1;
 		$instance['col_sm']                     = ! empty( $new_instance['col_sm'] ) ? VK_Helpers::sanitize_number( $new_instance['col_sm'] ) : 1;
 		$instance['col_md']                     = ! empty( $new_instance['col_md'] ) ? VK_Helpers::sanitize_number( $new_instance['col_md'] ) : 1;
 		$instance['col_lg']                     = ! empty( $new_instance['col_lg'] ) ? VK_Helpers::sanitize_number( $new_instance['col_lg'] ) : 1;
 		$instance['col_xl']                     = ! empty( $new_instance['col_xl'] ) ? VK_Helpers::sanitize_number( $new_instance['col_xl'] ) : 1;
-		$instance['col_xxl']                    = ! empty( $new_instance['col_xxl'] ) ? VK_Helpers::sanitize_number( $new_instance['col_xxl'] ) : 1;
+		$instance['col_xxl']                    = ! empty( $new_instance['col_xxl'] ) ? VK_Helpers::sanitize_number( $new_instance['col_xxl'] ) : VK_Helpers::sanitize_number( $new_instance['col_xl'] );
 		$instance['new_date']                   = ! empty( $new_instance['new_date'] ) ? mb_convert_kana( $new_instance['new_date'], 'n' ) : 7;
-		$instance['display_image']              = VK_Helpers::sanitize_checkbox( $new_instance['display_image'] );
-		$instance['display_image_overlay_term'] = VK_Helpers::sanitize_checkbox( $new_instance['display_image_overlay_term'] );
-		$instance['display_excerpt']            = VK_Helpers::sanitize_checkbox( $new_instance['display_excerpt'] );
-		$instance['display_author']             = VK_Helpers::sanitize_checkbox( $new_instance['display_author'] );
-		$instance['display_date']               = VK_Helpers::sanitize_checkbox( $new_instance['display_date'] );
-		$instance['display_new']                = VK_Helpers::sanitize_checkbox( $new_instance['display_new'] );
-		$instance['display_btn']                = VK_Helpers::sanitize_checkbox( $new_instance['display_btn'] );
-		$instance['btn_text']                   = wp_kses_post( $new_instance['btn_text'] );
-		$instance['btn_align']                  = wp_kses_post( $new_instance['btn_align'] );
-		$instance['new_text']                   = wp_kses_post( $new_instance['new_text'] );
-		$instance['count']                      = $new_instance['count'];
-		$instance['offset']                     = $new_instance['offset'];
-		$instance['title']                      = esc_attr( $new_instance['title'] );
-		$instance['post_type']                  = $new_instance['post_type'];
-		$instance['terms']                      = preg_replace( '/([^0-9,]+)/', '', $new_instance['terms'] );
+		$instance['display_image']              = ! empty( $new_instance['display_image'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_image'] ) : false;
+		$instance['display_image_overlay_term'] = ! empty( $new_instance['display_image_overlay_term'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_image_overlay_term'] ) : false;
+		$instance['display_excerpt']            = ! empty( $new_instance['display_excerpt'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_excerpt'] ) : false;
+		$instance['display_author']             = ! empty( $new_instance['display_author'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_author'] ) : false;
+		$instance['display_date']               = ! empty( $new_instance['display_date'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_date'] ) : false;
+		$instance['display_new']                = ! empty( $new_instance['display_new'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_new'] ) : false;
+		$instance['display_btn']                = ! empty( $new_instance['display_btn'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_btn'] ) : false;
+		$instance['btn_text']                   = ! empty( $new_instance['btn_text'] ) ? wp_kses_post( $new_instance['btn_text'] ) : '';
+		$instance['btn_align']                  = ! empty( $new_instance['btn_align'] ) ? wp_kses_post( $new_instance['btn_align'] ) : '';
+		$instance['new_text']                   = ! empty( $new_instance['new_text'] ) ? wp_kses_post( $new_instance['new_text'] ) : '';
+		$instance['count']                      = ! empty( $new_instance['count'] ) ? VK_Helpers::sanitize_number( $new_instance['count'] ) : 6;
+		$instance['offset']                     = ! empty( $new_instance['offset'] ) ? VK_Helpers::sanitize_number( $new_instance['offset'] ) : 0;
+		$instance['title']                      = ! empty( $new_instance['title'] ) ? esc_html( $new_instance['title'] ) : '';
+		$instance['post_type']                  = ! empty( $new_instance['post_type'] ) ? $new_instance['post_type'] : array( 'post' => 1 );
+		$instance['terms']                      = ! empty( $new_instance['terms'] ) ? preg_replace( '/([^0-9,]+)/', '', $new_instance['terms'] ) : '';
 		return $instance;
 	}
 }
