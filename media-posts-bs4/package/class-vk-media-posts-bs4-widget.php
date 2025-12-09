@@ -11,6 +11,8 @@
  * @license GPL-2.0+
  */
 
+ use VektorInc\VK_Component\VK_Component_Posts;
+
 /**
  * VK Media Posts BS4 Widget
  */
@@ -133,6 +135,8 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 
 		$defaults = self::options_default();
 		$instance = wp_parse_args( $instance, $defaults );
+
+		$instance = apply_filters( 'vk_media_posts_bs4_widget_instance', $instance );
 
 		if ( ! $instance['post_type'] ) {
 			$instance['post_type'] = array( 'post' => 1 );
