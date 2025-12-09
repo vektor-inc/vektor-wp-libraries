@@ -10,7 +10,7 @@
  * @package vektor-inc/vektor-wp-libraries/media-posts-bs4
  * @license GPL-2.0+
  *
- * @version 1.2.0
+ * @version 1.2.1
  */
 
 if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
