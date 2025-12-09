@@ -487,11 +487,7 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 					),
 				);
 				foreach ( $btn_aligns as $key => $value ) {
-					if ( $instance['btn_align'] === $key ) {
-						$selected = ' selected="selected"';
-					} else {
-						$selected;
-					}
+					$selected = ( isset( $instance['btn_align'] ) && $instance['btn_align'] === $key ) ? ' selected="selected"' : '';
 
 					echo '<option value="' . esc_attr( $key ) . '"' . esc_attr( $selected ) . '>' . esc_html( $value['label'] ) . '</option>';
 				}
@@ -509,32 +505,36 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 	 * @param array $instance Widget Option.
 	 */
 	public function update( $new_instance, $instance ) {
-		$instance                               = $new_instance;
-		$instance['orderby']                    = ! empty( $new_instance['orderby'] ) ? esc_attr( $new_instance['orderby'] ) : 'date';
-		$instance['order']                      = ! empty( $new_instance['order'] ) ? esc_attr( $new_instance['order'] ) : 'DESC';
-		$instance['layout']                     = ! empty( $new_instance['layout'] ) ? esc_attr( $new_instance['layout'] ) : 'media';
-		$instance['col_xs']                     = ! empty( $new_instance['col_xs'] ) ? VK_Helpers::sanitize_number( $new_instance['col_xs'] ) : 1;
+		$defaults                               = $this->options_default();
+		// Initialize with defaults first, then override with submitted values.
+		$instance                               = $defaults;
+		$instance['orderby']                    = ! empty( $new_instance['orderby'] ) ? esc_attr( $new_instance['orderby'] ) : $defaults['orderby'];
+		$instance['order']                      = ! empty( $new_instance['order'] ) ? esc_attr( $new_instance['order'] ) : $defaults['order'];
+		$instance['layout']                     = ! empty( $new_instance['layout'] ) ? esc_attr( $new_instance['layout'] ) : $defaults['layout'];
+		// Column settings cascade: empty values inherit from the next smaller size.
+		$instance['col_xs']                     = ! empty( $new_instance['col_xs'] ) ? VK_Helpers::sanitize_number( $new_instance['col_xs'] ) : $defaults['col_xs'];
 		$instance['col_sm']                     = ! empty( $new_instance['col_sm'] ) ? VK_Helpers::sanitize_number( $new_instance['col_sm'] ) : $instance['col_xs'];
 		$instance['col_md']                     = ! empty( $new_instance['col_md'] ) ? VK_Helpers::sanitize_number( $new_instance['col_md'] ) : $instance['col_sm'];
 		$instance['col_lg']                     = ! empty( $new_instance['col_lg'] ) ? VK_Helpers::sanitize_number( $new_instance['col_lg'] ) : $instance['col_md'];
 		$instance['col_xl']                     = ! empty( $new_instance['col_xl'] ) ? VK_Helpers::sanitize_number( $new_instance['col_xl'] ) : $instance['col_lg'];
 		$instance['col_xxl']                    = ! empty( $new_instance['col_xxl'] ) ? VK_Helpers::sanitize_number( $new_instance['col_xxl'] ) : $instance['col_xl'];
-		$instance['new_date']                   = ! empty( $new_instance['new_date'] ) ? mb_convert_kana( $new_instance['new_date'], 'n' ) : 7;
-		$instance['display_image']              = ! empty( $new_instance['display_image'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_image'] ) : false;
-		$instance['display_image_overlay_term'] = ! empty( $new_instance['display_image_overlay_term'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_image_overlay_term'] ) : false;
-		$instance['display_excerpt']            = ! empty( $new_instance['display_excerpt'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_excerpt'] ) : false;
-		$instance['display_author']             = ! empty( $new_instance['display_author'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_author'] ) : false;
-		$instance['display_date']               = ! empty( $new_instance['display_date'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_date'] ) : false;
-		$instance['display_new']                = ! empty( $new_instance['display_new'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_new'] ) : false;
-		$instance['display_btn']                = ! empty( $new_instance['display_btn'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_btn'] ) : false;
-		$instance['btn_text']                   = ! empty( $new_instance['btn_text'] ) ? wp_kses_post( $new_instance['btn_text'] ) : '';
-		$instance['btn_align']                  = ! empty( $new_instance['btn_align'] ) ? esc_attr( $new_instance['btn_align'] ) : '';
-		$instance['new_text']                   = ! empty( $new_instance['new_text'] ) ? wp_kses_post( $new_instance['new_text'] ) : '';
-		$instance['count']                      = ! empty( $new_instance['count'] ) ? VK_Helpers::sanitize_number( $new_instance['count'] ) : 6;
-		$instance['offset']                     = ! empty( $new_instance['offset'] ) ? VK_Helpers::sanitize_number( $new_instance['offset'] ) : 0;
-		$instance['title']                      = ! empty( $new_instance['title'] ) ? esc_html( $new_instance['title'] ) : '';
-		$instance['post_type']                  = ! empty( $new_instance['post_type'] ) ? $new_instance['post_type'] : array( 'post' => 1 );
-		$instance['terms']                      = ! empty( $new_instance['terms'] ) ? preg_replace( '/([^0-9,]+)/', '', $new_instance['terms'] ) : '';
+		$instance['terms']                      = ! empty( $new_instance['terms'] ) ? preg_replace( '/[^0-9,]/', '', $new_instance['terms'] ) : $defaults['terms'];
+		$instance['new_date']                   = ! empty( $new_instance['new_date'] ) ? mb_convert_kana( $new_instance['new_date'], 'n' ) : $defaults['new_date'];
+		$instance['display_image']              = isset( $new_instance['display_image'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_image'] ) : false;
+		$instance['display_image_overlay_term'] = isset( $new_instance['display_image_overlay_term'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_image_overlay_term'] ) : false;
+		$instance['display_excerpt']            = isset( $new_instance['display_excerpt'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_excerpt'] ) : false;
+		$instance['display_author']             = isset( $new_instance['display_author'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_author'] ) : false;
+		$instance['display_date']               = isset( $new_instance['display_date'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_date'] ) : false;
+		$instance['display_new']                = isset( $new_instance['display_new'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_new'] ) : false;
+		$instance['display_taxonomies']         = isset( $new_instance['display_taxonomies'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_taxonomies'] ) : false;
+		$instance['display_btn']                = isset( $new_instance['display_btn'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_btn'] ) : false;
+		$instance['btn_text']                   = ! empty( $new_instance['btn_text'] ) ? wp_kses_post( $new_instance['btn_text'] ) : $defaults['btn_text'];
+		$instance['btn_align']                  = ! empty( $new_instance['btn_align'] ) ? esc_attr( $new_instance['btn_align'] ) : $defaults['btn_align'];
+		$instance['new_text']                   = ! empty( $new_instance['new_text'] ) ? wp_kses_post( $new_instance['new_text'] ) : $defaults['new_text'];
+		$instance['count']                      = ! empty( $new_instance['count'] ) ? VK_Helpers::sanitize_number( $new_instance['count'] ) : $defaults['count'];
+		$instance['offset']                     = ! empty( $new_instance['offset'] ) ? VK_Helpers::sanitize_number( $new_instance['offset'] ) : $defaults['offset'];
+		$instance['title']                      = ! empty( $new_instance['title'] ) ? esc_html( $new_instance['title'] ) : $defaults['title'];
+		$instance['post_type'] = ! empty( $new_instance['post_type'] ) && is_array( $new_instance['post_type'] ) ? array_intersect_key( $new_instance['post_type'], array_flip( get_post_types( array( 'public' => true ), 'names' ) ) ) : $defaults['post_type'];
 		return $instance;
 	}
 }
