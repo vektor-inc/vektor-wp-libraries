@@ -514,10 +514,10 @@ class VK_Media_Posts_BS4_Widget extends WP_Widget {
 		$instance['order']                      = ! empty( $new_instance['order'] ) ? esc_attr( $new_instance['order'] ) : 'DESC';
 		$instance['layout']                     = ! empty( $new_instance['layout'] ) ? esc_attr( $new_instance['layout'] ) : 'media';
 		$instance['col_xs']                     = ! empty( $new_instance['col_xs'] ) ? VK_Helpers::sanitize_number( $new_instance['col_xs'] ) : 1;
-		$instance['col_sm']                     = ! empty( $new_instance['col_sm'] ) ? VK_Helpers::sanitize_number( $new_instance['col_sm'] ) : 1;
-		$instance['col_md']                     = ! empty( $new_instance['col_md'] ) ? VK_Helpers::sanitize_number( $new_instance['col_md'] ) : 1;
-		$instance['col_lg']                     = ! empty( $new_instance['col_lg'] ) ? VK_Helpers::sanitize_number( $new_instance['col_lg'] ) : 1;
-		$instance['col_xl']                     = ! empty( $new_instance['col_xl'] ) ? VK_Helpers::sanitize_number( $new_instance['col_xl'] ) : 1;
+		$instance['col_sm']                     = ! empty( $new_instance['col_sm'] ) ? VK_Helpers::sanitize_number( $new_instance['col_sm'] ) : $instance['col_xs'];
+		$instance['col_md']                     = ! empty( $new_instance['col_md'] ) ? VK_Helpers::sanitize_number( $new_instance['col_md'] ) : $instance['col_sm'];
+		$instance['col_lg']                     = ! empty( $new_instance['col_lg'] ) ? VK_Helpers::sanitize_number( $new_instance['col_lg'] ) : $instance['col_md'];
+		$instance['col_xl']                     = ! empty( $new_instance['col_xl'] ) ? VK_Helpers::sanitize_number( $new_instance['col_xl'] ) : $instance['col_lg'];
 		$instance['col_xxl']                    = ! empty( $new_instance['col_xxl'] ) ? VK_Helpers::sanitize_number( $new_instance['col_xxl'] ) : $instance['col_xl'];
 		$instance['new_date']                   = ! empty( $new_instance['new_date'] ) ? mb_convert_kana( $new_instance['new_date'], 'n' ) : 7;
 		$instance['display_image']              = ! empty( $new_instance['display_image'] ) ? VK_Helpers::sanitize_checkbox( $new_instance['display_image'] ) : false;
