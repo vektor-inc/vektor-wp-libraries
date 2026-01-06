@@ -689,7 +689,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 	});
 })();
 JS;
-			echo '<script>' . $script_raw . '</script>';
+			wp_print_inline_script_tag( $script_raw, array( 'id' => 'vk-mobile-fix-nav-height-js' ) );
 		}
 
 		/*
