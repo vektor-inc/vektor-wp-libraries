@@ -106,7 +106,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				'link_url_3'     => home_url( '/contact/' ),
 				'link_blank_3'   => false,
 				'link_text_4'    => 'TEL',
-				'link_icon_4'    => 'fa-solid fa-phone-square',
+				'link_icon_4'    => 'fa-solid fa-square-phone',
 				'link_url_4'     => 'tel:000-000-0000',
 				'link_blank_4'   => true,
 			);
