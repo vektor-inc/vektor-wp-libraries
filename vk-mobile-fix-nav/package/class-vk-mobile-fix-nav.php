@@ -6,7 +6,7 @@ https://github.com/vektor-inc/vektor-wp-libraries
 */
 
 use VektorInc\VK_Font_Awesome_Versions\VkFontAwesomeVersions;
-if ( method_exists( 'VektorInc\VK_Font_Awesome_Versions\VkFontAwesomeVersions', 'init' ) ) {
+if ( method_exists( VkFontAwesomeVersions::class, 'init' ) ) {
 	VkFontAwesomeVersions::init();
 }
 
@@ -68,6 +68,8 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			add_filter( 'body_class', array( __CLASS__, 'add_body_class' ) );
 			$vk_mobil_fix_nav_html_hook_point = apply_filters( 'vk_mobile_fix_nav_html_hook_point', 'wp_footer' );
 			add_action( $vk_mobil_fix_nav_html_hook_point, array( __CLASS__, 'vk_mobil_fix_nav_html' ) );
+			// モバイル固定ナビの高さをCSSカスタムプロパティとして出力
+			add_action( $vk_mobil_fix_nav_html_hook_point, array( __CLASS__, 'print_mobile_fix_nav_height_css' ), 20 );
 			add_action( 'widgets_init', array( __CLASS__, 'widgets_init' ) );
 			add_filter( 'vk_css_tree_shaking_handles', array( __CLASS__, 'css_tree_shaking_handles' ) );
 		}
@@ -92,19 +94,19 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				'add_menu_btn'   => false,
 				'link_text_0'    => 'MENU',
 				'link_text_1'    => 'HOME',
-				'link_icon_1'    => 'fas fa-home',
+				'link_icon_1'    => 'fa-solid fa-house',
 				'link_url_1'     => home_url(),
 				'link_blank_1'   => false,
 				'link_text_2'    => 'アクセス',
-				'link_icon_2'    => 'fas fa-map-marker-alt',
+				'link_icon_2'    => 'fa-solid fa-location-dot',
 				'link_url_2'     => 'https://www.google.co.jp/maps/search/%E5%90%8D%E5%8F%A4%E5%B1%8B%E5%B8%82%E4%B8%AD%E5%8C%BA%E6%A0%84%E4%B8%80%E4%B8%81%E7%9B%AE%EF%BC%92%EF%BC%92%E7%95%AA%EF%BC%91%EF%BC%96%E5%8F%B7+%E3%83%9F%E3%83%8A%E3%83%9F%E6%A0%84%E3%83%93%E3%83%AB+302%E5%8F%B7%E5%AE%A4/@35.1645087,136.8922015,17z/data=!3m1!4b1',
 				'link_blank_2'   => true,
 				'link_text_3'    => 'お問い合わせ',
-				'link_icon_3'    => 'fas fa-envelope',
+				'link_icon_3'    => 'fa-solid fa-envelope',
 				'link_url_3'     => home_url( '/contact/' ),
 				'link_blank_3'   => false,
 				'link_text_4'    => 'TEL',
-				'link_icon_4'    => 'fas fa-phone-square',
+				'link_icon_4'    => 'fa-solid fa-square-phone',
 				'link_url_4'     => 'tel:000-000-0000',
 				'link_blank_4'   => true,
 			);
@@ -375,7 +377,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				);
 
 				$description = '';
-				if ( method_exists( 'VektorInc\VK_Font_Awesome_Versions\VkFontAwesomeVersions', 'ex_and_link' ) ) {
+				if ( method_exists( VkFontAwesomeVersions::class, 'ex_and_link' ) ) {
 					$description = VkFontAwesomeVersions::ex_and_link();
 				}
 
@@ -590,7 +592,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					'vk-mobile-fix-nav'
 				)
 			);
-			
+
 			return $vk_css_tree_shaking_handles;
 		}
 
@@ -640,6 +642,55 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			}
 		}
 
+		/**
+		 * Output custom property for mobile fix nav height.
+		 */
+		public static function print_mobile_fix_nav_height_css() {
+			// モバイル固定ナビもウィジェットも空なら何もしない
+			if ( self::is_hidden_all() ) {
+				return;
+			}
+			// CSSカスタムプロパティの初期値はテーマ側のCSSで書いてあるのでここでは書かない
+			// jsで高さを取得してCSSカスタムプロパティを書き換える
+			$script_raw = <<<'JS'
+(function(){
+	const STYLE_ID = 'vk-mobile-fix-nav-height-css';
+	let styleEl = document.getElementById(STYLE_ID);
+	if (! styleEl) {
+		styleEl = document.createElement('style');
+		styleEl.id = STYLE_ID;
+		document.head.appendChild(styleEl);
+	}
+	function updateNavHeight() {
+		const nav = document.querySelector('.mobile-fix-nav');
+		if (! nav) {
+			return;
+		}
+		styleEl.textContent = ':root{--vk-mobile-fix-nav-height:' + Math.round(nav.getBoundingClientRect().height) + 'px;}';
+	}
+	function observeNav() {
+		const nav = document.querySelector('.mobile-fix-nav');
+		if (! nav || typeof MutationObserver === 'undefined') {
+			return;
+		}
+		new MutationObserver(updateNavHeight).observe(nav, { attributes: true, childList: true, subtree: true });
+	}
+	function init() {
+		updateNavHeight();
+		observeNav();
+	}
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', init, { once: true });
+	} else {
+		init();
+	}
+	['load', 'resize', 'orientationchange'].forEach(function (eventName) {
+		window.addEventListener(eventName, updateNavHeight);
+	});
+})();
+JS;
+			wp_print_inline_script_tag( $script_raw, array( 'id' => 'vk-mobile-fix-nav-height-js' ) );
+		}
 
 		/*
 		  vk_mobil_fix_nav_html
@@ -694,7 +745,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 						// add_menu_btn.
 						if ( ! empty( $options['add_menu_btn'] ) ) {
 							echo '<li>';
-							echo '<span id="vk-mobile-nav-menu-btn" class="vk-mobile-nav-menu-btn" style="color: ' . $color . ';"><span class="link-icon"><i class="fas fa fa-bars" aria-hidden="true"></i></span>' . esc_html( $options['link_text_0'] ) . '</span>';
+							echo '<span id="vk-mobile-nav-menu-btn" class="vk-mobile-nav-menu-btn" style="color: ' . $color . ';"><span class="link-icon"><i class="fa-solid fa-bars"></i></span>' . esc_html( $options['link_text_0'] ) . '</span>';
 							echo '</li>';
 						}
 
@@ -765,7 +816,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 								} // if ( ! empty( $options['event_'.$i] ) && $options['event_'.$i] ){
 
 								$icon_html = '';
-								if ( method_exists( 'VektorInc\VK_Font_Awesome_Versions\VkFontAwesomeVersions', 'get_icon_tag' ) ) {
+								if ( method_exists( VkFontAwesomeVersions::class, 'get_icon_tag' ) && ! empty( $link_icon ) ) {
 									$icon_html = VkFontAwesomeVersions::get_icon_tag( $link_icon );
 								}
 
