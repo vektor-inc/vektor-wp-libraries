@@ -10,6 +10,9 @@ https://github.com/vektor-inc/vektor-wp-libraries
 /*
 * 項目変動・多行のカスタムフィールド
 */
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class VK_Custom_Field_Builder_Flexible_Table {
 
@@ -128,7 +131,7 @@ class VK_Custom_Field_Builder_Flexible_Table {
 		$form_table .= '</tbody>';
 		$form_table .= '</table>';
 		$form_table .= '</div>';
-		echo $form_table;
+		echo wp_kses( $form_table, self::get_allowed_form_html() );
 	}
 
 	/**
@@ -143,7 +146,7 @@ class VK_Custom_Field_Builder_Flexible_Table {
 
 		// 設定したnonce を取得（CSRF対策）
 		$nonce_name             = 'noncename__' . $custom_fields_array['field_name'];
-		$noncename__bill_fields = isset( $_POST[ $nonce_name ] ) ? $_POST[ $nonce_name ] : null;
+		$noncename__bill_fields = isset( $_POST[ $nonce_name ] ) ? sanitize_text_field( wp_unslash( $_POST[ $nonce_name ] ) ) : null;
 
 		// nonce を確認し、値が書き換えられていれば、何もしない（CSRF対策）
 		if ( ! wp_verify_nonce( $noncename__bill_fields, wp_create_nonce( __FILE__ ) ) ) {
@@ -156,7 +159,12 @@ class VK_Custom_Field_Builder_Flexible_Table {
 		}
 
 		$field       = $custom_fields_array['field_name'];
-		$field_value = ( isset( $_POST[ $field ] ) ) ? $_POST[ $field ] : '';
+		$field_value = null;
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Value is sanitized below.
+		if ( isset( $_POST[ $field ] ) ) {
+			$field_value = wp_unslash( $_POST[ $field ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized below.
+		}
+		$field_value = self::sanitize_field_value( $field_value );
 
 		// 配列の空の行を削除する
 		if ( is_array( $field_value ) ) {
@@ -174,6 +182,45 @@ class VK_Custom_Field_Builder_Flexible_Table {
 			delete_post_meta( $post->ID, $field, get_post_meta( $post->ID, $field, true ) );
 		}
 
+	}
+
+	private static function get_allowed_form_html() {
+		return array(
+			'div'    => array( 'class' => true ),
+			'table'  => array( 'class' => true ),
+			'thead'  => array(),
+			'tbody'  => array( 'class' => true ),
+			'tr'     => array(),
+			'th'     => array( 'class' => true ),
+			'td'     => array( 'class' => true ),
+			'span'   => array( 'class' => true ),
+			'input'  => array(
+				'type'  => true,
+				'class' => true,
+				'name'  => true,
+				'value' => true,
+				'id'    => true,
+			),
+			'textarea' => array(
+				'name'  => true,
+				'class' => true,
+				'cols'  => true,
+				'rows'  => true,
+			),
+			'select' => array( 'id' => true, 'name' => true, 'class' => true ),
+			'option' => array( 'value' => true, 'selected' => true ),
+		);
+	}
+
+	private static function sanitize_field_value( $value ) {
+		if ( is_array( $value ) ) {
+			foreach ( $value as $key => $item ) {
+				$value[ $key ] = self::sanitize_field_value( $item );
+			}
+			return $value;
+		}
+
+		return sanitize_text_field( $value );
 	}
 
 	/*
