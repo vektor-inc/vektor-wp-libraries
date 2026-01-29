@@ -41,6 +41,20 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 			// media_uploader.js は、メディアアップローダーを使うためのjs
 			// Post Author Display と干渉するのでプロフィール画面では読み込まない
 			$media_uploader_exclude = array( 'profile.php' );
+			if ( has_filter( 'cfb_media_uploader_exclude' ) ) {
+				if ( function_exists( 'apply_filters_deprecated' ) ) {
+					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Back-compat for legacy hook.
+					$media_uploader_exclude = apply_filters_deprecated(
+						'cfb_media_uploader_exclude',
+						array( $media_uploader_exclude ),
+						VGJPM_VERSION,
+						'vgjpm_cfb_media_uploader_exclude'
+					);
+				} else {
+					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Back-compat for legacy hook.
+					$media_uploader_exclude = apply_filters( 'cfb_media_uploader_exclude', $media_uploader_exclude );
+				}
+			}
 			$media_uploader_exclude = apply_filters( 'vgjpm_cfb_media_uploader_exclude', $media_uploader_exclude );
 			if ( ! in_array( $hook_suffix, $media_uploader_exclude, true ) ) {
 				wp_enqueue_script( 'vk_mediauploader', self::admin_directory_url() . 'js/mediauploader.js', array( 'jquery' ), self::$version, true );
@@ -52,9 +66,23 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					)
 				);
 			}
-			
+
 			// flexible-table の js が NestedPagesのjsと干渉して正常に動かなくなるので、NestedPagesのページで読み込まないように.
 			$cfb_flexible_table_excludes = array( 'toplevel_page_nestedpages' );
+			if ( has_filter( 'cfb_flexible_table_excludes' ) ) {
+				if ( function_exists( 'apply_filters_deprecated' ) ) {
+					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Back-compat for legacy hook.
+					$cfb_flexible_table_excludes = apply_filters_deprecated(
+						'cfb_flexible_table_excludes',
+						array( $cfb_flexible_table_excludes ),
+						VGJPM_VERSION,
+						'vgjpm_cfb_flexible_table_excludes'
+					);
+				} else {
+					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Back-compat for legacy hook.
+					$cfb_flexible_table_excludes = apply_filters( 'cfb_flexible_table_excludes', $cfb_flexible_table_excludes );
+				}
+			}
 			$cfb_flexible_table_excludes = apply_filters( 'vgjpm_cfb_flexible_table_excludes', $cfb_flexible_table_excludes );
 
 			if ( ! in_array( $hook_suffix, $cfb_flexible_table_excludes, true ) ) {
@@ -65,6 +93,20 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 			// Contact form 7　など jQuery ui のクラス名を使っていて干渉するので除外 .
 			$cfb_jquery_ui_excludes = array( 'toplevel_page_wpcf7', 'toplevel_page_gf_edit_forms' );
+			if ( has_filter( 'cfb_jquery_ui_excludes' ) ) {
+				if ( function_exists( 'apply_filters_deprecated' ) ) {
+					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Back-compat for legacy hook.
+					$cfb_jquery_ui_excludes = apply_filters_deprecated(
+						'cfb_jquery_ui_excludes',
+						array( $cfb_jquery_ui_excludes ),
+						VGJPM_VERSION,
+						'vgjpm_cfb_jquery_ui_excludes'
+					);
+				} else {
+					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Back-compat for legacy hook.
+					$cfb_jquery_ui_excludes = apply_filters( 'cfb_jquery_ui_excludes', $cfb_jquery_ui_excludes );
+				}
+			}
 			$cfb_jquery_ui_excludes = apply_filters( 'vgjpm_cfb_jquery_ui_excludes', $cfb_jquery_ui_excludes );
 			if ( ! in_array( $hook_suffix, $cfb_jquery_ui_excludes, true ) ) {
 				wp_enqueue_style( 'cf-builder-jquery-ui-style', self::admin_directory_url() . 'css/jquery-ui.css', array( 'cf-builder-style' ), self::$version, 'all' );
@@ -87,7 +129,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 				}
 				if ( isset( $type ) && $type == 'textarea' ) {
 					// n2brはフォームにbrがそのまま入ってしまうので入れない
-					$value = esc_textarea( $posted_value );
+					$value = wp_kses_post( $posted_value );
 				} else {
 					$value = esc_attr( $posted_value );
 				}
@@ -162,7 +204,26 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 						$post_value = $options[ $key ];
 					}
 
-					$form_html .= '<textarea class="form-control" class="cf_textarea_wysiwyg" name="' . esc_attr( $key ) . '" cols="70" rows="3">' . esc_textarea( $post_value ) . '</textarea>';
+					if ( isset( $value['wysiwyg'] ) && $value['wysiwyg'] ) {
+						ob_start();
+						wp_editor(
+							$post_value,
+							$key,
+							array(
+								'textarea_name' => $key,
+								'textarea_rows' => 10,
+								'media_buttons' => false,
+								'tinymce'       => false,
+								'teeny'         => true,
+								'quicktags'     => false,
+							)
+						);
+						$form_html .= ob_get_clean();
+					} else {
+						$textarea_value = wp_kses_post( $post_value );
+						$textarea_value = str_ireplace( '</textarea>', '&lt;/textarea&gt;', $textarea_value );
+						$form_html .= '<textarea class="form-control cf_textarea_wysiwyg" name="' . esc_attr( $key ) . '" cols="70" rows="3">' . $textarea_value . '</textarea>';
+					}
 
 				} elseif ( $value['type'] == 'select' ) {
 					$form_html .= '<select id="' . esc_attr( $key ) . '" class="form-control" name="' . esc_attr( $key ) . '"  >';
@@ -255,7 +316,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					// .media_btn がトリガーでメディアアップローダーが起動する
 					// id名から media_ を削除した id 名の input 要素に返り値が反映される。
 					// id名が media_src_ で始まる場合はURLを返す
-					$form_html .= '<button id="media_' . esc_attr( $key ) . '" class="cfb_media_btn btn btn-default button button-default">' . esc_html__( 'Choose Image', 'vk-google-job-posting-manager' ) . '</button> ';
+					$form_html .= '<button type="button" id="media_' . esc_attr( $key ) . '" class="cfb_media_btn btn btn-default button button-default">' . esc_html__( 'Choose Image', 'vk-google-job-posting-manager' ) . '</button> ';
 
 					// 削除ボタン
 					// ボタンタグだとその場でページが再読込されてしまうのでaタグに変更
@@ -271,9 +332,9 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					}
 
 					$form_html .= '<input name="' . esc_attr( $key ) . '" id="' . esc_attr( $key ) . '" value="' . esc_attr( $post_value ) . '" style="width:60%;" />
-<button id="media_src_' . esc_attr( $key ) . '" class="cfb_media_btn btn btn-default button button-default">' . esc_html__( 'Select file', 'vk-google-job-posting-manager' ) . '</button> ';
+<button type="button" id="media_src_' . esc_attr( $key ) . '" class="cfb_media_btn btn btn-default button button-default">' . esc_html__( 'Select file', 'vk-google-job-posting-manager' ) . '</button> ';
 					if ( $post_value ) {
-						$form_html .= '<a href="' . esc_url( $post_value ) . '" target="_blank" class="btn btn-default button button-default">' . __( 'View file', 'vk-google-job-posting-manager' ) . '</a>';
+						$form_html .= '<a href="' . esc_url( $post_value ) . '" target="_blank" rel="noopener noreferrer" class="btn btn-default button button-default">' . esc_html__( 'View file', 'vk-google-job-posting-manager' ) . '</a>';
 					}
 				}
 				if ( $value['description'] ) {
@@ -311,7 +372,8 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 			// 自動保存ルーチンかどうかチェック。そうだった場合は何もしない（記事の自動保存処理として呼び出された場合の対策）
 			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-				return $post_id; }
+				return;
+			}
 
 			foreach ( $custom_fields_array as $key => $value ) {
 
@@ -379,6 +441,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					'value' => true,
 					'size'  => true,
 					'checked' => true,
+					'style' => true,
 				),
 				'textarea' => array(
 					'name'  => true,
@@ -388,9 +451,9 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 				),
 				'select' => array( 'id' => true, 'name' => true, 'class' => true ),
 				'option' => array( 'value' => true, 'selected' => true ),
-				'button' => array( 'id' => true, 'class' => true ),
+				'button' => array( 'id' => true, 'class' => true, 'type' => true ),
 				'img'    => array( 'src' => true, 'id' => true, 'alt' => true, 'class' => true, 'style' => true ),
-				'a'      => array( 'href' => true, 'target' => true, 'class' => true ),
+				'a'      => array( 'href' => true, 'target' => true, 'class' => true, 'rel' => true, 'id' => true ),
 			);
 		}
 	} // class Vk_custom_field_builder
