@@ -164,7 +164,7 @@ class VK_Custom_Field_Builder_Flexible_Table {
 		if ( isset( $_POST[ $field ] ) ) {
 			$field_value = wp_unslash( $_POST[ $field ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized below.
 		}
-		$field_value = self::sanitize_field_value( $field_value );
+		$field_value = self::sanitize_field_value( $field_value, $custom_fields_array['items'] );
 
 		// 配列の空の行を削除する
 		if ( is_array( $field_value ) ) {
@@ -200,6 +200,7 @@ class VK_Custom_Field_Builder_Flexible_Table {
 				'name'  => true,
 				'value' => true,
 				'id'    => true,
+				'size'  => true,
 			),
 			'textarea' => array(
 				'name'  => true,
@@ -212,12 +213,27 @@ class VK_Custom_Field_Builder_Flexible_Table {
 		);
 	}
 
-	private static function sanitize_field_value( $value ) {
+	private static function sanitize_field_value( $value, $field_config = null ) {
 		if ( is_array( $value ) ) {
 			foreach ( $value as $key => $item ) {
-				$value[ $key ] = self::sanitize_field_value( $item );
+				$item_config   = null;
+				if ( is_array( $field_config ) && isset( $field_config[ $key ] ) ) {
+					$item_config = $field_config[ $key ];
+				} else {
+					$item_config = $field_config;
+				}
+				$value[ $key ] = self::sanitize_field_value( $item, $item_config );
 			}
 			return $value;
+		}
+
+		if ( is_array( $field_config ) && isset( $field_config['type'] ) ) {
+			switch ( $field_config['type'] ) {
+				case 'textarea':
+					return wp_kses_post( $value );
+				case 'url':
+					return esc_url_raw( $value );
+			}
 		}
 
 		return sanitize_text_field( $value );

@@ -47,7 +47,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					$media_uploader_exclude = apply_filters_deprecated(
 						'cfb_media_uploader_exclude',
 						array( $media_uploader_exclude ),
-						VGJPM_VERSION,
+						self::$version,
 						'vgjpm_cfb_media_uploader_exclude'
 					);
 				} else {
@@ -75,7 +75,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					$cfb_flexible_table_excludes = apply_filters_deprecated(
 						'cfb_flexible_table_excludes',
 						array( $cfb_flexible_table_excludes ),
-						VGJPM_VERSION,
+						self::$version,
 						'vgjpm_cfb_flexible_table_excludes'
 					);
 				} else {
@@ -99,7 +99,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					$cfb_jquery_ui_excludes = apply_filters_deprecated(
 						'cfb_jquery_ui_excludes',
 						array( $cfb_jquery_ui_excludes ),
-						VGJPM_VERSION,
+						self::$version,
 						'vgjpm_cfb_jquery_ui_excludes'
 					);
 				} else {
