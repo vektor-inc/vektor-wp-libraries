@@ -732,7 +732,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			if ( isset( $_GET['post'] ) && $_GET['post'] === get_option( 'page_for_posts' ) && 'page' === get_option( 'show_on_front' ) ) {
 				return;
 			}
-			add_meta_box( 'vk_page_header_meta_box', __( 'Page Header Image', 'vk_page_header_textdomain' ), array( $this, 'vk_page_header_meta_box_content' ), 'page', 'normal', 'high' );
+			add_meta_box( 'vk_page_header_meta_box', __( 'Page Header Image', 'vk_page_header_textdomain' ), array( $this, 'vk_page_header_meta_box_content' ), 'page', 'normal', 'high', array( '__back_compat_meta_box' => true ) );
 		}
 
 		public function vk_page_header_meta_box_content() {
