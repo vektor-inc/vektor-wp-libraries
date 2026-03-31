@@ -33,7 +33,7 @@ class Flexible_Table_Sample {
 		$screen        = 'vk-managing-patterns';
 		$context       = 'advanced';
 		$priority      = 'high';
-		$callback_args = array( '__back_compat_meta_box' => true );
+		$callback_args = array( '__back_compat_meta_box' => false );
 
 		add_meta_box( $id, $title, $callback, $screen, $context, $priority, $callback_args );
 
