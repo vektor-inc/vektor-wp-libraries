@@ -130,6 +130,14 @@ var PageHeaderImagePanel = function () {
 	var pageHeaderImage = ( meta && meta.vk_page_header_image ) || 0;
 	var pageHeaderImageSp = ( meta && meta.vk_page_header_image_sp ) || 0;
 
+	// Helper to update a single meta key.
+	// 単一のメタキーを更新するヘルパー。
+	var updateMetaValue = function ( key, value ) {
+		var newMeta = Object.assign( {}, meta );
+		newMeta[ key ] = value;
+		setMeta( newMeta );
+	};
+
 	return createElement(
 		PluginDocumentSettingPanel,
 		{
@@ -140,9 +148,7 @@ var PageHeaderImagePanel = function () {
 			label: i18n.pageHeaderBg || 'Page header bg image',
 			imageId: pageHeaderImage,
 			onChange: function ( value ) {
-				var newMeta = Object.assign( {}, meta );
-				newMeta.vk_page_header_image = value;
-				setMeta( newMeta );
+				updateMetaValue( 'vk_page_header_image', value );
 			},
 		} ),
 		createElement( ImageUploadField, {
@@ -153,9 +159,7 @@ var PageHeaderImagePanel = function () {
 				' )',
 			imageId: pageHeaderImageSp,
 			onChange: function ( value ) {
-				var newMeta = Object.assign( {}, meta );
-				newMeta.vk_page_header_image_sp = value;
-				setMeta( newMeta );
+				updateMetaValue( 'vk_page_header_image_sp', value );
 			},
 		} )
 	);
