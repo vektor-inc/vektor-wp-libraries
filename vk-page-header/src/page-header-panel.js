@@ -127,8 +127,8 @@ var PageHeaderImagePanel = function () {
 	var meta = entityProp[ 0 ];
 	var setMeta = entityProp[ 1 ];
 
-	var pageHeaderImage = meta && meta.vk_page_header_image ? meta.vk_page_header_image : 0;
-	var pageHeaderImageSp = meta && meta.vk_page_header_image_sp ? meta.vk_page_header_image_sp : 0;
+	var pageHeaderImage = ( meta && meta.vk_page_header_image ) || 0;
+	var pageHeaderImageSp = ( meta && meta.vk_page_header_image_sp ) || 0;
 
 	return createElement(
 		PluginDocumentSettingPanel,
