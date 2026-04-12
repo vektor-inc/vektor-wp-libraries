@@ -849,9 +849,9 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					'pageHeaderTitle' => __( 'Page Header Image', 'vk_page_header_textdomain' ),
 					'pageHeaderBg'    => __( 'Page header bg image', 'vk_page_header_textdomain' ),
 					'mobile'          => __( 'Mobile', 'vk_page_header_textdomain' ),
-					'selectImage'     => __( 'Select image', 'vk_page_header_textdomain' ),
-					'changeImage'     => __( 'Change image', 'vk_page_header_textdomain' ),
-					'removeImage'     => __( 'Remove image', 'vk_page_header_textdomain' ),
+					'selectImage'     => __( 'Select image' ),
+					'changeImage'     => __( 'Change image' ),
+					'removeImage'     => __( 'Remove image' ),
 				)
 			);
 		}
