@@ -774,7 +774,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					'single'            => true,
 					'show_in_rest'      => true,
 					'auth_callback'     => function () {
-						return current_user_can( 'edit_posts' );
+						return current_user_can( 'edit_pages' );
 					},
 					'sanitize_callback' => 'absint',
 					'default'           => 0,
@@ -789,7 +789,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					'single'            => true,
 					'show_in_rest'      => true,
 					'auth_callback'     => function () {
-						return current_user_can( 'edit_posts' );
+						return current_user_can( 'edit_pages' );
 					},
 					'sanitize_callback' => 'absint',
 					'default'           => 0,
@@ -811,7 +811,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				return;
 			}
 
-			$script_dir = dirname( __FILE__ );
+			$script_dir = wp_normalize_path( dirname( __FILE__ ) );
 			$script_path = $script_dir . '/js/vk-page-header-panel.min.js';
 			if ( ! file_exists( $script_path ) ) {
 				return;
@@ -820,7 +820,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			// Determine the URL base depending on whether we are in a theme or a plugin.
 			// テーマかプラグインかに応じて URL のベースを決定する。
 			$script_url = '';
-			$theme_dir  = get_template_directory();
+			$theme_dir  = wp_normalize_path( get_template_directory() );
 			if ( strpos( $script_dir, $theme_dir ) !== false ) {
 				// Inside a theme.
 				// テーマ内の場合。
@@ -829,7 +829,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			} else {
 				// Inside a plugin or wp-content direct.
 				// プラグインまたは wp-content 直下の場合。
-				$content_dir = WP_CONTENT_DIR;
+				$content_dir = wp_normalize_path( WP_CONTENT_DIR );
 				$relative    = str_replace( $content_dir, '', $script_dir );
 				$script_url  = content_url( $relative . '/js/vk-page-header-panel.min.js' );
 			}
