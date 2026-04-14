@@ -98,10 +98,6 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			// Enqueue block editor panel script.
 			// ブロックエディタのサイドバーパネル用スクリプトを読み込む。
 			add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_page_header_panel' ) );
-			// Hide legacy metabox on block editor screens (native panel replaces it).
-			// Classic Editor ユーザーには旧メタボックスが残る。
-			// ブロックエディタ画面ではネイティブパネルが代替するため旧メタボックスを非表示にする。
-			add_action( 'add_meta_boxes', array( $this, 'remove_legacy_metabox_on_block_editor' ), 20 );
 		}
 
 
@@ -735,6 +731,14 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		/*-------------------------------------------*/
 		/* static にすると環境によってmetabox内のコールバック関数が反応しない */
 		public function add_pagehead_setting_meta_box() {
+			// Skip on block editor screens - the native sidebar panel replaces the metabox.
+			// Classic Editor users still see the metabox.
+			// ブロックエディタ画面ではネイティブパネルが代替するため登録しない。
+			// クラシックエディタのユーザーには従来のメタボックスがそのまま表示される。
+			$screen = get_current_screen();
+			if ( $screen && $screen->is_block_editor ) {
+				return;
+			}
 			// 投稿トップは固定ページでなくアーカイプページ判定されるので、
 			// 投稿トップにわりあてた固定ページで指定したカラム数は反映されない。
 			// よって、誤解を避けるためにレイアウト設定を含む Lightningデザイン設定のmetabox自体表示しないようにする
@@ -742,25 +746,6 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				return;
 			}
 			add_meta_box( 'vk_page_header_meta_box', __( 'Page Header Image', 'vk_page_header_textdomain' ), array( $this, 'vk_page_header_meta_box_content' ), 'page', 'normal', 'high', array( '__back_compat_meta_box' => true ) );
-		}
-
-		/**
-		 * Remove the legacy metabox on block editor screens.
-		 * ブロックエディタ画面では旧メタボックスを非表示にする。
-		 *
-		 * The new sidebar panel replaces the metabox in the block editor.
-		 * Classic Editor users will still see the original metabox.
-		 * 新しいサイドバーパネルがブロックエディタでメタボックスの代わりになる。
-		 * クラシックエディタのユーザーには従来のメタボックスがそのまま表示される。
-		 *
-		 * @return void
-		 */
-		public function remove_legacy_metabox_on_block_editor() {
-			$screen = get_current_screen();
-			if ( ! $screen || ! $screen->is_block_editor ) {
-				return;
-			}
-			remove_meta_box( 'vk_page_header_meta_box', 'page', 'normal' );
 		}
 
 		public function vk_page_header_meta_box_content() {
@@ -844,7 +829,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			// テーマかプラグインかに応じて URL のベースを決定する。
 			$script_url = '';
 			$theme_dir  = wp_normalize_path( get_template_directory() );
-			if ( strpos( $script_dir, $theme_dir ) !== false ) {
+			if ( 0 === strpos( $script_dir, $theme_dir ) ) {
 				// Inside a theme.
 				// テーマ内の場合。
 				$relative   = str_replace( $theme_dir, '', $script_dir );
