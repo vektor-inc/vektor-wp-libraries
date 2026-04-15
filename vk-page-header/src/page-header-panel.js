@@ -107,23 +107,15 @@ var ImageUploadField = function ( props ) {
 };
 
 /**
- * Page Header Image panel component.
- * ページヘッダー画像パネルコンポーネント。
+ * Page Header Image panel body. All hooks here are called unconditionally.
+ * ページヘッダー画像パネル本体。Hook は無条件で呼ばれる。
  *
- * @return {Object|null} React element or null if not a page.
+ * @param {Object} props - Component props.
+ * @param {string} props.postType - Current post type (guaranteed non-null by parent).
+ * @return {Object} React element.
  */
-var PageHeaderImagePanel = function () {
-	var postType = useSelect( function ( select ) {
-		return select( 'core/editor' ).getCurrentPostType();
-	}, [] );
-
-	// Only display on page post type.
-	// 固定ページでのみ表示する。
-	if ( postType !== 'page' ) {
-		return null;
-	}
-
-	var entityProp = useEntityProp( 'postType', postType, 'meta' );
+var PageHeaderImagePanelBody = function ( props ) {
+	var entityProp = useEntityProp( 'postType', props.postType, 'meta' );
 	var meta = entityProp[ 0 ];
 	var setMeta = entityProp[ 1 ];
 
@@ -163,6 +155,29 @@ var PageHeaderImagePanel = function () {
 			},
 		} )
 	);
+};
+
+/**
+ * Page Header Image panel component (parent).
+ * ページヘッダー画像パネルの親コンポーネント。
+ *
+ * トップレベルで useSelect のみを呼び、postType チェック後に
+ * Body コンポーネントに委譲することで Rules of Hooks に準拠する。
+ *
+ * @return {Object|null} React element or null if not a page.
+ */
+var PageHeaderImagePanel = function () {
+	var postType = useSelect( function ( select ) {
+		return select( 'core/editor' ).getCurrentPostType();
+	}, [] );
+
+	// Only display on page post type.
+	// 固定ページでのみ表示する。
+	if ( postType !== 'page' ) {
+		return null;
+	}
+
+	return createElement( PageHeaderImagePanelBody, { postType: postType } );
 };
 
 registerPlugin( 'vk-page-header-image-panel', {
