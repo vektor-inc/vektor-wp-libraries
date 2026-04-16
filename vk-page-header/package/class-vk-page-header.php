@@ -838,8 +838,19 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				// Inside a plugin or wp-content direct.
 				// プラグインまたは wp-content 直下の場合。
 				$content_dir = wp_normalize_path( WP_CONTENT_DIR );
-				$relative    = str_replace( $content_dir, '', $script_dir );
-				$script_url  = content_url( $relative . '/js/vk-page-header-panel.min.js' );
+				// Skip when outside WP_CONTENT_DIR (e.g. symlinked), as URL cannot be derived.
+				// WP_CONTENT_DIR 外（シンボリックリンク等）の場合はURL生成不可のためスキップ。
+				if ( 0 !== strpos( $script_dir, $content_dir ) ) {
+					return;
+				}
+				$relative   = str_replace( $content_dir, '', $script_dir );
+				$script_url = content_url( $relative . '/js/vk-page-header-panel.min.js' );
+			}
+
+			// Abort enqueue if URL could not be resolved safely.
+			// URL が解決できなかった場合は安全側に倒して読み込みを中止する。
+			if ( empty( $script_url ) ) {
+				return;
 			}
 
 			wp_enqueue_script(
