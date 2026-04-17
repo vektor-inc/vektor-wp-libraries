@@ -267,7 +267,10 @@ gulp.task('watch_compo', function () {
 /*-------------------------------------*/
 gulp.task('copy_page-header', function (done) {
 	gulp.src('./vk-page-header/package/**')
+		.pipe(replace("'vk_page_header_textdomain'", "'katawara'"))
 		.pipe(gulp.dest('../themes/katawara/inc/vk-page-header/package/'))
+	gulp.src('./vk-page-header/package/**')
+		.pipe(replace("'vk_page_header_textdomain'", "'lightning-pro'"))
 		.pipe(gulp.dest('../themes/lightning-pro/inc/vk-page-header/package/'))
 	done();
 });

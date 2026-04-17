@@ -8,6 +8,7 @@
 		"gulp": "gulp",
 		"sass_vk-mobile-nav": "gulp sass_vk-mobile-nav",
 		"jsmin_vk-mobile-nav": "webpack --config webpack/vk-mobile-nav.config.js",
+		"build_vk-page-header-panel": "webpack --config webpack/vk-page-header.config.js",
 		"mobile": "gulp watch_mobile"
 	},
 	"repository": {
