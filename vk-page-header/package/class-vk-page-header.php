@@ -92,7 +92,12 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			add_action( 'wp_head', array( $this, 'dynamic_header_css' ), 5 );
 			add_action( 'add_meta_boxes', array( $this, 'add_pagehead_setting_meta_box' ) );
 			add_action( 'save_post', array( $this, 'save_custom_fields' ), 10, 2 );
-
+			// Register meta for REST API access (block editor native panel).
+			// ブロックエディタのネイティブパネルから読み書きするためにメタキーを REST API に公開する。
+			add_action( 'init', array( $this, 'register_page_header_meta' ) );
+			// Enqueue block editor panel script.
+			// ブロックエディタのサイドバーパネル用スクリプトを読み込む。
+			add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_page_header_panel' ) );
 		}
 
 
@@ -726,6 +731,14 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		/*-------------------------------------------*/
 		/* static にすると環境によってmetabox内のコールバック関数が反応しない */
 		public function add_pagehead_setting_meta_box() {
+			// Skip on block editor screens - the native sidebar panel replaces the metabox.
+			// Classic Editor users still see the metabox.
+			// ブロックエディタ画面ではネイティブパネルが代替するため登録しない。
+			// クラシックエディタのユーザーには従来のメタボックスがそのまま表示される。
+			$screen = get_current_screen();
+			if ( $screen && $screen->is_block_editor ) {
+				return;
+			}
 			// 投稿トップは固定ページでなくアーカイプページ判定されるので、
 			// 投稿トップにわりあてた固定ページで指定したカラム数は反映されない。
 			// よって、誤解を避けるためにレイアウト設定を含む Lightningデザイン設定のmetabox自体表示しないようにする
@@ -750,6 +763,116 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				$custom_fields_array = self::custom_fields_array();
 				VK_Custom_Field_Builder::save_cf_value( $custom_fields_array );
 			}
+		}
+
+		/**
+		 * Register post meta for REST API access.
+		 * ブロックエディタのサイドバーパネルから読み書きするためにメタキーを REST API に公開する。
+		 *
+		 * @return void
+		 */
+		public function register_page_header_meta() {
+			// Page header images (page post type only).
+			// ページヘッダー画像（固定ページのみ）。
+			register_post_meta(
+				'page',
+				'vk_page_header_image',
+				array(
+					'type'              => 'integer',
+					'single'            => true,
+					'show_in_rest'      => true,
+					'auth_callback'     => function () {
+						return current_user_can( 'edit_pages' );
+					},
+					'sanitize_callback' => 'absint',
+					'default'           => 0,
+				)
+			);
+
+			register_post_meta(
+				'page',
+				'vk_page_header_image_sp',
+				array(
+					'type'              => 'integer',
+					'single'            => true,
+					'show_in_rest'      => true,
+					'auth_callback'     => function () {
+						return current_user_can( 'edit_pages' );
+					},
+					'sanitize_callback' => 'absint',
+					'default'           => 0,
+				)
+			);
+		}
+
+		/**
+		 * Enqueue block editor panel script for page header image.
+		 * ページヘッダー画像のサイドバーパネル用スクリプトを読み込む。
+		 *
+		 * @return void
+		 */
+		public function enqueue_page_header_panel() {
+			$current_screen = get_current_screen();
+			// Only load on page edit screen.
+			// 固定ページの編集画面でのみ読み込む。
+			if ( ! $current_screen || 'page' !== $current_screen->post_type ) {
+				return;
+			}
+
+			$script_dir = wp_normalize_path( dirname( __FILE__ ) );
+			$script_path = $script_dir . '/js/vk-page-header-panel.min.js';
+			if ( ! file_exists( $script_path ) ) {
+				return;
+			}
+
+			// Determine the URL base depending on whether we are in a theme or a plugin.
+			// テーマかプラグインかに応じて URL のベースを決定する。
+			$script_url = '';
+			$theme_dir  = wp_normalize_path( get_template_directory() );
+			if ( 0 === strpos( $script_dir, $theme_dir ) ) {
+				// Inside a theme.
+				// テーマ内の場合。
+				$relative   = str_replace( $theme_dir, '', $script_dir );
+				$script_url = get_template_directory_uri() . $relative . '/js/vk-page-header-panel.min.js';
+			} else {
+				// Inside a plugin or wp-content direct.
+				// プラグインまたは wp-content 直下の場合。
+				$content_dir = wp_normalize_path( WP_CONTENT_DIR );
+				// Skip when outside WP_CONTENT_DIR (e.g. symlinked), as URL cannot be derived.
+				// WP_CONTENT_DIR 外（シンボリックリンク等）の場合はURL生成不可のためスキップ。
+				if ( 0 !== strpos( $script_dir, $content_dir ) ) {
+					return;
+				}
+				$relative   = str_replace( $content_dir, '', $script_dir );
+				$script_url = content_url( $relative . '/js/vk-page-header-panel.min.js' );
+			}
+
+			// Abort enqueue if URL could not be resolved safely.
+			// URL が解決できなかった場合は安全側に倒して読み込みを中止する。
+			if ( empty( $script_url ) ) {
+				return;
+			}
+
+			wp_enqueue_script(
+				'vk-page-header-panel',
+				$script_url,
+				array( 'wp-plugins', 'wp-edit-post', 'wp-element', 'wp-components', 'wp-data', 'wp-core-data', 'wp-block-editor' ),
+				filemtime( $script_path ),
+				true
+			);
+
+			wp_localize_script(
+				'vk-page-header-panel',
+				'vkPageHeaderPanelI18n',
+				array(
+					'pageHeaderTitle' => __( 'Page Header Image', 'vk_page_header_textdomain' ),
+					'pageHeaderBg'    => __( 'Page header bg image', 'vk_page_header_textdomain' ),
+					'mobile'          => __( 'Mobile', 'vk_page_header_textdomain' ),
+					'selectImage'     => __( 'Select image' ),
+					'changeImage'     => __( 'Change image' ),
+					'removeImage'     => __( 'Remove image' ),
+				)
+			);
 		}
 
 		public static function custom_fields_array() {
