@@ -1,4 +1,13 @@
 <?php
+/**
+ * Custom Field Builder の利用サンプル
+ *
+ * このファイルは Custom Field Builder（custom-field-builder/）の使い方を示す
+ * サンプルコードです。ライブラリ本体や config からは読み込まれません。
+ * カスタムフィールドを追加する際の記述例として参照してください。
+ *
+ * @package vektor-wp-libraries
+ */
 class Flexible_Table_Sample {
 
 	public static $custom_fields_array = array(
