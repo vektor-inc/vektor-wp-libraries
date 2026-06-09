@@ -39,12 +39,20 @@ If you want to change this file that, you have to change original file.
 	/*  Functions
 	/*-------------------------------------*/
 
-	// モバイルデバイスの判定
+	/**
+	 * モバイルデバイスかどうかを判定する。
+	 *
+	 * @return {boolean} モバイルデバイスの UserAgent なら true。
+	 */
 	VkMobileNav.isMobileDevice = function() {
 		return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 	}
 
-	// デバイスクラスの付与
+	/**
+	 * 判定結果に応じて body にデバイスクラス（device-mobile / device-pc）を付与する。
+	 *
+	 * @return {void}
+	 */
 	VkMobileNav.addDeviceClass = function() {
 		// モバイルデバイスの場合は body に device-mobile クラスを追加
 		// モバイルデバイスでない場合は body に device-pc クラスを追加
@@ -55,7 +63,11 @@ If you want to change this file that, you have to change original file.
 		document.body.classList.add(deviceClass);
 	}
 
-	// メニューを開く
+	/**
+	 * メニューを開き、開いた状態を支援技術へ伝える（aria-expanded=true）。
+	 *
+	 * @return {void}
+	 */
 	VkMobileNav.openMenu = function() {
 
 		// メニューボタンに .menu-open クラスを付与
@@ -72,7 +84,11 @@ If you want to change this file that, you have to change original file.
 
 	}
 
-	// メニューを閉じる
+	/**
+	 * メニューを閉じ、閉じた状態を支援技術へ伝える（aria-expanded=false）。
+	 *
+	 * @return {void}
+	 */
 	VkMobileNav.closeMenu = function() {
 
 		if (VkMobileNav.menuBtn) {
@@ -94,7 +110,12 @@ If you want to change this file that, you have to change original file.
 	// HTML要素の読み込みが完了してから実行
 	window.addEventListener('DOMContentLoaded', () => {
 
-		// 初期設定
+		/**
+		 * 初期設定。デバイスクラス付与・要素取得を行い、
+		 * メニューボタンに aria 属性・キーボード操作用属性が欠落していれば補完する。
+		 *
+		 * @return {void}
+		 */
 		const init = () => {
 			// デバイスクラスの付与
 			VkMobileNav.addDeviceClass();
@@ -128,7 +149,13 @@ If you want to change this file that, you have to change original file.
 			}
 		};
 
-		// メニュー開閉ボタンの開閉トグル（click / keydown で共通利用）
+		/**
+		 * メニュー開閉ボタンの開閉トグル（click / keydown で共通利用）。
+		 * 開いていれば閉じ、閉じていれば開く。
+		 *
+		 * @param {HTMLElement} [targetBtn] 判定対象のボタン要素。省略時は取得済みの menuBtn を使う。
+		 * @return {void}
+		 */
 		VkMobileNav.toggleMenu = function(targetBtn) {
 			// 引数が無い場合は取得済みの menuBtn を使う
 			const btn = targetBtn || VkMobileNav.menuBtn;
@@ -194,7 +221,13 @@ If you want to change this file that, you have to change original file.
 	/*-------------------------------------*/
 	/*  sub item accordion
 	/*-------------------------------------*/
-	// 子階層のアコーディオンを有効にする
+	/**
+	 * 子階層のアコーディオンを有効にする。
+	 * 開閉ボタン（.acc-btn）を生成して aria 属性・キーボード操作用属性を付与し、
+	 * click / keydown（Enter・Space）で開閉できるようにする。
+	 *
+	 * @return {void}
+	 */
 	VkMobileNav.runAcc = function() {
 
 		// 子階層をアコーディオンにするメニュー（ul.vk-menu-acc）に対して、.vk-menu-acc-active クラスを付与
@@ -242,7 +275,12 @@ If you want to change this file that, you have to change original file.
 		});
 	}
 
-	// 子階層のアコーディオン開閉ボタンがクリックされた時の処理
+	/**
+	 * 子階層のアコーディオンを開閉し、開閉状態を支援技術へ伝える（aria-expanded を同期）。
+	 *
+	 * @param {HTMLElement} subMenu 開閉対象の子階層 ul.sub-menu 要素。
+	 * @return {void}
+	 */
 	VkMobileNav.accAction = function(subMenu) {
 		// subMenu の前要素の .acc-btn を取得して accBtn に格納
 		const accBtn = subMenu.previousElementSibling;
@@ -273,7 +311,11 @@ If you want to change this file that, you have to change original file.
 		}
 	}
 
-	// 子階層のアコーディオンクラスをリセット
+	/**
+	 * 子階層のアコーディオン関連クラスをすべてリセットする。
+	 *
+	 * @return {void}
+	 */
 	VkMobileNav.resetAccordion = function() {
 		const accMenus = document.querySelectorAll('ul.vk-menu-acc');
 		accMenus.forEach((elm) => {
