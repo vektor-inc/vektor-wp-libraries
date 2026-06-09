@@ -92,16 +92,31 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 			}
 
 			$menu_btn_text = apply_filters( 'vk_mobile_nav_menu_btn_text', __( 'MENU', 'vk_mobile_nav_textdomain' ) );
-			$menu_btn      = '<div id="vk-mobile-nav-menu-btn" class="vk-mobile-nav-menu-btn' . $btn_additional_class . '">' . $menu_btn_text . '</div>';
+			// aria-expanded / aria-controls をマークアップ側で初期付与する。
+			// 属性が無いと「状態欠落」扱いになり、JS 初期化前に支援技術へ状態が伝わらないため必ず付与する。
+			// aria-controls はメニュー本体の固定 id（vk-mobile-nav）を素の値で参照する。
+			// role="button" / tabindex="0" を付与し、div のままキーボードフォーカス・操作を可能にする。
+			// （button 化は .vk-mobile-nav-menu-btn セレクタへの CSS 波及が読めないため div + role 方式を採用）
+			$menu_btn = '<div id="vk-mobile-nav-menu-btn" class="vk-mobile-nav-menu-btn' . $btn_additional_class . '" role="button" tabindex="0" aria-expanded="false" aria-controls="vk-mobile-nav">' . $menu_btn_text . '</div>';
+
+			// wp_kses_post() のグローバル属性には tabindex が含まれず、そのまま通すと
+			// キーボードフォーカス用の tabindex="0" が剥がされてしまう。
+			// そこで post 用許可属性をベースに、開閉ボタンの div へ tabindex を追加で許可する。
+			$menu_btn_allowed_html                         = wp_kses_allowed_html( 'post' );
+			$menu_btn_allowed_html['div']                  = isset( $menu_btn_allowed_html['div'] ) ? $menu_btn_allowed_html['div'] : array();
+			$menu_btn_allowed_html['div']['tabindex']      = true;
+			$menu_btn_allowed_html['div']['role']          = true;
+			$menu_btn_allowed_html['div']['aria-expanded'] = true;
+			$menu_btn_allowed_html['div']['aria-controls'] = true;
 
 			if ( class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 				$fix_nav_options = Vk_Mobile_Fix_Nav::get_options();
 				// fixナビ内にメニュー展開ボタンを表示しない || fixナビ自体を表示しない
 				if ( ! $fix_nav_options['add_menu_btn'] || $fix_nav_options['hidden'] ) {
-					echo wp_kses_post( $menu_btn );
+					echo wp_kses( $menu_btn, $menu_btn_allowed_html );
 				}
 			} else {
-				echo wp_kses_post( $menu_btn );
+				echo wp_kses( $menu_btn, $menu_btn_allowed_html );
 			}
 
 			echo '<div class="vk-mobile-nav vk-mobile-nav-' . esc_attr( $option['slide_type'] ) . '" id="vk-mobile-nav">';
@@ -165,6 +180,15 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 		public static function add_script() {
 			global $library_url;
 			wp_register_script( 'vk-mobile-nav-js', $library_url . '/js/vk-mobile-nav.min.js', array(), self::$version );
+			// JS 側で動的生成する子階層開閉ボタン（.acc-btn）はアイコンのみで表示テキストを持たないため、
+			// aria-label に使う翻訳済み文言を JS へ渡す。
+			wp_localize_script(
+				'vk-mobile-nav-js',
+				'vkMobileNavL10n',
+				array(
+					'openSubMenu' => __( 'Open submenu', 'vk_mobile_nav_textdomain' ),
+				)
+			);
 			wp_enqueue_script( 'vk-mobile-nav-js' );
 			wp_enqueue_style( 'vk-mobile-nav-css', $library_url . '/css/vk-mobile-nav-bright.css', array(), self::$version, 'all' );
 		}

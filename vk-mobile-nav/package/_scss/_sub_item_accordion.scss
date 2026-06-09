@@ -41,6 +41,13 @@
 		left: 4px;
 		font-size: 16px;
 	}
+	// キーボードフォーカス時の可視インジケータ（WCAG 2.4.7）。
+	// outline は削除せず :focus-visible でのみ表示する。既定色は currentColor とし、
+	// bright / dark で背景に応じた色を上書きする。
+	.acc-btn:focus-visible {
+		outline: 2px solid currentColor;
+		outline-offset: 2px;
+	}
 	.acc-btn-open {
 	}
 	.acc-btn-close {

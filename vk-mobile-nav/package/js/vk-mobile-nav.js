@@ -61,6 +61,8 @@ If you want to change this file that, you have to change original file.
 		// メニューボタンに .menu-open クラスを付与
 		if (VkMobileNav.menuBtn) {
 			VkMobileNav.menuBtn.classList.add('menu-open');
+			// 開いた状態を支援技術へ伝えるため aria-expanded を true に同期
+			VkMobileNav.menuBtn.setAttribute('aria-expanded', 'true');
 		}
 
 		// メニューに .vk-mobile-nav-open クラスを付与
@@ -76,6 +78,8 @@ If you want to change this file that, you have to change original file.
 		if (VkMobileNav.menuBtn) {
 			// ※ fix nav の方を押される事もある
 			VkMobileNav.menuBtn.classList.remove('menu-open');
+			// 閉じた状態を支援技術へ伝えるため aria-expanded を false に同期
+			VkMobileNav.menuBtn.setAttribute('aria-expanded', 'false');
 		}
 
 		// メニューから .vk-mobile-nav-open クラスを削除
@@ -104,6 +108,41 @@ If you want to change this file that, you have to change original file.
 				console.error('Required elements not found');
 				return;
 			}
+
+			// aria 属性・キーボード操作用属性のフォールバック付与
+			// 通常は PHP 側マークアップで初期付与されるが、固定ナビ側など別経路でボタンが
+			// 描画され属性が欠落している場合に備え、未設定なら初期状態を補完する。
+			if (!VkMobileNav.menuBtn.hasAttribute('aria-expanded')) {
+				VkMobileNav.menuBtn.setAttribute('aria-expanded', 'false');
+			}
+			if (!VkMobileNav.menuBtn.hasAttribute('aria-controls')) {
+				VkMobileNav.menuBtn.setAttribute('aria-controls', 'vk-mobile-nav');
+			}
+			// div 要素はそのままではキーボードフォーカス・操作ができないため、
+			// role="button" / tabindex="0" が欠落していれば補完する。
+			if (!VkMobileNav.menuBtn.hasAttribute('role')) {
+				VkMobileNav.menuBtn.setAttribute('role', 'button');
+			}
+			if (!VkMobileNav.menuBtn.hasAttribute('tabindex')) {
+				VkMobileNav.menuBtn.setAttribute('tabindex', '0');
+			}
+		};
+
+		// メニュー開閉ボタンの開閉トグル（click / keydown で共通利用）
+		VkMobileNav.toggleMenu = function(targetBtn) {
+			// 引数が無い場合は取得済みの menuBtn を使う
+			const btn = targetBtn || VkMobileNav.menuBtn;
+			if (!btn) {
+				return;
+			}
+			// メニューボタンと本体のクラスを切り替える
+			if (btn.classList.contains('menu-open')) {
+				// 開いている場合 → 閉じる
+				VkMobileNav.closeMenu();
+			} else {
+				// 閉じている場合 → 開く
+				VkMobileNav.openMenu();
+			}
 		};
 
 		init();
@@ -117,13 +156,16 @@ If you want to change this file that, you have to change original file.
 		let button = document.getElementById('vk-mobile-nav-menu-btn');
 		if (button) {
 			button.addEventListener('click', () => {
-				// メニューボタンと本体のクラスを切り替える
-				if( button.classList.contains('menu-open') ){
-					// 開いている場合 → 閉じる
-					VkMobileNav.closeMenu();
-				}else{
-					// 閉じている場合 → 開く
-					VkMobileNav.openMenu();
+				// クリックでもキーボードでも同じトグル処理を共通化して呼ぶ
+				VkMobileNav.toggleMenu(button);
+			})
+			// キーボード操作対応：Enter / Space で開閉する。
+			// div + role="button" はネイティブボタンと違い Enter/Space で click が発火しないため、
+			// keydown を明示的に拾ってトグルする。Space は既定のページスクロールを抑止する。
+			button.addEventListener('keydown', (e) => {
+				if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+					e.preventDefault();
+					VkMobileNav.toggleMenu(button);
 				}
 			})
 		}
@@ -161,6 +203,16 @@ If you want to change this file that, you have to change original file.
 		// サブメニュー展開用のボタン要素 subMenuButton を span タグで定義して .acc-btn , .acc-btn-open クラスを付与
 		const subMenuButton = document.createElement('span');
 		subMenuButton.classList.add('acc-btn', 'acc-btn-open');
+		// .acc-btn はアイコンのみで表示テキストを持たないため、アクセシブルな名前を aria-label で付与する。
+		// 文言は PHP から渡される翻訳値を優先し、未提供時は英語フォールバックを使う。
+		const accBtnLabel = (window.vkMobileNavL10n && window.vkMobileNavL10n.openSubMenu) ? window.vkMobileNavL10n.openSubMenu : 'Open submenu';
+		subMenuButton.setAttribute('aria-label', accBtnLabel);
+		// 子階層は初期状態で閉じているため aria-expanded を false で初期化する。
+		subMenuButton.setAttribute('aria-expanded', 'false');
+		// span 要素はそのままではキーボードフォーカス・操作ができないため、
+		// role="button" / tabindex="0" を付与して到達・操作可能にする。
+		subMenuButton.setAttribute('role', 'button');
+		subMenuButton.setAttribute('tabindex', '0');
 		
 		// ul.vk-menu-acc ul.sub-menu がある場合（子階層をアコーディオンにするメニューの中に子階層がある場合）
 		accMenus.forEach((elm) => {
@@ -175,6 +227,15 @@ If you want to change this file that, you have to change original file.
 				// 追加した subMenuButton（.acc-btn） がクリックされたら VkMobileNav.accAction に .acc と subMenu の要素を渡して実行
 				subMenu.previousElementSibling.addEventListener('click', () => {
 					VkMobileNav.accAction(subMenu);
+				});
+				// キーボード操作対応：Enter / Space で click と同じ開閉処理を発火する。
+				// span + role="button" は Enter/Space で click が発火しないため keydown を明示的に拾う。
+				// Space は既定のページスクロールを抑止する。
+				subMenu.previousElementSibling.addEventListener('keydown', (e) => {
+					if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+						e.preventDefault();
+						VkMobileNav.accAction(subMenu);
+					}
 				});
 
 			});
@@ -193,6 +254,8 @@ If you want to change this file that, you have to change original file.
 			subMenu.classList.add('acc-child-open');
 			accBtn.classList.remove('acc-btn-open');
 			accBtn.classList.add('acc-btn-close');
+			// 子階層を開いた状態を支援技術へ伝えるため aria-expanded を true に同期
+			accBtn.setAttribute('aria-expanded', 'true');
 			// subMenu の親要素の li 要素に .acc-parent-open クラスを付与
 			subMenu.parentNode.classList.remove('acc-parent-close');
 			subMenu.parentNode.classList.add('acc-parent-open');
@@ -202,6 +265,8 @@ If you want to change this file that, you have to change original file.
 			subMenu.classList.add('acc-child-close');
 			accBtn.classList.remove('acc-btn-close');
 			accBtn.classList.add('acc-btn-open');
+			// 子階層を閉じた状態を支援技術へ伝えるため aria-expanded を false に同期
+			accBtn.setAttribute('aria-expanded', 'false');
 			// subMenu の親要素の li 要素に .acc-parent-open クラスを付与
 			subMenu.parentNode.classList.remove('acc-parent-open');
 			subMenu.parentNode.classList.add('acc-parent-close');
