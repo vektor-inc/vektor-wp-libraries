@@ -186,7 +186,7 @@ if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 				'vk-mobile-nav-js',
 				'vkMobileNavL10n',
 				array(
-					'openSubMenu' => __( 'Open submenu', 'vk_mobile_nav_textdomain' ),
+					'openSubMenu' => __( 'Submenu', 'vk_mobile_nav_textdomain' ),
 				)
 			);
 			wp_enqueue_script( 'vk-mobile-nav-js' );

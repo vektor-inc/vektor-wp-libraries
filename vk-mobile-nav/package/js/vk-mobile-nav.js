@@ -238,7 +238,7 @@ If you want to change this file that, you have to change original file.
 		subMenuButton.classList.add('acc-btn', 'acc-btn-open');
 		// .acc-btn はアイコンのみで表示テキストを持たないため、アクセシブルな名前を aria-label で付与する。
 		// 文言は PHP から渡される翻訳値を優先し、未提供時は英語フォールバックを使う。
-		const accBtnLabel = (window.vkMobileNavL10n && window.vkMobileNavL10n.openSubMenu) ? window.vkMobileNavL10n.openSubMenu : 'Open submenu';
+		const accBtnLabel = (window.vkMobileNavL10n && window.vkMobileNavL10n.openSubMenu) ? window.vkMobileNavL10n.openSubMenu : 'Submenu';
 		subMenuButton.setAttribute('aria-label', accBtnLabel);
 		// 子階層は初期状態で閉じているため aria-expanded を false で初期化する。
 		subMenuButton.setAttribute('aria-expanded', 'false');
