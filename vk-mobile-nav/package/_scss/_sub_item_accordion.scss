@@ -21,8 +21,18 @@
 		display: grid;
 		grid-template-columns: 1fr auto;
 	}
+	li.menu-item-has-children > a {
+		// タイトルを grid 全幅（1〜最終列）に張り、スキン由来の仕切り線（border-bottom）が
+		// 右端まで届くようにする。開閉ボタンは別途同じ行の 2 列目へ重ねるため、
+		// タイトル文字がボタンと重ならないよう右側に余白を確保する。
+		grid-column: 1 / -1;
+		grid-row: 1;
+		padding-right: 3em;
+	}
 	li.menu-item-has-children > .acc-btn {
-		// 絶対配置をやめて grid の 2 列目に配置し、縦中央に揃える。
+		// 絶対配置をやめて grid の 2 列目・1 行目にタイトルへ重ねて配置し、縦中央に揃える。
+		grid-column: 2;
+		grid-row: 1;
 		position: relative;
 		top: auto;
 		right: auto;
@@ -32,6 +42,7 @@
 	li.menu-item-has-children > ul.sub-menu {
 		// サブメニューは全幅で次の行に配置する。
 		grid-column: 1 / -1;
+		grid-row: 2;
 	}
 	.acc-btn {
 		position: absolute;
