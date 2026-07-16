@@ -591,8 +591,9 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 		static function add_style() {
 			$css_url  = self::style_url();
 			$css_path = wp_normalize_path( dirname( __FILE__ ) ) . '/css/vk-mobile-fix-nav.css';
-			// ファイルが存在すれば更新時刻を、存在しなければ従来のバージョン定数をフォールバックとして使う。
-			$css_version = file_exists( $css_path ) ? filemtime( $css_path ) : self::$version;
+			// ファイルの更新時刻を取得する。取得できなければ（存在しない・取得失敗）従来のバージョン定数をフォールバックとして使う。
+			$css_mtime   = file_exists( $css_path ) ? filemtime( $css_path ) : false;
+			$css_version = ( false !== $css_mtime ) ? $css_mtime : self::$version;
 			wp_enqueue_style( 'vk-mobile-fix-nav', $css_url, array(), $css_version, 'all' );
 		}
 
