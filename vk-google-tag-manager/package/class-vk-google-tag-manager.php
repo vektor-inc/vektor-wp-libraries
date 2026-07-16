@@ -19,9 +19,6 @@ if ( ! class_exists( 'Vk_Goole_Tag_Manager' ) ) {
 
 	class Vk_Goole_Tag_Manager {
 
-
-		public static $version = '0.0.0';
-
 		/*-------------------------------------------*/
 		/*	Customizer
 		/*-------------------------------------------*/

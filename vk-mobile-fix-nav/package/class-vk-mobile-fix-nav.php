@@ -580,9 +580,20 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 			return $css_url;
 		}
 
+		/**
+		 * フロント用CSSを読み込む。
+		 *
+		 * アセットのバージョンにCSSファイルの更新時刻（filemtime）を使うことで、
+		 * CSSを更新した際にブラウザキャッシュが自動で更新されるようにする。
+		 *
+		 * @return void
+		 */
 		static function add_style() {
-			$css_url = self::style_url();
-			wp_enqueue_style( 'vk-mobile-fix-nav', $css_url, array(), self::$version, 'all' );
+			$css_url  = self::style_url();
+			$css_path = wp_normalize_path( dirname( __FILE__ ) ) . '/css/vk-mobile-fix-nav.css';
+			// ファイルが存在すれば更新時刻を、存在しなければ従来のバージョン定数をフォールバックとして使う。
+			$css_version = file_exists( $css_path ) ? filemtime( $css_path ) : self::$version;
+			wp_enqueue_style( 'vk-mobile-fix-nav', $css_url, array(), $css_version, 'all' );
 		}
 
 		public static function css_tree_shaking_handles( $vk_css_tree_shaking_handles ) {
