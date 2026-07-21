@@ -54,7 +54,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 	class Vk_Mobile_Fix_Nav {
 
-		public static $version = '0.0.0';
+		public static $version = '0.1.0';
 
 		public function __construct() {
 
@@ -583,18 +583,15 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 		/**
 		 * フロント用CSSを読み込む。
 		 *
-		 * アセットのバージョンにCSSファイルの更新時刻（filemtime）を使うことで、
-		 * CSSを更新した際にブラウザキャッシュが自動で更新されるようにする。
+		 * アセットのバージョンにモジュールのバージョン（self::$version）を使うことで、
+		 * CSSを更新した際は $version を上げればブラウザキャッシュが更新される。
+		 * $version の上げ忘れは CI（version guard）で検知する。
 		 *
 		 * @return void
 		 */
 		static function add_style() {
-			$css_url  = self::style_url();
-			$css_path = wp_normalize_path( dirname( __FILE__ ) ) . '/css/vk-mobile-fix-nav.css';
-			// ファイルの更新時刻を取得する。取得できなければ（存在しない・取得失敗）従来のバージョン定数をフォールバックとして使う。
-			$css_mtime   = file_exists( $css_path ) ? filemtime( $css_path ) : false;
-			$css_version = ( false !== $css_mtime ) ? $css_mtime : self::$version;
-			wp_enqueue_style( 'vk-mobile-fix-nav', $css_url, array(), $css_version, 'all' );
+			$css_url = self::style_url();
+			wp_enqueue_style( 'vk-mobile-fix-nav', $css_url, array(), self::$version, 'all' );
 		}
 
 		public static function css_tree_shaking_handles( $vk_css_tree_shaking_handles ) {
