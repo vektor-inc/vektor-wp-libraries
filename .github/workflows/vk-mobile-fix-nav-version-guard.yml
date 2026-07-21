@@ -16,6 +16,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: vk-mobile-fix-nav のバージョン更新を確認する
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
