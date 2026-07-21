@@ -1,0 +1,29 @@
+name: vk-mobile-fix-nav version guard
+
+on:
+  pull_request:
+    paths:
+      - 'vk-mobile-fix-nav/package/css/**'
+      - 'vk-mobile-fix-nav/package/_scss/**'
+
+permissions:
+  contents: read
+
+jobs:
+  version-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: vk-mobile-fix-nav のバージョン更新を確認する
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          CLASS_FILE="vk-mobile-fix-nav/package/class-vk-mobile-fix-nav.php"
+          if git diff "$BASE_SHA" HEAD -- "$CLASS_FILE" | grep -qE '^\+[[:space:]]*public static \$version'; then
+            echo "OK: \$version が更新されています。"
+          else
+            echo "::error file=$CLASS_FILE::vk-mobile-fix-nav の CSS/SCSS を変更した場合は $CLASS_FILE の \$version を必ず更新してください（フロントCSSのキャッシュバスター用）。"
+            exit 1
+          fi
