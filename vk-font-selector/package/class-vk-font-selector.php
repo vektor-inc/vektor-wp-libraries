@@ -71,7 +71,7 @@ if ( ! class_exists( 'Vk_Font_Selector' ) ) {
 			add_action( 'wp_head', array( __CLASS__, 'dynamic_header_css' ), 5 );
 			add_action( 'wp_footer', array( __CLASS__, 'load_web_fonts' ) );
 			add_action( 'admin_footer', array( __CLASS__, 'load_web_fonts' ) );
-			add_action( 'enqueue_block_editor_assets', array( __CLASS__, 'dynamic_editor_css' ), 12 );
+			add_action( 'enqueue_block_assets', array( __CLASS__, 'dynamic_editor_css' ), 12 );
 		}
 
 		/**
@@ -478,6 +478,10 @@ if ( ! class_exists( 'Vk_Font_Selector' ) ) {
 		 * @return void
 		 */
 		public static function dynamic_editor_css() {
+			// enqueue_block_assets はフロントでも動くため、ブロックエディタでのみ読み込む.
+			if ( ! is_admin() ) {
+				return;
+			}
 
 			global $vk_font_selector_editor_style;
 			$options = get_option( 'vk_font_selector' );

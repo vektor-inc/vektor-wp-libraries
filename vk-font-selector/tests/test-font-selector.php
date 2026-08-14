@@ -8,6 +8,42 @@
 class VK_Font_Selector_Test extends WP_UnitTestCase {
 
 	/**
+	 * テスト前のオプション値.
+	 *
+	 * @var array
+	 */
+	private $original_font_option;
+
+	/**
+	 * テスト前のグローバル値.
+	 *
+	 * @var array
+	 */
+	private $original_globals;
+
+	/**
+	 * テストの前処理.
+	 */
+	public function setUp(): void {
+		parent::setUp();
+
+		$missing                    = new stdClass();
+		$original_font_option       = get_option( 'vk_font_selector', $missing );
+		$this->original_font_option = array(
+			'exists' => $missing !== $original_font_option,
+			'value'  => $original_font_option,
+		);
+
+		$this->original_globals = array();
+		foreach ( array( 'current_screen', 'vk_font_selector_editor_style' ) as $global_name ) {
+			$this->original_globals[ $global_name ] = array(
+				'exists' => array_key_exists( $global_name, $GLOBALS ),
+				'value'  => array_key_exists( $global_name, $GLOBALS ) ? $GLOBALS[ $global_name ] : null,
+			);
+		}
+	}
+
+	/**
 	 * Get font url
 	 */
 	public function test_get_web_fonts_url() {
@@ -72,6 +108,73 @@ class VK_Font_Selector_Test extends WP_UnitTestCase {
 			print 'return : ' . esc_attr( $return ) . PHP_EOL;
 			print 'correct : ' . esc_attr( $value['correct'] ) . PHP_EOL;
 			$this->assertEquals( $value['correct'], $return );
+		}
+	}
+
+	/**
+	 * Iframe 用アセット収集時にフォント設定の動的 CSS が含まれること.
+	 */
+	public function test__wp_get_iframed_editor_assets() {
+		update_option( 'vk_font_selector', array( 'title' => 'mincho' ) );
+		set_current_screen( 'post' );
+		$GLOBALS['vk_font_selector_editor_style'] = 'vk-font-selector-test';
+
+		wp_styles();
+		wp_scripts();
+		wp_register_style( 'vk-font-selector-test', false, array(), Vk_Font_Selector::$version );
+		add_action( 'enqueue_block_assets', array( $this, 'enqueue_test_editor_style' ), 10 );
+
+		$assets = _wp_get_iframed_editor_assets();
+
+		remove_action( 'enqueue_block_assets', array( $this, 'enqueue_test_editor_style' ), 10 );
+
+		$this->assertStringContainsString( '/* Font switch */', $assets['styles'] );
+		$this->assertStringContainsString( 'font-family:Hiragino Mincho ProN,"游明朝",serif;', $assets['styles'] );
+	}
+
+	/**
+	 * テスト用のスタイルを iframe の収集対象へ追加する.
+	 */
+	public function enqueue_test_editor_style() {
+		wp_enqueue_style( 'vk-font-selector-test' );
+	}
+
+	/**
+	 * 公開画面では編集画面用の動的 CSS を追加しないこと.
+	 */
+	public function test_dynamic_editor_css_on_front() {
+		update_option( 'vk_font_selector', array( 'title' => 'mincho' ) );
+		set_current_screen( 'front' );
+		$GLOBALS['vk_font_selector_editor_style'] = 'vk-font-selector-test';
+
+		wp_register_style( 'vk-font-selector-test', false, array(), Vk_Font_Selector::$version );
+		Vk_Font_Selector::dynamic_editor_css();
+
+		$this->assertFalse( wp_styles()->get_data( 'vk-font-selector-test', 'after' ) );
+	}
+
+	/**
+	 * テストの後処理.
+	 */
+	public function tearDown(): void {
+		remove_action( 'enqueue_block_assets', array( $this, 'enqueue_test_editor_style' ), 10 );
+		wp_dequeue_style( 'vk-font-selector-test' );
+		wp_deregister_style( 'vk-font-selector-test' );
+
+		if ( $this->original_font_option['exists'] ) {
+			update_option( 'vk_font_selector', $this->original_font_option['value'] );
+		} else {
+			delete_option( 'vk_font_selector' );
+		}
+
+		parent::tearDown();
+
+		foreach ( $this->original_globals as $global_name => $original_global ) {
+			if ( $original_global['exists'] ) {
+				$GLOBALS[ $global_name ] = $original_global['value'];
+			} else {
+				unset( $GLOBALS[ $global_name ] );
+			}
 		}
 	}
 
