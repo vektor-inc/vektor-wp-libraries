@@ -59,6 +59,15 @@ body.device-pc {
 .vk-mobile-nav-menu-btn.menu-open {
 	border: 1px solid $color_font_default;
 }
+// キーボードフォーカス時の可視インジケータ（WCAG 2.4.7）。
+// outline は削除せず :focus-visible でのみ表示し、マウス操作時には出さない。
+// overflow:hidden だと outline が切れるため、フォーカス時のみ outline を要素の外側に出す。
+// 既定色は currentColor とし、bright / dark で背景に応じた色を上書きする。
+.vk-mobile-nav-menu-btn:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+	overflow: visible;
+}
 
 /* 現状 .mobile-nav-btn-right は AdvUnit より body class に追加している */
 .mobile-nav-btn-right .vk-mobile-nav-menu-btn,

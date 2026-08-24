@@ -16,6 +16,13 @@ $color_font_default: rgba(255, 255, 255, 0.8);
 	background: var(--vk-menu-acc-icon-close-white-bg-src) center 50% no-repeat
 		rgba(0, 0, 0, 0.8);
 }
+// dark スキンは暗い背景のため、フォーカスリングは明るい基調色で表示してコントラストを確保する。
+.vk-mobile-nav-menu-btn:focus-visible {
+	outline-color: $color_font_default;
+}
+.vk-menu-acc .acc-btn:focus-visible {
+	outline-color: $color_font_default;
+}
 
 .vk-mobile-nav {
 	background-color: #333;

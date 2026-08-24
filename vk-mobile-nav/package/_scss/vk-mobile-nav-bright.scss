@@ -28,6 +28,13 @@ $color_font_default: #333;
 	background: var(--vk-mobile-nav-menu-btn-close-bg-src) center 50% no-repeat
 		rgba(255, 255, 255, 0.8);
 }
+// bright スキンは明るい背景のため、フォーカスリングは暗い基調色で表示してコントラストを確保する。
+.vk-mobile-nav-menu-btn:focus-visible {
+	outline-color: $color_font_default;
+}
+.vk-menu-acc .acc-btn:focus-visible {
+	outline-color: $color_font_default;
+}
 
 .vk-mobile-nav {
 	background-color: #fff;
