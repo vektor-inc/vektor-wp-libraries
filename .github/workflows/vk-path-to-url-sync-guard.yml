@@ -1,0 +1,66 @@
+name: vk-path-to-url sync guard
+
+on:
+  pull_request:
+    paths:
+      - 'vk-campaign-text/package/class-vk-campaign-text.php'
+      - 'vk-mobile-fix-nav/package/class-vk-mobile-fix-nav.php'
+      - 'vk-page-header/package/class-vk-page-header.php'
+
+permissions:
+  contents: read
+
+jobs:
+  sync-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: パス→URL変換ロジックが3モジュールで同一内容であることを確認する
+        run: |
+          # issue #172 の対応で、vk-campaign-text / vk-mobile-fix-nav / vk-page-header の
+          # 3クラスに、意図的に同一内容でパス→URL変換ロジック（get_directory_uri() 等）を
+          # 複製している（VK_Helpers 等への共通化ができない事情は各ファイルの PHPDoc を参照）。
+          # 重複を守っているのが PHPDoc の注意書きだけだと「片方だけ直る」事故がレビューでの
+          # 目視頼みになるため、このワークフローで機械的に同一性を確認する。
+          FILES=(
+            "vk-campaign-text/package/class-vk-campaign-text.php"
+            "vk-mobile-fix-nav/package/class-vk-mobile-fix-nav.php"
+            "vk-page-header/package/class-vk-page-header.php"
+          )
+
+          # 各ファイルの // vk-path-to-url:begin 〜 // vk-path-to-url:end の間を抽出し、
+          # モジュールごとに異なる部分（ログメッセージ中の製品名）だけを正規化してから突き合わせる。
+          extract_block() {
+            local file="$1"
+            sed -n '/\/\/ vk-path-to-url:begin/,/\/\/ vk-path-to-url:end/p' "$file" \
+              | sed '1d;$d' \
+              | sed -E "s/'[^']*: Could not resolve path to URL: %s'/'PRODUCT: Could not resolve path to URL: %s'/"
+          }
+
+          TMP_DIR=$(mktemp -d)
+          for f in "${FILES[@]}"; do
+            base=$(basename "$f")
+            if ! grep -q '// vk-path-to-url:begin' "$f" || ! grep -q '// vk-path-to-url:end' "$f"; then
+              echo "::error file=$f::vk-path-to-url:begin / :end の番兵コメントが見つかりません。3モジュール共通のパス→URL変換ロジックを削除・移動する場合は、この番兵コメントごと扱ってください。"
+              exit 1
+            fi
+            extract_block "$f" > "$TMP_DIR/$base.block"
+          done
+
+          first="${FILES[0]}"
+          first_base=$(basename "$first")
+          status=0
+          for f in "${FILES[@]:1}"; do
+            base=$(basename "$f")
+            if ! diff -u "$TMP_DIR/$first_base.block" "$TMP_DIR/$base.block"; then
+              echo "::error::$first と $f のパス→URL変換ロジック（vk-path-to-url:begin〜:end の間）が一致していません。3モジュールとも同じ内容に揃えてください（製品名の部分のみ差異が許容されます）。"
+              status=1
+            fi
+          done
+
+          if [ "$status" -eq 0 ]; then
+            echo "OK: 3モジュールのパス→URL変換ロジックは同一内容です。"
+          fi
+          exit $status
