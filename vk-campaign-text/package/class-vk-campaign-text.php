@@ -65,6 +65,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			return self::get_directory_uri( $path ) . 'css/vk-campaign-text.css';
 		}
 
+		// vk-path-to-url:begin
 		/**
 		 * ファイルパスを URL へ変換する.
 		 *
@@ -165,29 +166,14 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			if ( ! isset( $logged_paths[ $path ] ) ) {
 				$logged_paths[ $path ] = true;
 
-				// trigger_error() と error_log() は、記録されるかどうかが依存する設定が異なる。
-				// trigger_error() は PHP のエラーハンドラ経由で記録されるため、php.ini の
-				// log_errors が On のときしか記録されない。WP_DEBUG_LOG の有無では代用できない。
-				// WP_DEBUG_LOG は「WordPress が起動時に log_errors を 1 へ強制するかどうか」を
-				// 決めるだけで、log_errors は wp-config.php や php.ini から独立に On のままにも
-				// できるため、「WP_DEBUG=false かつ WP_DEBUG_LOG=true」（デバッグを終えて WP_DEBUG
-				// だけ false に戻し、WP_DEBUG_LOG の行は残す、本番でよくある運用）のとき、実際には
-				// trigger_error() は呼ばれず記録されないのに、WP_DEBUG_LOG を基準にすると
-				// error_log() まで抑止してしまい、記録が一切残らなくなる。
-				// そのため、判定は「trigger_error() が実際にログへ記録されるかどうか」そのもの
-				// （WP_DEBUG が有効 かつ php.ini の log_errors が On）に揃える。この条件が真の
-				// ときだけ error_log() を省けば、二重記録も記録ゼロも起きない.
-				$trigger_error_is_logged = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) && ini_get( 'log_errors' );
-
-				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-					// translators: %s is the file path that could not be resolved to a URL.
-					trigger_error( sprintf( esc_html__( 'VK Campaign Text: Could not resolve path to URL: %s', 'lightning-pro' ), esc_html( $path ) ), E_USER_NOTICE );
-				}
-
-				if ( ! $trigger_error_is_logged ) {
-					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- 本番環境でも原因追跡できるよう意図的に使用している.
-					error_log( sprintf( 'VK Campaign Text: Could not resolve path to URL: %s', $path ) );
-				}
+				// trigger_error() は使わない。WP_DEBUG が有効なとき WP_DEBUG_DISPLAY の既定（表示する）
+				// により画面へ出てしまい、このメソッドの呼び出し元はフロント側（wp_enqueue_scripts 等）
+				// のため、ログインしていない一般の閲覧者にもサーバー内の絶対パスが見えてしまう。
+				// そのため error_log() の1本のみで記録し、画面には一切出さない。WP_DEBUG による
+				// 条件分岐も付けない（本番環境でも原因追跡できるようにするため、常に記録する）。
+				// ログはロケールによらず同じ文字列の方が調査しやすいため、翻訳・エスケープは行わない.
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- 本番環境でも原因追跡できるよう意図的に使用している.
+				error_log( sprintf( 'VK Campaign Text: Could not resolve path to URL: %s', $path ) );
 			}
 
 			return trailingslashit( content_url() );
@@ -311,6 +297,7 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 			}
 			return '';
 		}
+		// vk-path-to-url:end
 
 		/**
 		 * Launch Action
