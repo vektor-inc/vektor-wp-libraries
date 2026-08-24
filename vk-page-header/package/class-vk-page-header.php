@@ -819,39 +819,18 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				return;
 			}
 
-			$script_dir = wp_normalize_path( dirname( __FILE__ ) );
+			$script_dir  = wp_normalize_path( dirname( __FILE__ ) );
 			$script_path = $script_dir . '/js/vk-page-header-panel.min.js';
 			if ( ! file_exists( $script_path ) ) {
 				return;
 			}
 
-			// Determine the URL base depending on whether we are in a theme or a plugin.
-			// テーマかプラグインかに応じて URL のベースを決定する。
-			$script_url = '';
-			$theme_dir  = wp_normalize_path( get_template_directory() );
-			if ( 0 === strpos( $script_dir, $theme_dir ) ) {
-				// Inside a theme.
-				// テーマ内の場合。
-				$relative   = str_replace( $theme_dir, '', $script_dir );
-				$script_url = get_template_directory_uri() . $relative . '/js/vk-page-header-panel.min.js';
-			} else {
-				// Inside a plugin or wp-content direct.
-				// プラグインまたは wp-content 直下の場合。
-				$content_dir = wp_normalize_path( WP_CONTENT_DIR );
-				// Skip when outside WP_CONTENT_DIR (e.g. symlinked), as URL cannot be derived.
-				// WP_CONTENT_DIR 外（シンボリックリンク等）の場合はURL生成不可のためスキップ。
-				if ( 0 !== strpos( $script_dir, $content_dir ) ) {
-					return;
-				}
-				$relative   = str_replace( $content_dir, '', $script_dir );
-				$script_url = content_url( $relative . '/js/vk-page-header-panel.min.js' );
-			}
-
-			// Abort enqueue if URL could not be resolved safely.
-			// URL が解決できなかった場合は安全側に倒して読み込みを中止する。
-			if ( empty( $script_url ) ) {
-				return;
-			}
+			// テーマ配下・プラグイン配下・mu-plugins 配下のいずれに置かれても正しい URL になるよう、
+			// 共通処理（VK_Helpers::get_directory_uri()）で解決する。AWS Bitnami 等の
+			// シンボリックリンク環境や、wp-content を WordPress 本体の外に置いた構成でも
+			// 正しく解決できるため、以前の「解決できない場合は読み込みを中止する」対症療法は
+			// 不要になった（issue #172）。
+			$script_url = self::get_directory_uri( $script_dir ) . 'js/vk-page-header-panel.min.js';
 
 			wp_enqueue_script(
 				'vk-page-header-panel',
@@ -873,6 +852,30 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					'removeImage'     => __( 'Remove image' ),
 				)
 			);
+		}
+
+		/**
+		 * ディレクトリの URL を取得する.
+		 *
+		 * AWS Bitnami 等、シンボリックリンクで WordPress が配置された環境（wp-content を
+		 * WordPress 本体の外に置いた構成も含む）では、__FILE__ が返す実体パスと WP_CONTENT_DIR
+		 * 等の WordPress の定数の文字列表記が食い違い、単純な前方一致では URL を組み立てられない
+		 * ことがある（issue #172）。同じ問題を解決する共通処理 VK_Helpers::get_directory_uri()
+		 * （vk-helpers）があればそれを使う。vk-helpers を同梱していない配布物でも致命的エラーに
+		 * ならないよう、無ければドメイン直結の壊れた URL を避けて content_url() へフォールバック
+		 * する（vk-page-header はこのリポジトリの配布上、常に vk-helpers と併せてコピーされる
+		 * ためこの分岐へ実際に入ることは想定していないが、念のための安全策）.
+		 *
+		 * @param string $dir 変換対象のディレクトリパス.
+		 * @return string ディレクトリの URL（末尾スラッシュ付き）.
+		 */
+		private static function get_directory_uri( $dir ) {
+			if ( class_exists( 'VK_Helpers' ) && method_exists( 'VK_Helpers', 'get_directory_uri' ) ) {
+				return VK_Helpers::get_directory_uri( $dir );
+			}
+
+			// vk-helpers 未同梱環境向けのフォールバック（安全側の content_url() ベースの URL）.
+			return trailingslashit( content_url() );
 		}
 
 		public static function custom_fields_array() {

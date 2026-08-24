@@ -37,15 +37,13 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 
 		public static function load_css() {
 			if ( apply_filters( 'vk_campaign_text_print_css', false ) ) {
-				$path    = wp_normalize_path( dirname( __FILE__ ) );
-				$css_url = str_replace( wp_normalize_path( ABSPATH ), site_url() . '/', $path ) . '/css/vk-campaign-text.css';
+				$css_url = self::get_css_url();
 				wp_enqueue_style( 'vk-campaign-text', $css_url, array(), self::$version );
 			}
 		}
 
 		public static function css_tree_shaking_array( $vk_css_tree_shaking_array ) {
-			$path                        = wp_normalize_path( dirname( __FILE__ ) );
-			$css_url                     = str_replace( wp_normalize_path( ABSPATH ), site_url() . '/', $path ) . '/css/vk-campaign-text.css';
+			$css_url                     = self::get_css_url();
 			$vk_css_tree_shaking_array[] = array(
 				'id'      => 'vk-campaign-text',
 				'url'     => $css_url,
@@ -53,6 +51,31 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 				'version' => self::$version,
 			);
 			return $vk_css_tree_shaking_array;
+		}
+
+		/**
+		 * CSS の URL を取得する.
+		 *
+		 * AWS Bitnami 等、シンボリックリンクで WordPress が配置された環境（wp-content を
+		 * WordPress 本体の外に置いた構成も含む）では、__FILE__ が返す実体パスと ABSPATH の
+		 * 文字列表記が食い違い、str_replace() による単純な置換ではパスが 1 文字も置き換わらず、
+		 * サーバー内のパスがそのまま URL に混ざってしまう（issue #172）。
+		 * 同じ問題を解決する共通処理 VK_Helpers::get_directory_uri()（vk-helpers）があれば
+		 * それを使う。vk-helpers を同梱していない配布物（モジュール単体で製品にコピーされる場合）
+		 * でも致命的エラーにならないよう、無ければ従来どおりの str_replace() にフォールバックする
+		 * （フォールバック時は従来と同じ問題が残り得るが、白画面にはならない）.
+		 *
+		 * @return string CSS の URL.
+		 */
+		private static function get_css_url() {
+			$path = wp_normalize_path( dirname( __FILE__ ) );
+
+			if ( class_exists( 'VK_Helpers' ) && method_exists( 'VK_Helpers', 'get_directory_uri' ) ) {
+				return VK_Helpers::get_directory_uri( $path ) . 'css/vk-campaign-text.css';
+			}
+
+			// vk-helpers 未同梱環境向けのフォールバック（従来どおりの挙動）.
+			return str_replace( wp_normalize_path( ABSPATH ), site_url() . '/', $path ) . '/css/vk-campaign-text.css';
 		}
 
 		/**

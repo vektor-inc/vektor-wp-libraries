@@ -570,14 +570,29 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 		} // function vk_mobil_fix_nav_customize_register( $wp_customize ) {
 
 		/**
-		 * Load js & CSS
+		 * CSS の URL を取得する.
 		 *
-		 * @return $css_url
+		 * AWS Bitnami 等、シンボリックリンクで WordPress が配置された環境（wp-content を
+		 * WordPress 本体の外に置いた構成も含む）では、__FILE__ が返す実体パスと ABSPATH の
+		 * 文字列表記が食い違い、str_replace() による単純な置換ではパスが 1 文字も置き換わらず、
+		 * サーバー内のパスがそのまま URL に混ざってしまう（issue #172）。
+		 * 同じ問題を解決する共通処理 VK_Helpers::get_directory_uri()（vk-helpers）があれば
+		 * それを使う。vk-helpers を同梱していない配布物（vk-mobile-fix-nav が単体で製品にコピー
+		 * される場合。例: lightning-g3-pro-unit）でも致命的エラーにならないよう、無ければ
+		 * 従来どおりの str_replace() にフォールバックする（フォールバック時は従来と同じ問題が
+		 * 残り得るが、白画面にはならない）.
+		 *
+		 * @return string CSS の URL.
 		 */
 		public static function style_url() {
-			$path    = wp_normalize_path( dirname( __FILE__ ) );
-			$css_url = str_replace( wp_normalize_path( ABSPATH ), site_url() . '/', $path ) . '/css/vk-mobile-fix-nav.css';
-			return $css_url;
+			$path = wp_normalize_path( dirname( __FILE__ ) );
+
+			if ( class_exists( 'VK_Helpers' ) && method_exists( 'VK_Helpers', 'get_directory_uri' ) ) {
+				return VK_Helpers::get_directory_uri( $path ) . 'css/vk-mobile-fix-nav.css';
+			}
+
+			// vk-helpers 未同梱環境向けのフォールバック（従来どおりの挙動）.
+			return str_replace( wp_normalize_path( ABSPATH ), site_url() . '/', $path ) . '/css/vk-mobile-fix-nav.css';
 		}
 
 		/**
