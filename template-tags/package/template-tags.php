@@ -6,6 +6,10 @@ https://github.com/vektor-inc/vektor-wp-libraries
 にあります。修正の際は上記リポジトリのデータを修正してください。
 */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /*
   Chack use post top page
   Chack post type info
@@ -14,6 +18,8 @@ https://github.com/vektor-inc/vektor-wp-libraries
   vk_is_plugin_active
   Sanitize
   Post Type Check Box
+  Taxonomy Check Box
+  vk_is_checked
 */
 
 if ( ! function_exists( 'vk_is_template_tags_exist' ) ) {
@@ -60,7 +66,8 @@ if ( ! function_exists( 'vk_get_post_type' ) ) {
 
 		$postType = array();
 
-		$url = $_SERVER['REQUEST_URI'];
+		// WP-CLI / cron 等では REQUEST_URI が未設定になり得るため、strpos() に null が渡らないよう既定値を与える。
+		$url = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 
 		// 管理画面の投稿タイプ
 		// ※ phpunitで is_admin()判定が効かない場合のため strpos( $url, 'wp-admin' ) を使用
@@ -68,14 +75,18 @@ if ( ! function_exists( 'vk_get_post_type' ) ) {
 			global $post;
 			$postType['slug'] = get_post_type( $post );
 			if ( ! $postType['slug'] ) {
+				// この分岐は状態を変更しない読み取り専用の判定のため、ノンス検証は不要。
+				// 投稿タイプのスラッグは英数字・アンダースコア・ハイフンのみのため、sanitize_key() で情報は落ちない。
+				// phpcs:disable WordPress.Security.NonceVerification.Recommended
 				if ( ! empty( $_GET['post_type'] ) ) {
-					$postType['slug'] = $_GET['post_type'];
+					$postType['slug'] = sanitize_key( wp_unslash( $_GET['post_type'] ) );
 				} elseif ( ! empty( $_GET['post'] ) ) {
-					$admin_post = get_post( $_GET['post'] );
+					$admin_post = get_post( absint( wp_unslash( $_GET['post'] ) ) );
 					if ( ! empty( $admin_post->post_type ) ) {
 						$postType['slug'] = $admin_post->post_type;
 					}
 				}
+				// phpcs:enable WordPress.Security.NonceVerification.Recommended
 			}
 			return $postType;
 		}
@@ -90,6 +101,12 @@ if ( ! function_exists( 'vk_get_post_type' ) ) {
 
 				$postType['slug'] = $wp_query->query_vars['post_type'];
 
+				// メインクエリに post_type を配列で指定した場合（例: pre_get_posts で array( 'event', 'page' ) を set）への対策.
+				// slug は文字列前提で利用されるため、配列の場合は先頭要素を採用して文字列に正規化する.
+				// これをしないと後続の 'post-type-' . $slug 等で "Array to string conversion" Warning が発生する.
+				if ( is_array( $postType['slug'] ) ) {
+					$postType['slug'] = ! empty( $postType['slug'] ) ? reset( $postType['slug'] ) : '';
+				}
 			} else {
 				// Case of no post type query
 				if ( ! empty( $wp_query->queried_object->taxonomy ) ) {
@@ -198,23 +215,31 @@ if ( ! function_exists( 'vk_get_the_archive_title' ) ) {
 if ( ! function_exists( 'vk_get_page_description' ) ) {
 	function vk_get_page_description() {
 		global $wp_query;
-		$post = $wp_query->get_queried_object();
-		if ( is_front_page() ) {
-			if ( isset( $post->post_excerpt ) && $post->post_excerpt ) {
-				$page_description = get_the_excerpt();
+		$page_description = '';
+		$post             = $wp_query->get_queried_object();
+		if ( is_search() || is_404() ) {
+			$page_description = '';
+		} elseif ( is_front_page() ) {
+			if ( isset( $post->post_excerpt ) && $post->post_excerpt && ! post_password_required( $post->ID ) ) {
+				$page_description = get_the_excerpt( $post->ID );
 			} else {
 				$page_description = get_bloginfo( 'description' );
 			}
 		} elseif ( is_home() ) {
 			$page_for_posts = vk_get_page_for_posts();
 			if ( $page_for_posts['post_top_use'] ) {
-				$page             = get_post( $page_for_posts['post_top_id'] );
-				$page_description = $page->post_excerpt;
+				$page = get_post( $page_for_posts['post_top_id'] );
+				if ( ! empty( $page->post_excerpt ) && ! post_password_required( $page->ID ) ) {
+					$page_description = get_the_excerpt( $page->ID );
+				} else {
+					$page_description  = sprintf( _x( 'Article of %s.', 'Archive description', 'template_tags_textdomain' ), esc_html( $page_for_posts['post_top_name'] ) );
+					$page_description .= ' ' . get_bloginfo( 'name' ) . ' ' . get_bloginfo( 'description' );
+				}
 			} else {
 				$page_description = get_bloginfo( 'description' );
 			}
 		} elseif ( is_category() || is_tax() ) {
-			if ( ! $post->description ) {
+			if ( empty( $post->description ) ) {
 				$page_description = sprintf( __( 'About %s', 'template_tags_textdomain' ), single_cat_title( '', false ) ) . ' ' . get_bloginfo( 'name' ) . ' ' . get_bloginfo( 'description' );
 			} else {
 				$page_description = $post->description;
@@ -248,16 +273,20 @@ if ( ! function_exists( 'vk_get_page_description' ) ) {
 				}
 			}
 		} elseif ( is_page() || is_single() ) {
-			if ( $post->post_excerpt ) {
-				$page_description = $post->post_excerpt;
+			if ( post_password_required( $post->ID ) ) {
+				$page_description = __( 'This article is protected by a password.', 'template_tags_textdomain' );
+			} elseif ( ! empty( $post->post_excerpt ) ) {
+				$page_description = get_the_excerpt( $post->ID );
 			} else {
-				$page_description = $post->post_content;
+				$page_description = get_the_content( null, false, $post->ID );
 			}
 		} else {
 			$page_description = get_bloginfo( 'description' );
 		}
 		global $paged;
-		if ( $paged != '0' ) {
+		// 検索・404 では $page_description が空文字になり得るため、空のときは
+		// 「[2ページ目] 」のようにページ数表記だけが付いた説明文にならないようにする。
+		if ( $paged != '0' && '' !== $page_description ) {
 			$page_description = '[' . sprintf( __( 'Page of %s', 'template_tags_textdomain' ), $paged ) . '] ' . $page_description;
 		}
 		// This filter (vkExUnit_pageDescriptionCustom) is deprecated.
@@ -274,9 +303,17 @@ if ( ! function_exists( 'vk_get_page_description' ) ) {
 		なので、ショートコードの実行は行わないが、ショートコードの引き値としての " は不具合の原因となるので
 		 " esc_attr でエスケープを実施する
 		本来ショートコードが出る場合は適切に抜粋欄に記入して運用でカバーする。
+		動的ブロックの場合も同様とする。
 		*/
 		// この関数は get_the_ ではないので関数内では esc_attr() は行わない
+
+		// 余計なスタイルタグ・スクリプトタグを除去
+		$page_description = preg_replace( '/<(style|script).*?>(.|\r|\n)*?<\/(style|script)>/', '', $page_description );
+
+		// HTML タグを除去
 		$page_description = strip_tags( $page_description );
+
+		// ショートコードを削除
 		$page_description = strip_shortcodes( $page_description );
 
 		if ( is_singular() ) {
@@ -319,6 +356,14 @@ if ( ! function_exists( 'vk_sanitize_boolean' ) ) {
 	}
 }
 
+// veu_sanitize_radio() と同様、PAD には template-tags.php しか配られないため、
+// veu_sanitize_boolean() もここに guarded なエイリアスとして残す（詳細は template-tags/README.md）。
+if ( ! function_exists( 'veu_sanitize_boolean' ) ) {
+	function veu_sanitize_boolean( $input ) {
+		return vk_sanitize_boolean( $input );
+	}
+}
+
 if ( ! function_exists( 'veu_sanitize_radio' ) ) {
 	function veu_sanitize_radio( $input ) {
 		return esc_attr( $input );
@@ -333,8 +378,9 @@ if ( ! function_exists( 'vk_sanitize_number' ) ) {
 }
 if ( ! function_exists( 'vk_sanitize_array' ) ) {
 	function vk_sanitize_array( $input ) {
+		// $input が配列でない場合に「Undefined variable $return」警告とならないよう先に初期化する。
+		$return = array();
 		if ( is_array( $input ) ) {
-			$return = array();
 			foreach ( $input as $key => $value ) {
 				$return[ $key ] = wp_kses_post( $value );
 			}
@@ -366,11 +412,9 @@ if ( ! function_exists( 'vk_the_post_type_check_list' ) ) {
 		$args       = wp_parse_args( $args, $default );
 		$post_types = get_post_types( $args['post_types_args'], 'object' );
 
-		echo '<ul>';
+		echo '<ul class="no-style">';
 		foreach ( $post_types as $key => $value ) {
-
 			if ( ! in_array( $key, $args['exclude_post_types'] ) ) {
-
 				$checked = ( isset( $args['checked'][ $key ] ) && ( $args['checked'][ $key ] ) ) ? ' checked' : '';
 
 				if ( ! empty( $args['id'][ $key ] ) ) {
@@ -382,7 +426,73 @@ if ( ! function_exists( 'vk_the_post_type_check_list' ) ) {
 				}
 
 				echo '<li><label>';
-				echo '<input type="checkbox" name="' . esc_attr( $args['name'] ) . '[' . $key . ']"' . $id . ' value="true"' . $checked . ' />' . esc_html( $value->label );
+				echo '<input type="checkbox" name="' . esc_attr( $args['name'] ) . '[' . esc_attr( $key ) . ']"' . $id . ' value="true"' . $checked . ' />';
+				echo ' ' . esc_html( $value->label );
+				// スラッグは分類の手がかりとして表示するため、翻訳関数には通さない（自然言語ではないため i18n 対象外）。
+				echo ' <span class="description">(<code>' . esc_html( $key ) . '</code>)</span>';
+				echo '</label></li>';
+			}
+		}
+		echo '</ul>';
+	}
+}
+
+/*
+  Taxonomy Check Box
+/*-------------------------------------------*/
+/**
+ * タクソノミーのチェックボックスを表示する関数。
+ *
+ * vk_the_post_type_check_list() と同じ作法（構造・エスケープ・function_exists ガード）で、
+ * タクソノミー版として新設。対象となるタクソノミーは呼び出し元が 'taxonomies' 引数で渡す
+ * （どのタクソノミーを一覧に載せるかの絞り込み条件は呼び出し元のドメインロジックに委ねる）。
+ * 投稿タイプ版と異なり、'id' 引数は配列形式のみ対応する。投稿タイプ版にあった文字列キーの
+ * フォールバック（`$args['name'][$key]`）は、ここでは 'name' が常に文字列のため絶対に通らない
+ * 死んだ分岐であり、この新規関数では意図的に落としている。
+ *
+ * @param  array $args {
+ *     チェックボックス表示用の設定。
+ *
+ *     @type WP_Taxonomy[] $taxonomies         表示対象のタクソノミーオブジェクトの配列（キーはタクソノミー名）。
+ *     @type string        $name               チェックボックスの name 属性のベース（例: 'vkExUnit_sitemap_options[excludeTaxonomies]'）。
+ *     @type array         $checked            チェック状態を持つ保存済みの値（タクソノミー名 => 'true' 等）。
+ *     @type array         $id                 タクソノミー名ごとの id 属性を指定する場合の配列。
+ *     @type string[]      $exclude_taxonomies 一覧から除外するタクソノミー名の配列。
+ *     @type string        $empty_message      'taxonomies' が空の場合に一覧の代わりに表示する文言。
+ *                                              サイトマップの「除外タクソノミー」以外の用途で再利用しても
+ *                                              文言が破綻しないよう、決め打ちにせず引数化している。
+ * }
+ * @return void 直接 echo で出力するため返り値はなし。'taxonomies' が空の場合は、空の一覧ではなく
+ *              'empty_message' を出す（「対象が無い」と「表示が壊れている」を区別できるように）。
+ */
+if ( ! function_exists( 'vk_the_taxonomy_check_list' ) ) {
+	function vk_the_taxonomy_check_list( $args ) {
+		$default = array(
+			'taxonomies'         => array(),
+			'name'               => '',
+			'checked'            => array(),
+			'id'                 => array(),
+			'exclude_taxonomies' => array(),
+			'empty_message'      => __( 'No taxonomies are available to exclude.', 'template_tags_textdomain' ),
+		);
+		$args    = wp_parse_args( $args, $default );
+
+		if ( empty( $args['taxonomies'] ) ) {
+			echo '<p class="description">' . esc_html( $args['empty_message'] ) . '</p>';
+			return;
+		}
+
+		echo '<ul class="no-style">';
+		foreach ( $args['taxonomies'] as $key => $value ) {
+			if ( ! in_array( $key, $args['exclude_taxonomies'], true ) ) {
+				$checked = ( isset( $args['checked'][ $key ] ) && ( $args['checked'][ $key ] ) ) ? ' checked' : '';
+				$id      = ! empty( $args['id'][ $key ] ) ? ' id="' . esc_attr( $args['id'][ $key ] ) . '"' : '';
+
+				echo '<li><label>';
+				echo '<input type="checkbox" name="' . esc_attr( $args['name'] ) . '[' . esc_attr( $key ) . ']"' . $id . ' value="true"' . $checked . ' />';
+				echo ' ' . esc_html( $value->label );
+				// スラッグは分類の手がかりとして表示するため、翻訳関数には通さない（自然言語ではないため i18n 対象外）。
+				echo ' <span class="description">(<code>' . esc_html( $key ) . '</code>)</span>';
 				echo '</label></li>';
 			}
 		}

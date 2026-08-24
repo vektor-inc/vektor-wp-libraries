@@ -152,12 +152,28 @@ gulp.task('sass_cf', function(done) {
 /*  Template Tags
 /*-------------------------------------*/
 gulp.task('c_tags', function(done) {
+	// テキストドメイン（翻訳を紐づける識別子）は正本側で仮の識別子 'template_tags_textdomain' を
+	// 使っているため、コピー先の製品ごとに実際のテキストドメインへ置換する。
+	// 置換先が製品ごとに異なるので、1つの stream を複数の gulp.dest() へ流す形にはできず、
+	// gulp.src() を宛先ごとに分けている。
+	//
+	// コピーするファイルも製品ごとに異なる。ExUnit は inc/template-tags/template-tags-config.php で
+	// package/ 配下の3ファイル（template-tags.php / template-tags-veu.php / template-tags-veu-old.php）を
+	// すべて require しているため3ファイルとも必要（詳細は template-tags/README.md）。
+	// VK Post Author Display は同じ config ファイルで template-tags.php のみを require しているため、
+	// 他の2ファイルを送るとデッドコードが同梱されてしまう。そのため gulp.src() のパターンも
+	// 宛先ごとに分けている。
+	//
+	// template-tags/tests/** は配らない。ExUnit・PAD とも共有関数向けの自前テストを既に持っており
+	// （ExUnit は同名クラス TemplateTagsTest で正本より多いテストケースを持つ）、そのまま配ると
+	// 同名ファイルが上書きされてテストが失われる・存在しない関数を呼ぶテストで壊れるため
+	// （詳細は template-tags/README.md）、テストは各製品が own する方針とした。
 	gulp.src('./template-tags/package/**')
-		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/template-tags/package/'))
+		.pipe(replace("'template_tags_textdomain'", "'vk-all-in-one-expansion-unit'"))
+		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/inc/template-tags/package/'));
+	gulp.src('./template-tags/package/template-tags.php')
+		.pipe(replace("'template_tags_textdomain'", "'vk-post-author-display'"))
 		.pipe(gulp.dest('../plugins/vk-post-author-display/inc/template-tags/package/'));
-	gulp.src('./template-tags/tests/**')
-		.pipe(gulp.dest('../plugins/vk-all-in-one-expansion-unit/tests/'))
-		.pipe(gulp.dest('../plugins/vk-post-author-display/tests/'));
     done();
 });
 gulp.task('w_tags', function (done) {

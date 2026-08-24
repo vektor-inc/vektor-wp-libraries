@@ -6,6 +6,10 @@ https://github.com/vektor-inc/vektor-wp-libraries
 にあります。修正の際は上記リポジトリのデータを修正してください。
 */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * ExUnit固有の関数だが、ExUnitの機能を複製している他のプラグインにも使用されるものもある
  */
@@ -18,14 +22,17 @@ function veu_get_common_options() {
 	return apply_filters( 'vkExUnit_common_options', $options );
 }
 
-function veu_get_common_options_default() {
+function veu_get_common_options_default( $is_block_theme = null ) {
+
 	// hook veu_package_is_enable()
 	// パッケージの情報を取得してデフォルトの配列を作成
 	$defaults = array();
-	$packages = veu_get_packages();
+	$packages = veu_get_packages( $is_block_theme );
 	foreach ( $packages as $key => $value ) {
-		$name                                 = $value['name'];
-		$default_options[ 'active_' . $name ] = $value['default'];
+		if ( empty( $value['section_title'] ) ) {
+			$name                                 = $value['name'];
+			$default_options[ 'active_' . $name ] = $value['default'];
+		}
 	}
 	$default_options['post_metabox_individual']      = false;
 	$default_options['delete_options_at_deactivate'] = false;
@@ -33,11 +40,9 @@ function veu_get_common_options_default() {
 	return apply_filters( 'vkExUnit_common_options_default', $default_options );
 }
 
- /*
- -------------------------------------------*/
- /*
-   validate
- /*-------------------------------------------*/
+/*
+	validate
+/*-------------------------------------------*/
 
 function veu_common_options_validate( $input ) {
 	/*
@@ -46,10 +51,12 @@ function veu_common_options_validate( $input ) {
 	 veu_get_common_options_default() の中で package に登録してある項目・デフォルト値を読み込み、それをループ処理する
 	*/
 	$defaults = veu_get_common_options_default();
+	$input    = is_array( $input ) ? $input : array();
 	foreach ( $defaults as $key => $default_value ) {
 		// 'content_filter_state'　以外は true か false しか返ってこない
 		if ( $key != 'content_filter_state' ) {
-				$output[ $key ] = ( isset( $input[ $key ] ) ) ? esc_html( $input[ $key ] ) : $default_value;
+				// チェックが外れたチェックボックスは送信されないため、未指定のキーは false として扱う。
+				$output[ $key ] = ( isset( $input[ $key ] ) ) ? esc_html( $input[ $key ] ) : false;
 		} else {
 				$output['content_filter_state'] = ( ! empty( $input['content_filter_state'] ) ) ? 'loop_end' : 'content';
 		}
@@ -86,7 +93,7 @@ if ( ! function_exists( 'veu_content_filter_state' ) ) {
 
 if ( ! function_exists( 'veu_get_name' ) ) {
 	function veu_get_name() {
-		$system_name = apply_filters( 'veu_get_name', 'VK All in one Expansion Unit' );
+		$system_name = apply_filters( 'veu_get_name', 'VK All in One Expansion Unit' );
 		return $system_name;
 	}
 }
@@ -134,7 +141,7 @@ if ( ! function_exists( 'veu_is_cta_active' ) ) {
 	}
 }
 
-require_once 'template-tags-veu-old.php';
+require_once __DIR__ . '/template-tags-veu-old.php';
 
 
 function veu_is_parent_metabox_display() {
