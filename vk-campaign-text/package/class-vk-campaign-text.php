@@ -56,26 +56,260 @@ if ( ! class_exists( 'VK_Campaign_Text' ) ) {
 		/**
 		 * CSS の URL を取得する.
 		 *
-		 * AWS Bitnami 等、シンボリックリンクで WordPress が配置された環境（wp-content を
-		 * WordPress 本体の外に置いた構成も含む）では、__FILE__ が返す実体パスと ABSPATH の
-		 * 文字列表記が食い違い、str_replace() による単純な置換ではパスが 1 文字も置き換わらず、
-		 * サーバー内のパスがそのまま URL に混ざってしまう（issue #172）。
-		 * 同じ問題を解決する共通処理 VK_Helpers::get_directory_uri()（vk-helpers）があれば
-		 * それを使う。vk-helpers を同梱していない配布物（モジュール単体で製品にコピーされる場合）
-		 * でも致命的エラーにならないよう、無ければ従来どおりの str_replace() にフォールバックする
-		 * （フォールバック時は従来と同じ問題が残り得るが、白画面にはならない）.
+		 * URL への変換自体は get_directory_uri()（同ファイル内）が行う。詳細はそちらの PHPDoc を参照.
 		 *
 		 * @return string CSS の URL.
 		 */
 		private static function get_css_url() {
 			$path = wp_normalize_path( dirname( __FILE__ ) );
+			return self::get_directory_uri( $path ) . 'css/vk-campaign-text.css';
+		}
 
-			if ( class_exists( 'VK_Helpers' ) && method_exists( 'VK_Helpers', 'get_directory_uri' ) ) {
-				return VK_Helpers::get_directory_uri( $path ) . 'css/vk-campaign-text.css';
+		/**
+		 * ファイルパスを URL へ変換する.
+		 *
+		 * [重要] この実装は vk-campaign-text / vk-mobile-fix-nav / vk-page-header の
+		 * 3モジュールに、意図的に同一内容で存在する（VK_Helpers 等への共通化はしていない）。
+		 * 理由: グローバルクラス名 VK_Helpers は、Lightning（_g3）や Katawara などの製品側で
+		 * composer 版 vektor-inc/vk-helpers（クラス VkHelpers）のサブクラス・エイリアスに
+		 * 差し替えられており、class_exists( 'VK_Helpers' ) による機能検出では「同じ名前だが
+		 * 中身が違うクラス」を掴んでしまい、本来のメソッドが呼べない（issue #172 のレビューで
+		 * 判明）。そのためモジュール固有のクラス名の中に private static として持たせている。
+		 * このメソッドを修正する場合は、必ず他の2モジュールの同名メソッドも同じ内容に揃えること。
+		 * 参照実装: vektor-inc/font-awesome-versions#57, vektor-inc/vk-swiper#14
+		 *
+		 * AWS Bitnami 等、シンボリックリンクで WordPress が配置された環境では、
+		 * 引数 $path（呼び出し元は __FILE__ / __DIR__ ベース。シンボリックリンクを辿って実体パスを返す）と
+		 * WP_PLUGIN_DIR 等の WordPress の定数（シンボリックリンクを辿らない文字列のまま）の表記が食い違い、
+		 * 単純な前方一致では基準ディレクトリのどれにも一致しないことがある（issue #172）。
+		 * また ABSPATH や WP_CONTENT_DIR を基準にした str_replace() による変換は、
+		 * wp-content を WordPress 本体の外に置いた構成でも同様に壊れるため、この関数では使わない。
+		 * そのため、次の4段階で解決を試みる。
+		 * 通常構成（シンボリックリンク無し・標準配置）では段階 (0) の最初の一致で確定するため
+		 * 後続の段階は一切実行されず、挙動・戻り値ともに従来から変化しない。
+		 * (0) まず変換無しでそのまま突き合わせる（従来と完全に同一の経路）。
+		 * (1) (0) で一致しなければ、WordPress 本体の対応表（$wp_plugin_paths）による変換を試す。
+		 * (2) (1) でも一致しなければ、基準ディレクトリ側を realpath() で実体パスへ変換して再度突き合わせる。
+		 * (3) それでも解決できなければ、空文字（ドメイン直結の壊れた URL の原因になる）を返さず、
+		 *     content_url() を最後の手段として返す（詳細は各処理のコメントを参照）。
+		 *
+		 * @param string $path 変換対象のファイルパス.
+		 * @return string 変換後の URL（末尾スラッシュ付き）.
+		 */
+		private static function get_directory_uri( $path ) {
+
+			$path = wp_normalize_path( $path );
+
+			// 子テーマ・親テーマ・プラグイン・mu-plugins・wp-content はそれぞれ独立にカスタマイズ
+			// 可能なため、より具体的なディレクトリから順にマッチさせて URL を生成する。
+			// テーマルートは get_theme_root()（引数無し）だと常に wp-content/themes 固定になり、
+			// register_theme_directory() で追加された場所にあるテーマを解決できないため、
+			// get_stylesheet() / get_template() を渡して現在有効なテーマ（子テーマ・親テーマ）の
+			// 実際のテーマルートを取得する。WP_CONTENT_DIR は他すべての親ディレクトリのため
+			// 必ず最後に置く。
+			// 配列のキーにディレクトリを使うと、カスタマイズでキーが重複した際に後勝ちで
+			// 上書きされてしまうため、dir / url の組の配列にしている.
+			$directories = array(
+				array(
+					'dir' => wp_normalize_path( get_theme_root( get_stylesheet() ) ),
+					'url' => get_theme_root_uri( get_stylesheet() ),
+				),
+				array(
+					'dir' => wp_normalize_path( get_theme_root( get_template() ) ),
+					'url' => get_theme_root_uri( get_template() ),
+				),
+				array(
+					'dir' => wp_normalize_path( WP_PLUGIN_DIR ),
+					'url' => plugins_url(),
+				),
+				array(
+					'dir' => wp_normalize_path( WPMU_PLUGIN_DIR ),
+					'url' => WPMU_PLUGIN_URL,
+				),
+				array(
+					'dir' => wp_normalize_path( WP_CONTENT_DIR ),
+					'url' => content_url(),
+				),
+			);
+
+			// (0) まず従来どおり、変換無しでそのまま突き合わせる（通常構成はここで確定する）.
+			$uri = self::match_directory_uri( $path, $directories );
+
+			// (1) (0) で一致しなければ、WordPress 本体が持つシンボリックリンク対応表
+			// （$wp_plugin_paths。plugin_basename() が内部で使っているもの）による変換を試す.
+			if ( '' === $uri ) {
+				$uri = self::match_directory_uri( self::resolve_symlinked_plugin_path( $path ), $directories );
 			}
 
-			// vk-helpers 未同梱環境向けのフォールバック（従来どおりの挙動）.
-			return str_replace( wp_normalize_path( ABSPATH ), site_url() . '/', $path ) . '/css/vk-campaign-text.css';
+			// (2) (1) でも一致しなければ、基準ディレクトリ側を realpath() で実体パスへ解決してから、
+			// 変換前の $path（シンボリックリンクを辿った実体パスのまま）と改めて突き合わせる.
+			if ( '' === $uri ) {
+				$uri = self::match_directory_uri( $path, self::realpath_directories( $directories ) );
+			}
+
+			if ( '' !== $uri ) {
+				return $uri;
+			}
+
+			// (3) (0)(1)(2) のいずれでも解決できなかったときの最後の手段.
+			// 空文字を返すと、呼び出し元で相対パスのまま wp_enqueue_style() 等に渡ることになり、
+			// サイト URL（末尾スラッシュ無し）とドメインが直結した壊れた URL になる（issue #172）。
+			// content_url() はファイルシステムとの突き合わせを行わない純粋な URL 生成関数のため、
+			// このケースでも安全にサイト内の絶対 URL を返せる。実際に配置先ディレクトリと
+			// 一致しない可能性はある（読み込むファイルが 404 になりうる）が、ドメイン直結の壊れた URL は避けられる.
+			//
+			// 解決できないまま処理が続くと運用者が気づけないため、原因追跡できるよう記録を残す。
+			// この関数は1リクエスト中に複数回呼ばれることがあるため、static 変数で
+			// 「同一リクエスト内・同じパスにつき1回だけ」記録するようガードする.
+			static $logged_paths = array();
+			if ( ! isset( $logged_paths[ $path ] ) ) {
+				$logged_paths[ $path ] = true;
+
+				// trigger_error() と error_log() は、記録されるかどうかが依存する設定が異なる。
+				// trigger_error() は PHP のエラーハンドラ経由で記録されるため、php.ini の
+				// log_errors が On のときしか記録されない。WP_DEBUG_LOG の有無では代用できない。
+				// WP_DEBUG_LOG は「WordPress が起動時に log_errors を 1 へ強制するかどうか」を
+				// 決めるだけで、log_errors は wp-config.php や php.ini から独立に On のままにも
+				// できるため、「WP_DEBUG=false かつ WP_DEBUG_LOG=true」（デバッグを終えて WP_DEBUG
+				// だけ false に戻し、WP_DEBUG_LOG の行は残す、本番でよくある運用）のとき、実際には
+				// trigger_error() は呼ばれず記録されないのに、WP_DEBUG_LOG を基準にすると
+				// error_log() まで抑止してしまい、記録が一切残らなくなる。
+				// そのため、判定は「trigger_error() が実際にログへ記録されるかどうか」そのもの
+				// （WP_DEBUG が有効 かつ php.ini の log_errors が On）に揃える。この条件が真の
+				// ときだけ error_log() を省けば、二重記録も記録ゼロも起きない.
+				$trigger_error_is_logged = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) && ini_get( 'log_errors' );
+
+				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+					// translators: %s is the file path that could not be resolved to a URL.
+					trigger_error( sprintf( esc_html__( 'VK Campaign Text: Could not resolve path to URL: %s', 'lightning-pro' ), esc_html( $path ) ), E_USER_NOTICE );
+				}
+
+				if ( ! $trigger_error_is_logged ) {
+					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- 本番環境でも原因追跡できるよう意図的に使用している.
+					error_log( sprintf( 'VK Campaign Text: Could not resolve path to URL: %s', $path ) );
+				}
+			}
+
+			return trailingslashit( content_url() );
+		}
+
+		/**
+		 * シンボリックリンク対応の変換.
+		 *
+		 * [重要] この実装は get_directory_uri() と同様、3モジュールに同一内容で存在する
+		 * 意図的な重複である。修正時は他の2モジュールも揃えること。参照実装は
+		 * get_directory_uri() の PHPDoc を参照.
+		 *
+		 * WordPress 本体が持つグローバル変数 $wp_plugin_paths（論理パス（定数ベース）→実体パス（realpath）の
+		 * 対応表。plugin_basename() が内部で使っているもの）を使って、実体パス表記の $path を
+		 * 論理パス（定数ベース）表記へ変換する。対応表に一致するエントリが無ければ $path をそのまま返す。
+		 *
+		 * この対応表を直接参照し plugin_basename() 自体は呼び出していない。plugin_basename() は
+		 * WP_PLUGIN_DIR / WPMU_PLUGIN_DIR からの相対パス（basename）へ変換してしまうため、
+		 * テーマ配下・wp-content 直下など他の基準ディレクトリの判定に使い回せなくなるためである。
+		 * 対応表の構造・突き合わせ方（値が長いものを優先する arsort()）は plugin_basename() の実装に合わせている.
+		 *
+		 * @param string $path 変換対象のパス（wp_normalize_path 済み）.
+		 * @return string 変換後のパス（対応表に一致しなければ $path のまま）.
+		 */
+		private static function resolve_symlinked_plugin_path( $path ) {
+			global $wp_plugin_paths;
+
+			if ( empty( $wp_plugin_paths ) || ! is_array( $wp_plugin_paths ) ) {
+				return $path;
+			}
+
+			// 値（実体パス）が長いものから優先的に評価する。plugin_basename() と同じ arsort().
+			$plugin_paths = $wp_plugin_paths;
+			arsort( $plugin_paths );
+
+			foreach ( $plugin_paths as $dir => $realdir ) {
+				// $dir = 論理パス（定数ベース）, $realdir = 実体パス（realpath）.
+				// 比較（境界判定）・切り出し（substr）・連結（返り値）の3箇所すべてで
+				// 末尾スラッシュを取り除いた同じ基準の文字列を使う。基準が食い違うと、
+				// $realdir の末尾にスラッシュが付いているだけでフォルダの区切りが消えた
+				// 壊れたパスを返してしまう.
+				$realdir = untrailingslashit( wp_normalize_path( $realdir ) );
+				// ディレクトリ境界を正しく判定する。例: /srv/foo が /srv/foo-bar に誤マッチしないようにする。
+				// $realdir が空文字の場合、PHP 8 では strpos( $path, '' ) が 0 を返し全マッチしてしまうため、
+				// 空文字チェックも合わせて行う.
+				if ( '' !== $realdir && ( $path === $realdir || 0 === strpos( $path, $realdir . '/' ) ) ) {
+					return untrailingslashit( wp_normalize_path( $dir ) ) . substr( $path, strlen( $realdir ) );
+				}
+			}
+
+			return $path;
+		}
+
+		/**
+		 * 基準ディレクトリの配列（dir/url の組）を、dir 側を realpath() で実体パスへ解決した配列に変換する。
+		 * realpath() は存在しないパスに false を返すため、その場合はマッチ対象から除外する
+		 * （false のまま突き合わせに使うと strpos() 等で意図しない挙動になるため）。
+		 *
+		 * [重要] この実装は 3モジュールに同一内容で存在する意図的な重複である。
+		 * 修正時は他の2モジュールも揃えること。参照実装は get_directory_uri() の PHPDoc を参照.
+		 *
+		 * @param array $directories dir/url の組の配列.
+		 * @return array realpath 解決後の dir/url の組の配列（解決できなかったものは除外済み）.
+		 */
+		private static function realpath_directories( $directories ) {
+			$resolved = array();
+			foreach ( $directories as $directory ) {
+				// match_directory_uri() と同じ入力検証（dir/url が揃っていない要素は候補から除外する）.
+				if ( empty( $directory['dir'] ) || ! isset( $directory['url'] ) ) {
+					continue;
+				}
+				// open_basedir 制限下のホストでは、制限外パスへの realpath() が E_WARNING を出すことがある。
+				// 戻り値 false は後続で正しく処理できる想定のため、警告だけがログを汚さないよう '@' で抑制する.
+				$real_dir = @realpath( $directory['dir'] ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- open_basedir 制限下での E_WARNING 抑制のため（false は後続で処理する）.
+				if ( false === $real_dir ) {
+					continue;
+				}
+				$resolved[] = array(
+					'dir' => wp_normalize_path( $real_dir ),
+					'url' => $directory['url'],
+				);
+			}
+			return $resolved;
+		}
+
+		/**
+		 * $path が $directories（dir/url の組の配列）のいずれかの dir と前方一致するか調べ、
+		 * 一致したら URL を組み立てて返す。一致しなければ空文字を返す.
+		 *
+		 * [重要] この実装は 3モジュールに同一内容で存在する意図的な重複である。
+		 * 修正時は他の2モジュールも揃えること。参照実装は get_directory_uri() の PHPDoc を参照.
+		 *
+		 * @param string $path 判定対象のパス.
+		 * @param array  $directories dir/url の組の配列.
+		 * @return string 一致した場合は URL（末尾スラッシュ付き）、しなければ空文字.
+		 */
+		private static function match_directory_uri( $path, $directories ) {
+			foreach ( $directories as $directory ) {
+				if ( empty( $directory['dir'] ) || ! isset( $directory['url'] ) ) {
+					continue;
+				}
+				// ディレクトリ境界を正しく判定するため、末尾のスラッシュを取り除いてから比較する。
+				// 例: /wp-content/plugins が /wp-content/plugins-extra に誤マッチしないようにする。
+				// 比較に使う正規化済みの $dir を substr() の切り出し位置にもそのまま使う
+				// （比較にだけ末尾スラッシュ除去後の値を使い、substr() は除去前の $directory['dir'] の
+				// 長さを使うと、WP_CONTENT_DIR 等が末尾スラッシュ付きで define() されている環境で
+				// 相対パスの先頭が1文字欠ける）.
+				$dir = untrailingslashit( $directory['dir'] );
+				// $directory['dir'] が '/' や '//' のように untrailingslashit() 後に空文字になるケースを弾く。
+				// 空文字のままだと strpos( $path, '/' ) === 0 で全マッチしてしまう.
+				if ( '' === $dir ) {
+					continue;
+				}
+				if ( $path === $dir || 0 === strpos( $path, $dir . '/' ) ) {
+					$relative_path = substr( $path, strlen( $dir ) );
+					// url 側も末尾スラッシュを正規化してから連結する。正規化しないと、WP_PLUGIN_URL /
+					// WP_CONTENT_URL 等を末尾スラッシュ付きで define() している環境でスラッシュが重複する
+					// （dir 側は untrailingslashit() 済みのため、url 側も揃える）.
+					return untrailingslashit( $directory['url'] ) . $relative_path . '/';
+				}
+			}
+			return '';
 		}
 
 		/**
