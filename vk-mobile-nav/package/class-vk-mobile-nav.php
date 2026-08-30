@@ -8,7 +8,7 @@ https://github.com/vektor-inc/vektor-wp-libraries
 if ( ! class_exists( 'Vk_Mobile_Nav' ) ) {
 	class Vk_Mobile_Nav {
 
-		public static $version = '0.3.3';
+		public static $version = '0.3.4';
 
 		public function __construct() {
 			/* Can not call get_called_class() on PHP5.2 */
