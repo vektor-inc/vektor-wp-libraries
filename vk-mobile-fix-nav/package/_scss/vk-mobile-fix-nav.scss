@@ -51,7 +51,7 @@
 
 .admin-bar .vk-mobile-nav {
 	height: calc(100% - 62px - 32px);
-	@media screen and (max-width: 782px ) {
+	@media screen and ( width <= 782px ) {
 		height: calc(100% - 62px - 46px);
 	}
 }
@@ -121,7 +121,7 @@
 	}
 }
 
-@media (min-width: 992px){
+@media ( 992px < width ){
 	.mobile-fix-nav {
 		display: none;
 	}

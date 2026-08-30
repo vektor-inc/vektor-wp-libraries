@@ -54,7 +54,7 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 
 	class Vk_Mobile_Fix_Nav {
 
-		public static $version = '0.1.0';
+		public static $version = '0.1.1';
 
 		public function __construct() {
 
