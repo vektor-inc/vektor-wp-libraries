@@ -1148,7 +1148,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				}
 				if ( $image_url ) {
 					$variables_dynamic_css .= '
-					@media ( max-width:575.98px ){
+					@media ( width <= 576px ){
 						:root{
 							--vk-page-header-url : url(' . esc_url( $image_url_sp ) . ');
 						}
