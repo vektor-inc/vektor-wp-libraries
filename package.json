@@ -36,7 +36,7 @@
 		"gulp-sass": "^5.1.0",
 		"gulp-uglify": "^3.0.2",
 		"is-mobile": "^4.0.0",
-		"webpack": "^5.93.0",
+		"webpack": "^5.110.2",
 		"webpack-cli": "^5.1.4"
 	},
 	"devDependencies": {
