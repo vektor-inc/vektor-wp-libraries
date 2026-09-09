@@ -688,7 +688,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 						$wp_customize,
 						'single_page_display_item',
 						array(
-							'label'            => __( 'Single page display item', 'katawara' ),
+							'label'            => __( 'Single page display item', 'vk_page_header_textdomain' ),
 							'section'          => 'vk_page_header_setting',
 							'type'             => 'text',
 							'custom_title_sub' => '',
@@ -709,15 +709,15 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 						$wp_customize->add_control(
 							'vk_page_header[displaytype_' . $name . ']',
 							array(
-								'label'       => __( 'Page header Content Setting', 'katawara' ) . ' [ ' . $label . ' ]',
+								'label'       => __( 'Page header Content Setting', 'vk_page_header_textdomain' ) . ' [ ' . $label . ' ]',
 								'section'     => 'vk_page_header_setting',
 								'settings'    => 'vk_page_header[displaytype_' . $name . ']',
 								'description' => '',
 								'type'        => 'select',
 								'choices'     => array(
-									'default'             => __( 'Default', 'katawara' ),
-									'thumbnail'           => __( 'Display only Thumbnail', 'katawara' ),
-									'post_title_and_meta' => __( 'Display Title, Thumbnail and Post Meta', 'katawara' ),
+									'default'             => __( 'Default', 'vk_page_header_textdomain' ),
+									'thumbnail'           => __( 'Display only Thumbnail', 'vk_page_header_textdomain' ),
+									'post_title_and_meta' => __( 'Display Title, Thumbnail and Post Meta', 'vk_page_header_textdomain' ),
 								),
 							)
 						);
