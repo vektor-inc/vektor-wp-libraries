@@ -15,7 +15,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 	class VK_Custom_Field_Builder {
 
-		public static $version = '0.2.4';
+		public static $version = '0.2.5';
 
 		// define( 'Bill_URL', get_template_directory_uri() );
 		public static function init() {
@@ -144,6 +144,93 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 		/*
 		-------------------------------------------
+		保存値の取得と復元
+		-------------------------------------------
+		*/
+
+		/**
+		 * 投稿メタの値を、復元せず保存されているままの形で取得する
+		 *
+		 * get_post_meta() は単一キーを要求すると保存値を自前で復元するため、
+		 * シリアライズされたオブジェクトが保存されていた場合はそれを生成してしまう。
+		 * 生成してしまってから中身を検査しても手遅れなので、取得の時点で復元させない。
+		 * get_post_custom() は全メタをまとめて要求するので、どの値も保存されたまま返る。
+		 *
+		 * @param  int    $post_id  Post ID to read the value of.
+		 * @param  string $meta_key Meta key to read.
+		 * @return string Stored value, or an empty string when the key holds no string value.
+		 */
+		public static function get_raw_post_meta( $post_id, $meta_key ) {
+			$stored_all = get_post_custom( $post_id );
+
+			if ( ! isset( $stored_all[ $meta_key ][0] ) || ! is_string( $stored_all[ $meta_key ][0] ) ) {
+				return '';
+			}
+
+			return $stored_all[ $meta_key ][0];
+		}
+
+		/**
+		 * 保存されている値を復元する。その際 PHP オブジェクトの生成は許可しない
+		 *
+		 * このライブラリが保存する値は、素の文字列かシリアライズされた配列のみ。
+		 * シリアライズされたオブジェクトは復元せず破棄する。復元してしまうと、
+		 * 保存されていたデータが別クラスのマジックメソッドに渡されてしまうため。
+		 *
+		 * @param  mixed $value Stored value as it is saved in the database.
+		 * @return mixed Restored value, the value itself when it is not serialized, or an empty string when it cannot be restored safely.
+		 */
+		public static function maybe_unserialize_without_object( $value ) {
+			// シリアライズされた文字列でなければ復元するものはない
+			if ( ! is_string( $value ) || ! is_serialized( $value ) ) {
+				return $value;
+			}
+
+			// シリアライズされた false だけは復元結果が正しく false になるため、
+			// 後続の失敗判定より前に処理する
+			if ( 'b:0;' === $value ) {
+				return false;
+			}
+
+			// allowed_classes => false により、読み込み中に PHP がどのクラスも
+			// インスタンス化しないため、どのクラスのマジックメソッドにも到達できない。
+			// 壊れたデータの警告は意図的に抑制している。値はデータベース由来であり、
+			// 壊れていた場合は直後で処理するため、画面表示のたびにエラーログを埋めてはならない
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize -- allowed_classes => false prevents PHP object injection, and a malformed value is handled below.
+			$restored = @unserialize( $value, array( 'allowed_classes' => false ) );
+
+			// 壊れたデータ、およびオブジェクトを含んだままのデータは、どちらも利用できない
+			if ( false === $restored || self::contains_object( $restored ) ) {
+				return '';
+			}
+
+			return $restored;
+		}
+
+		/**
+		 * 値がオブジェクトか、あるいは何階層目かにオブジェクトを含む配列かを判定する
+		 *
+		 * @param  mixed $value Value to inspect.
+		 * @return bool True when an object is found.
+		 */
+		public static function contains_object( $value ) {
+			if ( is_object( $value ) ) {
+				return true;
+			}
+
+			if ( is_array( $value ) ) {
+				foreach ( $value as $item ) {
+					if ( self::contains_object( $item ) ) {
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+		/*
+		-------------------------------------------
 		フォームテーブル
 		-------------------------------------------
 		*/
@@ -242,19 +329,17 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					$form_html .= '</select>';
 
 				} elseif ( $value['type'] == 'checkbox' || $value['type'] == 'radio' ) {
-					$field_value = array();
-					if ( ! empty( get_post_meta( $post->ID, $key, true ) ) ) {
-						$field_value = get_post_meta( $post->ID, $key, true );
-					} elseif ( ! empty( $options[ $key ] ) ) {
-						$field_value = $options[ $key ];
+					// 保存値はそのままの形で取得し、シリアライズして保存されてたら戻す
+					// get_post_meta() は取得時に自前で復元してしまうため、ここでは使わない
+					$field_value = self::maybe_unserialize_without_object( self::get_raw_post_meta( $post->ID, $key ) );
+					if ( empty( $field_value ) ) {
+						$field_value = ( ! empty( $options[ $key ] ) ) ? $options[ $key ] : array();
 					}
 					$form_html .= '<ul>';
 
-					// シリアライズして保存されてたら戻す
-					if ( $value['type'] == 'checkbox' ) {
-						if ( ! is_array( $field_value ) ) {
-							$field_value = unserialize( get_post_meta( $post->ID, $key, true ) );
-						}
+					// チェックボックスは配列としてしか扱えないため、配列以外は空配列にする
+					if ( $value['type'] == 'checkbox' && ! is_array( $field_value ) ) {
+						$field_value = array();
 					}
 
 					foreach ( $value['options'] as $option_value => $option_label ) {
