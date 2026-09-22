@@ -211,8 +211,8 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 		 * 値がオブジェクトか、あるいは何階層目かにオブジェクトを含む配列かを判定する
 		 *
 		 * @param  mixed $value Value to inspect.
-		 * @param  int   $depth Current nesting level of this call.
-		 * @return bool True when an object is found, or when the value is nested too deeply to be a normal stored value.
+		 * @param  int   $depth Current recursion depth.
+		 * @return bool True when an object is found, or when the value nests deeper than the limit.
 		 */
 		public static function contains_object( $value, $depth = 0 ) {
 			// 自分自身を指す配列を渡されると再帰が止まらずメモリを使い切るため、階層の上限で打ち切る。
