@@ -211,16 +211,24 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 		 * 値がオブジェクトか、あるいは何階層目かにオブジェクトを含む配列かを判定する
 		 *
 		 * @param  mixed $value Value to inspect.
-		 * @return bool True when an object is found.
+		 * @param  int   $depth Current nesting level of this call.
+		 * @return bool True when an object is found, or when the value is nested too deeply to be a normal stored value.
 		 */
-		public static function contains_object( $value ) {
+		public static function contains_object( $value, $depth = 0 ) {
+			// 自分自身を指す配列を渡されると再帰が止まらずメモリを使い切るため、階層の上限で打ち切る。
+			// このライブラリが保存するのはチェックボックスの選択値の配列で、入れ子はごく浅い。
+			// 上限を超えた値は正常な保存値ではないので、オブジェクトを含む場合と同じく使わずに破棄する
+			if ( 64 < $depth ) {
+				return true;
+			}
+
 			if ( is_object( $value ) ) {
 				return true;
 			}
 
 			if ( is_array( $value ) ) {
 				foreach ( $value as $item ) {
-					if ( self::contains_object( $item ) ) {
+					if ( self::contains_object( $item, $depth + 1 ) ) {
 						return true;
 					}
 				}
