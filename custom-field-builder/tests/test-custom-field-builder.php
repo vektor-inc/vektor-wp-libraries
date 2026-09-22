@@ -1,0 +1,275 @@
+<?php
+/**
+ * Class VK_Custom_Field_Builder_Test
+ *
+ * @package vektor-inc/VK_Custom_Field_Builder
+ */
+
+if ( ! class_exists( 'VK_CFB_Injection_Probe' ) ) {
+	/**
+	 * 保存値からオブジェクトが生成されたことを検出するためのクラス.
+	 *
+	 * unserialize() がこのクラスをインスタンス化すると __wakeup() が呼ばれる.
+	 * $woken が true になった場合、保存値がクラスのマジックメソッドに到達したことを意味する.
+	 */
+	class VK_CFB_Injection_Probe {
+
+		/**
+		 * __wakeup() が呼ばれたかどうか.
+		 *
+		 * @var bool
+		 */
+		public static $woken = false;
+
+		/**
+		 * unserialize() によってインスタンス化されたことを記録する.
+		 *
+		 * @return void
+		 */
+		public function __wakeup() {
+			self::$woken = true;
+		}
+	}
+}
+
+/**
+ * Class VK_Custom_Field_Builder_Test
+ */
+class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
+
+	/**
+	 * テスト用のチェックボックス項目の定義.
+	 *
+	 * @var string
+	 */
+	const FIELD_KEY = 'cfb_test_employment';
+
+	/**
+	 * テストの前処理.
+	 */
+	public function setUp(): void {
+		parent::setUp();
+		VK_CFB_Injection_Probe::$woken = false;
+	}
+
+	/**
+	 * テスト用のチェックボックス項目の定義を返す.
+	 *
+	 * @return array form_table() に渡すカスタムフィールドの定義.
+	 */
+	private function checkbox_fields_array() {
+		return array(
+			self::FIELD_KEY => array(
+				'label'       => 'Employment',
+				'type'        => 'checkbox',
+				'description' => '',
+				'options'     => array(
+					'FULL_TIME' => 'Full time',
+					'PART_TIME' => 'Part time',
+				),
+			),
+		);
+	}
+
+	/**
+	 * プローブ用クラスをシリアライズした保存値を返す.
+	 *
+	 * @return string シリアライズされたプローブ用クラス.
+	 */
+	private function probe_payload() {
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize -- 復元時の挙動を検証するため、保存値を意図的に組み立てている.
+		return serialize( new VK_CFB_Injection_Probe() );
+	}
+
+	/**
+	 * 入力フォームを生成して HTML を返す.
+	 *
+	 * form_table() は自前で nonce フィールドを出力するため、
+	 * テスト結果に混ざらないようバッファに取る.
+	 *
+	 * @param  array $options 共通設定側の値.
+	 * @return string 生成された入力フォームの HTML.
+	 */
+	private function render_form_table( $options = array() ) {
+		ob_start();
+		$form_html = VK_Custom_Field_Builder::form_table( $this->checkbox_fields_array(), '', false, $options );
+		ob_end_clean();
+
+		return $form_html;
+	}
+
+	/**
+	 * 保存値は復元されずそのままの形で取得される.
+	 */
+	public function test_get_raw_post_meta_returns_stored_value_without_restoring_it() {
+		$post_id = self::factory()->post->create();
+		$payload = $this->probe_payload();
+
+		wp_cache_set( $post_id, array( self::FIELD_KEY => array( $payload ) ), 'post_meta' );
+
+		VK_CFB_Injection_Probe::$woken = false;
+		$stored_value                  = VK_Custom_Field_Builder::get_raw_post_meta( $post_id, self::FIELD_KEY );
+
+		$this->assertFalse( VK_CFB_Injection_Probe::$woken );
+		$this->assertSame( $payload, $stored_value );
+	}
+
+	/**
+	 * 存在しないキーでは空文字を返す.
+	 */
+	public function test_get_raw_post_meta_returns_empty_string_for_missing_key() {
+		$post_id = self::factory()->post->create();
+
+		$this->assertSame( '', VK_Custom_Field_Builder::get_raw_post_meta( $post_id, 'cfb_test_missing' ) );
+	}
+
+	/**
+	 * シリアライズされた文字列でない値はそのまま返る.
+	 */
+	public function test_maybe_unserialize_without_object_returns_plain_value_as_is() {
+		$this->assertSame( 'FULL_TIME', VK_Custom_Field_Builder::maybe_unserialize_without_object( 'FULL_TIME' ) );
+		$this->assertSame( 123, VK_Custom_Field_Builder::maybe_unserialize_without_object( 123 ) );
+		$this->assertSame( array( 'a' ), VK_Custom_Field_Builder::maybe_unserialize_without_object( array( 'a' ) ) );
+	}
+
+	/**
+	 * シリアライズされた配列は配列として復元される.
+	 */
+	public function test_maybe_unserialize_without_object_restores_array() {
+		$expected = array( 'FULL_TIME', 'PART_TIME' );
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize -- 復元前の保存値を組み立てるために必要.
+		$stored_value = serialize( $expected );
+
+		$this->assertSame( $expected, VK_Custom_Field_Builder::maybe_unserialize_without_object( $stored_value ) );
+	}
+
+	/**
+	 * シリアライズされた false は失敗扱いにせず false として復元される.
+	 */
+	public function test_maybe_unserialize_without_object_restores_serialized_false() {
+		$this->assertFalse( VK_Custom_Field_Builder::maybe_unserialize_without_object( 'b:0;' ) );
+	}
+
+	/**
+	 * シリアライズされたオブジェクトは復元されず破棄される.
+	 */
+	public function test_maybe_unserialize_without_object_discards_object() {
+		$this->assertSame( '', VK_Custom_Field_Builder::maybe_unserialize_without_object( 'O:8:"stdClass":1:{s:3:"foo";s:3:"bar";}' ) );
+	}
+
+	/**
+	 * 配列の中に入れ込まれたオブジェクトも同様に破棄される.
+	 */
+	public function test_maybe_unserialize_without_object_discards_nested_object() {
+		$payload = 'a:1:{i:0;a:1:{s:5:"inner";O:8:"stdClass":0:{}}}';
+
+		$this->assertSame( '', VK_Custom_Field_Builder::maybe_unserialize_without_object( $payload ) );
+	}
+
+	/**
+	 * 壊れたシリアライズデータは空文字になる.
+	 */
+	public function test_maybe_unserialize_without_object_discards_broken_data() {
+		$this->assertSame( '', VK_Custom_Field_Builder::maybe_unserialize_without_object( 'a:2:{i:0;s:1:"a";}' ) );
+	}
+
+	/**
+	 * 復元でオブジェクトのマジックメソッドに到達しない.
+	 */
+	public function test_maybe_unserialize_without_object_does_not_wake_object() {
+		$payload = $this->probe_payload();
+
+		VK_CFB_Injection_Probe::$woken = false;
+		$restored                      = VK_Custom_Field_Builder::maybe_unserialize_without_object( $payload );
+
+		$this->assertFalse( VK_CFB_Injection_Probe::$woken );
+		$this->assertSame( '', $restored );
+	}
+
+	/**
+	 * オブジェクトは最上位でも配列の何階層目でも検出される.
+	 */
+	public function test_contains_object() {
+		$this->assertTrue( VK_Custom_Field_Builder::contains_object( new stdClass() ) );
+		$this->assertTrue( VK_Custom_Field_Builder::contains_object( array( 'a' => array( 'b' => new stdClass() ) ) ) );
+		$this->assertFalse( VK_Custom_Field_Builder::contains_object( array( 'a' => array( 'b' => 'c' ) ) ) );
+		$this->assertFalse( VK_Custom_Field_Builder::contains_object( 'string' ) );
+	}
+
+	/**
+	 * 入力フォームの生成でチェックボックスの保存値からオブジェクトを生成しない.
+	 *
+	 * 投稿編集画面からチェックボックスの項目に文字列が送信されて保存された状態を再現している.
+	 * update_post_meta() はシリアライズ済みに見える文字列をもう一度シリアライズして保存する.
+	 */
+	public function test_form_table_does_not_instantiate_object_from_checkbox_meta() {
+		global $post;
+
+		$post_id = self::factory()->post->create();
+		$post    = get_post( $post_id );
+
+		update_post_meta( $post_id, self::FIELD_KEY, $this->probe_payload() );
+
+		VK_CFB_Injection_Probe::$woken = false;
+		$form_html                     = $this->render_form_table();
+
+		$this->assertFalse( VK_CFB_Injection_Probe::$woken );
+		$this->assertIsString( $form_html );
+	}
+
+	/**
+	 * シリアライズが 1 回だけかかった保存値でも同じであること.
+	 *
+	 * インポーターやデータベースへの直接書き込みで残る状態がこれに当たる.
+	 */
+	public function test_form_table_does_not_instantiate_object_from_single_serialized_meta() {
+		global $post;
+
+		$post_id = self::factory()->post->create();
+		$post    = get_post( $post_id );
+
+		wp_cache_set(
+			$post_id,
+			array( self::FIELD_KEY => array( $this->probe_payload() ) ),
+			'post_meta'
+		);
+
+		VK_CFB_Injection_Probe::$woken = false;
+		$form_html                     = $this->render_form_table();
+
+		$this->assertFalse( VK_CFB_Injection_Probe::$woken );
+		$this->assertIsString( $form_html );
+	}
+
+	/**
+	 * 保存済みの配列は従来どおりチェック状態として反映される.
+	 */
+	public function test_form_table_keeps_checkbox_selection_from_meta() {
+		global $post;
+
+		$post_id = self::factory()->post->create();
+		$post    = get_post( $post_id );
+
+		update_post_meta( $post_id, self::FIELD_KEY, array( 'PART_TIME' ) );
+
+		$form_html = $this->render_form_table();
+
+		$this->assertMatchesRegularExpression( '/value="PART_TIME"[^>]*checked/', $form_html );
+		$this->assertDoesNotMatchRegularExpression( '/value="FULL_TIME"[^>]*checked/', $form_html );
+	}
+
+	/**
+	 * 投稿側に値が無い場合は共通設定側の値が使われる.
+	 */
+	public function test_form_table_falls_back_to_common_option_when_meta_is_empty() {
+		global $post;
+
+		$post_id = self::factory()->post->create();
+		$post    = get_post( $post_id );
+
+		$form_html = $this->render_form_table( array( self::FIELD_KEY => array( 'FULL_TIME' ) ) );
+
+		$this->assertMatchesRegularExpression( '/value="FULL_TIME"[^>]*checked/', $form_html );
+		$this->assertDoesNotMatchRegularExpression( '/value="PART_TIME"[^>]*checked/', $form_html );
+	}
+}

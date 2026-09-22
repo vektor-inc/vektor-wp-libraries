@@ -138,11 +138,15 @@ gulp.task('sass_cf', function(done) {
 	  .pipe(gulp.dest('../plugins/lightning-g3-pro-unit/inc/custom-field-builder/package/'))
 	  .pipe(gulp.dest('../plugins/vk-fullsite-installer-beta-tester/inc/custom-field-builder/package/'))
 	  .pipe(gulp.dest('../plugins/vk-fullsite-installer-web/inc/custom-field-builder/package/'));
+	// custom-field-builder/tests/** の配布先は、bootstrap がこのライブラリを読み込むことを
+	// 確認できたものだけに絞っている。他の配布先は各リポジトリで確認してから追加する。
+	gulp.src('./custom-field-builder/tests/**')
+	  .pipe(gulp.dest('../plugins/vk-google-job-posting-manager/tests/'));
 	done();
   });
   gulp.task('watch_cf', function (done) {
 	gulp.watch('./custom-field-builder/package/_scss/**', gulp.task('sass_cf'));
-	gulp.watch('./custom-field-builder/package/**', gulp.task('copy_custom-field-builder'));
+	gulp.watch(['./custom-field-builder/package/**', './custom-field-builder/tests/**'], gulp.task('copy_custom-field-builder'));
 	done();
   });
 
