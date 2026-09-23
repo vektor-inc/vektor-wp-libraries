@@ -82,6 +82,27 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 	}
 
 	/**
+	 * 自分自身を指す配列の保存値を返す.
+	 *
+	 * 復元すると 0 番目の要素が配列そのものを指す形になる.
+	 *
+	 * @return string シリアライズされた、自分自身を指す配列.
+	 */
+	private function self_referencing_payload() {
+		return 'a:1:{i:0;R:1;}';
+	}
+
+	/**
+	 * 自分自身を指す配列を復元して返す.
+	 *
+	 * @return array 0 番目の要素が自分自身を指している配列.
+	 */
+	private function self_referencing_array() {
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize -- allowed_classes => false でオブジェクトは生成されない。検証用の保存値を意図的に復元している.
+		return @unserialize( $this->self_referencing_payload(), array( 'allowed_classes' => false ) );
+	}
+
+	/**
 	 * 入力フォームを生成して HTML を返す.
 	 *
 	 * form_table() は自前で nonce フィールドを出力するため、
@@ -174,6 +195,15 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 	}
 
 	/**
+	 * 自分自身を指す配列は、復元しても使わずに破棄される.
+	 *
+	 * 復元結果をたどる処理が止まらなくなる形のため、値として受け取らない.
+	 */
+	public function test_maybe_unserialize_without_object_discards_self_referencing_array() {
+		$this->assertSame( '', VK_Custom_Field_Builder::maybe_unserialize_without_object( $this->self_referencing_payload() ) );
+	}
+
+	/**
 	 * 復元でオブジェクトのマジックメソッドに到達しない.
 	 */
 	public function test_maybe_unserialize_without_object_does_not_wake_object() {
@@ -194,6 +224,50 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 		$this->assertTrue( VK_Custom_Field_Builder::contains_object( array( 'a' => array( 'b' => new stdClass() ) ) ) );
 		$this->assertFalse( VK_Custom_Field_Builder::contains_object( array( 'a' => array( 'b' => 'c' ) ) ) );
 		$this->assertFalse( VK_Custom_Field_Builder::contains_object( 'string' ) );
+	}
+
+	/**
+	 * 自分自身を指す配列を渡しても処理が止まり、使えない値として判定される.
+	 *
+	 * 打ち切りが効いていない場合、このテストはメモリを使い切って
+	 * プロセスごと停止する（Fatal error）ため、値が返ること自体が確認対象になる.
+	 */
+	public function test_contains_object_stops_for_self_referencing_array() {
+		$this->assertTrue( VK_Custom_Field_Builder::contains_object( $this->self_referencing_array() ) );
+	}
+
+	/**
+	 * 入れ子の深さが上限を超えた配列は、オブジェクトを含まなくても使えない値として判定される.
+	 */
+	public function test_contains_object_limits_nesting_depth() {
+		// 深さごとの期待結果. 上限は 64 階層.
+		$test_cases = array(
+			array(
+				'test_condition_name' => '1 階層だけの配列の場合 => false',
+				'nesting_depth'       => 1,
+				'expected'            => false,
+			),
+			array(
+				'test_condition_name' => '上限以内の 64 階層の配列の場合 => false',
+				'nesting_depth'       => 64,
+				'expected'            => false,
+			),
+			array(
+				'test_condition_name' => '上限を超えた 65 階層の配列の場合 => true',
+				'nesting_depth'       => 65,
+				'expected'            => true,
+			),
+		);
+
+		foreach ( $test_cases as $case ) {
+			// 指定された階層数だけ配列で包んだ値を組み立てる.
+			$value = 'FULL_TIME';
+			for ( $i = 0; $i < $case['nesting_depth']; $i++ ) {
+				$value = array( $value );
+			}
+
+			$this->assertSame( $case['expected'], VK_Custom_Field_Builder::contains_object( $value ), $case['test_condition_name'] );
+		}
 	}
 
 	/**
