@@ -103,6 +103,39 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 	}
 
 	/**
+	 * 指定された階層数だけ配列で包んだ保存値を返す.
+	 *
+	 * 一番内側には整数の 1 を置いている.
+	 *
+	 * @param  int $nesting_depth 配列の入れ子の階層数.
+	 * @return string シリアライズされた、指定階層の入れ子配列.
+	 */
+	private function nested_array_payload( $nesting_depth ) {
+		return str_repeat( 'a:1:{i:0;', $nesting_depth ) . 'i:1;' . str_repeat( '}', $nesting_depth );
+	}
+
+	/**
+	 * 復元結果が何階層の入れ子配列になっているかを返す.
+	 *
+	 * 破棄された値（空文字）は配列ではないため 0 階層として返る.
+	 * nested_array_payload() で組み立てた保存値は必ず 1 階層以上あるので、
+	 * 0 が返った場合は破棄されたことを意味する.
+	 *
+	 * @param  mixed $value maybe_unserialize_without_object() の返り値.
+	 * @return int 入れ子の階層数.
+	 */
+	private function nesting_depth_of( $value ) {
+		$nesting_depth = 0;
+
+		while ( is_array( $value ) && isset( $value[0] ) ) {
+			++$nesting_depth;
+			$value = $value[0];
+		}
+
+		return $nesting_depth;
+	}
+
+	/**
 	 * 入力フォームを生成して HTML を返す.
 	 *
 	 * form_table() は自前で nonce フィールドを出力するため、
@@ -201,6 +234,52 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 	 */
 	public function test_maybe_unserialize_without_object_discards_self_referencing_array() {
 		$this->assertSame( '', VK_Custom_Field_Builder::maybe_unserialize_without_object( $this->self_referencing_payload() ) );
+	}
+
+	/**
+	 * 入れ子が 64 階層を超えた保存値は破棄され、64 階層までは復元される.
+	 *
+	 * 復元を打ち切る上限と、復元後に階層を検査する contains_object() の上限は
+	 * 同じ 64 階層なので、どちらで打ち切られたかは返り値からは区別できない.
+	 * このテストが押さえるのは「上限の値がずれていないこと」で、
+	 * 上限を下げすぎると 64 階層の条件が失敗して気づける.
+	 */
+	public function test_maybe_unserialize_without_object_limits_nesting_depth() {
+		// 階層ごとの期待結果. 上限は 64 階層で、expected は復元された階層数（0 は破棄されたことを意味する）.
+		$test_cases = array(
+			array(
+				'test_condition_name' => '1 階層だけの入れ子の場合 => 1 階層として復元される',
+				'nesting_depth'       => 1,
+				'expected'            => 1,
+			),
+			array(
+				'test_condition_name' => '上限以内の 64 階層の入れ子の場合 => 64 階層として復元される',
+				'nesting_depth'       => 64,
+				'expected'            => 64,
+			),
+			array(
+				'test_condition_name' => '上限を超えた 65 階層の入れ子の場合 => 破棄される',
+				'nesting_depth'       => 65,
+				'expected'            => 0,
+			),
+			array(
+				'test_condition_name' => 'PHP 既定の上限以内でも深すぎる 4000 階層の入れ子の場合 => 破棄される',
+				'nesting_depth'       => 4000,
+				'expected'            => 0,
+			),
+		);
+
+		foreach ( $test_cases as $case ) {
+			$stored_value = $this->nested_array_payload( $case['nesting_depth'] );
+			$restored     = VK_Custom_Field_Builder::maybe_unserialize_without_object( $stored_value );
+
+			$this->assertSame( $case['expected'], $this->nesting_depth_of( $restored ), $case['test_condition_name'] );
+
+			// 破棄された場合は、階層数が 0 になるだけでなく空文字が返る.
+			if ( 0 === $case['expected'] ) {
+				$this->assertSame( '', $restored, $case['test_condition_name'] );
+			}
+		}
 	}
 
 	/**
