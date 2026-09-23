@@ -15,7 +15,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 	class VK_Custom_Field_Builder {
 
-		public static $version = '0.2.6';
+		public static $version = '0.2.7';
 
 		// define( 'Bill_URL', get_template_directory_uri() );
 		public static function init() {
@@ -194,10 +194,19 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 			// allowed_classes => false により、読み込み中に PHP がどのクラスも
 			// インスタンス化しないため、どのクラスのマジックメソッドにも到達できない。
+			// max_depth => 64 は復元そのものを 64 階層で打ち切る。復元し終えてから
+			// contains_object() で階層を見るだけでは、打ち切るまでの復元にスタックと
+			// メモリを使うため、復元の時点で止める（contains_object() の上限と同じ値）。
 			// 壊れたデータの警告は意図的に抑制している。値はデータベース由来であり、
 			// 壊れていた場合は直後で処理するため、画面表示のたびにエラーログを埋めてはならない
 			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize -- allowed_classes => false prevents PHP object injection, and a malformed value is handled below.
-			$restored = @unserialize( $value, array( 'allowed_classes' => false ) );
+			$restored = @unserialize(
+				$value,
+				array(
+					'allowed_classes' => false,
+					'max_depth'       => 64,
+				)
+			);
 
 			// 壊れたデータ、およびオブジェクトを含んだままのデータは、どちらも利用できない
 			if ( false === $restored || self::contains_object( $restored ) ) {
