@@ -11,6 +11,7 @@ if ( ! class_exists( 'Vk_term_color' ) ) {
 
 		/**
 		 * Construct
+		 * init 実行中に読み込まれた場合はその場で register_meta() する.
 		 */
 		public function __construct() {
 			/*
