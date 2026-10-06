@@ -12,6 +12,49 @@ if ( ! class_exists( 'Vk_term_color' ) ) {
 class VkTermColorTest extends WP_UnitTestCase {
 
 	/**
+	 * タームメタ登録処理が init 前の読み込みで init に予約されること.
+	 *
+	 * @return void
+	 */
+	public function test_term_meta_color_registers_init_callback_before_init() {
+		global $wp_actions;
+
+		$init_action_count   = $wp_actions['init'];
+		$callback            = array( 'Vk_term_color', 'term_meta_color' );
+		$registered_priority = has_action( 'init', $callback );
+
+		// 他のテストが残したフックを外し、init 未発火の状態を再現する.
+		if ( false !== $registered_priority ) {
+			remove_action( 'init', $callback, $registered_priority );
+		}
+
+		try {
+			unset( $wp_actions['init'] );
+
+			$this->assertFalse(
+				has_action( 'init', $callback ),
+				'テスト開始前からタームメタ登録処理が init に登録されています.'
+			);
+
+			// init 前にクラスを読み込むと、登録処理は init まで保留される.
+			new Vk_term_color();
+
+			$this->assertTrue(
+				false !== has_action( 'init', $callback ),
+				'タームメタ登録処理が init に登録されていません.'
+			);
+		} finally {
+			// 後続テストへ init の実行状態とフックを持ち越さない.
+			remove_action( 'init', $callback );
+			$wp_actions['init'] = $init_action_count;
+
+			if ( false !== $registered_priority ) {
+				add_action( 'init', $callback, $registered_priority );
+			}
+		}
+	}
+
+	/**
 	 * init 後の読み込みでもサニタイズコールバックが登録されること.
 	 *
 	 * @return void
