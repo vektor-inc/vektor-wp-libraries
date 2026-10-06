@@ -13,7 +13,15 @@ if ( ! class_exists( 'Vk_term_color' ) ) {
 		 * Construct
 		 */
 		public function __construct() {
-			add_action( 'init', array( $this, 'term_meta_color' ) );
+			/*
+			 * init の実行中にこのファイルが読まれると、同じ init へ追加したコールバックは今回走らない.
+			 * その場合はここで register_meta() する.
+			 */
+			if ( did_action( 'init' ) ) {
+				self::term_meta_color();
+			} else {
+				add_action( 'init', array( __CLASS__, 'term_meta_color' ) );
+			}
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 
 			/********************************************
@@ -39,7 +47,7 @@ if ( ! class_exists( 'Vk_term_color' ) ) {
 		 * @return void
 		 */
 		public static function term_meta_color() {
-			register_meta( 'term', 'term_color', array( 'sanitize_callback', array( __CLASS__, 'sanitize_hex' ) ) );
+			register_meta( 'term', 'term_color', array( 'sanitize_callback' => array( __CLASS__, 'sanitize_hex' ) ) );
 		}
 
 		/**
