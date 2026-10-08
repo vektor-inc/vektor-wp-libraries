@@ -60,7 +60,7 @@ if ( ! class_exists( 'Vk_term_color' ) ) {
 		public static function sanitize_hex( $color ) {
 			// sanitize_hex_color() は undefined function くらう.
 			$color = ltrim( $color, '#' );
-			return preg_match( '/^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/', $color ) ? $color : '';
+			return preg_match( '/^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\z/', $color ) ? $color : '';
 		}
 
 		/**
@@ -269,7 +269,7 @@ if ( ! class_exists( 'Vk_term_color' ) ) {
 				$term_name  = esc_html( $terms[0]->name );
 				$term_url   = esc_url( get_term_link( $terms[0]->term_id, $taxonomy ) );
 				$term_color = self::get_term_color( $terms[0]->term_id );
-				$term_color = ( $term_color ) ? ' style="color:#fff;background-color:' . $term_color . '"' : '';
+				$term_color = ( $term_color ) ? ' style="color:#fff;background-color:' . esc_attr( $term_color ) . '"' : '';
 
 				if ( $args['link'] ) {
 					$single_term_with_color .= '<a' . $outer_class . $term_color . ' href="' . esc_url( $term_url ) . '">';

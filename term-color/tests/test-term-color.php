@@ -110,6 +110,11 @@ class VkTermColorTest extends WP_UnitTestCase {
 				'color'               => 'notacolor000',
 				'expected'            => '',
 			),
+			array(
+				'test_condition_name' => '末尾に改行を付けた値は空文字を返す（PCREの$は末尾改行の直前にもマッチするため）',
+				'color'               => "abc\n",
+				'expected'            => '',
+			),
 		);
 
 		foreach ( $test_cases as $test_case ) {
