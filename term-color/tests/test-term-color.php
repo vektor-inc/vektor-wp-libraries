@@ -125,4 +125,165 @@ class VkTermColorTest extends WP_UnitTestCase {
 			);
 		}
 	}
+
+	/**
+	 * ターム色の保存処理 save_term_meta_color() が nonce とタームの編集権限を確認したうえで、送信された色を整形して保存することを確認する.
+	 * 管理画面での保存と同じく wp_update_term() → edited_category フック経由で呼び出し、フックの配線ごと検証する.
+	 *
+	 * @return void
+	 */
+	public function test_save_term_meta_color() {
+		// カテゴリーの編集権限（manage_categories）は管理者にはあり、投稿者・購読者には無い.
+		$admin_id      = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		$author_id     = self::factory()->user->create( array( 'role' => 'author' ) );
+		$subscriber_id = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+
+		// nonce のアクション名はクラスファイルの basename( __FILE__ ) と一致させる必要がある.
+		$nonce_action = 'class.term-color.php';
+
+		// 各ケースの前に入れておく保存済みの値（sanitize_hex を通るため # は除かれて保存される）.
+		$saved = '00ff00';
+
+		$test_cases = array(
+			array(
+				'test_condition_name' => '管理者が nonce 付きで #ff0000 を送信 => ff0000 が保存される',
+				'user_id'             => $admin_id,
+				'nonce'               => 'valid',
+				'term_color'          => '#ff0000',
+				'expected'            => 'ff0000',
+			),
+			array(
+				'test_condition_name' => '管理者が nonce 付きで # なしの ff0000 を送信 => ff0000 が保存される',
+				'user_id'             => $admin_id,
+				'nonce'               => 'valid',
+				'term_color'          => 'ff0000',
+				'expected'            => 'ff0000',
+			),
+			array(
+				'test_condition_name' => '管理者が nonce 付きで 3 桁の #abc を送信 => abc が保存される',
+				'user_id'             => $admin_id,
+				'nonce'               => 'valid',
+				'term_color'          => '#abc',
+				'expected'            => 'abc',
+			),
+			array(
+				'test_condition_name' => '投稿者（カテゴリーの編集権限なし）が nonce 付きで送信 => 保存されず既存の値のまま',
+				'user_id'             => $author_id,
+				'nonce'               => 'valid',
+				'term_color'          => '#ff0000',
+				'expected'            => $saved,
+			),
+			array(
+				'test_condition_name' => '購読者（カテゴリーの編集権限なし）が nonce 付きで送信 => 保存されず既存の値のまま',
+				'user_id'             => $subscriber_id,
+				'nonce'               => 'valid',
+				'term_color'          => '#ff0000',
+				'expected'            => $saved,
+			),
+			array(
+				'test_condition_name' => 'nonce が無い => 保存されず既存の値のまま',
+				'user_id'             => $admin_id,
+				'nonce'               => 'none',
+				'term_color'          => '#ff0000',
+				'expected'            => $saved,
+			),
+			array(
+				'test_condition_name' => 'nonce のアクション名が違う => 保存されず既存の値のまま',
+				'user_id'             => $admin_id,
+				'nonce'               => 'other',
+				'term_color'          => '#ff0000',
+				'expected'            => $saved,
+			),
+			array(
+				'test_condition_name' => 'term_color が送信されない => 既存の値のまま',
+				'user_id'             => $admin_id,
+				'nonce'               => 'valid',
+				'term_color'          => null,
+				'expected'            => $saved,
+			),
+			array(
+				'test_condition_name' => '配列を送信 => 警告を出さずに空文字が保存される',
+				'user_id'             => $admin_id,
+				'nonce'               => 'valid',
+				'term_color'          => array( '#ff0000' ),
+				'expected'            => '',
+			),
+			array(
+				'test_condition_name' => '16進数カラーではない値を送信 => 空文字が保存される',
+				'user_id'             => $admin_id,
+				'nonce'               => 'valid',
+				'term_color'          => 'notacolor000',
+				'expected'            => '',
+			),
+		);
+
+		foreach ( $test_cases as $case ) {
+			// ターム作成時にも create_category 経由で save_term_meta_color() が走るため、前のケースの $_POST を先に空にする.
+			$_POST = array();
+
+			$term_id = self::factory()->term->create( array( 'taxonomy' => 'category' ) );
+			update_term_meta( $term_id, 'term_color', '#' . $saved );
+
+			// nonce は現在のユーザーに紐づくため、ユーザーを切り替えてから作る.
+			wp_set_current_user( $case['user_id'] );
+			if ( 'valid' === $case['nonce'] ) {
+				$_POST['term_color_nonce'] = wp_create_nonce( $nonce_action );
+			} elseif ( 'other' === $case['nonce'] ) {
+				$_POST['term_color_nonce'] = wp_create_nonce( 'other_action' );
+			}
+
+			// WordPress が $_POST に付けるスラッシュを再現する.
+			if ( null !== $case['term_color'] ) {
+				$_POST['term_color'] = wp_slash( $case['term_color'] );
+			}
+
+			// 管理画面での保存と同じく edited_category フック経由で呼び出す.
+			wp_update_term( $term_id, 'category', array( 'description' => 'updated' ) );
+
+			$this->assertSame( $case['expected'], get_term_meta( $term_id, 'term_color', true ), $case['test_condition_name'] );
+		}
+
+		$_POST = array();
+		wp_set_current_user( 0 );
+	}
+
+	/**
+	 * ターム色の取得 get_term_color() が保存済みの値を # 付きで返し、# 付きで保存された旧い値でも同じ色を返すことを確認する.
+	 *
+	 * @return void
+	 */
+	public function test_get_term_color() {
+		$test_cases = array(
+			array(
+				'test_condition_name' => '# なしで保存された値 => # 付きで返す',
+				'saved'               => '00ff00',
+				'expected'            => '#00ff00',
+			),
+			array(
+				'test_condition_name' => '# 付きで保存された旧い値 => # を重ねずに同じ色を返す',
+				'saved'               => '#00ff00',
+				'expected'            => '#00ff00',
+			),
+			array(
+				'test_condition_name' => '保存値が無い => 既定色を返す',
+				'saved'               => null,
+				'expected'            => '#999999',
+			),
+		);
+
+		foreach ( $test_cases as $case ) {
+			$term_id = self::factory()->term->create( array( 'taxonomy' => 'category' ) );
+
+			// 旧い保存値（# 付き）を再現するため、sanitize_callback を通さずに保存する.
+			if ( null !== $case['saved'] ) {
+				$sanitize_callback = array( 'Vk_term_color', 'sanitize_hex' );
+				remove_filter( 'sanitize_term_meta_term_color', $sanitize_callback );
+				update_term_meta( $term_id, 'term_color', $case['saved'] );
+				add_filter( 'sanitize_term_meta_term_color', $sanitize_callback, 10, 4 );
+				$this->assertSame( $case['saved'], get_term_meta( $term_id, 'term_color', true ), $case['test_condition_name'] . '（前提: 保存値がそのまま入っていること）' );
+			}
+
+			$this->assertSame( $case['expected'], Vk_term_color::get_term_color( $term_id ), $case['test_condition_name'] );
+		}
+	}
 }
