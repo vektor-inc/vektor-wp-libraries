@@ -168,7 +168,7 @@ class VK_Custom_Field_Builder_Flexible_Table {
 		}
 
 		$field       = $custom_fields_array['field_name'];
-		$field_value = null;
+		$field_value = '';
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Value is sanitized below.
 		if ( isset( $_POST[ $field ] ) ) {
 			$field_value = wp_unslash( $_POST[ $field ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized below.

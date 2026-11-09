@@ -494,7 +494,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 			foreach ( $custom_fields_array as $key => $value ) {
 
-				$field_value = null;
+				$field_value = '';
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Value is sanitized below.
 				if ( isset( $_POST[ $key ] ) ) {
 					$field_value = wp_unslash( $_POST[ $key ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized below.
