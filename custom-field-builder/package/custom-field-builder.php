@@ -503,10 +503,10 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 				// データが空だったら入れる
 				if ( get_post_meta( $post->ID, $key ) == '' ) {
-					add_post_meta( $post->ID, $key, $field_value, true );
+					add_post_meta( $post->ID, $key, wp_slash( $field_value ), true );
 					// 今入ってる値と違ってたらアップデートする
 				} elseif ( $field_value != get_post_meta( $post->ID, $key, true ) ) {
-					update_post_meta( $post->ID, $key, $field_value );
+					update_post_meta( $post->ID, $key, wp_slash( $field_value ) );
 					// 入力がなかったら消す
 				} elseif ( $field_value == '' ) {
 					delete_post_meta( $post->ID, $key, get_post_meta( $post->ID, $key, true ) );
