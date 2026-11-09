@@ -520,4 +520,47 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 		$_POST = array();
 		wp_set_current_user( 0 );
 	}
+
+	/**
+	 * type が image のときは数値の添付 ID だけを保存する.
+	 *
+	 * @return void
+	 */
+	public function test_save_cf_value_image_id() {
+		$admin_id  = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		$field_key = 'cfb_test_image';
+		$fields    = array(
+			$field_key => array(
+				'label'       => 'Image',
+				'type'        => 'image',
+				'description' => '',
+				'required'    => false,
+			),
+		);
+
+		$cases = array(
+			'数値 ID は保存される' => array( '12', '12' ),
+			'非数値は保存されず消える' => array( 'not-an-id', '' ),
+		);
+
+		foreach ( $cases as $label => list( $posted, $expected ) ) {
+			$_POST   = array();
+			$post_id = self::factory()->post->create( array( 'post_author' => $admin_id ) );
+			update_post_meta( $post_id, $field_key, '99' );
+
+			global $post;
+			$post = get_post( $post_id );
+
+			wp_set_current_user( $admin_id );
+			$_POST['noncename__fields'] = wp_create_nonce( 'vk_custom_field_builder' );
+			$_POST[ $field_key ]        = wp_slash( $posted );
+
+			VK_Custom_Field_Builder::save_cf_value( $fields );
+
+			$this->assertSame( $expected, get_post_meta( $post_id, $field_key, true ), $label );
+		}
+
+		$_POST = array();
+		wp_set_current_user( 0 );
+	}
 }

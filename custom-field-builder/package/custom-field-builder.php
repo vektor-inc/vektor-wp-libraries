@@ -528,6 +528,12 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					return wp_kses_post( $field_value );
 				case 'url':
 					return esc_url_raw( $field_value );
+				case 'image':
+					if ( ! is_numeric( $field_value ) ) {
+						return '';
+					}
+					$image_id = absint( $field_value );
+					return $image_id ? (string) $image_id : '';
 				default:
 					return sanitize_text_field( $field_value );
 			}
