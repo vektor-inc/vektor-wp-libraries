@@ -15,7 +15,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 	class VK_Custom_Field_Builder {
 
-		public static $version = '0.2.7';
+		public static $version = '0.2.8';
 
 		// define( 'Bill_URL', get_template_directory_uri() );
 		public static function init() {
@@ -124,7 +124,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 			}
 			if ( isset( $_POST['noncename__fields'] ) && null !== $posted_value ) {
 				$noncename__fields = sanitize_text_field( wp_unslash( $_POST['noncename__fields'] ) );
-				if ( ! wp_verify_nonce( $noncename__fields, wp_create_nonce( __FILE__ ) ) ) {
+				if ( ! wp_verify_nonce( $noncename__fields, 'vk_custom_field_builder' ) ) {
 					return $value;
 				}
 				if ( isset( $type ) && $type == 'textarea' ) {
@@ -253,7 +253,9 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 		*/
 		public static function form_table( $custom_fields_array, $befor_items = '', $echo = true, $options = array() ) {
 
-			wp_nonce_field( wp_create_nonce( __FILE__ ), 'noncename__fields' );
+			// アクション名は save_cf_value() の wp_verify_nonce() と同じ固定文字列にすること。
+			// 時刻で変わる値をアクション名にすると、発行から 12 時間の区切りを跨いだ保存が通らなくなる.
+			wp_nonce_field( 'vk_custom_field_builder', 'noncename__fields' );
 
 			global $post;
 			global $vgjpm_custom_field_builder_url;
@@ -460,20 +462,33 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 		入力された値の保存
 		-------------------------------------------
 		*/
+		/**
+		 * 入力されたカスタムフィールドの値を保存する.
+		 *
+		 * @param array $custom_fields_array カスタムフィールドの定義.
+		 * @return void
+		 */
 		public static function save_cf_value( $custom_fields_array ) {
 
 			global $post;
 
-			// 設定したnonce を取得（CSRF対策）
-			$noncename__fields = isset( $_POST['noncename__fields'] ) ? sanitize_text_field( wp_unslash( $_POST['noncename__fields'] ) ) : null;
+			if ( ! $post instanceof WP_Post ) {
+				return;
+			}
 
-			// nonce を確認し、値が書き換えられていれば、何もしない（CSRF対策）
-			if ( ! wp_verify_nonce( $noncename__fields, wp_create_nonce( __FILE__ ) ) ) {
+			// nonce の確認（CSRF 対策）。アクション名はフォーム側の wp_nonce_field() と同じ固定文字列にすること.
+			$nonce = isset( $_POST['noncename__fields'] ) ? sanitize_text_field( wp_unslash( $_POST['noncename__fields'] ) ) : '';
+			if ( ! wp_verify_nonce( $nonce, 'vk_custom_field_builder' ) ) {
 				return;
 			}
 
 			// 自動保存ルーチンかどうかチェック。そうだった場合は何もしない（記事の自動保存処理として呼び出された場合の対策）
 			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+				return;
+			}
+
+			// 権限の確認（この投稿を編集できるユーザーだけが保存できる）.
+			if ( ! current_user_can( 'edit_post', $post->ID ) ) {
 				return;
 			}
 

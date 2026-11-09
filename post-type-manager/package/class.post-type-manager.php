@@ -78,7 +78,9 @@ if ( ! class_exists( 'VK_Post_Type_Manager' ) ) {
 			global $post;
 
 			// CSRF対策の設定（フォームにhiddenフィールドとして追加するためのnonceを「'noncename__post_type_manager」として設定）.
-			wp_nonce_field( wp_create_nonce( __FILE__ ), 'noncename__post_type_manager' );
+			// アクション名は save_cf_value() の wp_verify_nonce() と同じ固定文字列にすること。
+			// 時刻で変わる値をアクション名にすると、発行から 12 時間の区切りを跨いだ保存が通らなくなる.
+			wp_nonce_field( 'vk_post_type_manager', 'noncename__post_type_manager' );
 
 			?>
 			<style type="text/css">
@@ -227,19 +229,17 @@ if ( ! class_exists( 'VK_Post_Type_Manager' ) ) {
 
 		}
 
-		/***
+		/**
 		 * 入力されたカスタムフィールドの値の保存
 		 *
-		 * @param string $post_id : post id.
+		 * @param int $post_id 保存対象の投稿 ID.
+		 * @return int $post_id 保存対象の投稿 ID.
 		 */
 		public static function save_cf_value( $post_id ) {
-			global $post;
 
-			// 設定したnonce を取得（CSRF対策）.
-			$noncename__post_type_manager = isset( $_POST['noncename__post_type_manager'] ) ? wp_unslash( $_POST['noncename__post_type_manager'] ) : null;
-
-			// nonce を確認し、値が書き換えられていれば、何もしない（CSRF対策）.
-			if ( ! wp_verify_nonce( $noncename__post_type_manager, wp_create_nonce( __FILE__ ) ) ) {
+			// nonce の確認（CSRF 対策）。アクション名はフォーム側の wp_nonce_field() と同じ固定文字列にすること.
+			$nonce = isset( $_POST['noncename__post_type_manager'] ) ? sanitize_text_field( wp_unslash( $_POST['noncename__post_type_manager'] ) ) : '';
+			if ( ! wp_verify_nonce( $nonce, 'vk_post_type_manager' ) ) {
 				return $post_id;
 			}
 
@@ -248,7 +248,12 @@ if ( ! class_exists( 'VK_Post_Type_Manager' ) ) {
 				return $post_id;
 			}
 
-				// 保存しているカスタムフィールド.
+			// 権限の確認（この投稿を編集できるユーザーだけが保存できる）.
+			if ( ! current_user_can( 'edit_post', $post_id ) ) {
+				return $post_id;
+			}
+
+			// 保存しているカスタムフィールド.
 			$fields = array(
 				'veu_post_type_id',
 				'veu_post_type_items',
@@ -257,10 +262,10 @@ if ( ! class_exists( 'VK_Post_Type_Manager' ) ) {
 				'veu_taxonomy',
 			);
 
-			foreach ( $fields as $key => $field ) {
-					$field_value = ( isset( $_POST[ $field ] ) ) ? $_POST[ $field ] : '';
+			foreach ( $fields as $field ) {
+				$field_value = isset( $_POST[ $field ] ) ? self::sanitize_posted_meta( $field, wp_unslash( $_POST[ $field ] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitize_posted_meta() で整形している.
 
-					// データが空だったら入れる.
+				// データが空だったら入れる.
 				if ( get_post_meta( $post_id, $field ) == '' ) {
 					add_post_meta( $post_id, $field, $field_value, true );
 
@@ -272,10 +277,63 @@ if ( ! class_exists( 'VK_Post_Type_Manager' ) ) {
 				} elseif ( '' === $field_value ) {
 					delete_post_meta( $post_id, $field, get_post_meta( $post_id, $field, true ) );
 				}
-			}		
-			
+			}
+
 			// リライトルールを更新するように.
 			delete_post_meta( $post_id, 'veu_post_type_flush_rewrite_rules' );
+		}
+
+		/**
+		 * 投稿タイプ設定の送信値を項目ごとに整形する.
+		 *
+		 * @param string $field 保存するメタキー.
+		 * @param mixed  $raw   wp_unslash() 済みの送信値.
+		 * @return mixed 整形後の値.
+		 */
+		private static function sanitize_posted_meta( $field, $raw ) {
+			if ( 'veu_post_type_id' === $field ) {
+				return substr( sanitize_key( is_string( $raw ) ? $raw : '' ), 0, 20 );
+			}
+
+			if ( 'veu_post_type_items' === $field ) {
+				if ( ! is_array( $raw ) ) {
+					return '';
+				}
+				$items = array();
+				foreach ( $raw as $key => $value ) {
+					$key = sanitize_key( $key );
+					if ( '' !== $key ) {
+						$items[ $key ] = 'true';
+					}
+				}
+				return $items;
+			}
+
+			if ( 'veu_post_type_export_to_api' === $field ) {
+				$value = sanitize_text_field( is_scalar( $raw ) ? (string) $raw : '' );
+				return ( 'true' === $value || 'false' === $value ) ? $value : '';
+			}
+
+			if ( is_array( $raw ) ) {
+				return self::sanitize_posted_array( $raw );
+			}
+
+			return sanitize_text_field( is_scalar( $raw ) ? (string) $raw : '' );
+		}
+
+		/**
+		 * 配列のキーと値を再帰的に整形する.
+		 *
+		 * @param array $value 送信された配列.
+		 * @return array 整形後の配列.
+		 */
+		private static function sanitize_posted_array( $value ) {
+			$sanitized = array();
+			foreach ( $value as $key => $item ) {
+				$clean_key               = sanitize_text_field( (string) $key );
+				$sanitized[ $clean_key ] = is_array( $item ) ? self::sanitize_posted_array( $item ) : sanitize_text_field( (string) $item );
+			}
+			return $sanitized;
 		}
 
 		/**

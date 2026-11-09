@@ -5,6 +5,10 @@
  * @package vektor-inc/VK_Custom_Field_Builder
  */
 
+if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
+	require_once __DIR__ . '/../package/custom-field-builder.php';
+}
+
 if ( ! class_exists( 'VK_CFB_Injection_Probe' ) ) {
 	/**
 	 * 保存値からオブジェクトが生成されたことを検出するためのクラス.
@@ -424,5 +428,96 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 
 		$this->assertMatchesRegularExpression( '/value="FULL_TIME"[^>]*checked/', $form_html );
 		$this->assertDoesNotMatchRegularExpression( '/value="PART_TIME"[^>]*checked/', $form_html );
+	}
+
+	/**
+	 * 保存処理 save_cf_value() が nonce と投稿の編集権限を確認したうえで、送信された値を整形して保存することを確認する.
+	 *
+	 * @return void
+	 */
+	public function test_save_cf_value() {
+		$admin_id      = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		$author_id     = self::factory()->user->create( array( 'role' => 'author' ) );
+		$subscriber_id = self::factory()->user->create( array( 'role' => 'subscriber' ) );
+
+		$nonce_action = 'vk_custom_field_builder';
+		$saved        = 'FULL_TIME';
+
+		$test_cases = array(
+			array(
+				'test_condition_name' => '管理者が nonce 付きで PART_TIME を送信 => PART_TIME が保存される',
+				'user_id'             => $admin_id,
+				'post_author'         => $admin_id,
+				'nonce'               => 'valid',
+				'posted'              => array( 'PART_TIME' ),
+				'expected'            => array( 'PART_TIME' ),
+			),
+			array(
+				'test_condition_name' => '投稿者が自分の投稿を nonce 付きで送信 => 保存される',
+				'user_id'             => $author_id,
+				'post_author'         => $author_id,
+				'nonce'               => 'valid',
+				'posted'              => array( 'PART_TIME' ),
+				'expected'            => array( 'PART_TIME' ),
+			),
+			array(
+				'test_condition_name' => '投稿者が他人の投稿を nonce 付きで送信 => 保存されず既存の値のまま',
+				'user_id'             => $author_id,
+				'post_author'         => $admin_id,
+				'nonce'               => 'valid',
+				'posted'              => array( 'PART_TIME' ),
+				'expected'            => $saved,
+			),
+			array(
+				'test_condition_name' => '購読者（投稿の編集権限なし）が nonce 付きで送信 => 保存されず既存の値のまま',
+				'user_id'             => $subscriber_id,
+				'post_author'         => $admin_id,
+				'nonce'               => 'valid',
+				'posted'              => array( 'PART_TIME' ),
+				'expected'            => $saved,
+			),
+			array(
+				'test_condition_name' => 'nonce が無い => 保存されず既存の値のまま',
+				'user_id'             => $admin_id,
+				'post_author'         => $admin_id,
+				'nonce'               => 'none',
+				'posted'              => array( 'PART_TIME' ),
+				'expected'            => $saved,
+			),
+			array(
+				'test_condition_name' => 'nonce の用途名が違う => 保存されず既存の値のまま',
+				'user_id'             => $admin_id,
+				'post_author'         => $admin_id,
+				'nonce'               => 'other',
+				'posted'              => array( 'PART_TIME' ),
+				'expected'            => $saved,
+			),
+		);
+
+		foreach ( $test_cases as $case ) {
+			$_POST = array();
+
+			$post_id = self::factory()->post->create( array( 'post_author' => $case['post_author'] ) );
+			update_post_meta( $post_id, self::FIELD_KEY, $saved );
+
+			global $post;
+			$post = get_post( $post_id );
+
+			wp_set_current_user( $case['user_id'] );
+			if ( 'valid' === $case['nonce'] ) {
+				$_POST['noncename__fields'] = wp_create_nonce( $nonce_action );
+			} elseif ( 'other' === $case['nonce'] ) {
+				$_POST['noncename__fields'] = wp_create_nonce( 'other_action' );
+			}
+
+			$_POST[ self::FIELD_KEY ] = wp_slash( $case['posted'] );
+
+			VK_Custom_Field_Builder::save_cf_value( $this->checkbox_fields_array() );
+
+			$this->assertSame( $case['expected'], get_post_meta( $post_id, self::FIELD_KEY, true ), $case['test_condition_name'] );
+		}
+
+		$_POST = array();
+		wp_set_current_user( 0 );
 	}
 }
