@@ -494,7 +494,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 			foreach ( $custom_fields_array as $key => $value ) {
 
-				$field_value = null;
+				$field_value = '';
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Value is sanitized below.
 				if ( isset( $_POST[ $key ] ) ) {
 					$field_value = wp_unslash( $_POST[ $key ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized below.
@@ -503,10 +503,10 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 				// データが空だったら入れる
 				if ( get_post_meta( $post->ID, $key ) == '' ) {
-					add_post_meta( $post->ID, $key, $field_value, true );
+					add_post_meta( $post->ID, $key, wp_slash( $field_value ), true );
 					// 今入ってる値と違ってたらアップデートする
 				} elseif ( $field_value != get_post_meta( $post->ID, $key, true ) ) {
-					update_post_meta( $post->ID, $key, $field_value );
+					update_post_meta( $post->ID, $key, wp_slash( $field_value ) );
 					// 入力がなかったら消す
 				} elseif ( $field_value == '' ) {
 					delete_post_meta( $post->ID, $key, get_post_meta( $post->ID, $key, true ) );
@@ -528,6 +528,12 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					return wp_kses_post( $field_value );
 				case 'url':
 					return esc_url_raw( $field_value );
+				case 'image':
+					if ( ! is_numeric( $field_value ) ) {
+						return '';
+					}
+					$image_id = absint( $field_value );
+					return $image_id ? (string) $image_id : '';
 				default:
 					return sanitize_text_field( $field_value );
 			}

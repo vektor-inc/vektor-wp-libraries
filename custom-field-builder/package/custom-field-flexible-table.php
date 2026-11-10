@@ -168,7 +168,7 @@ class VK_Custom_Field_Builder_Flexible_Table {
 		}
 
 		$field       = $custom_fields_array['field_name'];
-		$field_value = null;
+		$field_value = '';
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Value is sanitized below.
 		if ( isset( $_POST[ $field ] ) ) {
 			$field_value = wp_unslash( $_POST[ $field ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized below.
@@ -182,10 +182,10 @@ class VK_Custom_Field_Builder_Flexible_Table {
 
 		// データが空だったら入れる
 		if ( get_post_meta( $post->ID, $field ) == '' ) {
-			add_post_meta( $post->ID, $field, $field_value, true );
+			add_post_meta( $post->ID, $field, wp_slash( $field_value ), true );
 			// 今入ってる値と違ってたらアップデートする
 		} elseif ( $field_value != get_post_meta( $post->ID, $field, true ) ) {
-			update_post_meta( $post->ID, $field, $field_value );
+			update_post_meta( $post->ID, $field, wp_slash( $field_value ) );
 			// 入力がなかったら消す
 		} elseif ( $field_value == '' ) {
 			delete_post_meta( $post->ID, $field, get_post_meta( $post->ID, $field, true ) );
