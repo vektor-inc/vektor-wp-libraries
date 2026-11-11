@@ -78,9 +78,12 @@ if ( ! function_exists( 'vk_get_post_type' ) ) {
 				// この分岐は状態を変更しない読み取り専用の判定のため、ノンス検証は不要。
 				// 投稿タイプのスラッグは英数字・アンダースコア・ハイフンのみのため、sanitize_key() で情報は落ちない。
 				// phpcs:disable WordPress.Security.NonceVerification.Recommended
-				if ( ! empty( $_GET['post_type'] ) ) {
+				// URL に post_type[]=post のように配列で付いた場合は、post_type の指定が無いときと同じ扱いにする。
+				// WordPress 5.8 以前の sanitize_key() は値の型を確かめないため、PHP 8.0 以上で配列を渡すと TypeError（致命的エラー）になる。
+				if ( ! empty( $_GET['post_type'] ) && is_string( $_GET['post_type'] ) ) {
 					$postType['slug'] = sanitize_key( wp_unslash( $_GET['post_type'] ) );
-				} elseif ( ! empty( $_GET['post'] ) ) {
+				} elseif ( ! empty( $_GET['post'] ) && is_scalar( $_GET['post'] ) ) {
+					// 配列を absint() に通すと 1 になり、無関係な ID 1 の投稿の投稿タイプを返してしまうため、単一の値のときだけ投稿を引く。
 					$admin_post = get_post( absint( wp_unslash( $_GET['post'] ) ) );
 					if ( ! empty( $admin_post->post_type ) ) {
 						$postType['slug'] = $admin_post->post_type;
