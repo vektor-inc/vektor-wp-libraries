@@ -74,6 +74,9 @@ class TemplateTagsTest extends WP_UnitTestCase {
 	 *   sanitize_key() へ渡らず（WordPress 5.8 以前 + PHP 8.0 以上では
 	 *   TypeError になる）、指定が無いときと同じ結果になること。
 	 *   文字列で付いた通常の URL では、返る投稿タイプが変わらないこと。
+	 * - 管理画面かどうかの判定は URL のパス部分で行い、公開側の URL のクエリ文字列に
+	 *   wp-admin が含まれるだけでは管理画面扱いにならないこと。
+	 * - URL の post が正の整数として読める値のときだけ投稿を引くこと。
 	 *
 	 * を、同じ前提（$_SERVER['REQUEST_URI'] の状態・$_GET の状態・
 	 * $wp_query->query_vars['post_type'] の状態）をセットにした条件配列で
@@ -251,6 +254,66 @@ class TemplateTagsTest extends WP_UnitTestCase {
 					'unset_request_uri'   => false,
 					'post_type_query_var' => '',
 					'get'                 => array( 'post' => array( (string) $normal_post_id ) ),
+				),
+				'expected_slug'       => false,
+			),
+			array(
+				'test_condition_name' => '公開側の URL のクエリ文字列に wp-admin を含む場合 => 管理画面扱いにせず、メインクエリの post_type（post）で取得できる',
+				'conditions'          => array(
+					'request_uri'         => '/?s=wp-admin',
+					'unset_request_uri'   => false,
+					'post_type_query_var' => 'post',
+					'get'                 => array( 'post_type' => 'page' ),
+				),
+				'expected_slug'       => 'post',
+			),
+			array(
+				'test_condition_name' => '公開側の URL のパスに wp-admin を含む別名のスラッグがある場合 => 管理画面扱いにせず、メインクエリの post_type（post）で取得できる',
+				'conditions'          => array(
+					'request_uri'         => '/wp-admin-guide/',
+					'unset_request_uri'   => false,
+					'post_type_query_var' => 'post',
+					'get'                 => array( 'post_type' => 'page' ),
+				),
+				'expected_slug'       => 'post',
+			),
+			array(
+				'test_condition_name' => 'サブディレクトリ設置の管理画面で URL にクエリ文字列がある場合 => 管理画面として post の投稿タイプが取得できる',
+				'conditions'          => array(
+					'request_uri'         => '/sub/wp-admin/post.php?post=1',
+					'unset_request_uri'   => false,
+					'post_type_query_var' => '',
+					'get'                 => array( 'post' => (string) $normal_post_id ),
+				),
+				'expected_slug'       => 'post',
+			),
+			array(
+				'test_condition_name' => '管理画面で URL の post が数字以外を含む文字列の場合 => 投稿 ID に化けさせず、post の指定が無いときと同じ false',
+				'conditions'          => array(
+					'request_uri'         => '/wp-admin/post.php',
+					'unset_request_uri'   => false,
+					'post_type_query_var' => '',
+					'get'                 => array( 'post' => $normal_post_id . 'abc' ),
+				),
+				'expected_slug'       => false,
+			),
+			array(
+				'test_condition_name' => '管理画面で URL の post が負の数の文字列の場合 => 絶対値の投稿を拾わず、post の指定が無いときと同じ false',
+				'conditions'          => array(
+					'request_uri'         => '/wp-admin/post.php',
+					'unset_request_uri'   => false,
+					'post_type_query_var' => '',
+					'get'                 => array( 'post' => '-' . $normal_post_id ),
+				),
+				'expected_slug'       => false,
+			),
+			array(
+				'test_condition_name' => '管理画面で URL の post が小数の文字列の場合 => 整数部の投稿を拾わず、post の指定が無いときと同じ false',
+				'conditions'          => array(
+					'request_uri'         => '/wp-admin/post.php',
+					'unset_request_uri'   => false,
+					'post_type_query_var' => '',
+					'get'                 => array( 'post' => '1.5' ),
 				),
 				'expected_slug'       => false,
 			),
