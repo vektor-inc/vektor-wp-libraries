@@ -386,7 +386,11 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					$form_html .= '</ul>';
 
 				} elseif ( $value['type'] == 'image' ) {
-					if ( $post->$key ) {
+					// 保存値が URL（添付 ID ではない値）のときは、その URL をプレビューに使う.
+					$saved_image_url = is_scalar( $post->$key ) ? self::sanitize_image_url( $post->$key ) : '';
+					if ( $saved_image_url ) {
+						$thumb_image_url = $saved_image_url;
+					} elseif ( $post->$key ) {
 						$thumb_image = wp_get_attachment_image_src( $post->$key, 'medium', false );
 						if ( is_array( $thumb_image ) && ! empty( $thumb_image[0] ) ) {
 							$thumb_image_url = $thumb_image[0];

@@ -416,6 +416,66 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 	}
 
 	/**
+	 * 画像フィールドのプレビューは、保存値が URL ならその URL を、添付 ID なら添付画像を、それ以外なら画像なしを表示する.
+	 */
+	public function test_form_table_image_preview() {
+		global $post, $vgjpm_custom_field_builder_url;
+
+		$vgjpm_custom_field_builder_url = 'https://example.com/cfb/';
+		$attachment_id                  = self::factory()->attachment->create_upload_object( DIR_TESTDATA . '/images/canola.jpg' );
+		$attachment_src                 = wp_get_attachment_image_src( $attachment_id, 'medium', false );
+		$fields                         = array(
+			'cfb_test_image' => array(
+				'label'       => 'Image',
+				'type'        => 'image',
+				'description' => '',
+			),
+		);
+
+		$test_cases = array(
+			array(
+				'test_condition_name' => 'URL で保存済みの場合 => その URL がプレビューになる（変更前は画像なしだった）',
+				'saved'               => 'https://example.com/logo.png',
+				'expected_src'        => 'https://example.com/logo.png',
+			),
+			array(
+				'test_condition_name' => '添付 ID で保存済みの場合 => 添付画像がプレビューになる',
+				'saved'               => (string) $attachment_id,
+				'expected_src'        => $attachment_src[0],
+			),
+			array(
+				'test_condition_name' => '空の場合 => 画像なし',
+				'saved'               => '',
+				'expected_src'        => 'https://example.com/cfb/images/no_image.png',
+			),
+			array(
+				'test_condition_name' => 'javascript: の場合 => 画像なし',
+				'saved'               => 'javascript:alert(1)',
+				'expected_src'        => 'https://example.com/cfb/images/no_image.png',
+			),
+			array(
+				'test_condition_name' => '存在しない添付 ID の場合 => 画像なし',
+				'saved'               => '999999',
+				'expected_src'        => 'https://example.com/cfb/images/no_image.png',
+			),
+		);
+
+		foreach ( $test_cases as $case ) {
+			$post_id = self::factory()->post->create();
+			$post    = get_post( $post_id );
+			update_post_meta( $post_id, 'cfb_test_image', $case['saved'] );
+
+			ob_start();
+			$form_html = VK_Custom_Field_Builder::form_table( $fields, '', false );
+			ob_end_clean();
+
+			$this->assertStringContainsString( '<img src="' . esc_url( $case['expected_src'] ) . '" id="thumb_cfb_test_image"', $form_html, $case['test_condition_name'] );
+			// 送信される hidden input の値は保存値のまま変わらない.
+			$this->assertStringContainsString( 'name="cfb_test_image" id="cfb_test_image" value="' . esc_attr( $case['saved'] ) . '"', $form_html, $case['test_condition_name'] );
+		}
+	}
+
+	/**
 	 * 投稿側に値が無い場合は共通設定側の値が使われる.
 	 */
 	public function test_form_table_falls_back_to_common_option_when_meta_is_empty() {
