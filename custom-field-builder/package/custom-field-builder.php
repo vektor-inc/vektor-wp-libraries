@@ -386,7 +386,11 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					$form_html .= '</ul>';
 
 				} elseif ( $value['type'] == 'image' ) {
-					if ( $post->$key ) {
+					// 保存値が URL（添付 ID ではない値）のときは、その URL をプレビューに使う.
+					$saved_image_url = is_scalar( $post->$key ) ? self::sanitize_image_url( $post->$key ) : '';
+					if ( $saved_image_url ) {
+						$thumb_image_url = $saved_image_url;
+					} elseif ( $post->$key ) {
 						$thumb_image = wp_get_attachment_image_src( $post->$key, 'medium', false );
 						if ( is_array( $thumb_image ) && ! empty( $thumb_image[0] ) ) {
 							$thumb_image_url = $thumb_image[0];
@@ -529,14 +533,69 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 				case 'url':
 					return esc_url_raw( $field_value );
 				case 'image':
-					if ( ! is_numeric( $field_value ) ) {
-						return '';
-					}
-					$image_id = absint( $field_value );
-					return $image_id ? (string) $image_id : '';
+					return self::sanitize_image_value( $field_value );
 				default:
 					return sanitize_text_field( $field_value );
 			}
+		}
+
+		/**
+		 * 画像フィールドの値を整える.
+		 *
+		 * 数値は添付 ID として、http / https の URL は esc_url_raw で整えて残し、それ以外は空文字にする.
+		 * 整えた値をもう一度通しても変わらないこと.
+		 *
+		 * @param mixed $value 整える値.
+		 * @return string 添付 ID（正の整数の文字列）か URL. どちらでもなければ空文字.
+		 */
+		public static function sanitize_image_value( $value ) {
+			// 配列などの文字列にできない値は保存しない.
+			if ( ! is_scalar( $value ) ) {
+				return '';
+			}
+
+			// 数値は添付 ID として保存する（0 は空）.
+			if ( is_numeric( $value ) ) {
+				$image_id = absint( $value );
+				return $image_id ? (string) $image_id : '';
+			}
+
+			return self::sanitize_image_url( $value );
+		}
+
+		/**
+		 * 画像フィールドに送信された、添付 ID ではない値を URL として整える.
+		 *
+		 * REST API やインポートで画像の URL を保存している投稿を更新しても値が消えないよう、http / https の URL だけを残す.
+		 *
+		 * @param mixed $value 送信された値.
+		 * @return string 整えた URL. http / https の URL でない値と、制御文字を含む値は空文字.
+		 */
+		public static function sanitize_image_url( $value ) {
+			$image_url = trim( (string) $value );
+
+			// 制御文字を含む値は保存しない（esc_url_raw が取り除くため、検査した URL と保存される URL がずれる）.
+			if ( preg_match( '/[\x00-\x1F\x7F]/', $image_url ) ) {
+				return '';
+			}
+
+			// スキームが http / https で、ホスト名がある URL だけを受け付ける（javascript: や、ただの文字列は保存しない）.
+			$url_parts = wp_parse_url( $image_url );
+			if ( ! is_array( $url_parts ) || empty( $url_parts['host'] ) || empty( $url_parts['scheme'] ) ) {
+				return '';
+			}
+			if ( ! in_array( strtolower( $url_parts['scheme'] ), array( 'http', 'https' ), true ) ) {
+				return '';
+			}
+
+			// 整えたあとの URL にもホスト名が残っていることを確かめる.
+			$sanitized_url   = esc_url_raw( $image_url, array( 'http', 'https' ) );
+			$sanitized_parts = wp_parse_url( $sanitized_url );
+			if ( ! is_array( $sanitized_parts ) || empty( $sanitized_parts['host'] ) ) {
+				return '';
+			}
+
+			return $sanitized_url;
 		}
 
 		private static function get_allowed_form_html() {
