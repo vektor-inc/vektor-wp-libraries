@@ -582,6 +582,116 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 	}
 
 	/**
+	 * 入れ子配列の各フィールドを形式に応じて整え、画像 ID と URL も保持する.
+	 *
+	 * @return void
+	 */
+	public function test_save_cf_value_sanitizes_nested_values_by_field_type() {
+		$admin_id   = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		$field_key  = 'cfb_test_nested_values';
+		$fields     = array(
+			$field_key => array(
+				'nested' => array(
+					'textarea'  => array( 'type' => 'textarea' ),
+					'url'       => array( 'type' => 'url' ),
+					'plain'     => array( 'type' => 'text' ),
+					'image_id'  => array( 'type' => 'image' ),
+					'image_url' => array( 'type' => 'image' ),
+				),
+			),
+		);
+		$test_cases = array(
+			array(
+				'test_condition_name' => '入れ子の textarea・URL・テキスト・画像 ID・画像 URL を送信 => 各形式に応じた値が保存される',
+				'posted'              => array(
+					'nested' => array(
+						'textarea'  => '<strong>説明</strong>',
+						'url'       => 'https://example.com/page',
+						'plain'     => '<b>通常テキスト</b>',
+						'image_id'  => '0012',
+						'image_url' => '  https://example.com/image.png  ',
+					),
+				),
+				'expected'            => array(
+					'nested' => array(
+						'textarea'  => '<strong>説明</strong>',
+						'url'       => 'https://example.com/page',
+						'plain'     => '通常テキスト',
+						'image_id'  => '12',
+						'image_url' => 'https://example.com/image.png',
+					),
+				),
+			),
+			array(
+				'test_condition_name' => '不正な URL・画像値を含む入れ子配列を送信 => 該当する値は空になる',
+				'posted'              => array(
+					'nested' => array(
+						'textarea'  => '<em>補足</em>',
+						'url'       => 'javascript:alert(1)',
+						'plain'     => '通常テキスト',
+						'image_id'  => 'not-an-id',
+						'image_url' => 'ftp://example.com/image.png',
+					),
+				),
+				'expected'            => array(
+					'nested' => array(
+						'textarea'  => '<em>補足</em>',
+						'url'       => '',
+						'plain'     => '通常テキスト',
+						'image_id'  => '',
+						'image_url' => '',
+					),
+				),
+			),
+			array(
+				'test_condition_name' => '空文字と画像 ID 0 を送信 => 空文字が保存される',
+				'posted'              => array(
+					'nested' => array(
+						'textarea'  => '',
+						'url'       => '',
+						'plain'     => '',
+						'image_id'  => '0',
+						'image_url' => '',
+					),
+				),
+				'expected'            => array(
+					'nested' => array(
+						'textarea'  => '',
+						'url'       => '',
+						'plain'     => '',
+						'image_id'  => '',
+						'image_url' => '',
+					),
+				),
+			),
+		);
+
+		foreach ( $test_cases as $case ) {
+			$_POST   = array();
+			$post_id = self::factory()->post->create( array( 'post_author' => $admin_id ) );
+			update_post_meta( $post_id, $field_key, array( 'old' ) );
+
+			global $post;
+			$post = get_post( $post_id );
+
+			wp_set_current_user( $admin_id );
+			$_POST['noncename__fields'] = wp_create_nonce( 'vk_custom_field_builder' );
+			$_POST[ $field_key ]        = wp_slash( $case['posted'] );
+
+			VK_Custom_Field_Builder::save_cf_value( $fields );
+
+			$this->assertSame(
+				$case['expected'],
+				get_post_meta( $post_id, $field_key, true ),
+				$case['test_condition_name']
+			);
+		}
+
+		$_POST = array();
+		wp_set_current_user( 0 );
+	}
+
+	/**
 	 * type が image のときは添付 ID と http / https の URL を保存し、それ以外は空にする.
 	 *
 	 * @return void
@@ -632,6 +742,105 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 			VK_Custom_Field_Builder::save_cf_value( $fields );
 
 			$this->assertSame( $expected, get_post_meta( $post_id, $field_key, true ), $label );
+		}
+
+		$_POST = array();
+		wp_set_current_user( 0 );
+	}
+
+	/**
+	 * Flexible Table の入れ子配列で textarea・URL・通常テキストを形式に応じて整える.
+	 *
+	 * @return void
+	 */
+	public function test_flexible_table_save_cf_value_sanitizes_nested_values_by_field_type() {
+		$admin_id   = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		$field      = 'cfb_test_flexible_nested_values';
+		$fields     = array(
+			'field_name' => $field,
+			'items'      => array(
+				'textarea' => array( 'type' => 'textarea' ),
+				'url'      => array( 'type' => 'url' ),
+				'plain'    => array( 'type' => 'text' ),
+			),
+		);
+		$test_cases = array(
+			array(
+				'test_condition_name' => 'textarea・URL・通常テキストの行を送信 => 各形式に応じた値が保存される',
+				'posted'              => array(
+					0 => array(
+						'textarea' => '<strong>説明</strong>',
+						'url'      => 'https://example.com/first',
+						'plain'    => '<b>通常テキスト</b>',
+					),
+				),
+				'expected'            => array(
+					0 => array(
+						'textarea' => '<strong>説明</strong>',
+						'url'      => 'https://example.com/first',
+						'plain'    => '通常テキスト',
+					),
+				),
+			),
+			array(
+				'test_condition_name' => '複数行と不正な URL を送信 => 全行がサニタイズされ、不正な URL は空になる',
+				'posted'              => array(
+					0 => array(
+						'textarea' => '<em>補足</em>',
+						'url'      => 'javascript:alert(1)',
+						'plain'    => '行 1',
+					),
+					1 => array(
+						'textarea' => '<strong>詳細</strong>',
+						'url'      => 'https://example.com/second',
+						'plain'    => '<i>行 2</i>',
+					),
+				),
+				'expected'            => array(
+					0 => array(
+						'textarea' => '<em>補足</em>',
+						'url'      => '',
+						'plain'    => '行 1',
+					),
+					1 => array(
+						'textarea' => '<strong>詳細</strong>',
+						'url'      => 'https://example.com/second',
+						'plain'    => '行 2',
+					),
+				),
+			),
+			array(
+				'test_condition_name' => '全項目が空の行を送信 => 空の行が削除される',
+				'posted'              => array(
+					0 => array(
+						'textarea' => '',
+						'url'      => '',
+						'plain'    => '',
+					),
+				),
+				'expected'            => array(),
+			),
+		);
+
+		foreach ( $test_cases as $case ) {
+			$_POST   = array();
+			$post_id = self::factory()->post->create( array( 'post_author' => $admin_id ) );
+			update_post_meta( $post_id, $field, array( 'old' ) );
+
+			global $post;
+			$post = get_post( $post_id );
+
+			wp_set_current_user( $admin_id );
+			$_POST[ 'noncename__' . $field ] = wp_create_nonce( 'vk_custom_field_flexible_table' );
+			$_POST[ $field ]                 = wp_slash( $case['posted'] );
+
+			VK_Custom_Field_Builder_Flexible_Table::save_cf_value( $fields );
+
+			$this->assertSame(
+				$case['expected'],
+				get_post_meta( $post_id, $field, true ),
+				$case['test_condition_name']
+			);
 		}
 
 		$_POST = array();

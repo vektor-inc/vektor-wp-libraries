@@ -11,6 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+require_once __DIR__ . '/class-vk-custom-field-builder-sanitizer.php';
+
 if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 	class VK_Custom_Field_Builder {
@@ -518,25 +520,19 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 			} // foreach ($custom_fields_all_array as $key => $value) {
 		}
 
+		/**
+		 * フィールド定義に従って値を整える.
+		 *
+		 * @param mixed $field_value 送信された値.
+		 * @param array $field_config フィールド定義.
+		 * @return mixed 整えた値.
+		 */
 		private static function sanitize_field_value( $field_value, $field_config ) {
-			if ( is_array( $field_value ) ) {
-				return array_map( 'sanitize_text_field', $field_value );
-			}
-
-			if ( ! isset( $field_config['type'] ) ) {
-				return sanitize_text_field( $field_value );
-			}
-
-			switch ( $field_config['type'] ) {
-				case 'textarea':
-					return wp_kses_post( $field_value );
-				case 'url':
-					return esc_url_raw( $field_value );
-				case 'image':
-					return self::sanitize_image_value( $field_value );
-				default:
-					return sanitize_text_field( $field_value );
-			}
+			return VK_Custom_Field_Builder_Sanitizer::sanitize_value(
+				$field_value,
+				$field_config,
+				array( __CLASS__, 'sanitize_image_value' )
+			);
 		}
 
 		/**
