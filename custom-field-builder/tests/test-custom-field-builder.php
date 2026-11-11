@@ -522,7 +522,7 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * type が image のときは数値の添付 ID だけを保存する.
+	 * type が image のときは添付 ID と http / https の URL を保存し、それ以外は空にする.
 	 *
 	 * @return void
 	 */
@@ -540,7 +540,21 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 
 		$cases = array(
 			'数値 ID は保存される' => array( '12', '12' ),
-			'非数値は保存されず消える' => array( 'not-an-id', '' ),
+			'数値の文字列 ID は保存される' => array( '0012', '12' ),
+			'0 は空になる' => array( '0', '' ),
+			'空は空になる' => array( '', '' ),
+			'URL は消えずに保たれる（変更前は空になっていた）' => array( 'https://example.com/logo.png', 'https://example.com/logo.png' ),
+			'http の URL も保たれる' => array( 'http://example.com/a/logo.png?v=1', 'http://example.com/a/logo.png?v=1' ),
+			'前後の空白は除いて URL が保たれる' => array( '  https://example.com/logo.png  ', 'https://example.com/logo.png' ),
+			'%20 を含む URL は %20 のまま残る' => array( 'https://example.com/my%20logo.png', 'https://example.com/my%20logo.png' ),
+			'URL でない文字列は空になる' => array( 'not-an-id', '' ),
+			'script タグは空になる' => array( '<script>alert(1)</script>', '' ),
+			'javascript: は空になる' => array( 'javascript:alert(1)', '' ),
+			'ftp は空になる' => array( 'ftp://example.com/logo.png', '' ),
+			'スキーム省略（//host）は空になる' => array( '//example.com/logo.png', '' ),
+			'改行を含む値は空になる' => array( "https://example.com/a\nb.png", '' ),
+			'タブを含む値は空になる' => array( "https://example.com/a\tb.png", '' ),
+			'<> を含むホストは空になる' => array( 'https://<>/logo.png', '' ),
 		);
 
 		foreach ( $cases as $label => list( $posted, $expected ) ) {
