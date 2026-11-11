@@ -83,9 +83,6 @@ class TemplateTagsTest extends WP_UnitTestCase {
 
 		global $wp_query, $post;
 
-		// 管理画面の URL の post に付ける、通常の投稿（投稿タイプ post）を作成
-		$normal_post_id = self::factory()->post->create( array( 'post_type' => 'post' ) );
-
 		// 配列を absint() に通すと 1 になるため、ID 1 の投稿を拾わないことを確かめられるよう、ID 1 の固定ページを用意
 		if ( get_post( 1 ) ) {
 			wp_update_post(
@@ -105,6 +102,10 @@ class TemplateTagsTest extends WP_UnitTestCase {
 			);
 		}
 		$this->assertSame( 'page', get_post_type( 1 ), 'テストの前提: ID 1 の投稿が固定ページとして存在すること' );
+
+		// 管理画面の URL の post に付ける、通常の投稿（投稿タイプ post）を作成。
+		// ID 1 の用意より後に作ること（先に作ると、この投稿の ID が 1 になる環境で固定ページに書き換わる）。
+		$normal_post_id = self::factory()->post->create( array( 'post_type' => 'post' ) );
 
 		$tests = array(
 			array(
@@ -197,6 +198,16 @@ class TemplateTagsTest extends WP_UnitTestCase {
 					'unset_request_uri'   => false,
 					'post_type_query_var' => '',
 					'get'                 => array( 'post' => (string) $normal_post_id ),
+				),
+				'expected_slug'       => 'post',
+			),
+			array(
+				'test_condition_name' => '管理画面で他のコードが $_GET の post に整数の投稿 ID を入れている場合 => その投稿の投稿タイプが取得できる',
+				'conditions'          => array(
+					'request_uri'         => '/wp-admin/post.php',
+					'unset_request_uri'   => false,
+					'post_type_query_var' => '',
+					'get'                 => array( 'post' => $normal_post_id ),
 				),
 				'expected_slug'       => 'post',
 			),
