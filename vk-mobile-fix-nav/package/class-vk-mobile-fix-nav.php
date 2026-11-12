@@ -989,7 +989,7 @@ JS;
 						// add_menu_btn.
 						if ( ! empty( $options['add_menu_btn'] ) ) {
 							echo '<li>';
-							echo '<span id="vk-mobile-nav-menu-btn" class="vk-mobile-nav-menu-btn" style="color: ' . $color . ';"><span class="link-icon"><i class="fa-solid fa-bars"></i></span>' . esc_html( $options['link_text_0'] ) . '</span>';
+							echo '<span id="vk-mobile-nav-menu-btn" class="vk-mobile-nav-menu-btn" style="color: ' . esc_attr( $color ) . ';"><span class="link-icon"><i class="fa-solid fa-bars"></i></span>' . esc_html( $options['link_text_0'] ) . '</span>';
 							echo '</li>';
 						}
 
@@ -1064,7 +1064,7 @@ JS;
 									$icon_html = VkFontAwesomeVersions::get_icon_tag( $link_icon );
 								}
 
-								echo '<a href="' . esc_url( $link_url ) . '" ' . $blank . ' style="color: ' . $color_style . ';"' . $event . '>
+								echo '<a href="' . esc_url( $link_url ) . '" ' . $blank . ' style="color: ' . esc_attr( $color_style ) . ';"' . $event . '>
 		            <span class="link-icon">' . wp_kses_post( $icon_html ) . '</span>' . esc_html( $link_text ) . '</a>';
 								echo '</li>';
 							}
