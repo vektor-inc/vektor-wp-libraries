@@ -10,8 +10,10 @@
  * @package vektor-inc/vektor-wp-libraries/media-posts-bs4
  * @license GPL-2.0+
  *
- * @version 1.2.1
+ * @version 1.2.2
  */
+
+use VektorInc\VK_Component\VK_Component_Posts;
 
 if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 
@@ -110,6 +112,8 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 				'display_excerpt'            => false,
 				'display_author'             => false,
 				'display_date'               => true,
+				// 更新日の表示（デフォルトは非表示。既存サイトの表示が勝手に変わらないようにする）.
+				'display_modified'           => false,
 				'display_new'                => true,
 				'display_taxonomies'         => false,
 				'display_btn'                => false,
@@ -247,15 +251,11 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 
 			if ( is_author() ) {
 				$post_type_slug = 'author';
-			}
-
-			// 検索結果ページの場合
-			if ( is_search() && $post_type_slug === 'any' ) {
-
-				// 検索にそもそも投稿タイプ指定がある場合は、その投稿タイプで指定されたレイアウトで表示するため
-				// 検索に投稿タイプ指定が any の場合のみ、検索専用レイアウトを適用する
-				$post_type_slug = 'search';
-
+			} elseif ( is_search() ) {
+				// 検索結果ページは、検索クエリの投稿タイプ指定で判定する.
+				// get_post_type_info() は検索結果の1件目の投稿タイプを返すため、使うと検索語によって
+				// 適用されるレイアウトが変わってしまう（Lightning 15.36.0 以降）.
+				$post_type_slug = self::get_search_post_type_slug();
 			}
 
 			// 指定の投稿タイプアーカイブのレイアウトに値が存在する場合
@@ -280,6 +280,39 @@ if ( ! class_exists( 'VK_Media_Posts_BS4' ) ) {
 			}
 
 			return $flag;
+		}
+
+		/**
+		 * 検索結果ページで、どの投稿タイプのレイアウト設定を使うかを返す
+		 *
+		 * 投稿タイプ指定の無い検索（WordPress が 'any' を入れる）は検索専用レイアウトの 'search' を返す。
+		 * 投稿タイプ指定がある検索はその投稿タイプ名を返す。複数指定の場合は先頭の投稿タイプを使う。
+		 *
+		 * @return string 投稿タイプ名、または 'search'
+		 */
+		public static function get_search_post_type_slug() {
+			global $wp_query;
+
+			// query_vars の投稿タイプ配列は WP_Query がアルファベット順に並べ替えるため、
+			// 複数指定時の「先頭」を指定順で判定できるよう、並べ替え前の元のクエリから取得する.
+			if ( isset( $wp_query->query['post_type'] ) ) {
+				$search_post_type = $wp_query->query['post_type'];
+			} else {
+				$search_post_type = get_query_var( 'post_type' );
+			}
+
+			// 複数の投稿タイプが指定された場合は先頭を使う.
+			if ( is_array( $search_post_type ) ) {
+				$search_post_type = current( $search_post_type );
+			}
+			$search_post_type = is_string( $search_post_type ) ? sanitize_key( $search_post_type ) : '';
+
+			// 投稿タイプ指定が無い場合は検索専用レイアウト.
+			if ( empty( $search_post_type ) || 'any' === $search_post_type ) {
+				return 'search';
+			}
+
+			return $search_post_type;
 		}
 
 		/**
