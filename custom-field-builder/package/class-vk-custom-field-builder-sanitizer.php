@@ -27,7 +27,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder_Sanitizer' ) ) {
 			if ( is_array( $value ) ) {
 				// 配列の各要素に対応する定義を渡し、入れ子の値も同じ規則で処理する.
 				foreach ( $value as $key => $item ) {
-					if ( is_array( $field_config ) && isset( $field_config['type'] ) ) {
+					if ( is_array( $field_config ) && isset( $field_config['type'] ) && is_string( $field_config['type'] ) ) {
 						$item_config = $field_config;
 					} elseif ( is_array( $field_config ) && array_key_exists( $key, $field_config ) ) {
 						$item_config = $field_config[ $key ];
@@ -41,7 +41,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder_Sanitizer' ) ) {
 				return $value;
 			}
 
-			if ( is_array( $field_config ) && isset( $field_config['type'] ) ) {
+			if ( is_array( $field_config ) && isset( $field_config['type'] ) && is_string( $field_config['type'] ) ) {
 				switch ( $field_config['type'] ) {
 					case 'textarea':
 						return wp_kses_post( $value );

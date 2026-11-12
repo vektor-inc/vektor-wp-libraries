@@ -820,9 +820,65 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 				),
 				'expected'            => array(),
 			),
+			array(
+				'test_condition_name' => 'type という列と不正な URL を送信 => type 列を保持し URL は空になる',
+				'items'               => array(
+					'type' => array( 'type' => 'text' ),
+					'url'  => array( 'type' => 'url' ),
+				),
+				'posted'              => array(
+					0 => array(
+						'type' => '<strong>列名</strong>',
+						'url'  => 'javascript:alert(1)',
+					),
+				),
+				'expected'            => array(
+					0 => array(
+						'type' => '列名',
+						'url'  => '',
+					),
+				),
+			),
+			array(
+				'test_condition_name' => '整数キーの列と不正な URL を行 0 で送信 => 列ごとの形式で処理され URL は空になる',
+				'items'               => array(
+					0     => array( 'type' => 'textarea' ),
+					'url' => array( 'type' => 'url' ),
+				),
+				'posted'              => array(
+					0 => array(
+						0     => '<strong>説明</strong>',
+						'url' => 'javascript:alert(1)',
+					),
+				),
+				'expected'            => array(
+					0 => array(
+						0     => '<strong>説明</strong>',
+						'url' => '',
+					),
+				),
+			),
+			array(
+				'test_condition_name' => 'image 列に 0012 を送信 => 文字列 0012 が保持される',
+				'items'               => array(
+					'image' => array( 'type' => 'image' ),
+				),
+				'posted'              => array(
+					0 => array( 'image' => '0012' ),
+				),
+				'expected'            => array(
+					0 => array( 'image' => '0012' ),
+				),
+			),
 		);
 
 		foreach ( $test_cases as $case ) {
+			$fields['items'] = isset( $case['items'] ) ? $case['items'] : array(
+				'textarea' => array( 'type' => 'textarea' ),
+				'url'      => array( 'type' => 'url' ),
+				'plain'    => array( 'type' => 'text' ),
+			);
+
 			$_POST   = array();
 			$post_id = self::factory()->post->create( array( 'post_author' => $admin_id ) );
 			update_post_meta( $post_id, $field, array( 'old' ) );

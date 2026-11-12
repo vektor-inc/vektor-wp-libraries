@@ -175,10 +175,19 @@ class VK_Custom_Field_Builder_Flexible_Table {
 		if ( isset( $_POST[ $field ] ) ) {
 			$field_value = wp_unslash( $_POST[ $field ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized below.
 		}
-		$field_value = VK_Custom_Field_Builder_Sanitizer::sanitize_value(
-			$field_value,
-			$custom_fields_array['items']
-		);
+		if ( is_array( $field_value ) ) {
+			foreach ( $field_value as $row_key => $row_value ) {
+				$field_value[ $row_key ] = VK_Custom_Field_Builder_Sanitizer::sanitize_value(
+					$row_value,
+					$custom_fields_array['items']
+				);
+			}
+		} else {
+			$field_value = VK_Custom_Field_Builder_Sanitizer::sanitize_value(
+				$field_value,
+				$custom_fields_array['items']
+			);
+		}
 
 		// 配列の空の行を削除する
 		if ( is_array( $field_value ) ) {
