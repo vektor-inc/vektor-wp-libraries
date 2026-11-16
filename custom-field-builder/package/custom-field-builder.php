@@ -17,7 +17,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 	class VK_Custom_Field_Builder {
 
-		public static $version = '0.2.10';
+		public static $version = '0.2.11';
 
 		// define( 'Bill_URL', get_template_directory_uri() );
 		public static function init() {
@@ -566,7 +566,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 		 * REST API やインポートで画像の URL を保存している投稿を更新しても値が消えないよう、http / https の URL だけを残す.
 		 *
 		 * @param mixed $value 送信された値.
-		 * @return string 整えた URL. http / https の URL でない値と、制御文字を含む値と、長さが上限（VK_Custom_Field_Builder_Sanitizer::VALUE_MAX_LENGTH バイト）を超える値は空文字.
+		 * @return string 整えた URL. http / https の URL でない値と、制御文字を含む値と、整形の前後どちらかで長さが上限（VK_Custom_Field_Builder_Sanitizer::VALUE_MAX_LENGTH バイト）を超える値は空文字.
 		 */
 		public static function sanitize_image_url( $value ) {
 			// 現実的でない長さの値は保存しない（前後の空白を除く前の値で測る）.
@@ -594,6 +594,11 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 			$sanitized_url   = esc_url_raw( $image_url, array( 'http', 'https' ) );
 			$sanitized_parts = wp_parse_url( $sanitized_url );
 			if ( ! is_array( $sanitized_parts ) || empty( $sanitized_parts['host'] ) ) {
+				return '';
+			}
+
+			// 整形すると空白が %20 に変わり長くなることがあるため、整形後の値も上限以内か確かめる.
+			if ( strlen( $sanitized_url ) > VK_Custom_Field_Builder_Sanitizer::VALUE_MAX_LENGTH ) {
 				return '';
 			}
 
