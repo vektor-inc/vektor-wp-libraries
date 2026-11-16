@@ -815,7 +815,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 		 * 致命的エラーになるため呼ばない.
 		 *
 		 * @param mixed $meta_value 保存しようとしている値.
-		 * @return int|string http / https の URL なら整えた URL、URL として不正なら 0、それ以外は 0 以上の整数（添付 ID）.
+		 * @return int|string http / https の URL なら整えた URL、URL として不正（制御文字を含む・ホスト名が無いなど）なら 0、それ以外は 0 以上の整数（添付 ID）.
 		 */
 		public static function sanitize_page_header_image_meta( $meta_value ) {
 			// 文字列以外は添付 ID として整数にする.
@@ -831,8 +831,9 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 				return absint( $meta_value );
 			}
 
-			// 制御文字を含む URL は保存しない（esc_url_raw が取り除くため、検査した URL と保存される URL がずれる）.
-			if ( preg_match( '/[\x00-\x1F\x7F]/', $image_url ) ) {
+			// 制御文字を含む URL は保存しない.
+			// trim() と esc_url_raw() は制御文字を取り除き、調べた値と保存される値がずれるため、整える前の値で調べる.
+			if ( preg_match( '/[\x00-\x1F\x7F]/', $meta_value ) ) {
 				return 0;
 			}
 

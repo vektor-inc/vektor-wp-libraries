@@ -118,9 +118,29 @@ class VkPageHeaderTest extends WP_UnitTestCase {
 				'expected'            => 0,
 			),
 			array(
+				'test_condition_name' => '末尾に NUL がある URL（trim() で消える制御文字） => 0',
+				'value'               => "https://example.com/wp-content/uploads/header.jpg\x00",
+				'expected'            => 0,
+			),
+			array(
+				'test_condition_name' => '末尾に改行がある URL（trim() で消える制御文字） => 0',
+				'value'               => "https://example.com/wp-content/uploads/header.jpg\n",
+				'expected'            => 0,
+			),
+			array(
 				'test_condition_name' => 'ホスト名の無い URL => 0',
 				'value'               => 'https:/wp-content/uploads/header.jpg',
 				'expected'            => 0,
+			),
+			array(
+				'test_condition_name' => '整えるとホスト名が消える URL => 0',
+				'value'               => 'https://<>/header.jpg',
+				'expected'            => 0,
+			),
+			array(
+				'test_condition_name' => '空白を含む URL => 空白を %20 に変えた URL',
+				'value'               => 'https://example.com/wp-content/uploads/my header.jpg',
+				'expected'            => 'https://example.com/wp-content/uploads/my%20header.jpg',
 			),
 		);
 
