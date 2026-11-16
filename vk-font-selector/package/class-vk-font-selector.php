@@ -659,7 +659,7 @@ if ( ! class_exists( 'Vk_Font_Selector' ) ) {
 			if ( $url ) {
 				// enqueue だとパラメーターが反応でずにフォントが認識されない事がある
 				// wp_enqueue_style( 'vk_add_google_web_fonts', $url, array(), self::$version, 'all' );
-				echo '<link href="' . $url . '&ver=' . self::$version . '" rel="stylesheet">';
+				echo '<link href="' . esc_url( $url . '&ver=' . self::$version ) . '" rel="stylesheet">';
 			}
 
 		}

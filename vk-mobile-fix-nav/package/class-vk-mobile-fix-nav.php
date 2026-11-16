@@ -444,7 +444,9 @@ if ( ! class_exists( 'Vk_Mobile_Fix_Nav' ) ) {
 					array(
 						'default'           => '',
 						'type'              => 'option', // 保存先 option or theme_mod
-						'capability'        => 'edit_theme_options', // サイト編集者
+						// この欄の値は onmousedown などの属性に JavaScript としてそのまま出力される.
+						// 追加 CSS と同じ HTML の投稿権限（unfiltered_html）を持つユーザーだけが変更できるようにしているため、edit_theme_options に戻さないこと.
+						'capability'        => 'unfiltered_html',
 						'sanitize_callback' => 'sanitize_text_field',
 					)
 				);
