@@ -308,7 +308,8 @@ class VK_Custom_Field_Builder_Flexible_Table {
 			} // if ( $exist_value || $custom_fields_array['row_empty_display'] ) {
 
 		}
-		return $table_body_html;
+		// 出力する HTML を整える.
+		return wp_kses_post( $table_body_html );
 	}
 
 }
