@@ -17,7 +17,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 	class VK_Custom_Field_Builder {
 
-		public static $version = '0.2.8';
+		public static $version = '0.2.9';
 
 		// define( 'Bill_URL', get_template_directory_uri() );
 		public static function init() {
@@ -417,7 +417,8 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 						$post_value = $options[ $key ];
 					}
 					// ダミー & プレビュー画像
-					$form_html .= '<img src="' . esc_url( $thumb_image_url ) . '" id="thumb_' . esc_attr( $key ) . '" alt="" class="input_thumb" style="width:200px;height:auto;"> ';
+					// data-no-image は、プレビューの読み込み失敗時・画像削除時に js が差し替える「画像なし」の URL.
+					$form_html .= '<img src="' . esc_url( $thumb_image_url ) . '" id="thumb_' . esc_attr( $key ) . '" alt="" class="input_thumb" data-no-image="' . esc_url( $vgjpm_custom_field_builder_url . 'images/no_image.png' ) . '" style="width:200px;height:auto;"> ';
 
 					// 実際に送信する値
 					$form_html .= '<input type="hidden" name="' . esc_attr( $key ) . '" id="' . esc_attr( $key ) . '" value="' . esc_attr( $post_value ) . '" style="width:60%;" />';
@@ -630,7 +631,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 				'select' => array( 'id' => true, 'name' => true, 'class' => true ),
 				'option' => array( 'value' => true, 'selected' => true ),
 				'button' => array( 'id' => true, 'class' => true, 'type' => true ),
-				'img'    => array( 'src' => true, 'id' => true, 'alt' => true, 'class' => true, 'style' => true ),
+				'img'    => array( 'src' => true, 'id' => true, 'alt' => true, 'class' => true, 'style' => true, 'data-no-image' => true ),
 				'a'      => array( 'href' => true, 'target' => true, 'class' => true, 'rel' => true, 'id' => true ),
 			);
 		}

@@ -51,7 +51,44 @@ jQuery(document).ready(function($){
         media_target_id			= jQuery(this).attr('id').replace(/media_reset_/g,'#');
         thumb_id						= jQuery(this).attr('id').replace(/media_reset_/g,'#thumb_');
         jQuery(media_target_id).attr('value', '' );
-        jQuery(thumb_id).attr('src', '' );
+        jQuery(thumb_id).attr('src', jQuery(thumb_id).attr('data-no-image') || '' );
 				jQuery(thumb_id).attr('srcset', '' );
+    });
+
+    /*	プレビュー画像の読み込み失敗時の処理
+    /*-------------------------------------------*/
+    const thumb_selector = '.input_thumb';
+
+    /**
+     * 読み込みに失敗したプレビュー画像を、data-no-image の「画像なし」の画像へ差し替える。
+     * 保存値（hidden 入力）は変更しない。
+     *
+     * @param {HTMLImageElement} img プレビュー画像
+     */
+    function replace_thumb_with_no_image( img ) {
+        const no_image = img.getAttribute('data-no-image');
+
+        // 属性が無い場合と、差し替え済みの場合（「画像なし」自体の読み込み失敗を含む）は何もしない
+        if ( ! no_image || img.getAttribute('src') === no_image ) {
+            return;
+        }
+
+        // srcset が残ると src より優先されるため空にする
+        img.setAttribute('srcset', '' );
+        img.setAttribute('src', no_image );
+    }
+
+    // error イベントは bubble しないため、キャプチャで拾う（後から増えた画像項目にも効く）
+    document.addEventListener('error', function(e) {
+        if ( e.target && e.target.matches && e.target.matches( thumb_selector ) ) {
+            replace_thumb_with_no_image( e.target );
+        }
+    }, true );
+
+    // このスクリプトは admin_footer で読み込まれるため、束縛前に読み込みに失敗した画像も差し替える
+    document.querySelectorAll( thumb_selector ).forEach(function(img) {
+        if ( img.getAttribute('src') && img.complete && 0 === img.naturalWidth ) {
+            replace_thumb_with_no_image( img );
+        }
     });
 });
