@@ -784,7 +784,7 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					'auth_callback'     => function () {
 						return current_user_can( 'edit_pages' );
 					},
-					'sanitize_callback' => 'absint',
+					'sanitize_callback' => array( __CLASS__, 'sanitize_page_header_image_meta' ),
 					'default'           => 0,
 				)
 			);
@@ -799,10 +799,56 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					'auth_callback'     => function () {
 						return current_user_can( 'edit_pages' );
 					},
-					'sanitize_callback' => 'absint',
+					'sanitize_callback' => array( __CLASS__, 'sanitize_page_header_image_meta' ),
 					'default'           => 0,
 				)
 			);
+		}
+
+		/**
+		 * ページヘッダー画像の投稿メタに保存する値を整える.
+		 *
+		 * 古い Lightning は添付 ID ではなく画像の URL を保存していた.
+		 * URL に absint をかけると 0 になり、クラシックエディターの「更新」で
+		 * 「カスタムフィールド」欄から値が送り直されるたびに消えてしまうため、http / https の URL は残す.
+		 * カスタムフィールドビルダーの sanitize_image_url() は、古いビルダーを同梱する製品では存在せず
+		 * 致命的エラーになるため呼ばない.
+		 *
+		 * @param mixed $meta_value 保存しようとしている値.
+		 * @return int|string http / https の URL なら整えた URL、URL として不正なら 0、それ以外は 0 以上の整数（添付 ID）.
+		 */
+		public static function sanitize_page_header_image_meta( $meta_value ) {
+			// 文字列以外は添付 ID として整数にする.
+			if ( ! is_string( $meta_value ) ) {
+				return absint( $meta_value );
+			}
+
+			$image_url = trim( $meta_value );
+			$url_parts = wp_parse_url( $image_url );
+
+			// スキームが http / https でない値は URL として扱わず、添付 ID として整数にする.
+			if ( ! is_array( $url_parts ) || empty( $url_parts['scheme'] ) || ! in_array( strtolower( $url_parts['scheme'] ), array( 'http', 'https' ), true ) ) {
+				return absint( $meta_value );
+			}
+
+			// 制御文字を含む URL は保存しない（esc_url_raw が取り除くため、検査した URL と保存される URL がずれる）.
+			if ( preg_match( '/[\x00-\x1F\x7F]/', $image_url ) ) {
+				return 0;
+			}
+
+			// ホスト名の無い URL は保存しない.
+			if ( empty( $url_parts['host'] ) ) {
+				return 0;
+			}
+
+			// 整えたあとの URL にもホスト名が残っていることを確かめる.
+			$sanitized_url   = esc_url_raw( $image_url, array( 'http', 'https' ) );
+			$sanitized_parts = wp_parse_url( $sanitized_url );
+			if ( ! is_array( $sanitized_parts ) || empty( $sanitized_parts['host'] ) ) {
+				return 0;
+			}
+
+			return $sanitized_url;
 		}
 
 		/**
