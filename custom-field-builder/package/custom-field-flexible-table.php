@@ -154,7 +154,7 @@ class VK_Custom_Field_Builder_Flexible_Table {
 
 		// nonce の確認（CSRF 対策）。アクション名はフォーム側の wp_nonce_field() と同じ固定文字列にすること.
 		$nonce_name = 'noncename__' . $custom_fields_array['field_name'];
-		$nonce      = isset( $_POST[ $nonce_name ] ) ? sanitize_text_field( wp_unslash( $_POST[ $nonce_name ] ) ) : '';
+		$nonce      = isset( $_POST[ $nonce_name ] ) ? sanitize_key( wp_unslash( $_POST[ $nonce_name ] ) ) : '';
 		if ( ! wp_verify_nonce( $nonce, 'vk_custom_field_flexible_table' ) ) {
 			return;
 		}

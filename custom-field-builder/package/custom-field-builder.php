@@ -125,7 +125,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 				$posted_value = wp_unslash( $_POST[ $post_field ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized below.
 			}
 			if ( isset( $_POST['noncename__fields'] ) && null !== $posted_value ) {
-				$noncename__fields = sanitize_text_field( wp_unslash( $_POST['noncename__fields'] ) );
+				$noncename__fields = sanitize_key( wp_unslash( $_POST['noncename__fields'] ) );
 				if ( ! wp_verify_nonce( $noncename__fields, 'vk_custom_field_builder' ) ) {
 					return $value;
 				}
@@ -484,7 +484,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 			}
 
 			// nonce の確認（CSRF 対策）。アクション名はフォーム側の wp_nonce_field() と同じ固定文字列にすること.
-			$nonce = isset( $_POST['noncename__fields'] ) ? sanitize_text_field( wp_unslash( $_POST['noncename__fields'] ) ) : '';
+			$nonce = isset( $_POST['noncename__fields'] ) ? sanitize_key( wp_unslash( $_POST['noncename__fields'] ) ) : '';
 			if ( ! wp_verify_nonce( $nonce, 'vk_custom_field_builder' ) ) {
 				return;
 			}
