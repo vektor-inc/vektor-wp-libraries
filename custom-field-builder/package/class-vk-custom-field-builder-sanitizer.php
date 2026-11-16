@@ -26,6 +26,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder_Sanitizer' ) ) {
 		 * 配列を再帰的にたどり、各フィールド形式に応じて値を整える.
 		 *
 		 * 長さが上限（VALUE_MAX_LENGTH バイト）を超える値は、textarea 以外の項目で、URL・画像・ファイルは空文字にし、それ以外は上限までに切り詰める.
+		 * URL は整形後の値も上限以内か確かめ、超えたら空文字にする.
 		 *
 		 * @param mixed         $value 送信された値.
 		 * @param mixed         $field_config フィールド定義または子フィールド定義.
@@ -64,7 +65,12 @@ if ( ! class_exists( 'VK_Custom_Field_Builder_Sanitizer' ) ) {
 				case 'textarea':
 					return wp_kses_post( $value );
 				case 'url':
-					return esc_url_raw( $value );
+					$sanitized_url = esc_url_raw( $value );
+					// 整形すると空白が %20 に変わり長くなることがあるため、整形後の値も上限以内か確かめる（超えたら切り詰めずに空にする）.
+					if ( strlen( $sanitized_url ) > self::VALUE_MAX_LENGTH ) {
+						return '';
+					}
+					return $sanitized_url;
 				case 'image':
 					if ( is_callable( $image_sanitizer ) ) {
 						return call_user_func( $image_sanitizer, $value );

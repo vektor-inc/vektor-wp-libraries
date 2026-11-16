@@ -746,6 +746,48 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 					),
 				),
 			),
+			array(
+				'test_condition_name' => '整形すると空白が %20 に変わり 2050 バイトになる URL（整形前は上限ちょうどの 2048 バイト）を送信 => URL・画像 URL は空になる',
+				'posted'              => array(
+					'nested' => array(
+						'textarea'  => '',
+						'url'       => 'https://example.com/' . str_repeat( 'a', 2026 ) . ' b',
+						'plain'     => '',
+						'image_id'  => '12',
+						'image_url' => 'https://example.com/' . str_repeat( 'a', 2026 ) . ' b',
+					),
+				),
+				'expected'            => array(
+					'nested' => array(
+						'textarea'  => '',
+						'url'       => '',
+						'plain'     => '',
+						'image_id'  => '12',
+						'image_url' => '',
+					),
+				),
+			),
+			array(
+				'test_condition_name' => '整形すると空白が %20 に変わりちょうど上限（2048 バイト）になる URL（整形前は 2046 バイト）を送信 => URL・画像 URL は %20 に置き換えて保たれる',
+				'posted'              => array(
+					'nested' => array(
+						'textarea'  => '',
+						'url'       => 'https://example.com/' . str_repeat( 'a', 2024 ) . ' b',
+						'plain'     => '',
+						'image_id'  => '12',
+						'image_url' => 'https://example.com/' . str_repeat( 'a', 2024 ) . ' b',
+					),
+				),
+				'expected'            => array(
+					'nested' => array(
+						'textarea'  => '',
+						'url'       => 'https://example.com/' . str_repeat( 'a', 2024 ) . '%20b',
+						'plain'     => '',
+						'image_id'  => '12',
+						'image_url' => 'https://example.com/' . str_repeat( 'a', 2024 ) . '%20b',
+					),
+				),
+			),
 		);
 
 		foreach ( $test_cases as $case ) {
@@ -774,7 +816,7 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * type が image のときは添付 ID と http / https の URL を保存し、それ以外（長さが上限を超える URL を含む）は空にする.
+	 * type が image のときは添付 ID と http / https の URL を保存し、それ以外（整形の前後どちらかで長さが上限を超える URL を含む）は空にする.
 	 *
 	 * @return void
 	 */
@@ -795,6 +837,12 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 		$over_length_url = $max_length_url . 'a';
 		$this->assertSame( 2048, strlen( $max_length_url ), 'テスト用の URL がちょうど 2048 バイトであること' );
 
+		// 空白を 1 つ含み、整形すると空白が %20 に変わって 2 バイト長くなる URL（整形前 2048 バイトと 2046 バイト）.
+		$escaped_over_length_url = 'https://example.com/' . str_repeat( 'a', 2026 ) . ' b';
+		$escaped_max_length_url  = 'https://example.com/' . str_repeat( 'a', 2024 ) . ' b';
+		$this->assertSame( 2048, strlen( $escaped_over_length_url ), 'テスト用の空白を含む URL が整形前にちょうど 2048 バイトであること' );
+		$this->assertSame( 2046, strlen( $escaped_max_length_url ), 'テスト用の空白を含む URL が整形前に 2046 バイトであること' );
+
 		$cases = array(
 			'数値 ID は保存される' => array( '12', '12' ),
 			'数値の文字列 ID は保存される' => array( '0012', '12' ),
@@ -814,6 +862,8 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 			'<> を含むホストは空になる' => array( 'https://<>/logo.png', '' ),
 			'長さがちょうど上限（2048 バイト）の URL は保たれる' => array( $max_length_url, $max_length_url ),
 			'長さが上限を 1 バイト超える URL（2049 バイト）は空になる' => array( $over_length_url, '' ),
+			'整形すると 2050 バイトになる URL（整形前は上限ちょうどの 2048 バイト）は空になる' => array( $escaped_over_length_url, '' ),
+			'整形するとちょうど上限（2048 バイト）になる URL（整形前は 2046 バイト）は %20 に置き換えて保たれる' => array( $escaped_max_length_url, 'https://example.com/' . str_repeat( 'a', 2024 ) . '%20b' ),
 		);
 
 		foreach ( $cases as $label => list( $posted, $expected ) ) {
@@ -967,6 +1017,33 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 					0 => array(
 						'plain' => '行 1',
 						'url'   => 'https://example.com/' . str_repeat( 'a', 2028 ),
+					),
+					1 => array(
+						'plain' => '行 2',
+						'url'   => '',
+					),
+				),
+			),
+			array(
+				'test_condition_name' => 'URL 列に、整形すると空白が %20 に変わりちょうど上限（2048 バイト）になる URL と、2050 バイトになる URL を送信 => 上限以内は %20 に置き換えて保たれ、超えた URL は空になる',
+				'items'               => array(
+					'plain' => array( 'type' => 'text' ),
+					'url'   => array( 'type' => 'url' ),
+				),
+				'posted'              => array(
+					0 => array(
+						'plain' => '行 1',
+						'url'   => 'https://example.com/' . str_repeat( 'a', 2024 ) . ' b',
+					),
+					1 => array(
+						'plain' => '行 2',
+						'url'   => 'https://example.com/' . str_repeat( 'a', 2026 ) . ' b',
+					),
+				),
+				'expected'            => array(
+					0 => array(
+						'plain' => '行 1',
+						'url'   => 'https://example.com/' . str_repeat( 'a', 2024 ) . '%20b',
 					),
 					1 => array(
 						'plain' => '行 2',
