@@ -49,11 +49,42 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 	const FIELD_KEY = 'cfb_test_employment';
 
 	/**
+	 * 退避した $post.
+	 *
+	 * @var mixed
+	 */
+	private $original_post;
+
+	/**
+	 * 退避した $vgjpm_custom_field_builder_url.
+	 *
+	 * @var mixed
+	 */
+	private $original_custom_field_builder_url;
+
+	/**
 	 * テストの前処理.
+	 *
+	 * テストが書き換えるグローバルを退避する.
 	 */
 	public function setUp(): void {
 		parent::setUp();
-		VK_CFB_Injection_Probe::$woken = false;
+		global $post, $vgjpm_custom_field_builder_url;
+		VK_CFB_Injection_Probe::$woken           = false;
+		$this->original_post                     = isset( $post ) ? $post : null;
+		$this->original_custom_field_builder_url = isset( $vgjpm_custom_field_builder_url ) ? $vgjpm_custom_field_builder_url : null;
+	}
+
+	/**
+	 * テストの後処理.
+	 *
+	 * テストが書き換えたグローバルを元に戻す.
+	 */
+	public function tearDown(): void {
+		global $post, $vgjpm_custom_field_builder_url;
+		$post                           = $this->original_post;
+		$vgjpm_custom_field_builder_url = $this->original_custom_field_builder_url;
+		parent::tearDown();
 	}
 
 	/**
@@ -417,11 +448,13 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 
 	/**
 	 * 画像フィールドのプレビューは、保存値が URL ならその URL を、添付 ID なら添付画像を、それ以外なら画像なしを表示する.
+	 * 読み込み失敗時に差し替える「画像なし」の URL（data-no-image）が、wp_kses を通っても出力されることも確かめる.
 	 */
 	public function test_form_table_image_preview() {
 		global $post, $vgjpm_custom_field_builder_url;
 
-		$vgjpm_custom_field_builder_url = 'https://example.com/cfb/';
+		$default_builder_url            = 'https://example.com/cfb/';
+		$vgjpm_custom_field_builder_url = $default_builder_url;
 		$attachment_id                  = self::factory()->attachment->create_upload_object( DIR_TESTDATA . '/images/canola.jpg' );
 		$attachment_src                 = wp_get_attachment_image_src( $attachment_id, 'medium', false );
 		$fields                         = array(
@@ -458,9 +491,20 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 				'saved'               => '999999',
 				'expected_src'        => 'https://example.com/cfb/images/no_image.png',
 			),
+			array(
+				'test_condition_name' => '「画像なし」の URL に & と引用符を含む場合 => data-no-image は & が 1 回だけエスケープされ、引用符は除去されて属性から飛び出さない',
+				'saved'               => '',
+				'builder_url'         => 'https://example.org/pkg/?a=1&b=2"x/',
+				'expected_src_html'   => 'https://example.org/pkg/?a=1&amp;b=2x/images/no_image.png',
+				'expected_no_image'   => 'https://example.org/pkg/?a=1&amp;b=2x/images/no_image.png',
+				'should_not_contain'  => array( '&amp;amp;', '"onload="', 'b=2"x' ),
+			),
 		);
 
 		foreach ( $test_cases as $case ) {
+			// 「画像なし」の配置先 URL は、ケースで指定がなければ固定の URL を使う.
+			$vgjpm_custom_field_builder_url = isset( $case['builder_url'] ) ? $case['builder_url'] : $default_builder_url;
+
 			$post_id = self::factory()->post->create();
 			$post    = get_post( $post_id );
 			update_post_meta( $post_id, 'cfb_test_image', $case['saved'] );
@@ -469,9 +513,21 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 			$form_html = VK_Custom_Field_Builder::form_table( $fields, '', false );
 			ob_end_clean();
 
-			$this->assertStringContainsString( '<img src="' . esc_url( $case['expected_src'] ) . '" id="thumb_cfb_test_image"', $form_html, $case['test_condition_name'] );
+			// & を含む URL は wp_kses を通ると &amp; になるため、そのケースだけ出力後の形で指定する.
+			$expected_src_html = isset( $case['expected_src_html'] ) ? $case['expected_src_html'] : esc_url( $case['expected_src'] );
+			$this->assertStringContainsString( '<img src="' . $expected_src_html . '" id="thumb_cfb_test_image"', $form_html, $case['test_condition_name'] );
 			// 送信される hidden input の値は保存値のまま変わらない.
 			$this->assertStringContainsString( 'name="cfb_test_image" id="cfb_test_image" value="' . esc_attr( $case['saved'] ) . '"', $form_html, $case['test_condition_name'] );
+
+			// 読み込み失敗時・画像削除時に js が差し替える「画像なし」の URL が、保存値によらず出力される.
+			$expected_no_image = isset( $case['expected_no_image'] ) ? $case['expected_no_image'] : 'https://example.com/cfb/images/no_image.png';
+			$this->assertStringContainsString( 'data-no-image="' . $expected_no_image . '"', $form_html, $case['test_condition_name'] );
+
+			if ( isset( $case['should_not_contain'] ) ) {
+				foreach ( $case['should_not_contain'] as $not_expected ) {
+					$this->assertStringNotContainsString( $not_expected, $form_html, $case['test_condition_name'] );
+				}
+			}
 		}
 	}
 
