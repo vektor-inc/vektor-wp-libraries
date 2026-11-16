@@ -17,7 +17,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 	class VK_Custom_Field_Builder {
 
-		public static $version = '0.2.9';
+		public static $version = '0.2.10';
 
 		// define( 'Bill_URL', get_template_directory_uri() );
 		public static function init() {
@@ -125,7 +125,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 				$posted_value = wp_unslash( $_POST[ $post_field ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized below.
 			}
 			if ( isset( $_POST['noncename__fields'] ) && null !== $posted_value ) {
-				$noncename__fields = sanitize_text_field( wp_unslash( $_POST['noncename__fields'] ) );
+				$noncename__fields = sanitize_key( wp_unslash( $_POST['noncename__fields'] ) );
 				if ( ! wp_verify_nonce( $noncename__fields, 'vk_custom_field_builder' ) ) {
 					return $value;
 				}
@@ -484,7 +484,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 			}
 
 			// nonce の確認（CSRF 対策）。アクション名はフォーム側の wp_nonce_field() と同じ固定文字列にすること.
-			$nonce = isset( $_POST['noncename__fields'] ) ? sanitize_text_field( wp_unslash( $_POST['noncename__fields'] ) ) : '';
+			$nonce = isset( $_POST['noncename__fields'] ) ? sanitize_key( wp_unslash( $_POST['noncename__fields'] ) ) : '';
 			if ( ! wp_verify_nonce( $nonce, 'vk_custom_field_builder' ) ) {
 				return;
 			}
@@ -566,9 +566,14 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 		 * REST API やインポートで画像の URL を保存している投稿を更新しても値が消えないよう、http / https の URL だけを残す.
 		 *
 		 * @param mixed $value 送信された値.
-		 * @return string 整えた URL. http / https の URL でない値と、制御文字を含む値は空文字.
+		 * @return string 整えた URL. http / https の URL でない値と、制御文字を含む値と、長さが上限（VK_Custom_Field_Builder_Sanitizer::VALUE_MAX_LENGTH バイト）を超える値は空文字.
 		 */
 		public static function sanitize_image_url( $value ) {
+			// 現実的でない長さの値は保存しない（前後の空白を除く前の値で測る）.
+			if ( strlen( (string) $value ) > VK_Custom_Field_Builder_Sanitizer::VALUE_MAX_LENGTH ) {
+				return '';
+			}
+
 			$image_url = trim( (string) $value );
 
 			// 制御文字を含む値は保存しない（esc_url_raw が取り除くため、検査した URL と保存される URL がずれる）.

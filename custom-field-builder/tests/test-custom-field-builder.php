@@ -492,6 +492,11 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 				'expected_src'        => 'https://example.com/cfb/images/no_image.png',
 			),
 			array(
+				'test_condition_name' => '長さが上限（2048 バイト）を超える URL で保存済みの場合 => 画像なし',
+				'saved'               => 'https://example.com/' . str_repeat( 'a', 2029 ),
+				'expected_src'        => 'https://example.com/cfb/images/no_image.png',
+			),
+			array(
 				'test_condition_name' => '「画像なし」の URL に & と引用符を含む場合 => data-no-image は & が 1 回だけエスケープされ、引用符は除去されて属性から飛び出さない',
 				'saved'               => '',
 				'builder_url'         => 'https://example.org/pkg/?a=1&b=2"x/',
@@ -720,6 +725,27 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 					),
 				),
 			),
+			array(
+				'test_condition_name' => '入れ子の値が長さの上限（2048 バイト）を超える場合 => textarea は切られず、テキストは 2048 バイトに切り詰められ、URL・画像 URL は空になる',
+				'posted'              => array(
+					'nested' => array(
+						'textarea'  => str_repeat( 'a', 3000 ),
+						'url'       => 'https://example.com/' . str_repeat( 'a', 2029 ),
+						'plain'     => str_repeat( 'a', 2049 ),
+						'image_id'  => '12',
+						'image_url' => 'https://example.com/' . str_repeat( 'a', 2029 ),
+					),
+				),
+				'expected'            => array(
+					'nested' => array(
+						'textarea'  => str_repeat( 'a', 3000 ),
+						'url'       => '',
+						'plain'     => str_repeat( 'a', 2048 ),
+						'image_id'  => '12',
+						'image_url' => '',
+					),
+				),
+			),
 		);
 
 		foreach ( $test_cases as $case ) {
@@ -748,7 +774,7 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * type が image のときは添付 ID と http / https の URL を保存し、それ以外は空にする.
+	 * type が image のときは添付 ID と http / https の URL を保存し、それ以外（長さが上限を超える URL を含む）は空にする.
 	 *
 	 * @return void
 	 */
@@ -763,6 +789,11 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 				'required'    => false,
 			),
 		);
+
+		// 長さがちょうど上限（2048 バイト）の URL と、1 バイト超える URL.
+		$max_length_url  = 'https://example.com/' . str_repeat( 'a', 2028 );
+		$over_length_url = $max_length_url . 'a';
+		$this->assertSame( 2048, strlen( $max_length_url ), 'テスト用の URL がちょうど 2048 バイトであること' );
 
 		$cases = array(
 			'数値 ID は保存される' => array( '12', '12' ),
@@ -781,6 +812,8 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 			'改行を含む値は空になる' => array( "https://example.com/a\nb.png", '' ),
 			'タブを含む値は空になる' => array( "https://example.com/a\tb.png", '' ),
 			'<> を含むホストは空になる' => array( 'https://<>/logo.png', '' ),
+			'長さがちょうど上限（2048 バイト）の URL は保たれる' => array( $max_length_url, $max_length_url ),
+			'長さが上限を 1 バイト超える URL（2049 バイト）は空になる' => array( $over_length_url, '' ),
 		);
 
 		foreach ( $cases as $label => list( $posted, $expected ) ) {
@@ -911,6 +944,71 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 					0 => array(
 						0     => '<strong>説明</strong>',
 						'url' => '',
+					),
+				),
+			),
+			array(
+				'test_condition_name' => 'URL 列に長さがちょうど上限（2048 バイト）の URL と、1 バイト超える URL を送信 => 上限ちょうどは保たれ、超えた URL は空になる',
+				'items'               => array(
+					'plain' => array( 'type' => 'text' ),
+					'url'   => array( 'type' => 'url' ),
+				),
+				'posted'              => array(
+					0 => array(
+						'plain' => '行 1',
+						'url'   => 'https://example.com/' . str_repeat( 'a', 2028 ),
+					),
+					1 => array(
+						'plain' => '行 2',
+						'url'   => 'https://example.com/' . str_repeat( 'a', 2029 ),
+					),
+				),
+				'expected'            => array(
+					0 => array(
+						'plain' => '行 1',
+						'url'   => 'https://example.com/' . str_repeat( 'a', 2028 ),
+					),
+					1 => array(
+						'plain' => '行 2',
+						'url'   => '',
+					),
+				),
+			),
+			array(
+				'test_condition_name' => 'テキスト列に 3 バイトの日本語で 2048 バイト目が文字の途中に来る値、image 列に上限（2048 バイト）を超える値を送信 => テキストは文字の途中で切らずに 2046 バイト（682 文字）に切り詰められ、image は空になる',
+				'items'               => array(
+					'plain' => array( 'type' => 'text' ),
+					'image' => array( 'type' => 'image' ),
+				),
+				'posted'              => array(
+					0 => array(
+						'plain' => str_repeat( 'あ', 700 ),
+						'image' => 'https://example.com/' . str_repeat( 'a', 2029 ),
+					),
+				),
+				'expected'            => array(
+					0 => array(
+						'plain' => str_repeat( 'あ', 682 ),
+						'image' => '',
+					),
+				),
+			),
+			array(
+				'test_condition_name' => 'file 列に長さが上限（2048 バイト）を 1 バイト超える https の URL を送信 => 切り詰めずに空になる',
+				'items'               => array(
+					'plain' => array( 'type' => 'text' ),
+					'file'  => array( 'type' => 'file' ),
+				),
+				'posted'              => array(
+					0 => array(
+						'plain' => '行 1',
+						'file'  => 'https://example.com/' . str_repeat( 'a', 2029 ),
+					),
+				),
+				'expected'            => array(
+					0 => array(
+						'plain' => '行 1',
+						'file'  => '',
 					),
 				),
 			),
