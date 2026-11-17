@@ -104,8 +104,8 @@ class VK_Custom_Field_Builder_Flexible_Table {
 				$input_value = $fields_value[ $key ][ $field_key ];
 
 				if ( $value['type'] == 'textarea' ) {
-					// タグを文字にして入れる（値に含まれる textarea の終了タグも文字になる）。タグのまま入れると、末尾の wp_kses() が許可リストに無い太字・リンクなどを取り除き、そのまま更新すると保存値からも消えるため.
-					$textarea_value = esc_html( wp_kses_post( $input_value ) );
+					// 値に含まれる実体参照（&lt; など）も、ブラウザーが戻した値として保持するため、& も含めて文字にして入れる。textarea の終了タグも文字になる。タグのまま入れると、末尾の wp_kses() が許可リストに無い太字・リンクなどを取り除き、そのまま更新すると保存値からも消えるため.
+					$textarea_value = esc_textarea( wp_kses_post( $input_value ) );
 					$form_table    .= '<textarea class="flexible-field-item" class="cf_textarea_wysiwyg" name="' . $id . '" cols="100" rows="3">' . $textarea_value . '</textarea>';
 
 				} elseif ( $value['type'] == 'select' ) {

@@ -1192,10 +1192,29 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 					),
 				),
 				'expected'            => array(
-					'cols="100" rows="3">&lt;strong&gt;太字&lt;/strong&gt;&lt;br&gt;&lt;a href=&quot;https://example.com/?a=1&amp;b=2&quot;&gt;link&lt;/a&gt;</textarea>',
+					'cols="100" rows="3">&lt;strong&gt;太字&lt;/strong&gt;&lt;br&gt;&lt;a href=&quot;https://example.com/?a=1&amp;amp;b=2&quot;&gt;link&lt;/a&gt;</textarea>',
 				),
 				'not_expected'        => array( 'rows="3">太字link</textarea>' ),
-				'expected_textarea'   => '<strong>太字</strong><br><a href="https://example.com/?a=1&b=2">link</a>',
+				'expected_textarea'   => '<strong>太字</strong><br><a href="https://example.com/?a=1&amp;b=2">link</a>',
+			),
+			array(
+				'test_condition_name' => 'textarea に太字と実体参照（&lt;widget&gt;）が保存済み => 実体参照が保たれ、そのまま送信し直しても保存値が変わらない',
+				'conditions'          => array(
+					'items'  => $standard_items,
+					'stored' => array(
+						0 => array(
+							'name' => 'n',
+							'memo' => '<strong>&lt;widget&gt;</strong>',
+							'kind' => 'a',
+							'date' => '',
+						),
+					),
+				),
+				'expected'            => array(
+					'cols="100" rows="3">&lt;strong&gt;&amp;lt;widget&amp;gt;&lt;/strong&gt;</textarea>',
+				),
+				'not_expected'        => array(),
+				'expected_textarea'   => '<strong>&lt;widget&gt;</strong>',
 			),
 			array(
 				'test_condition_name' => '実体参照の文字列そのものが保存済みの行が 2 行 => 行ごとのキーで表示され、実体参照は二重にならない',
