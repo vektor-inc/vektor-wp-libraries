@@ -17,16 +17,23 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 	class VK_Custom_Field_Builder {
 
-		public static $version = '0.2.11';
+		public static $version = '0.2.12';
 
 		// define( 'Bill_URL', get_template_directory_uri() );
 		public static function init() {
 			add_action( 'admin_footer', array( __CLASS__, 'print_script' ), 10, 2 );
 		}
 
+		/**
+		 * 同梱した package（js・css・画像を置いたディレクトリ）の URL を返す.
+		 *
+		 * URL は、同梱する各製品の設定ファイル（custom-field-builder-config.php など）で $custom_field_builder_url に入れる.
+		 *
+		 * @return string|null package の URL（末尾は /）. 設定されていなければ null.
+		 */
 		static function admin_directory_url() {
-			global $vgjpm_custom_field_builder_url; // configファイルで指定
-			$direcrory_url = $vgjpm_custom_field_builder_url;
+			global $custom_field_builder_url; // configファイルで指定
+			$direcrory_url = $custom_field_builder_url;
 			return $direcrory_url;
 		}
 
@@ -35,6 +42,14 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 		管理画面用共通js読み込み（記述場所によっては動作しないので注意）
 		-------------------------------------------
 		*/
+		/**
+		 * 管理画面で使う js・css を読み込む.
+		 *
+		 * 他のプラグインと干渉する画面では、フィルター（cfb_media_uploader_exclude・cfb_flexible_table_excludes・cfb_jquery_ui_excludes）で指定した画面を読み込みから外す.
+		 *
+		 * @param string $hook_suffix 使わない（表示中の画面は、グローバル変数 $hook_suffix で判定する）.
+		 * @return void
+		 */
 		public static function print_script( $hook_suffix ) {
 			global $hook_suffix;
 			wp_register_script( 'datepicker', self::admin_directory_url() . 'js/datepicker.js', array( 'jquery', 'jquery-ui-datepicker' ), self::$version, true );
@@ -43,49 +58,21 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 			// media_uploader.js は、メディアアップローダーを使うためのjs
 			// Post Author Display と干渉するのでプロフィール画面では読み込まない
 			$media_uploader_exclude = array( 'profile.php' );
-			if ( has_filter( 'cfb_media_uploader_exclude' ) ) {
-				if ( function_exists( 'apply_filters_deprecated' ) ) {
-					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Back-compat for legacy hook.
-					$media_uploader_exclude = apply_filters_deprecated(
-						'cfb_media_uploader_exclude',
-						array( $media_uploader_exclude ),
-						self::$version,
-						'vgjpm_cfb_media_uploader_exclude'
-					);
-				} else {
-					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Back-compat for legacy hook.
-					$media_uploader_exclude = apply_filters( 'cfb_media_uploader_exclude', $media_uploader_exclude );
-				}
-			}
-			$media_uploader_exclude = apply_filters( 'vgjpm_cfb_media_uploader_exclude', $media_uploader_exclude );
+			$media_uploader_exclude = apply_filters( 'cfb_media_uploader_exclude', $media_uploader_exclude );
 			if ( ! in_array( $hook_suffix, $media_uploader_exclude, true ) ) {
 				wp_enqueue_script( 'vk_mediauploader', self::admin_directory_url() . 'js/mediauploader.js', array( 'jquery' ), self::$version, true );
 				wp_localize_script(
 					'vk_mediauploader',
 					'vk_cfb',
 					array(
-						'select_image' => __( 'Select image', 'vk-google-job-posting-manager' ),
+						'select_image' => __( 'Select image', 'custom_field_builder_textdomain' ),
 					)
 				);
 			}
 
 			// flexible-table の js が NestedPagesのjsと干渉して正常に動かなくなるので、NestedPagesのページで読み込まないように.
 			$cfb_flexible_table_excludes = array( 'toplevel_page_nestedpages' );
-			if ( has_filter( 'cfb_flexible_table_excludes' ) ) {
-				if ( function_exists( 'apply_filters_deprecated' ) ) {
-					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Back-compat for legacy hook.
-					$cfb_flexible_table_excludes = apply_filters_deprecated(
-						'cfb_flexible_table_excludes',
-						array( $cfb_flexible_table_excludes ),
-						self::$version,
-						'vgjpm_cfb_flexible_table_excludes'
-					);
-				} else {
-					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Back-compat for legacy hook.
-					$cfb_flexible_table_excludes = apply_filters( 'cfb_flexible_table_excludes', $cfb_flexible_table_excludes );
-				}
-			}
-			$cfb_flexible_table_excludes = apply_filters( 'vgjpm_cfb_flexible_table_excludes', $cfb_flexible_table_excludes );
+			$cfb_flexible_table_excludes = apply_filters( 'cfb_flexible_table_excludes', $cfb_flexible_table_excludes );
 
 			if ( ! in_array( $hook_suffix, $cfb_flexible_table_excludes, true ) ) {
 				wp_enqueue_script( 'flexible-table', self::admin_directory_url() . 'js/flexible-table.js', array( 'jquery', 'jquery-ui-sortable' ), self::$version, true );
@@ -95,26 +82,21 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 
 			// Contact form 7　など jQuery ui のクラス名を使っていて干渉するので除外 .
 			$cfb_jquery_ui_excludes = array( 'toplevel_page_wpcf7', 'toplevel_page_gf_edit_forms' );
-			if ( has_filter( 'cfb_jquery_ui_excludes' ) ) {
-				if ( function_exists( 'apply_filters_deprecated' ) ) {
-					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Back-compat for legacy hook.
-					$cfb_jquery_ui_excludes = apply_filters_deprecated(
-						'cfb_jquery_ui_excludes',
-						array( $cfb_jquery_ui_excludes ),
-						self::$version,
-						'vgjpm_cfb_jquery_ui_excludes'
-					);
-				} else {
-					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Back-compat for legacy hook.
-					$cfb_jquery_ui_excludes = apply_filters( 'cfb_jquery_ui_excludes', $cfb_jquery_ui_excludes );
-				}
-			}
-			$cfb_jquery_ui_excludes = apply_filters( 'vgjpm_cfb_jquery_ui_excludes', $cfb_jquery_ui_excludes );
+			$cfb_jquery_ui_excludes = apply_filters( 'cfb_jquery_ui_excludes', $cfb_jquery_ui_excludes );
 			if ( ! in_array( $hook_suffix, $cfb_jquery_ui_excludes, true ) ) {
 				wp_enqueue_style( 'cf-builder-jquery-ui-style', self::admin_directory_url() . 'css/jquery-ui.css', array( 'cf-builder-style' ), self::$version, 'all' );
 			}
 		}
 
+		/**
+		 * 入力欄に表示する値を取得する.
+		 *
+		 * 保存済みの値を返す。正しい nonce 付きで送信された値があるときだけ、その値を返す.
+		 *
+		 * @param string      $post_field カスタムフィールドのキー.
+		 * @param string|bool $type       入力欄の種類（'textarea' のときは投稿本文で使えるタグを残す）.
+		 * @return string 入力欄に表示する値.
+		 */
 		public static function form_post_value( $post_field = '', $type = false ) {
 			$value = '';
 			global $post;
@@ -139,8 +121,13 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 			return $value;
 		}
 
+		/**
+		 * 必須項目に付ける目印の HTML を返す.
+		 *
+		 * @return string 必須項目の目印の HTML.
+		 */
 		public static function form_required() {
-			$required = '<span class="required">' . __( 'Required', 'vk-google-job-posting-manager' ) . '</span>';
+			$required = '<span class="required">' . __( 'Required', 'custom_field_builder_textdomain' ) . '</span>';
 			return $required;
 		}
 
@@ -253,6 +240,15 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 		フォームテーブル
 		-------------------------------------------
 		*/
+		/**
+		 * 入力フォームの HTML を出力する、または返す.
+		 *
+		 * @param array  $custom_fields_array カスタムフィールドの定義.
+		 * @param string $befor_items         入力欄の前に入れる HTML（tr 要素）.
+		 * @param bool   $echo                true なら出力し、false なら HTML を返す.
+		 * @param array  $options             保存値が無いときに使う値（キーはカスタムフィールドのキー）.
+		 * @return string|void $echo が false のときは入力フォームの HTML.
+		 */
 		public static function form_table( $custom_fields_array, $befor_items = '', $echo = true, $options = array() ) {
 
 			// アクション名は save_cf_value() の wp_verify_nonce() と同じ固定文字列にすること。
@@ -260,7 +256,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 			wp_nonce_field( 'vk_custom_field_builder', 'noncename__fields' );
 
 			global $post;
-			global $vgjpm_custom_field_builder_url;
+			global $custom_field_builder_url;
 
 			$form_html = '';
 
@@ -397,17 +393,17 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 						if ( is_array( $thumb_image ) && ! empty( $thumb_image[0] ) ) {
 							$thumb_image_url = $thumb_image[0];
 						} else {
-							$thumb_image_url = $vgjpm_custom_field_builder_url . 'images/no_image.png';
+							$thumb_image_url = $custom_field_builder_url . 'images/no_image.png';
 						}
 					} elseif ( ! empty( $options[ $key ] ) ) {
 						$thumb_image = wp_get_attachment_image_src( $options[ $key ], 'medium', false );
 						if ( is_array( $thumb_image ) && ! empty( $thumb_image[0] ) ) {
 							$thumb_image_url = $thumb_image[0];
 						} else {
-							$thumb_image_url = $vgjpm_custom_field_builder_url . 'images/no_image.png';
+							$thumb_image_url = $custom_field_builder_url . 'images/no_image.png';
 						}
 					} else {
-						$thumb_image_url = $vgjpm_custom_field_builder_url . 'images/no_image.png';
+						$thumb_image_url = $custom_field_builder_url . 'images/no_image.png';
 					}
 
 					$post_value = '';
@@ -418,7 +414,7 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					}
 					// ダミー & プレビュー画像
 					// data-no-image は、プレビューの読み込み失敗時・画像削除時に js が差し替える「画像なし」の URL.
-					$form_html .= '<img src="' . esc_url( $thumb_image_url ) . '" id="thumb_' . esc_attr( $key ) . '" alt="" class="input_thumb" data-no-image="' . esc_url( $vgjpm_custom_field_builder_url . 'images/no_image.png' ) . '" style="width:200px;height:auto;"> ';
+					$form_html .= '<img src="' . esc_url( $thumb_image_url ) . '" id="thumb_' . esc_attr( $key ) . '" alt="" class="input_thumb" data-no-image="' . esc_url( $custom_field_builder_url . 'images/no_image.png' ) . '" style="width:200px;height:auto;"> ';
 
 					// 実際に送信する値
 					$form_html .= '<input type="hidden" name="' . esc_attr( $key ) . '" id="' . esc_attr( $key ) . '" value="' . esc_attr( $post_value ) . '" style="width:60%;" />';
@@ -427,11 +423,11 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					// .media_btn がトリガーでメディアアップローダーが起動する
 					// id名から media_ を削除した id 名の input 要素に返り値が反映される。
 					// id名が media_src_ で始まる場合はURLを返す
-					$form_html .= '<button type="button" id="media_' . esc_attr( $key ) . '" class="cfb_media_btn btn btn-default button button-default">' . esc_html__( 'Choose Image', 'vk-google-job-posting-manager' ) . '</button> ';
+					$form_html .= '<button type="button" id="media_' . esc_attr( $key ) . '" class="cfb_media_btn btn btn-default button button-default">' . esc_html__( 'Choose Image', 'custom_field_builder_textdomain' ) . '</button> ';
 
 					// 削除ボタン
 					// ボタンタグだとその場でページが再読込されてしまうのでaタグに変更
-					$form_html .= '<a id="media_reset_' . esc_attr( $key ) . '" class="media_reset_btn btn btn-default button button-default">' . esc_html__( 'Delete Image', 'vk-google-job-posting-manager' ) . '</a>';
+					$form_html .= '<a id="media_reset_' . esc_attr( $key ) . '" class="media_reset_btn btn btn-default button button-default">' . esc_html__( 'Delete Image', 'custom_field_builder_textdomain' ) . '</a>';
 
 				} elseif ( 'file' === $value['type'] ) {
 
@@ -443,9 +439,9 @@ if ( ! class_exists( 'VK_Custom_Field_Builder' ) ) {
 					}
 
 					$form_html .= '<input name="' . esc_attr( $key ) . '" id="' . esc_attr( $key ) . '" value="' . esc_attr( $post_value ) . '" style="width:60%;" />
-<button type="button" id="media_src_' . esc_attr( $key ) . '" class="cfb_media_btn btn btn-default button button-default">' . esc_html__( 'Select file', 'vk-google-job-posting-manager' ) . '</button> ';
+<button type="button" id="media_src_' . esc_attr( $key ) . '" class="cfb_media_btn btn btn-default button button-default">' . esc_html__( 'Select file', 'custom_field_builder_textdomain' ) . '</button> ';
 					if ( $post_value ) {
-						$form_html .= '<a href="' . esc_url( $post_value ) . '" target="_blank" rel="noopener noreferrer" class="btn btn-default button button-default">' . esc_html__( 'View file', 'vk-google-job-posting-manager' ) . '</a>';
+						$form_html .= '<a href="' . esc_url( $post_value ) . '" target="_blank" rel="noopener noreferrer" class="btn btn-default button button-default">' . esc_html__( 'View file', 'custom_field_builder_textdomain' ) . '</a>';
 					}
 				}
 				if ( $value['description'] ) {
