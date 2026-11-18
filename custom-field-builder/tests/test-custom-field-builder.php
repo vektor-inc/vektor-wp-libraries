@@ -190,7 +190,7 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 	/**
 	 * 出力 HTML の中に、指定した属性がすべてそろった要素があるかを返す.
 	 *
-	 * wp_kses() は WordPress のバージョンによって属性の並び順が変わるため、並び順に依存せず属性の値で探す.
+	 * WordPress のバージョンによって wp_kses() の出力する属性の並び順が変わるため、並び順に依存せず属性の値で探す.
 	 *
 	 * @param string $html       検索対象の HTML.
 	 * @param string $tag_name   探す要素名（例: input）.
@@ -479,10 +479,22 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 
 		$form_html = $this->render_form_table();
 
-		$this->assertTrue( $this->has_tag_with_attributes( $form_html, 'input', array( 'value' => 'PART_TIME', 'checked' => true ) ) );
-		$this->assertFalse( $this->has_tag_with_attributes( $form_html, 'input', array( 'value' => 'FULL_TIME', 'checked' => true ) ) );
+		$expected_attributes = array(
+			'value'   => 'PART_TIME',
+			'checked' => true,
+		);
+		$this->assertTrue( $this->has_tag_with_attributes( $form_html, 'input', $expected_attributes ) );
+		$expected_attributes = array(
+			'value'   => 'FULL_TIME',
+			'checked' => true,
+		);
+		$this->assertFalse( $this->has_tag_with_attributes( $form_html, 'input', $expected_attributes ) );
 		// チェックされていない選択肢も出力されている（要素ごと消えて偽陽性になっていない）.
-		$this->assertTrue( $this->has_tag_with_attributes( $form_html, 'input', array( 'value' => 'FULL_TIME', 'checked' => false ) ) );
+		$expected_attributes = array(
+			'value'   => 'FULL_TIME',
+			'checked' => false,
+		);
+		$this->assertTrue( $this->has_tag_with_attributes( $form_html, 'input', $expected_attributes ) );
 	}
 
 	/**
@@ -558,10 +570,19 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 			ob_end_clean();
 
 			// & を含む URL は wp_kses を通ると &amp; になるため、そのケースだけ出力後の形で指定する.
-			$expected_src_html = isset( $case['expected_src_html'] ) ? $case['expected_src_html'] : esc_url( $case['expected_src'] );
-			$this->assertTrue( $this->has_tag_with_attributes( $form_html, 'img', array( 'src' => wp_specialchars_decode( $expected_src_html ), 'id' => 'thumb_cfb_test_image' ) ), $case['test_condition_name'] );
+			$expected_src_html   = isset( $case['expected_src_html'] ) ? $case['expected_src_html'] : esc_url( $case['expected_src'] );
+			$expected_attributes = array(
+				'src' => wp_specialchars_decode( $expected_src_html ),
+				'id'  => 'thumb_cfb_test_image',
+			);
+			$this->assertTrue( $this->has_tag_with_attributes( $form_html, 'img', $expected_attributes ), $case['test_condition_name'] );
 			// 送信される hidden input の値は保存値のまま変わらない.
-			$this->assertTrue( $this->has_tag_with_attributes( $form_html, 'input', array( 'name' => 'cfb_test_image', 'id' => 'cfb_test_image', 'value' => $case['saved'] ) ), $case['test_condition_name'] );
+			$expected_attributes = array(
+				'name'  => 'cfb_test_image',
+				'id'    => 'cfb_test_image',
+				'value' => $case['saved'],
+			);
+			$this->assertTrue( $this->has_tag_with_attributes( $form_html, 'input', $expected_attributes ), $case['test_condition_name'] );
 
 			// 読み込み失敗時・画像削除時に js が差し替える「画像なし」の URL が、保存値によらず出力される.
 			$expected_no_image = isset( $case['expected_no_image'] ) ? $case['expected_no_image'] : 'https://example.com/cfb/images/no_image.png';
@@ -586,10 +607,22 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 
 		$form_html = $this->render_form_table( array( self::FIELD_KEY => array( 'FULL_TIME' ) ) );
 
-		$this->assertTrue( $this->has_tag_with_attributes( $form_html, 'input', array( 'value' => 'FULL_TIME', 'checked' => true ) ) );
-		$this->assertFalse( $this->has_tag_with_attributes( $form_html, 'input', array( 'value' => 'PART_TIME', 'checked' => true ) ) );
+		$expected_attributes = array(
+			'value'   => 'FULL_TIME',
+			'checked' => true,
+		);
+		$this->assertTrue( $this->has_tag_with_attributes( $form_html, 'input', $expected_attributes ) );
+		$expected_attributes = array(
+			'value'   => 'PART_TIME',
+			'checked' => true,
+		);
+		$this->assertFalse( $this->has_tag_with_attributes( $form_html, 'input', $expected_attributes ) );
 		// チェックされていない選択肢も出力されている（要素ごと消えて偽陽性になっていない）.
-		$this->assertTrue( $this->has_tag_with_attributes( $form_html, 'input', array( 'value' => 'PART_TIME', 'checked' => false ) ) );
+		$expected_attributes = array(
+			'value'   => 'PART_TIME',
+			'checked' => false,
+		);
+		$this->assertTrue( $this->has_tag_with_attributes( $form_html, 'input', $expected_attributes ) );
 	}
 
 	/**
