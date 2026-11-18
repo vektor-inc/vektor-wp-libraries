@@ -188,6 +188,43 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 	}
 
 	/**
+	 * 出力 HTML の中に、指定した属性がすべてそろった要素があるかを返す.
+	 *
+	 * wp_kses() は WordPress のバージョンによって属性の並び順が変わるため、並び順に依存せず属性の値で探す.
+	 *
+	 * @param string $html       検索対象の HTML.
+	 * @param string $tag_name   探す要素名（例: input）.
+	 * @param array  $attributes 属性名 => 期待する値. 値が true なら「属性がある」、false なら「属性が無い」ことを求める.
+	 * @return bool 条件に合う要素があれば true.
+	 */
+	private function has_tag_with_attributes( $html, $tag_name, $attributes ) {
+		$processor = new WP_HTML_Tag_Processor( $html );
+
+		// 要素を先頭から順に見て、すべての属性条件に合う要素が見つかった時点で true を返す.
+		while ( $processor->next_tag( $tag_name ) ) {
+			$matched = true;
+			foreach ( $attributes as $name => $expected ) {
+				$actual = $processor->get_attribute( $name );
+				if ( false === $expected ) {
+					$matched = null === $actual;
+				} elseif ( true === $expected ) {
+					$matched = null !== $actual;
+				} else {
+					$matched = $expected === $actual;
+				}
+				if ( ! $matched ) {
+					break;
+				}
+			}
+			if ( $matched ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * 保存値は復元されずそのままの形で取得される.
 	 */
 	public function test_get_raw_post_meta_returns_stored_value_without_restoring_it() {
@@ -442,8 +479,10 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 
 		$form_html = $this->render_form_table();
 
-		$this->assertMatchesRegularExpression( '/value="PART_TIME"[^>]*checked/', $form_html );
-		$this->assertDoesNotMatchRegularExpression( '/value="FULL_TIME"[^>]*checked/', $form_html );
+		$this->assertTrue( $this->has_tag_with_attributes( $form_html, 'input', array( 'value' => 'PART_TIME', 'checked' => true ) ) );
+		$this->assertFalse( $this->has_tag_with_attributes( $form_html, 'input', array( 'value' => 'FULL_TIME', 'checked' => true ) ) );
+		// チェックされていない選択肢も出力されている（要素ごと消えて偽陽性になっていない）.
+		$this->assertTrue( $this->has_tag_with_attributes( $form_html, 'input', array( 'value' => 'FULL_TIME', 'checked' => false ) ) );
 	}
 
 	/**
@@ -520,9 +559,9 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 
 			// & を含む URL は wp_kses を通ると &amp; になるため、そのケースだけ出力後の形で指定する.
 			$expected_src_html = isset( $case['expected_src_html'] ) ? $case['expected_src_html'] : esc_url( $case['expected_src'] );
-			$this->assertStringContainsString( '<img src="' . $expected_src_html . '" id="thumb_cfb_test_image"', $form_html, $case['test_condition_name'] );
+			$this->assertTrue( $this->has_tag_with_attributes( $form_html, 'img', array( 'src' => wp_specialchars_decode( $expected_src_html ), 'id' => 'thumb_cfb_test_image' ) ), $case['test_condition_name'] );
 			// 送信される hidden input の値は保存値のまま変わらない.
-			$this->assertStringContainsString( 'name="cfb_test_image" id="cfb_test_image" value="' . esc_attr( $case['saved'] ) . '"', $form_html, $case['test_condition_name'] );
+			$this->assertTrue( $this->has_tag_with_attributes( $form_html, 'input', array( 'name' => 'cfb_test_image', 'id' => 'cfb_test_image', 'value' => $case['saved'] ) ), $case['test_condition_name'] );
 
 			// 読み込み失敗時・画像削除時に js が差し替える「画像なし」の URL が、保存値によらず出力される.
 			$expected_no_image = isset( $case['expected_no_image'] ) ? $case['expected_no_image'] : 'https://example.com/cfb/images/no_image.png';
@@ -547,8 +586,10 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 
 		$form_html = $this->render_form_table( array( self::FIELD_KEY => array( 'FULL_TIME' ) ) );
 
-		$this->assertMatchesRegularExpression( '/value="FULL_TIME"[^>]*checked/', $form_html );
-		$this->assertDoesNotMatchRegularExpression( '/value="PART_TIME"[^>]*checked/', $form_html );
+		$this->assertTrue( $this->has_tag_with_attributes( $form_html, 'input', array( 'value' => 'FULL_TIME', 'checked' => true ) ) );
+		$this->assertFalse( $this->has_tag_with_attributes( $form_html, 'input', array( 'value' => 'PART_TIME', 'checked' => true ) ) );
+		// チェックされていない選択肢も出力されている（要素ごと消えて偽陽性になっていない）.
+		$this->assertTrue( $this->has_tag_with_attributes( $form_html, 'input', array( 'value' => 'PART_TIME', 'checked' => false ) ) );
 	}
 
 	/**
