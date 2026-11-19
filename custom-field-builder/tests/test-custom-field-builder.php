@@ -56,11 +56,18 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 	private $original_post;
 
 	/**
-	 * 退避した $vgjpm_custom_field_builder_url.
+	 * 退避した $custom_field_builder_url.
 	 *
 	 * @var mixed
 	 */
 	private $original_custom_field_builder_url;
+
+	/**
+	 * 退避した $hook_suffix.
+	 *
+	 * @var mixed
+	 */
+	private $original_hook_suffix;
 
 	/**
 	 * テストの前処理.
@@ -69,10 +76,11 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 	 */
 	public function setUp(): void {
 		parent::setUp();
-		global $post, $vgjpm_custom_field_builder_url;
+		global $post, $custom_field_builder_url;
 		VK_CFB_Injection_Probe::$woken           = false;
 		$this->original_post                     = isset( $post ) ? $post : null;
-		$this->original_custom_field_builder_url = isset( $vgjpm_custom_field_builder_url ) ? $vgjpm_custom_field_builder_url : null;
+		$this->original_custom_field_builder_url = isset( $custom_field_builder_url ) ? $custom_field_builder_url : null;
+		$this->original_hook_suffix              = isset( $GLOBALS['hook_suffix'] ) ? $GLOBALS['hook_suffix'] : null;
 	}
 
 	/**
@@ -81,9 +89,15 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 	 * テストが書き換えたグローバルを元に戻す.
 	 */
 	public function tearDown(): void {
-		global $post, $vgjpm_custom_field_builder_url;
-		$post                           = $this->original_post;
-		$vgjpm_custom_field_builder_url = $this->original_custom_field_builder_url;
+		global $post, $custom_field_builder_url;
+		$_POST                    = array();
+		$post                     = $this->original_post;
+		$custom_field_builder_url = $this->original_custom_field_builder_url;
+		$GLOBALS['hook_suffix']   = $this->original_hook_suffix;
+		// print_script() で登録したスクリプト・スタイルを、次のテストに残さない.
+		$GLOBALS['wp_scripts'] = null;
+		$GLOBALS['wp_styles']  = null;
+		wp_set_current_user( 0 );
 		parent::tearDown();
 	}
 
@@ -502,13 +516,13 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 	 * 読み込み失敗時に差し替える「画像なし」の URL（data-no-image）が、wp_kses を通っても出力されることも確かめる.
 	 */
 	public function test_form_table_image_preview() {
-		global $post, $vgjpm_custom_field_builder_url;
+		global $post, $custom_field_builder_url;
 
-		$default_builder_url            = 'https://example.com/cfb/';
-		$vgjpm_custom_field_builder_url = $default_builder_url;
-		$attachment_id                  = self::factory()->attachment->create_upload_object( DIR_TESTDATA . '/images/canola.jpg' );
-		$attachment_src                 = wp_get_attachment_image_src( $attachment_id, 'medium', false );
-		$fields                         = array(
+		$default_builder_url      = 'https://example.com/cfb/';
+		$custom_field_builder_url = $default_builder_url;
+		$attachment_id            = self::factory()->attachment->create_upload_object( DIR_TESTDATA . '/images/canola.jpg' );
+		$attachment_src           = wp_get_attachment_image_src( $attachment_id, 'medium', false );
+		$fields                   = array(
 			'cfb_test_image' => array(
 				'label'       => 'Image',
 				'type'        => 'image',
@@ -559,7 +573,7 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 
 		foreach ( $test_cases as $case ) {
 			// 「画像なし」の配置先 URL は、ケースで指定がなければ固定の URL を使う.
-			$vgjpm_custom_field_builder_url = isset( $case['builder_url'] ) ? $case['builder_url'] : $default_builder_url;
+			$custom_field_builder_url = isset( $case['builder_url'] ) ? $case['builder_url'] : $default_builder_url;
 
 			$post_id = self::factory()->post->create();
 			$post    = get_post( $post_id );
@@ -626,7 +640,934 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 	}
 
 	/**
+	 * 同梱した package の URL の取得のテスト.
+	 *
+	 * 各製品の設定ファイルが $custom_field_builder_url に入れた URL を、そのまま返すことを確かめる.
+	 *
+	 * @return void
+	 */
+	public function test_admin_directory_url() {
+		global $custom_field_builder_url;
+
+		// テストの配列.
+		$test_cases = array(
+			array(
+				'test_condition_name' => 'テーマに同梱した package の URL が設定済み => その URL を返す',
+				'builder_url'         => 'https://example.com/wp-content/themes/sample/inc/custom-field-builder/package/',
+				'expected'            => 'https://example.com/wp-content/themes/sample/inc/custom-field-builder/package/',
+			),
+			array(
+				'test_condition_name' => 'プラグインに同梱した package の URL が設定済み => その URL を返す',
+				'builder_url'         => 'https://example.com/wp-content/plugins/sample/inc/custom-field-builder/package/',
+				'expected'            => 'https://example.com/wp-content/plugins/sample/inc/custom-field-builder/package/',
+			),
+			array(
+				'test_condition_name' => '設定ファイルで URL が設定されていない => null を返す',
+				'builder_url'         => null,
+				'expected'            => null,
+			),
+		);
+
+		foreach ( $test_cases as $case ) {
+			// 設定ファイルで URL を入れた状態にする.
+			$custom_field_builder_url = $case['builder_url'];
+
+			// テスト関数を実行する.
+			$actual = VK_Custom_Field_Builder::admin_directory_url();
+
+			$this->assertSame( $case['expected'], $actual, $case['test_condition_name'] );
+		}
+	}
+
+	/**
+	 * 管理画面の読み込みのテスト.
+	 *
+	 * 管理画面で読み込む js・css の URL が $custom_field_builder_url から作られること（空にならないこと）と、
+	 * 既存のフィルター（cfb_*）が非推奨の通知を出さずに従来どおり使えることを確かめる.
+	 * 非推奨の通知が出た場合は、WP_UnitTestCase がテストを失敗にする.
+	 *
+	 * @return void
+	 */
+	public function test_print_script() {
+		global $custom_field_builder_url;
+
+		// 設定ファイルで入れる package の URL.
+		$package_url              = 'https://example.com/wp-content/plugins/sample/inc/custom-field-builder/package/';
+		$custom_field_builder_url = $package_url;
+
+		// テストの配列.
+		$test_cases = array(
+			array(
+				'test_condition_name' => '投稿編集画面 => すべて読み込み、URL は $custom_field_builder_url から作る',
+				'conditions'          => array(
+					'hook_suffix' => 'post.php',
+					'filters'     => array(),
+				),
+				'expected'            => array(
+					'datepicker'                 => $package_url . 'js/datepicker.js',
+					'vk_mediauploader'           => $package_url . 'js/mediauploader.js',
+					'flexible-table'             => $package_url . 'js/flexible-table.js',
+					'cf-builder-style'           => $package_url . 'css/cf-builder.css',
+					'cf-builder-jquery-ui-style' => $package_url . 'css/jquery-ui.css',
+				),
+			),
+			array(
+				'test_condition_name' => 'プロフィール画面 => メディアアップローダーだけ読み込まない',
+				'conditions'          => array(
+					'hook_suffix' => 'profile.php',
+					'filters'     => array(),
+				),
+				'expected'            => array(
+					'datepicker'                 => $package_url . 'js/datepicker.js',
+					'vk_mediauploader'           => false,
+					'flexible-table'             => $package_url . 'js/flexible-table.js',
+					'cf-builder-style'           => $package_url . 'css/cf-builder.css',
+					'cf-builder-jquery-ui-style' => $package_url . 'css/jquery-ui.css',
+				),
+			),
+			array(
+				'test_condition_name' => '既存の 3 つのフィルター（cfb_*）で投稿編集画面を除外 => どれも読み込まず、非推奨の通知も出ない',
+				'conditions'          => array(
+					'hook_suffix' => 'post.php',
+					'filters'     => array( 'cfb_media_uploader_exclude', 'cfb_flexible_table_excludes', 'cfb_jquery_ui_excludes' ),
+				),
+				'expected'            => array(
+					'datepicker'                 => $package_url . 'js/datepicker.js',
+					'vk_mediauploader'           => false,
+					'flexible-table'             => false,
+					'cf-builder-style'           => $package_url . 'css/cf-builder.css',
+					'cf-builder-jquery-ui-style' => false,
+				),
+			),
+			array(
+				'test_condition_name' => 'cfb_flexible_table_excludes だけで投稿編集画面を除外 => Flexible Table の js だけ読み込まない',
+				'conditions'          => array(
+					'hook_suffix' => 'post.php',
+					'filters'     => array( 'cfb_flexible_table_excludes' ),
+				),
+				'expected'            => array(
+					'datepicker'                 => $package_url . 'js/datepicker.js',
+					'vk_mediauploader'           => $package_url . 'js/mediauploader.js',
+					'flexible-table'             => false,
+					'cf-builder-style'           => $package_url . 'css/cf-builder.css',
+					'cf-builder-jquery-ui-style' => $package_url . 'css/jquery-ui.css',
+				),
+			),
+		);
+
+		/**
+		 * 表示中の画面を除外リストに足すフィルター.
+		 *
+		 * @param array $excludes 読み込みから外す画面の一覧.
+		 * @return array 表示中の画面を足した一覧.
+		 */
+		$exclude_current_screen = function ( $excludes ) {
+			$excludes[] = $GLOBALS['hook_suffix'];
+			return $excludes;
+		};
+
+		foreach ( $test_cases as $case ) {
+			$conditions = $case['conditions'];
+
+			// 読み込み状態を初期化し、表示中の画面とフィルターを設定する.
+			$GLOBALS['wp_scripts']  = null;
+			$GLOBALS['wp_styles']   = null;
+			$GLOBALS['hook_suffix'] = $conditions['hook_suffix'];
+			foreach ( $conditions['filters'] as $filter_name ) {
+				add_filter( $filter_name, $exclude_current_screen );
+			}
+
+			// テスト関数を実行する.
+			VK_Custom_Field_Builder::print_script( $conditions['hook_suffix'] );
+
+			// 読み込まれたファイルの URL を集める（読み込まれていなければ false）.
+			$actual = array(
+				'datepicker'                 => wp_script_is( 'datepicker', 'enqueued' ) ? wp_scripts()->registered['datepicker']->src : false,
+				'vk_mediauploader'           => wp_script_is( 'vk_mediauploader', 'enqueued' ) ? wp_scripts()->registered['vk_mediauploader']->src : false,
+				'flexible-table'             => wp_script_is( 'flexible-table', 'enqueued' ) ? wp_scripts()->registered['flexible-table']->src : false,
+				'cf-builder-style'           => wp_style_is( 'cf-builder-style', 'enqueued' ) ? wp_styles()->registered['cf-builder-style']->src : false,
+				'cf-builder-jquery-ui-style' => wp_style_is( 'cf-builder-jquery-ui-style', 'enqueued' ) ? wp_styles()->registered['cf-builder-jquery-ui-style']->src : false,
+			);
+
+			$this->assertSame( $case['expected'], $actual, $case['test_condition_name'] );
+
+			// フィルターを外す.
+			foreach ( $conditions['filters'] as $filter_name ) {
+				remove_filter( $filter_name, $exclude_current_screen );
+			}
+		}
+	}
+
+	/**
+	 * 必須項目の目印のテスト.
+	 *
+	 * 文言のテキストドメインが、各製品のビルドで置き換える仮の名前（custom_field_builder_textdomain）になっていることを確かめる.
+	 *
+	 * @return void
+	 */
+	public function test_form_required() {
+		// テストの配列.
+		$test_cases = array(
+			array(
+				'test_condition_name' => '翻訳なし => 英語の文言で出力される',
+				'translate_domain'    => null,
+				'expected'            => '<span class="required">Required</span>',
+			),
+			array(
+				'test_condition_name' => 'テキストドメイン custom_field_builder_textdomain の翻訳あり => 翻訳した文言で出力される',
+				'translate_domain'    => 'custom_field_builder_textdomain',
+				'expected'            => '<span class="required">必須</span>',
+			),
+			array(
+				'test_condition_name' => '別製品のテキストドメイン（vk-google-job-posting-manager）の翻訳だけあり => 翻訳されない',
+				'translate_domain'    => 'vk-google-job-posting-manager',
+				'expected'            => '<span class="required">Required</span>',
+			),
+		);
+
+		foreach ( $test_cases as $case ) {
+			$translate_domain = $case['translate_domain'];
+
+			/**
+			 * 指定したテキストドメインの「Required」だけを翻訳するフィルター.
+			 *
+			 * @param string $translation 翻訳済みの文言.
+			 * @param string $text        翻訳前の文言.
+			 * @param string $domain      テキストドメイン.
+			 * @return string 翻訳した文言.
+			 */
+			$translate = function ( $translation, $text, $domain ) use ( $translate_domain ) {
+				if ( 'Required' === $text && $translate_domain === $domain ) {
+					return '必須';
+				}
+				return $translation;
+			};
+			add_filter( 'gettext', $translate, 10, 3 );
+
+			// テスト関数を実行する.
+			$actual = VK_Custom_Field_Builder::form_required();
+
+			remove_filter( 'gettext', $translate, 10 );
+
+			$this->assertSame( $case['expected'], $actual, $case['test_condition_name'] );
+		}
+	}
+
+	/**
+	 * 入力欄に表示する値の取得のテスト.
+	 *
+	 * 送信された値を入力欄に表示し直すのは、正しい nonce が付いているときだけであることを確かめる.
+	 *
+	 * @return void
+	 */
+	public function test_form_post_value() {
+		$admin_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		$key      = 'cfb_test_form_value';
+
+		// テストの配列.
+		$test_cases = array(
+			array(
+				'test_condition_name' => '送信がない（通常の編集画面） => 保存済みの値を属性値として安全な形で返す',
+				'conditions'          => array(
+					'nonce'  => 'none',
+					'posted' => null,
+					'type'   => false,
+				),
+				'expected'            => 'A &amp; &quot;B&quot;',
+			),
+			array(
+				'test_condition_name' => '正しい nonce 付きで値を送信 => 送信値を、バックスラッシュを付けずに返す',
+				'conditions'          => array(
+					'nonce'  => 'valid',
+					'posted' => "O'Reilly",
+					'type'   => false,
+				),
+				'expected'            => 'O&#039;Reilly',
+			),
+			array(
+				'test_condition_name' => '別画面の nonce 付きで値を送信 => 送信値ではなく保存済みの値を返す',
+				'conditions'          => array(
+					'nonce'  => 'other',
+					'posted' => 'injected',
+					'type'   => false,
+				),
+				'expected'            => 'A &amp; &quot;B&quot;',
+			),
+			array(
+				'test_condition_name' => 'nonce なしで値を送信 => 送信値ではなく保存済みの値を返す',
+				'conditions'          => array(
+					'nonce'  => 'none',
+					'posted' => 'injected',
+					'type'   => false,
+				),
+				'expected'            => 'A &amp; &quot;B&quot;',
+			),
+			array(
+				'test_condition_name' => '正しい nonce 付きで textarea に HTML を送信 => 投稿本文で使えるタグだけを残して返す',
+				'conditions'          => array(
+					'nonce'  => 'valid',
+					'posted' => '<strong>a</strong><script>x</script>',
+					'type'   => 'textarea',
+				),
+				'expected'            => '<strong>a</strong>x',
+			),
+			array(
+				'test_condition_name' => '正しい nonce 付きで 0 を送信 => 0 を返す',
+				'conditions'          => array(
+					'nonce'  => 'valid',
+					'posted' => '0',
+					'type'   => false,
+				),
+				'expected'            => '0',
+			),
+			array(
+				'test_condition_name' => '正しい nonce 付きで空文字を送信 => 空文字を返す',
+				'conditions'          => array(
+					'nonce'  => 'valid',
+					'posted' => '',
+					'type'   => false,
+				),
+				'expected'            => '',
+			),
+		);
+
+		foreach ( $test_cases as $case ) {
+			$conditions = $case['conditions'];
+
+			// 保存済みの値を持つ投稿を用意する.
+			$_POST   = array();
+			$post_id = self::factory()->post->create( array( 'post_author' => $admin_id ) );
+			update_post_meta( $post_id, $key, 'A & "B"' );
+
+			global $post;
+			$post = get_post( $post_id );
+			wp_set_current_user( $admin_id );
+
+			// nonce と送信値を用意する.
+			if ( 'valid' === $conditions['nonce'] ) {
+				$_POST['noncename__fields'] = wp_create_nonce( 'vk_custom_field_builder' );
+			} elseif ( 'other' === $conditions['nonce'] ) {
+				$_POST['noncename__fields'] = wp_create_nonce( 'other_action' );
+			}
+			if ( null !== $conditions['posted'] ) {
+				$_POST[ $key ] = wp_slash( $conditions['posted'] );
+			}
+
+			// テスト関数を実行する.
+			$actual = VK_Custom_Field_Builder::form_post_value( $key, $conditions['type'] );
+
+			$this->assertSame( $case['expected'], $actual, $case['test_condition_name'] );
+		}
+	}
+
+	/**
+	 * 入力フォームの表示のテスト.
+	 *
+	 * 保存済みの値（既存ユーザーの値）が、入力欄の種類ごとに属性値・textarea の中身として安全な形で表示されることを確かめる.
+	 * 出力全体を許可リスト（wp_kses）に通すため、期待値は許可リストを通したあとの形（style 末尾の ; が無いなど）で書く.
+	 * 画像欄のプレビューは test_form_table_image_preview() で確かめる.
+	 *
+	 * @return void
+	 */
+	public function test_form_table() {
+		$admin_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		$key      = 'cfb_test_form_field';
+
+		// 選択肢を持つ入力欄の選択肢.
+		$choices = array(
+			'a' => 'A',
+			'b' => 'B',
+			'c' => 'C',
+		);
+
+		// テストの配列.
+		$test_cases = array(
+			array(
+				'test_condition_name' => 'テキスト欄に、記号を含む値が保存済み => 属性値として安全な形で表示される',
+				'conditions'          => array(
+					'field_config' => array( 'type' => 'text' ),
+					'stored'       => 'A & "B" <b>',
+					'options'      => array(),
+				),
+				'expected'            => array(
+					'<input class="form-control" type="text" id="' . $key . '" name="' . $key . '" value="A &amp; &quot;B&quot; &lt;b&gt;" size="70">',
+				),
+				'not_expected'        => array( '"B"', '<b>' ),
+			),
+			array(
+				'test_condition_name' => 'テキスト欄に 0 が保存済み => 0 が表示される',
+				'conditions'          => array(
+					'field_config' => array( 'type' => 'text' ),
+					'stored'       => '0',
+					'options'      => array(),
+				),
+				'expected'            => array( 'name="' . $key . '" value="0" size="70">' ),
+				'not_expected'        => array(),
+			),
+			array(
+				'test_condition_name' => 'URL 欄に、クエリ付きの URL が保存済み => & を実体参照にして表示される',
+				'conditions'          => array(
+					'field_config' => array( 'type' => 'url' ),
+					'stored'       => 'https://example.com/?a=1&b=2',
+					'options'      => array(),
+				),
+				'expected'            => array( 'name="' . $key . '" value="https://example.com/?a=1&amp;b=2" size="70">' ),
+				'not_expected'        => array(),
+			),
+			array(
+				'test_condition_name' => 'textarea に HTML が保存済み => タグを文字として表示する',
+				'conditions'          => array(
+					'field_config' => array( 'type' => 'textarea' ),
+					'stored'       => '<strong>説明</strong>',
+					'options'      => array(),
+				),
+				'expected'            => array(
+					'<textarea class="form-control cf_textarea_wysiwyg" name="' . $key . '" cols="70" rows="3">&lt;strong&gt;説明&lt;/strong&gt;</textarea>',
+				),
+				'not_expected'        => array( '<strong>' ),
+			),
+			array(
+				'test_condition_name' => 'textarea に終了タグを含む値が保存済み => textarea の外に出ない',
+				'conditions'          => array(
+					'field_config' => array( 'type' => 'textarea' ),
+					'stored'       => 'x</textarea><script>alert(1)</script>',
+					'options'      => array(),
+				),
+				'expected'            => array( 'rows="3">x&lt;/textarea&gt;&lt;script&gt;alert(1)&lt;/script&gt;</textarea>' ),
+				'not_expected'        => array( '</textarea><script>', '<script>' ),
+			),
+			array(
+				'test_condition_name' => '日付欄に日付が保存済み => その日付が表示される',
+				'conditions'          => array(
+					'field_config' => array( 'type' => 'datepicker' ),
+					'stored'       => '2026-11-16',
+					'options'      => array(),
+				),
+				'expected'            => array( '<input class="form-control datepicker" type="text" id="' . $key . '" name="' . $key . '" value="2026-11-16" size="70">' ),
+				'not_expected'        => array(),
+			),
+			array(
+				'test_condition_name' => 'セレクトボックスに b が保存済み => b が選択された状態で表示される',
+				'conditions'          => array(
+					'field_config' => array(
+						'type'    => 'select',
+						'options' => $choices,
+					),
+					'stored'       => 'b',
+					'options'      => array(),
+				),
+				'expected'            => array(
+					'<select id="' . $key . '" class="form-control" name="' . $key . '">',
+					'<option value="a">A</option>',
+					'<option value="b" selected="selected">B</option>',
+				),
+				'not_expected'        => array( '<option value="a" selected="selected">' ),
+			),
+			array(
+				'test_condition_name' => 'ラジオボタンに b が保存済み => b がチェックされた状態で表示される',
+				'conditions'          => array(
+					'field_config' => array(
+						'type'    => 'radio',
+						'options' => $choices,
+					),
+					'stored'       => 'b',
+					'options'      => array(),
+				),
+				'expected'            => array( 'value="b" checked' ),
+				'not_expected'        => array( 'value="a" checked', 'value="c" checked' ),
+			),
+			array(
+				'test_condition_name' => 'チェックボックスに a と c が保存済み => a と c がチェックされた状態で表示される',
+				'conditions'          => array(
+					'field_config' => array(
+						'type'    => 'checkbox',
+						'options' => $choices,
+					),
+					'stored'       => array( 'a', 'c' ),
+					'options'      => array(),
+				),
+				'expected'            => array( 'value="a" checked', 'value="c" checked' ),
+				'not_expected'        => array( 'value="b" checked' ),
+			),
+			array(
+				'test_condition_name' => 'ファイル欄に URL が保存済み => URL と、ページを送信しないボタン・別タブで開くリンクが表示される',
+				'conditions'          => array(
+					'field_config' => array( 'type' => 'file' ),
+					'stored'       => 'https://example.com/a.pdf',
+					'options'      => array(),
+				),
+				'expected'            => array(
+					'<input name="' . $key . '" id="' . $key . '" value="https://example.com/a.pdf" style="width:60%" />',
+					'<button type="button" id="media_src_' . $key . '" class="cfb_media_btn',
+					'<a href="https://example.com/a.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-default button button-default">',
+				),
+				'not_expected'        => array(),
+			),
+			array(
+				'test_condition_name' => '画像欄に添付 ID が保存済み => ID が送信用の欄に入り、ページを送信しないボタンが表示される',
+				'conditions'          => array(
+					'field_config' => array( 'type' => 'image' ),
+					'stored'       => '12',
+					'options'      => array(),
+				),
+				'expected'            => array(
+					'<input type="hidden" name="' . $key . '" id="' . $key . '" value="12" style="width:60%" />',
+					'<button type="button" id="media_' . $key . '" class="cfb_media_btn',
+				),
+				'not_expected'        => array(),
+			),
+			array(
+				'test_condition_name' => '保存値がなく、呼び出し側の初期値に二重引用符を含む値 => 属性の外に出ない',
+				'conditions'          => array(
+					'field_config' => array( 'type' => 'text' ),
+					'stored'       => null,
+					'options'      => array( $key => 'say "hi"' ),
+				),
+				'expected'            => array( 'name="' . $key . '" value="say &quot;hi&quot;" size="70">' ),
+				'not_expected'        => array( 'value="say "hi""' ),
+			),
+			array(
+				'test_condition_name' => '保存値がなく、呼び出し側の初期値（textarea）に終了タグとスクリプトを含む値 => textarea の外に出ない',
+				'conditions'          => array(
+					'field_config' => array( 'type' => 'textarea' ),
+					'stored'       => null,
+					'options'      => array( $key => '</textarea><script>alert(1)</script>' ),
+				),
+				'expected'            => array( 'rows="3">&lt;/textarea&gt;alert(1)</textarea>' ),
+				'not_expected'        => array( '<script>', '</textarea></textarea>' ),
+			),
+			array(
+				'test_condition_name' => '保存値も初期値もない => 空の入力欄が表示される',
+				'conditions'          => array(
+					'field_config' => array( 'type' => 'text' ),
+					'stored'       => null,
+					'options'      => array(),
+				),
+				'expected'            => array( 'name="' . $key . '" value="" size="70">' ),
+				'not_expected'        => array(),
+			),
+		);
+
+		foreach ( $test_cases as $case ) {
+			$conditions = $case['conditions'];
+
+			// 保存済みの値を持つ投稿を、編集画面で開いている状態にする.
+			$_POST   = array();
+			$post_id = self::factory()->post->create( array( 'post_author' => $admin_id ) );
+			if ( null !== $conditions['stored'] ) {
+				update_post_meta( $post_id, $key, wp_slash( $conditions['stored'] ) );
+			}
+
+			global $post;
+			$post = get_post( $post_id );
+			wp_set_current_user( $admin_id );
+
+			// フィールドの定義（ラベルと説明は共通）.
+			$fields = array(
+				$key => array_merge(
+					array(
+						'label'       => 'Label',
+						'description' => '',
+						'required'    => false,
+					),
+					$conditions['field_config']
+				),
+			);
+
+			// テスト関数を実行する（$echo が false でも nonce フィールドを出力するため、バッファに取る）.
+			ob_start();
+			$actual = VK_Custom_Field_Builder::form_table( $fields, '', false, $conditions['options'] );
+			ob_end_clean();
+
+			foreach ( $case['expected'] as $expected ) {
+				$this->assertStringContainsString( $expected, $actual, $case['test_condition_name'] );
+			}
+			foreach ( $case['not_expected'] as $not_expected ) {
+				$this->assertStringNotContainsString( $not_expected, $actual, $case['test_condition_name'] );
+			}
+		}
+	}
+
+	/**
+	 * 項目変動・多行（Flexible Table）の入力フォームの表示のテスト.
+	 *
+	 * 保存済みの行（既存ユーザーの値）が二重にエスケープされずに表示されることと、
+	 * 行のキー・列のキー・textarea の値に記号が含まれていても、属性や textarea の外に出ないことを確かめる.
+	 * textarea に保存済みの太字・改行・リンクは、ブラウザーが表示する textarea の値として保存値のまま残り、
+	 * その値をそのまま送信し直しても保存値が変わらないことも確かめる.
+	 *
+	 * @return void
+	 */
+	public function test_form_table_flexible() {
+		$admin_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		$field    = 'cfb_test_form_flexible';
+
+		// 標準の列の定義.
+		$standard_items = array(
+			'name' => array(
+				'label' => 'Name',
+				'type'  => 'text',
+			),
+			'memo' => array(
+				'label' => 'Memo',
+				'type'  => 'textarea',
+			),
+			'kind' => array(
+				'label'   => 'Kind',
+				'type'    => 'select',
+				'options' => array(
+					'a' => 'A',
+					'b' => 'B',
+				),
+			),
+			'date' => array(
+				'label' => 'Date',
+				'type'  => 'datepicker',
+			),
+		);
+
+		// テストの配列.
+		$test_cases = array(
+			array(
+				'test_condition_name' => '通常の行（キー 0）が保存済み => 各列が保存値のまま表示される（二重にエスケープしない）',
+				'conditions'          => array(
+					'items'  => $standard_items,
+					'stored' => array(
+						0 => array(
+							'name' => 'A & "B"',
+							'memo' => '<strong>太字</strong>',
+							'kind' => 'b',
+							'date' => '2026-11-16',
+						),
+					),
+				),
+				'expected'            => array(
+					'<th class="cell-name">Name</th>',
+					'<td class="cell-name"><input class="flexible-field-item" type="text" id="' . $field . '[0][name]" name="' . $field . '[0][name]" value="A &amp; &quot;B&quot;"></td>',
+					'name="' . $field . '[0][memo]" cols="100" rows="3">&lt;strong&gt;太字&lt;/strong&gt;</textarea>',
+					'<select id="' . $field . '[0][kind]" class="flexible-field-item" name="' . $field . '[0][kind]">',
+					'<option value="b" selected="selected">B</option>',
+					'<input class="flexible-field-item datepicker" type="text" id="' . $field . '[0][date]" name="' . $field . '[0][date]" value="2026-11-16" size="70">',
+				),
+				'not_expected'        => array( '&amp;amp;', '&amp;quot;' ),
+				'expected_textarea'   => '<strong>太字</strong>',
+			),
+			array(
+				'test_condition_name' => 'textarea に太字・改行・リンクを含む HTML が保存済み => 取り除かれずに textarea の値として表示され、そのまま送信し直しても保存値が変わらない',
+				'conditions'          => array(
+					'items'  => $standard_items,
+					'stored' => array(
+						0 => array(
+							'name' => 'n',
+							'memo' => '<strong>太字</strong><br><a href="https://example.com/?a=1&amp;b=2">link</a>',
+							'kind' => 'a',
+							'date' => '',
+						),
+					),
+				),
+				'expected'            => array(
+					'cols="100" rows="3">&lt;strong&gt;太字&lt;/strong&gt;&lt;br&gt;&lt;a href=&quot;https://example.com/?a=1&amp;amp;b=2&quot;&gt;link&lt;/a&gt;</textarea>',
+				),
+				'not_expected'        => array( 'rows="3">太字link</textarea>' ),
+				'expected_textarea'   => '<strong>太字</strong><br><a href="https://example.com/?a=1&amp;b=2">link</a>',
+			),
+			array(
+				'test_condition_name' => 'textarea に太字と実体参照（&lt;widget&gt;）が保存済み => 実体参照が保たれ、そのまま送信し直しても保存値が変わらない',
+				'conditions'          => array(
+					'items'  => $standard_items,
+					'stored' => array(
+						0 => array(
+							'name' => 'n',
+							'memo' => '<strong>&lt;widget&gt;</strong>',
+							'kind' => 'a',
+							'date' => '',
+						),
+					),
+				),
+				'expected'            => array(
+					'cols="100" rows="3">&lt;strong&gt;&amp;lt;widget&amp;gt;&lt;/strong&gt;</textarea>',
+				),
+				'not_expected'        => array(),
+				'expected_textarea'   => '<strong>&lt;widget&gt;</strong>',
+			),
+			array(
+				'test_condition_name' => '実体参照の文字列そのものが保存済みの行が 2 行 => 行ごとのキーで表示され、実体参照は二重にならない',
+				'conditions'          => array(
+					'items'  => array( 'name' => $standard_items['name'] ),
+					'stored' => array(
+						0 => array( 'name' => 'Tom &amp; Jerry' ),
+						1 => array( 'name' => '2 行目' ),
+					),
+				),
+				'expected'            => array(
+					'name="' . $field . '[0][name]" value="Tom &amp; Jerry">',
+					'name="' . $field . '[1][name]" value="2 行目">',
+				),
+				'not_expected'        => array( '&amp;amp;' ),
+			),
+			array(
+				'test_condition_name' => '行のキーに記号を含む行が保存済み => id・name の属性の外に出ない',
+				'conditions'          => array(
+					'items'  => $standard_items,
+					'stored' => array(
+						'1"><b>x' => array(
+							'name' => 'n',
+							'memo' => 'm',
+							'kind' => 'a',
+							'date' => '',
+						),
+					),
+				),
+				'expected'            => array(
+					'id="' . $field . '[1&quot;&gt;&lt;b&gt;x][name]" name="' . $field . '[1&quot;&gt;&lt;b&gt;x][name]" value="n">',
+					'name="' . $field . '[1&quot;&gt;&lt;b&gt;x][memo]" cols="100"',
+				),
+				'not_expected'        => array( '"><b>x', '<b>' ),
+			),
+			array(
+				'test_condition_name' => '列のキーに記号を含む定義 => class の属性の外に出ない',
+				'conditions'          => array(
+					'items'  => array(
+						'a"b' => array(
+							'label' => 'AB',
+							'type'  => 'text',
+						),
+					),
+					'stored' => array(
+						0 => array( 'a"b' => 'v' ),
+					),
+				),
+				'expected'            => array(
+					'<th class="cell-a&quot;b">AB</th>',
+					'<td class="cell-a&quot;b">',
+				),
+				'not_expected'        => array( 'class="cell-a"b"' ),
+			),
+			array(
+				'test_condition_name' => 'textarea の値に終了タグとスクリプトを含む行が保存済み => textarea の外に出ない',
+				'conditions'          => array(
+					'items'  => $standard_items,
+					'stored' => array(
+						0 => array(
+							'name' => 'n',
+							'memo' => 'x</textarea><script>alert(1)</script>',
+							'kind' => 'a',
+							'date' => '',
+						),
+					),
+				),
+				'expected'            => array( 'cols="100" rows="3">x&lt;/textarea&gt;alert(1)</textarea>' ),
+				'not_expected'        => array( '<script>', 'x</textarea>alert(1)' ),
+			),
+			array(
+				'test_condition_name' => '保存値がない => 初期の行数だけ空の入力欄が表示される',
+				'conditions'          => array(
+					'items'  => $standard_items,
+					'stored' => null,
+				),
+				'expected'            => array( 'id="' . $field . '[0][name]" name="' . $field . '[0][name]" value="">' ),
+				'not_expected'        => array( '[1][name]' ),
+			),
+		);
+
+		foreach ( $test_cases as $case ) {
+			$conditions = $case['conditions'];
+			$fields     = array(
+				'field_name'  => $field,
+				'row_default' => 1,
+				'items'       => $conditions['items'],
+			);
+
+			// 保存済みの行を持つ投稿を、編集画面で開いている状態にする.
+			$_POST   = array();
+			$post_id = self::factory()->post->create( array( 'post_author' => $admin_id ) );
+			if ( null !== $conditions['stored'] ) {
+				update_post_meta( $post_id, $field, wp_slash( $conditions['stored'] ) );
+			}
+
+			global $post;
+			$post = get_post( $post_id );
+			wp_set_current_user( $admin_id );
+
+			// テスト関数を実行する（nonce フィールドとフォームを出力するため、バッファに取る）.
+			ob_start();
+			VK_Custom_Field_Builder_Flexible_Table::form_table_flexible( $fields );
+			$actual = ob_get_clean();
+
+			foreach ( $case['expected'] as $expected ) {
+				$this->assertStringContainsString( $expected, $actual, $case['test_condition_name'] );
+			}
+			foreach ( $case['not_expected'] as $not_expected ) {
+				$this->assertStringNotContainsString( $not_expected, $actual, $case['test_condition_name'] );
+			}
+
+			if ( ! isset( $case['expected_textarea'] ) ) {
+				continue;
+			}
+
+			// ブラウザーが表示する textarea の値（実体参照を戻した値）を取り出す.
+			$this->assertSame( 1, preg_match( '#name="' . preg_quote( $field, '#' ) . '\[0\]\[memo\]"[^>]*>(.*?)</textarea>#s', $actual, $matches ), $case['test_condition_name'] . '（textarea が出力される）' );
+			$textarea_value = html_entity_decode( $matches[1], ENT_QUOTES, 'UTF-8' );
+			$this->assertSame( $case['expected_textarea'], $textarea_value, $case['test_condition_name'] . '（textarea の値）' );
+
+			// 表示された値をそのまま送信し直しても、保存値が変わらないことを確かめる.
+			$resubmitted                     = $conditions['stored'];
+			$resubmitted[0]['memo']          = $textarea_value;
+			$_POST                           = array();
+			$_POST[ 'noncename__' . $field ] = wp_create_nonce( 'vk_custom_field_flexible_table' );
+			$_POST[ $field ]                 = wp_slash( $resubmitted );
+			VK_Custom_Field_Builder_Flexible_Table::save_cf_value( $fields );
+			$this->assertSame( $conditions['stored'], get_post_meta( $post_id, $field, true ), $case['test_condition_name'] . '（送信し直したあとの保存値）' );
+		}
+	}
+
+	/**
+	 * 項目変動・多行（Flexible Table）の表示用の行（tbody の中身）のテスト.
+	 *
+	 * 保存済みの行が、列の class・align の指定どおりに出力されることと、
+	 * 出力する HTML が投稿本文で使える HTML に整えられる（太字・改行・リンクは残り、script タグや on* 属性は残らない）ことを確かめる.
+	 *
+	 * @return void
+	 */
+	public function test_get_view_table_body() {
+		$admin_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		$field    = 'cfb_test_view_flexible';
+
+		// 標準の列の定義.
+		$standard_items = array(
+			'name' => array( 'type' => 'text' ),
+			'memo' => array( 'type' => 'textarea' ),
+		);
+
+		// テストの配列.
+		$test_cases = array(
+			array(
+				'test_condition_name' => 'テキストと、投稿本文で使える HTML を含む行が保存済み => そのまま 1 行で出力される',
+				'conditions'          => array(
+					'items'             => $standard_items,
+					'row_empty_display' => false,
+					'stored'            => array(
+						0 => array(
+							'name' => '名前',
+							'memo' => '<strong>太字</strong>',
+						),
+					),
+				),
+				'expected'            => '<tr><td>名前</td><td><strong>太字</strong></td></tr>',
+			),
+			array(
+				'test_condition_name' => 'セルに太字・改行・リンクを含む値が保存済み => 取り除かれずに出力される',
+				'conditions'          => array(
+					'items'             => $standard_items,
+					'row_empty_display' => false,
+					'stored'            => array(
+						0 => array(
+							'name' => '名前',
+							'memo' => '<strong>太字</strong><br><a href="https://example.com/">link</a>',
+						),
+					),
+				),
+				'expected'            => '<tr><td>名前</td><td><strong>太字</strong><br><a href="https://example.com/">link</a></td></tr>',
+			),
+			array(
+				'test_condition_name' => '列に class と align の指定あり => td に class と text-{align} を出力する',
+				'conditions'          => array(
+					'items'             => array(
+						'name' => array(
+							'type'  => 'text',
+							'class' => 'cell-name',
+							'align' => 'right',
+						),
+					),
+					'row_empty_display' => false,
+					'stored'            => array(
+						0 => array( 'name' => '名前' ),
+					),
+				),
+				'expected'            => '<tr><td class="cell-name text-right">名前</td></tr>',
+			),
+			array(
+				'test_condition_name' => '空の行があり、空の行を表示しない指定 => 値のある行だけ出力される',
+				'conditions'          => array(
+					'items'             => array( 'name' => array( 'type' => 'text' ) ),
+					'row_empty_display' => false,
+					'stored'            => array(
+						0 => array( 'name' => '名前' ),
+						1 => array( 'name' => '' ),
+					),
+				),
+				'expected'            => '<tr><td>名前</td></tr>',
+			),
+			array(
+				'test_condition_name' => '空の行があり、空の行も表示する指定 => 空の行も出力される',
+				'conditions'          => array(
+					'items'             => array( 'name' => array( 'type' => 'text' ) ),
+					'row_empty_display' => true,
+					'stored'            => array(
+						0 => array( 'name' => '名前' ),
+						1 => array( 'name' => '' ),
+					),
+				),
+				'expected'            => '<tr><td>名前</td></tr><tr><td></td></tr>',
+			),
+			array(
+				'test_condition_name' => 'セルに script タグを含む値が保存済み => script タグを取り除いて出力される',
+				'conditions'          => array(
+					'items'             => $standard_items,
+					'row_empty_display' => false,
+					'stored'            => array(
+						0 => array(
+							'name' => '名前',
+							'memo' => '<script>alert(1)</script>',
+						),
+					),
+				),
+				'expected'            => '<tr><td>名前</td><td>alert(1)</td></tr>',
+			),
+			array(
+				'test_condition_name' => 'セルに onclick 属性を持つタグを含む値が保存済み => onclick 属性を取り除いて出力される',
+				'conditions'          => array(
+					'items'             => $standard_items,
+					'row_empty_display' => false,
+					'stored'            => array(
+						0 => array(
+							'name' => '名前',
+							'memo' => '<span onclick="alert(1)">メモ</span>',
+						),
+					),
+				),
+				'expected'            => '<tr><td>名前</td><td><span>メモ</span></td></tr>',
+			),
+		);
+
+		foreach ( $test_cases as $case ) {
+			$conditions = $case['conditions'];
+
+			// 保存済みの行を持つ投稿を、表示している状態にする.
+			$post_id = self::factory()->post->create( array( 'post_author' => $admin_id ) );
+			update_post_meta( $post_id, $field, wp_slash( $conditions['stored'] ) );
+
+			global $post;
+			$post = get_post( $post_id );
+
+			// テスト関数を実行する.
+			$actual = VK_Custom_Field_Builder_Flexible_Table::get_view_table_body(
+				array(
+					'field_name'        => $field,
+					'row_empty_display' => $conditions['row_empty_display'],
+					'items'             => $conditions['items'],
+				)
+			);
+
+			$this->assertSame( $case['expected'], $actual, $case['test_condition_name'] );
+		}
+	}
+
+	/**
 	 * 保存処理 save_cf_value() が nonce と投稿の編集権限を確認したうえで、送信された値を整形して保存することを確認する.
+	 *
+	 * フィールド形式（テキスト・URL・セレクトボックス・ラジオボタン・textarea・チェックボックス）ごとに整えて保存されることと、
+	 * nonce も値も送られない保存（このフォームを通らない保存）では保存済みの値が残ることも確かめる.
 	 *
 	 * @return void
 	 */
@@ -637,6 +1578,12 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 
 		$nonce_action = 'vk_custom_field_builder';
 		$saved        = 'FULL_TIME';
+
+		// 選択肢を持つフィールドの選択肢.
+		$choices = array(
+			'a' => 'A',
+			'b' => 'B',
+		);
 
 		$test_cases = array(
 			array(
@@ -687,27 +1634,125 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 				'posted'              => array( 'PART_TIME' ),
 				'expected'            => $saved,
 			),
+			array(
+				'test_condition_name' => 'テキスト欄に HTML を含む値を送信 => タグを取り除いて保存される',
+				'user_id'             => $admin_id,
+				'post_author'         => $admin_id,
+				'nonce'               => 'valid',
+				'field_config'        => array( 'type' => 'text' ),
+				'stored'              => 'old',
+				'posted'              => '<b>名前</b> & 会社',
+				'expected'            => '名前 & 会社',
+			),
+			array(
+				'test_condition_name' => 'URL 欄にクエリ付きの URL を送信 => URL として保存される',
+				'user_id'             => $admin_id,
+				'post_author'         => $admin_id,
+				'nonce'               => 'valid',
+				'field_config'        => array( 'type' => 'url' ),
+				'stored'              => 'old',
+				'posted'              => 'https://example.com/?a=1&b=2',
+				'expected'            => 'https://example.com/?a=1&b=2',
+			),
+			array(
+				'test_condition_name' => 'URL 欄に javascript: の値を送信 => 空になる',
+				'user_id'             => $admin_id,
+				'post_author'         => $admin_id,
+				'nonce'               => 'valid',
+				'field_config'        => array( 'type' => 'url' ),
+				'stored'              => 'https://example.com/old',
+				'posted'              => 'javascript:alert(1)',
+				'expected'            => '',
+			),
+			array(
+				'test_condition_name' => 'セレクトボックスに選択肢の値を送信 => その値が保存される',
+				'user_id'             => $admin_id,
+				'post_author'         => $admin_id,
+				'nonce'               => 'valid',
+				'field_config'        => array(
+					'type'    => 'select',
+					'options' => $choices,
+				),
+				'stored'              => 'a',
+				'posted'              => 'b',
+				'expected'            => 'b',
+			),
+			array(
+				'test_condition_name' => 'ラジオボタンにタグを含む値を送信 => タグを取り除いて保存される',
+				'user_id'             => $admin_id,
+				'post_author'         => $admin_id,
+				'nonce'               => 'valid',
+				'field_config'        => array(
+					'type'    => 'radio',
+					'options' => $choices,
+				),
+				'stored'              => 'b',
+				'posted'              => '<b>a</b>',
+				'expected'            => 'a',
+			),
+			array(
+				'test_condition_name' => 'textarea に HTML を送信 => 投稿本文で使えるタグだけを残して保存される',
+				'user_id'             => $admin_id,
+				'post_author'         => $admin_id,
+				'nonce'               => 'valid',
+				'field_config'        => array( 'type' => 'textarea' ),
+				'stored'              => 'old',
+				'posted'              => '<strong>a</strong><script>x</script>',
+				'expected'            => '<strong>a</strong>x',
+			),
+			array(
+				'test_condition_name' => 'チェックボックスをすべて外して送信（値が送られない） => 保存済みの値を消す',
+				'user_id'             => $admin_id,
+				'post_author'         => $admin_id,
+				'nonce'               => 'valid',
+				'field_config'        => array(
+					'type'    => 'checkbox',
+					'options' => $choices,
+				),
+				'stored'              => array( 'a' ),
+				'expected'            => '',
+			),
+			array(
+				'test_condition_name' => 'nonce も値も送られない保存（クイック編集・REST API・自動保存など、このフォームを通らない保存） => 保存済みの値を消さない',
+				'user_id'             => $admin_id,
+				'post_author'         => $admin_id,
+				'nonce'               => 'none',
+				'field_config'        => array(
+					'type'    => 'select',
+					'options' => $choices,
+				),
+				'stored'              => 'b',
+				'expected'            => 'b',
+			),
 		);
 
 		foreach ( $test_cases as $case ) {
 			$_POST = array();
 
+			// 指定がないケースは、チェックボックスの項目に $saved が保存済みの状態で始める.
+			$fields = isset( $case['field_config'] )
+				? array( self::FIELD_KEY => $case['field_config'] )
+				: $this->checkbox_fields_array();
+			$stored = array_key_exists( 'stored', $case ) ? $case['stored'] : $saved;
+
 			$post_id = self::factory()->post->create( array( 'post_author' => $case['post_author'] ) );
-			update_post_meta( $post_id, self::FIELD_KEY, $saved );
+			update_post_meta( $post_id, self::FIELD_KEY, wp_slash( $stored ) );
 
 			global $post;
 			$post = get_post( $post_id );
 
+			// 送信するユーザー・nonce・値を用意する（posted が無いケースは値を送らない）.
 			wp_set_current_user( $case['user_id'] );
 			if ( 'valid' === $case['nonce'] ) {
 				$_POST['noncename__fields'] = wp_create_nonce( $nonce_action );
 			} elseif ( 'other' === $case['nonce'] ) {
 				$_POST['noncename__fields'] = wp_create_nonce( 'other_action' );
 			}
+			if ( array_key_exists( 'posted', $case ) ) {
+				$_POST[ self::FIELD_KEY ] = wp_slash( $case['posted'] );
+			}
 
-			$_POST[ self::FIELD_KEY ] = wp_slash( $case['posted'] );
-
-			VK_Custom_Field_Builder::save_cf_value( $this->checkbox_fields_array() );
+			VK_Custom_Field_Builder::save_cf_value( $fields );
 
 			$this->assertSame( $case['expected'], get_post_meta( $post_id, self::FIELD_KEY, true ), $case['test_condition_name'] );
 		}
@@ -1173,6 +2218,40 @@ class VK_Custom_Field_Builder_Test extends WP_UnitTestCase {
 				),
 				'expected'            => array(
 					0 => array( 'image' => '0012' ),
+				),
+			),
+			array(
+				'test_condition_name' => '行のキーに記号を含む行を送信 => キーはそのまま、値は整えて保存される',
+				'posted'              => array(
+					'1"><b>x' => array(
+						'textarea' => '<strong>説明</strong>',
+						'url'      => 'https://example.com/',
+						'plain'    => '<b>通常</b>',
+					),
+				),
+				'expected'            => array(
+					'1"><b>x' => array(
+						'textarea' => '<strong>説明</strong>',
+						'url'      => 'https://example.com/',
+						'plain'    => '通常',
+					),
+				),
+			),
+			array(
+				'test_condition_name' => 'textarea 列に太字・改行・リンクを含む HTML を送信 => そのまま保存される',
+				'posted'              => array(
+					0 => array(
+						'textarea' => '<strong>太字</strong><br><a href="https://example.com/">link</a>',
+						'url'      => '',
+						'plain'    => '行 1',
+					),
+				),
+				'expected'            => array(
+					0 => array(
+						'textarea' => '<strong>太字</strong><br><a href="https://example.com/">link</a>',
+						'url'      => '',
+						'plain'    => '行 1',
+					),
 				),
 			),
 		);

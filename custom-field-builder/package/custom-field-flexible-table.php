@@ -23,8 +23,10 @@ class VK_Custom_Field_Builder_Flexible_Table {
 	/**
 	 * 入力フォームの生成
 	 *
-	 * @param  [type] $custom_fields_array [description]
-	 * @return [type]                      [description]
+	 * 保存済みの行を入力欄に入れて出力する。textarea の値は、投稿本文で使えるタグだけを残し、タグを文字として表示する.
+	 *
+	 * @param array $custom_fields_array 項目の定義（field_name・row_default・items）.
+	 * @return void
 	 */
 	public static function form_table_flexible( $custom_fields_array ) {
 
@@ -55,7 +57,7 @@ class VK_Custom_Field_Builder_Flexible_Table {
 
 		$form_table .= '<thead><tr><th></th><th></th>';
 		foreach ( $custom_fields_array['items'] as $key => $value ) {
-			$form_table .= '<th class="cell-' . $key . '">' . esc_html( $value['label'] ) . '</th>';
+			$form_table .= '<th class="cell-' . esc_attr( $key ) . '">' . esc_html( $value['label'] ) . '</th>';
 		}
 		$form_table .= '<th></th>';
 		$form_table .= '</tr></thead>';
@@ -94,14 +96,17 @@ class VK_Custom_Field_Builder_Flexible_Table {
 			// 列をループ
 			foreach ( $custom_fields_array['items'] as $field_key => $value ) {
 				// $bill_item_value[ $sub_field ] = ( isset( $value[ $sub_field ] ) ) ? $value[ $sub_field ] : '';
-				$form_table .= '<td class="cell-' . $field_key . '">';
+				$form_table .= '<td class="cell-' . esc_attr( $field_key ) . '">';
 
-				$id          = $custom_fields_array['field_name'] . '[' . $key . '][' . $field_key . ']';
-				$name        = $custom_fields_array['field_name'] . '[' . $key . '][' . $field_key . ']';
+				// 行のキーは保存値から取り出すため、属性値として整えてから使う.
+				$id          = esc_attr( $custom_fields_array['field_name'] . '[' . $key . '][' . $field_key . ']' );
+				$name        = $id;
 				$input_value = $fields_value[ $key ][ $field_key ];
 
 				if ( $value['type'] == 'textarea' ) {
-					$form_table .= '<textarea class="flexible-field-item" class="cf_textarea_wysiwyg" name="' . $id . '" cols="100" rows="3">' . wp_kses_post( $input_value ) . '</textarea>';
+					// 値に含まれる実体参照（&lt; など）も、ブラウザーが戻した値として保持するため、& も含めて文字にして入れる。textarea の終了タグも文字になる。タグのまま入れると、末尾の wp_kses() が許可リストに無い太字・リンクなどを取り除き、そのまま更新すると保存値からも消えるため.
+					$textarea_value = esc_textarea( wp_kses_post( $input_value ) );
+					$form_table    .= '<textarea class="flexible-field-item" class="cf_textarea_wysiwyg" name="' . $id . '" cols="100" rows="3">' . $textarea_value . '</textarea>';
 
 				} elseif ( $value['type'] == 'select' ) {
 					$form_table .= '<select id="' . $id . '" class="flexible-field-item" name="' . $name . '"  >';
