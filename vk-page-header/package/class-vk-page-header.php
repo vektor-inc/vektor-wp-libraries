@@ -95,6 +95,8 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			// Register meta for REST API access (block editor native panel).
 			// ブロックエディタのネイティブパネルから読み書きするためにメタキーを REST API に公開する。
 			add_action( 'init', array( $this, 'register_page_header_meta' ) );
+			// 古い形式（画像の URL）が保存された固定ページを、ブロックエディターから保存できるようにする.
+			add_filter( 'rest_pre_insert_page', array( __CLASS__, 'remove_null_image_meta_with_invalid_stored_value' ), 10, 2 );
 			// Enqueue block editor panel script.
 			// ブロックエディタのサイドバーパネル用スクリプトを読み込む。
 			add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_page_header_panel' ) );
@@ -230,9 +232,16 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			return $custom_types_labels;
 		}
 
-		/*
-			  header_image_url()
-		/*-------------------------------------------*/
+		/**
+		 * ページヘッダーに出す画像の URL を決める.
+		 *
+		 * カスタマイザーの画像（共通・投稿タイプ別）を元にし、固定ページでは、今のページ → 近い親 → 遠い祖先の順に、
+		 * 最初に画像を取り出せたページの画像で上書きする.
+		 * 投稿の詳細ページで、レイアウトが既定以外のときは、アイキャッチ画像で上書きする.
+		 *
+		 * @param string $size 'sp' ならモバイル用の画像、それ以外なら PC 用の画像.
+		 * @return string|false 画像の URL. 画像が無いときは空文字か false.
+		 */
 		public static function header_image_url( $size = '' ) {
 
 			$options   = get_option( 'vk_page_header' );
@@ -283,31 +292,20 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 					$target_field = 'vk_page_header_image';
 				}
 
-				$vk_page_header_image = get_post_meta( $post->ID, $target_field, true );
-				if ( $vk_page_header_image ) {
-					// 今の固定ページに画像が登録されていればそのまま使用
-					$image_id = $vk_page_header_image;
-				} else {
-					// 先祖階層を取得
-					$ancestors = array_reverse( get_post_ancestors( $post->ID ) );
-					   // array_push( $ancestors, $post->ID );
-					foreach ( $ancestors as $ancestor ) {
-						$vk_page_header_image = '';
-						// 親階層から順に画像を取得し、下階層に画像があれば上書きしていく
-						$vk_page_header_image = get_post_meta( $ancestor, $target_field, true );
-						if ( $vk_page_header_image ) {
-							$image_id = $vk_page_header_image;
-						}
+				// 今のページ → 近い親 → 遠い祖先の順に、最初に画像を取り出せたページの画像を使う.
+				// 画像を取り出せない値（古い形式の画像の URL・削除済みの画像の ID）は未設定と同じに扱い、次のページを見る.
+				// どこにも無ければ、上で決めたカスタマイザーの画像を残す（取り出せない値で上書きすると、既定の画像まで消えるため）.
+				$page_ids = array_merge( array( $post->ID ), get_post_ancestors( $post->ID ) );
+				foreach ( $page_ids as $page_id ) {
+					$vk_page_header_image = get_post_meta( $page_id, $target_field, true );
+					if ( ! $vk_page_header_image ) {
+						continue;
 					}
-				} // if ( $post->vk_page_header_image ){
 
-				// 固定ページで画像の登録があった場合のみ $image_url を上書きする
-				if ( isset( $image_id ) && $image_id ) {
-
-					$image_url = wp_get_attachment_image_src( $image_id, 'full', false );
-					// 元のメディアが削除されて画像が取得出来ない事があるため、画像がある時だけ上書き
-					if ( $image_url ) {
-						$image_url = $image_url[0];
+					$image_src = wp_get_attachment_image_src( $vk_page_header_image, 'full', false );
+					if ( is_array( $image_src ) && ! empty( $image_src[0] ) ) {
+						$image_url = $image_src[0];
+						break;
 					}
 				}
 			} elseif ( is_single() ) {
@@ -850,6 +848,64 @@ if ( ! class_exists( 'Vk_Page_Header' ) ) {
 			}
 
 			return $sanitized_url;
+		}
+
+		/**
+		 * 固定ページを REST API で保存するとき、ページヘッダー画像の投稿メタに送られた null のうち、
+		 * 保存済みの値が REST API の型（整数）に合わないキーを、送られた meta から取り除く.
+		 *
+		 * 古い Lightning は画像の URL を保存していた. REST API は整数として読めない値を null として返し、
+		 * ブロックエディターはほかの設定を保存するときにも meta をまとめて送り返す.
+		 * WordPress 本体は「保存済みの値が型に合わないものは null にできない」として保存を止める（rest_invalid_stored_value・HTTP 500）.
+		 * 取り除いたキーは更新されないため、保存済みの値はそのまま残る.
+		 * URL 以外の型に合わない値でも同じく止まるため、URL かどうかではなく、WordPress 本体と同じスキーマで判定する.
+		 *
+		 * @param stdClass|WP_Error $prepared_post 保存しようとしている固定ページ（rest_pre_insert_page の値）.
+		 * @param WP_REST_Request   $request       REST API のリクエスト.
+		 * @return stdClass|WP_Error 受け取った $prepared_post をそのまま返す（書き換えるのは $request の meta だけ）.
+		 */
+		public static function remove_null_image_meta_with_invalid_stored_value( $prepared_post, $request ) {
+			// 新規作成（保存済みの値が無い）や、ほかのフィルターがエラーにした場合は何もしない.
+			if ( is_wp_error( $prepared_post ) || empty( $prepared_post->ID ) || ! $request instanceof WP_REST_Request ) {
+				return $prepared_post;
+			}
+
+			$meta = $request->get_param( 'meta' );
+			if ( ! is_array( $meta ) ) {
+				return $prepared_post;
+			}
+
+			// WordPress 本体が保存時に使うものと同じスキーマを取る.
+			$meta_fields = new WP_REST_Post_Meta_Fields( 'page' );
+			$meta_schema = $meta_fields->get_field_schema();
+
+			$is_changed = false;
+			foreach ( array( 'vk_page_header_image', 'vk_page_header_image_sp' ) as $meta_key ) {
+				// null が送られたキーだけを見る（キーが無いときは、WordPress 本体も更新しない）.
+				if ( ! array_key_exists( $meta_key, $meta ) || null !== $meta[ $meta_key ] ) {
+					continue;
+				}
+
+				// REST API に公開されていないキーは、WordPress 本体も扱わないため何もしない.
+				if ( empty( $meta_schema['properties'][ $meta_key ] ) ) {
+					continue;
+				}
+
+				// 保存済みの値が型に合うなら、WordPress 本体のとおり削除させる.
+				$stored_value = get_post_meta( $prepared_post->ID, $meta_key, true );
+				if ( ! is_wp_error( rest_validate_value_from_schema( $stored_value, $meta_schema['properties'][ $meta_key ] ) ) ) {
+					continue;
+				}
+
+				unset( $meta[ $meta_key ] );
+				$is_changed = true;
+			}
+
+			if ( $is_changed ) {
+				$request->set_param( 'meta', $meta );
+			}
+
+			return $prepared_post;
 		}
 
 		/**
